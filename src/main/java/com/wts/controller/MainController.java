@@ -7,7 +7,7 @@ import com.wts.entity.*;
 public class MainController extends Controller {
 
   public void index()  throws WeixinException {
+    //renderText("aaa");
     renderText(WP.me.getUserByCode(getPara("code")).getName());
-
   }
 }
