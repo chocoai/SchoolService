@@ -8,6 +8,7 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.tx.TxByMethods;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.wts.controller.MainController;
+import com.wts.controller.CallBack;
 //import com.wts.entity.model._MappingKit;
 
 /**
@@ -31,6 +32,7 @@ public class Config extends JFinalConfig {
      */
     public void configRoute(Routes me) {
         me.add("/", MainController.class);
+        me.add("/callBack", CallBack.class);
     }
 
     /**
@@ -67,6 +69,6 @@ public class Config extends JFinalConfig {
      * 运行此 main 方法可以启动项目，此main方法可以放置在任意的Class类定义中，不一定要放于此
      */
     public static void main(String[] args) {
-        JFinal.start("WebRoot", 8080, "/", 5);
+        JFinal.start("WebRoot", 80, "/", 5);
     }
 }
