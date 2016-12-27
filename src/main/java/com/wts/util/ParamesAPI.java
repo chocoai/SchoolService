@@ -11,6 +11,7 @@ public class ParamesAPI {
   public static String secret = "";
   // OAuth2 回调地址
   public static String REDIRECT_URI = "";
-  private static String C = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx947e7da41f395af7&redirect_uri=http%3a%2f%2fwts.s1.758kongbao.com%2fbind%2f&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+  // 网址
+  public static String URL = "wts.s1.758kongbao.com";
 
 }
