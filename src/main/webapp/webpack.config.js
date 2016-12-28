@@ -6,11 +6,10 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 // var path = require('path');
 module.exports = {
   entry: {
-    com: './src/js/Com/All.js',
-    sys: './src/js/Sys/All.js'
+    TeacherManage: './src/js/TeacherManage/main.js'
   },
   output: {
-    path: __dirname + '/dist/',
+    path: __dirname + '/src/dist/',
     filename: '[name].js'
   },
   plugins: [
