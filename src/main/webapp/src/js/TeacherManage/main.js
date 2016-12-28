@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-class TeacherManage extends React.Component {
+import { Button } from 'antd-mobile';
+
+class TeacherManage extends Component {
 
   render() {
     return (
       <div>
+        <Button>Start</Button>
       </div>
     );
   }

@@ -12,3 +12,4 @@
 SchoolService.iml
 log/
 target/
+src/main/webapp/node_modules/
