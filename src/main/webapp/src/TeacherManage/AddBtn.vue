@@ -1,6 +1,6 @@
 <template>
   <div class="AddBtn">
-    <mt-button @click.native="handleClick" type="primary">{{ msg }}</mt-button>
+    <mt-button @click.native="handleClick" type="primary" size="large">{{ msg }}</mt-button>
   </div>
 </template>
 
