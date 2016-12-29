@@ -28,23 +28,24 @@ import java.io.*;
 public class MainController extends Controller {
 
   public void index()  throws WeixinException {
-//    renderText("aaa");
-    try {
-      //NotifyMessage CM = new NotifyMessage(25,new Text("hello world!!!"),new IdParameter().putUserIds("wts"),false);
-      //WP.me.sendNotifyMessage(CM);
-//上传指定文件
-      //System.out.println(WP.me.uploadMedia(25,new FileInputStream(new File("c:/777.jpg")),"aa"));
-      //System.out.println(WP.me.listMaterialMedia(25, MediaType.image,new Pageable(1,50)).toString());
-      // 创建文件输出流对象
-      FileOutputStream os = new FileOutputStream("c:/a.jpg");
-      os.write(WP.me.downloadMedia(25,"2DYEgQokxhwD197hQGE5L8yMXdkAWaY3YQrpcR5uc1crKnOVs4Kt-Ope4P9xx5jxFvXcYm3MeKJiiUIufeEKqnQ").getContent());
-// 关闭输出流
-      os.close();
-
-    } catch (Exception e){
-      System.out.println(e.getMessage());
-    }
-//    renderText(WP.me.getUserByCode(getPara("code")).getName());
+    render("src/html/TeacherManage.html");
+////    renderText("aaa");
+//    try {
+//      //NotifyMessage CM = new NotifyMessage(25,new Text("hello world!!!"),new IdParameter().putUserIds("wts"),false);
+//      //WP.me.sendNotifyMessage(CM);
+////上传指定文件
+//      //System.out.println(WP.me.uploadMedia(25,new FileInputStream(new File("c:/777.jpg")),"aa"));
+//      //System.out.println(WP.me.listMaterialMedia(25, MediaType.image,new Pageable(1,50)).toString());
+//      // 创建文件输出流对象
+//      FileOutputStream os = new FileOutputStream("c:/a.jpg");
+//      os.write(WP.me.downloadMedia(25,"2DYEgQokxhwD197hQGE5L8yMXdkAWaY3YQrpcR5uc1crKnOVs4Kt-Ope4P9xx5jxFvXcYm3MeKJiiUIufeEKqnQ").getContent());
+//// 关闭输出流
+//      os.close();
+//
+//    } catch (Exception e){
+//      System.out.println(e.getMessage());
+//    }
+////    renderText(WP.me.getUserByCode(getPara("code")).getName());
   }
 
   public void bind()  throws WeixinException {
