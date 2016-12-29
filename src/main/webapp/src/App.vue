@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
+    <mt-button @click.native="handleClick" type="primary">按钮</mt-button>
     <hello></hello>
   </div>
 </template>
