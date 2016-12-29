@@ -19,15 +19,15 @@ public class CreatMenu {
   public static void main(String[] args) {
     try{
       // 学校的相关功能
-      Button School1_1 = new Button("添加用户", CONNECT, ButtonType.view);
-      Button School1_2 = new Button("教师管理", CONNECT, ButtonType.view);
+      Button School1_1 = new Button("教师管理", CONNECT, ButtonType.view);
+      Button School1_2 = new Button("班级管理", CONNECT, ButtonType.view);
       Button School1_3 = new Button("家长管理", CONNECT, ButtonType.view);
       Button School1_4 = new Button("学生管理", CONNECT, ButtonType.view);
-      Button School1_5 = new Button("班级管理", CONNECT, ButtonType.view);
+      Button School1_5 = new Button("公告管理", CONNECT, ButtonType.view);
 
-      Button School2_1 = new Button("发布公告", CONNECT, ButtonType.view);
-      Button School2_2 = new Button("公告管理", CONNECT, ButtonType.view);
-      Button School2_3 = new Button("校长信箱", CONNECT, ButtonType.view);
+      Button School2_1 = new Button("校长信箱", CONNECT, ButtonType.view);
+      Button School2_2 = new Button("", CONNECT, ButtonType.view);
+      Button School2_3 = new Button("", CONNECT, ButtonType.view);
       Button School2_4 = new Button("", CONNECT, ButtonType.view);
       Button School2_5 = new Button("", CONNECT, ButtonType.view);
 
@@ -38,7 +38,7 @@ public class CreatMenu {
       Button School3_5 = new Button("班级考勤", CONNECT, ButtonType.view);
 
       Button School1 = new Button("综合管理", School1_1, School1_2, School1_3, School1_4, School1_5);
-      Button School2 = new Button("公告信息", School2_1, School2_2, School2_3);
+      Button School2 = new Button("公告信息", School2_1);
       Button School3 = new Button("班级情况", School3_1, School3_2, School3_3, School3_4, School3_5);
 
       List<Button> schools = new ArrayList<Button>();
@@ -47,11 +47,11 @@ public class CreatMenu {
       schools.add(School3);
 
       new WeixinProxy().createMenu(26, schools);
-
-    }
-    catch (WeixinException e){
+      System.exit(0);
+    } catch (WeixinException e){
       logger.error(e.getMessage());
       System.out.println(e.getMessage());
+      System.exit(0);
     }
 //    // 家长的相关功能
 //    Button Parent1_1 = new Button("关联学生", CONNECT, ButtonType.view);
