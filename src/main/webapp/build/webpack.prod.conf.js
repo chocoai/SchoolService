@@ -91,7 +91,8 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunks: ['vendor']
     }),
     new webpack.ProvidePlugin({
-      $: "jquery"
+      '$': 'jquery',
+      'vue': 'vue'
     })
   ]
 })
