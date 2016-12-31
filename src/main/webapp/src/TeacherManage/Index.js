@@ -1,43 +1,37 @@
 import Vue from 'vue'
 import Main from './Main.vue'
+import Add from './AddField.vue'
 import VueRouter from 'vue-router'
-import { Button, Search } from 'mint-ui'
+import { Button, Search, Field } from 'mint-ui'
 
 Vue.component(Search.name, Search)
 Vue.component(Button.name, Button)
+Vue.component(Field.name, Field)
 Vue.use(VueRouter)
 
-//开启debug模式
-Vue.config.debug = true;
-// new Vue(app);//这是上一篇用到的，新建一个vue实例，现在使用vue-router就不需要了。
-// 路由器需要一个根组件。
-var App = Vue.extend({});
-// 创建一个路由器实例
-var router = new VueRouter();
-// 每条路由规则应该映射到一个组件。这里的“组件”可以是一个使用 Vue.extend创建的组件构造函数，也可以是一个组件选项对象。
-// 稍后我们会讲解嵌套路由
-router.map({//定义路由映射
-  '/index':{//访问地址
-    name:'index',//定义路由的名字。方便使用。
-    component:index,//引用的组件名称，对应上面使用`import`导入的组件
-    //component:require("components/app.vue")//还可以直接使用这样的方式也是没问题的。不过会没有import集中引入那么直观
-  },
-  '/list': {
-    name:'list',
-    component: list
-  },
-});
-router.redirect({//定义全局的重定向规则。全局的重定向会在匹配当前路径之前执行。
-  '*':"/index"//重定向任意未匹配路径到/index
-});
-// 现在我们可以启动应用了！
-// 路由器会创建一个 App 实例，并且挂载到选择符 #app 匹配的元素上。
-router.start(App, '#app');
-
-
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  template: '<Main/>',
-  components: { Main }
+// 1. 定义（路由）组件。
+// 可以从其他文件 import 进来
+const Foo = { template: '<div>foo</div>' }
+// 2. 定义路由
+// 每个路由应该映射一个组件。 其中"component" 可以是
+// 通过 Vue.extend() 创建的组件构造器，
+// 或者，只是一个组件配置对象。
+// 我们晚点再讨论嵌套路由。
+const routes = [
+  { path: '/foo', component: Foo },
+  { path: '/add', component: Add },
+  { path: '/', component: Main }
+]
+// 3. 创建 router 实例，然后传 `routes` 配置
+// 你还可以传别的配置参数, 不过先这么简单着吧。
+const router = new VueRouter({
+  routes // （缩写）相当于 routes: routes
 })
+// 4. 创建和挂载根实例。
+// 记得要通过 router 配置参数注入路由，
+// 从而让整个应用都有路由功能
+/* eslint-disable no-unused-vars  */
+const app = new Vue({
+  router,
+  template: '<router-view></router-view>'
+}).$mount('#app')

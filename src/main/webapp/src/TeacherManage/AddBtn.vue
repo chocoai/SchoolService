@@ -1,6 +1,8 @@
 <template>
   <div class="AddBtn">
-    <mt-button @click.native="handleClick" type="primary" size="large">{{ msg }}</mt-button>
+    <router-link to="/add"><mt-button type="primary" size="large">
+      {{ msg }}
+    </mt-button></router-link>
   </div>
 </template>
 
@@ -14,3 +16,8 @@ export default {
   }
 }
 </script>
+<style>
+  a{
+text-decoration:none;
+}
+</style>

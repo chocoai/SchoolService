@@ -61,6 +61,7 @@ public class Config extends JFinalConfig {
 
     /**
      * 配置处理器
+     * ${contextPath}/dist/
      */
     public void configHandler(Handlers me) {
         me.add(new ContextPathHandler("contextPath"));//设置上下文路径
