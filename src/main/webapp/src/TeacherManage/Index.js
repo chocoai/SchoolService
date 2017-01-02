@@ -2,11 +2,20 @@ import Vue from 'vue'
 import Main from './Main.vue'
 import Add from './AddField.vue'
 import VueRouter from 'vue-router'
-import { Button, Search, Field } from 'mint-ui'
+// import { Button, Search, Field, Header } from 'mint-ui'
+import MuseUI from 'muse-ui'
+import 'muse-ui/dist/muse-ui.css'
+Vue.use(MuseUI)
+// import 'muse-components/styles/base.less' // 加载基础的样式
+// import appBar from 'muse-components/appBar'
+// import avatar from 'muse-components/avatar'
 
-Vue.component(Search.name, Search)
-Vue.component(Button.name, Button)
-Vue.component(Field.name, Field)
+// Vue.component(Search.name, Search)
+// Vue.component(Button.name, Button)
+// Vue.component(Field.name, Field)
+// Vue.component(Header.name, Header)
+// Vue.component(appBar.name, appBar)
+// Vue.component(avatar.name, avatar)
 Vue.use(VueRouter)
 
 // 1. 定义（路由）组件。
