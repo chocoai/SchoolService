@@ -1,23 +1,23 @@
 <template>
   <div class="AddField">
-    <mt-header title="行政教师">
-      <router-link to="/" slot="left">
-        <mt-button icon="back">返回</mt-button>
-      </router-link>
-    </mt-header>
-    <mt-field label="姓名" placeholder="请输入教师姓名"></mt-field>
-    <mt-field label="手机号" placeholder="请输入手机号" type="tel"></mt-field>
-    <mt-field label="微信号" placeholder="请输入微信号" type="password"></mt-field>
-    <mt-field label="邮箱" placeholder="请输入邮箱" type="email"></mt-field>
-    <mt-field label="备注" placeholder="请输入备注信息" type="textarea" rows="4"></mt-field>
-    <mt-button type="primary" size="large" v-on:click.native="doTheThing">
-      新增
-    </mt-button>
+    <mu-appbar title="新增教师">
+      <mu-flat-button color="white" label="保存" slot="right"/>
+    </mu-appbar>
+    <mu-text-field label="教师姓名" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="联系电话" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-text-field label="微信号码" fullWidth labelFloat icon="chat"/><br/>
+    <mu-text-field label="电子邮箱" fullWidth labelFloat icon="email"/><br/>
+    <mu-text-field label="备注信息" fullWidth labelFloat icon="bookmark"/><br/>
+    <back></back>
   </div>
 </template>
 
 <script>
+import Back from './Back'
 export default {
-  name: 'AddField'
+  name: 'AddField',
+  components: {
+    'back': Back
+  }
 }
 </script>

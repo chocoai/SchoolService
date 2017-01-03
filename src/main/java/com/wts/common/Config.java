@@ -9,6 +9,7 @@ import com.jfinal.plugin.activerecord.tx.TxByMethods;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.wts.controller.MainController;
 import com.wts.controller.CallBack;
+import com.wts.controller.TeacherController;
 import com.wts.controller.UserController;
 //import com.wts.entity.model._MappingKit;
 
@@ -35,6 +36,7 @@ public class Config extends JFinalConfig {
         me.add("/", MainController.class);
         me.add("/callBack", CallBack.class);
         me.add("/user", UserController.class);
+        me.add("/teacher", TeacherController.class);
     }
 
     /**

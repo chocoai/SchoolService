@@ -1,6 +1,7 @@
 package com.wts.util;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
+import com.foxinmy.weixin4j.http.weixin.ApiResult;
 import com.foxinmy.weixin4j.model.Button;
 import com.foxinmy.weixin4j.qy.WeixinProxy;
 import com.foxinmy.weixin4j.type.ButtonType;
@@ -15,11 +16,11 @@ public class CreatMenu {
   private static String BASIC = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ParamesAPI.corpId+"&redirect_uri=http%3a%2f%2f"+ParamesAPI.URL+"%2f"+"XXXXX"+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
 
   private static String CONNECT = BASIC.replaceAll("XXXXX","user%2faddUserPage%2f");
-
+  private static String TEACHER = BASIC.replaceAll("XXXXX","teacher%2f");
   public static void main(String[] args) {
     try{
       // 学校的相关功能
-      Button School1_1 = new Button("教师管理", CONNECT, ButtonType.view);
+      Button School1_1 = new Button("教师管理", TEACHER, ButtonType.view);
       Button School1_2 = new Button("班级管理", CONNECT, ButtonType.view);
       Button School1_3 = new Button("家长管理", CONNECT, ButtonType.view);
       Button School1_4 = new Button("学生管理", CONNECT, ButtonType.view);
@@ -46,7 +47,8 @@ public class CreatMenu {
       schools.add(School2);
       schools.add(School3);
 
-      new WeixinProxy().createMenu(26, schools);
+      ApiResult ret = new WeixinProxy().createMenu(26, schools);
+      System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
       System.exit(0);
     } catch (WeixinException e){
       logger.error(e.getMessage());

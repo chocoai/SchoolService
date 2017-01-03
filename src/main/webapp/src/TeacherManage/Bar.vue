@@ -1,15 +1,33 @@
 <template>
   <div class="Bar">
-    <mu-appbar title="">
-      <mu-text-field icon="search" class="appbar-search-field"  slot="right" hintText="请输入教师姓名"/>
+    <mu-appbar v-bind:title="userName">
+      <mu-text-field icon="search" class="appbar-search-field" slot="right" hintText="请输入教师姓名"/>
       <mu-flat-button color="white" label="搜索" slot="right"/>
     </mu-appbar>
   </div>
 </template>
 
 <script>
+import * as AF from '../Util/AjaxFunction.js'
 export default {
-  name: 'Bar'
+  name: 'Bar',
+  data () {
+    return {
+      userName: '未知'
+    }
+  },
+  created: function () {
+    this.$http.get(AF.TeacherGetName).then((response) => {
+      this.userName = response.data
+      console.log('成功啦！！！')
+      console.log(response)
+    }, (response) => {
+      console.log('失败啦！！！')
+    })
+  },
+  mounted: function () {
+    console.log('userName is: ' + AF.TeacherGetName)
+  }
 }
 </script>
 <style lang="less">

@@ -27,8 +27,8 @@ import java.io.*;
 
 public class MainController extends Controller {
 
-  public void index()  throws WeixinException {
-    render("dist/TeacherManage.html");
+  public void index() throws WeixinException {
+    render("/dist/TeacherManage.html");
 ////    renderText("aaa");
 //    try {
 //      //NotifyMessage CM = new NotifyMessage(25,new Text("hello world!!!"),new IdParameter().putUserIds("wts"),false);

@@ -12,6 +12,6 @@ public class ParamesAPI {
   // OAuth2 回调地址
   public static String REDIRECT_URI = "";
   // 网址
-  public static String URL = "wts.s1.758kongbao.com";
+  public static String URL = "wts.s1.natapp.cc";
 
 }
