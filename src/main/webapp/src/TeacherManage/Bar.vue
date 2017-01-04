@@ -19,14 +19,9 @@ export default {
   created: function () {
     this.$http.get(AF.TeacherGetName).then((response) => {
       this.userName = response.data
-      console.log('成功啦！！！')
       console.log(response)
     }, (response) => {
-      console.log('失败啦！！！')
     })
-  },
-  mounted: function () {
-    console.log('userName is: ' + AF.TeacherGetName)
   }
 }
 </script>
