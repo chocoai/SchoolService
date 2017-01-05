@@ -18,6 +18,11 @@ import textField from 'muse-components/textField'
 import divider from 'muse-components/divider'
 import paper from 'muse-components/paper'
 import toast from 'muse-components/toast'
+import avatar from 'muse-components/avatar'
+import iconMenu from 'muse-components/iconMenu'
+import dialog from 'muse-components/dialog'
+import { listItem, list } from 'muse-components/list'
+import { menuItem, menu } from 'muse-components/menu'
 
 Vue.component(appBar.name, appBar)
 Vue.component(flatButton.name, flatButton)
@@ -27,6 +32,13 @@ Vue.component(textField.name, textField)
 Vue.component(divider.name, divider)
 Vue.component(paper.name, paper)
 Vue.component(toast.name, toast)
+Vue.component(avatar.name, avatar)
+Vue.component(iconMenu.name, iconMenu)
+Vue.component(dialog.name, dialog)
+Vue.component(listItem.name, listItem)
+Vue.component(menuItem.name, menuItem)
+Vue.component(list.name, list)
+Vue.component(menu.name, menu)
 
 Vue.use(VueRouter)
 Vue.use(VueResource)

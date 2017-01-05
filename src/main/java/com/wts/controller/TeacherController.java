@@ -2,8 +2,12 @@ package com.wts.controller;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.model.Teacher;
+
+import java.util.List;
 
 public class TeacherController extends Controller {
 
@@ -100,4 +104,8 @@ public class TeacherController extends Controller {
     }
   }
 
+  public void query() {
+    List<Record> teachers= Db.find("SELECT * FROM teacher WHERE name LIKE '%"+getPara("name")+"%' ORDER BY id DESC");
+    renderJson(teachers);
+  }
 }
