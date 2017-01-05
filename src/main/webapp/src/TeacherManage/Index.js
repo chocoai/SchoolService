@@ -13,16 +13,20 @@ import 'muse-components/styles/base.less' // 加载基础的样式
 import appBar from 'muse-components/appBar'
 import flatButton from 'muse-components/flatButton'
 import floatButton from 'muse-components/floatButton'
+import raisedButton from 'muse-components/raisedButton'
 import textField from 'muse-components/textField'
 import divider from 'muse-components/divider'
 import paper from 'muse-components/paper'
+import toast from 'muse-components/toast'
 
 Vue.component(appBar.name, appBar)
 Vue.component(flatButton.name, flatButton)
 Vue.component(floatButton.name, floatButton)
+Vue.component(raisedButton.name, raisedButton)
 Vue.component(textField.name, textField)
 Vue.component(divider.name, divider)
 Vue.component(paper.name, paper)
+Vue.component(toast.name, toast)
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
