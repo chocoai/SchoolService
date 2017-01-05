@@ -11,7 +11,7 @@
         </mu-icon-menu>
       </mu-list-item>
     </mu-list>
-    <mu-dialog :open="dialog" title="提示" @close="close">
+    <mu-dialog :open="dialog" title="提示"  @close="close">
       {{}}
       <mu-flat-button slot="actions" @click="close" primary label="取消"/>
       <mu-flat-button slot="actions" @click="close" primary label="确定"/>
