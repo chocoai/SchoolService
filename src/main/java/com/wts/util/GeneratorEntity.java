@@ -9,7 +9,7 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 
 import javax.sql.DataSource;
 
-public class GeneratorDemo {
+public class GeneratorEntity {
   public static DataSource getDataSource() {
     Prop p = PropKit.use("a_little_config.txt");
     C3p0Plugin c3p0Plugin = new C3p0Plugin(p.get("jdbcUrl"), p.get("user"), p.get("password"));

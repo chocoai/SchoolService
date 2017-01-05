@@ -1,0 +1,13 @@
+Table: teacher
+----------+--------------+------+-----+---------+---------
+ Field    | Type         | Null | Key | Default | Remarks 
+----------+--------------+------+-----+---------+---------
+ id       | INT(10)      | NO   | PRI |         |         
+ name     | VARCHAR(255) | YES  |     |         |         
+ phone    | VARCHAR(255) | YES  |     |         |         
+ weixinId | VARCHAR(255) | YES  |     |         |         
+ email    | VARCHAR(255) | YES  |     |         |         
+ remark   | VARCHAR(255) | YES  |     |         |         
+ state    | VARCHAR(255) | YES  |     |         |         
+----------+--------------+------+-----+---------+---------
+

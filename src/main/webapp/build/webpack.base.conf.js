@@ -27,6 +27,7 @@ module.exports = {
       'vue$': 'vue/dist/vue.common.js',
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
+      'muse-components': 'muse-ui/src',
       'components': path.resolve(__dirname, '../src/components'),
       'TeacherManage': path.resolve(__dirname, '../src/TeacherManage')
     }
@@ -50,6 +51,10 @@ module.exports = {
       }
     ],
     loaders: [
+      {
+        test: /muse-ui.src.*?js$/,
+        loader: 'babel'
+      },
       {
         test: /\.vue$/,
         loader: 'vue'

@@ -1,4 +1,4 @@
-jdbcUrl = jdbc:mysql://127.0.0.1/ss?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+jdbcUrl = jdbc:mysql://127.0.0.1/school_service?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
 user = root
 password =root
 devMode = true

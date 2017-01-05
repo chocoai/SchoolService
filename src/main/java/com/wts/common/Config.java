@@ -11,7 +11,7 @@ import com.wts.controller.MainController;
 import com.wts.controller.CallBack;
 import com.wts.controller.TeacherController;
 import com.wts.controller.UserController;
-//import com.wts.entity.model._MappingKit;
+import com.wts.entity.model._MappingKit;
 
 /**
  * API引导式配置
@@ -51,7 +51,7 @@ public class Config extends JFinalConfig {
         ActiveRecordPlugin arp = new ActiveRecordPlugin(c3p0Plugin);
         arp.setShowSql(false);
         me.add(arp);
-        //_MappingKit.mapping(arp);
+        _MappingKit.mapping(arp);
     }
 
     /**
