@@ -50,7 +50,7 @@ public class TeacherController extends Controller {
     }
   }
   public void checkEmail() {
-    if (!getPara("email").matches("^([a-z0-9A-Z]+[-|\\\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\\\.)+[a-zA-Z]{2,}$")) {
+    if (!getPara("email").matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$")) {
       // 输入内容格式不正确
       renderText("1");
     } else if (Teacher.dao.find("select * from teacher where email=?", getPara("email")).size()!=0) {
