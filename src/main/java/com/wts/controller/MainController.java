@@ -28,9 +28,9 @@ import java.io.*;
 public class MainController extends Controller {
 
   public void index() throws WeixinException {
-    User u= WP.me.getUserByCode(getPara("code"));
-    System.out.println(getPara("code"));
-    setSessionAttr("user",u);
+//    User u= WP.me.getUserByCode(getPara("code"));
+//    System.out.println(getPara("code"));
+//    setSessionAttr("user",u);
     render("/dist/TeacherManage.html");
 ////    renderText("aaa");
 //    try {

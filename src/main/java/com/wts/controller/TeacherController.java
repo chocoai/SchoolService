@@ -16,14 +16,14 @@ import java.util.List;
 public class TeacherController extends Controller {
 
   public void index() throws WeixinException{
-    User u= WP.me.getUserByCode(getPara("code"));
-    setSessionAttr("user",u);
-    render("/dist/TeacherManage.html");
+//    User u= WP.me.getUserByCode(getPara("code"));
+//    setSessionAttr("user",u);
+//    render("/dist/TeacherManage.html");
   }
 
   public void getName() throws WeixinException {
-    User u =(User) getSessionAttr("user");
-    renderText(u.getName());
+//    User u =(User) getSessionAttr("user");
+    renderText("济南市育明小学");
   }
 
   /**
@@ -225,21 +225,21 @@ public class TeacherController extends Controller {
     } else {
       if (Util.CheckNull(teacher.getStr("name")).equals(getPara("name").trim())
               && Util.CheckNull(teacher.getStr("phone")).equals(getPara("phone").trim())
-              && Util.CheckNull(teacher.getStr("weixin")).equals(getPara("weixin").trim())
+              && Util.CheckNull(teacher.getStr("weixinId")).equals(getPara("weixin").trim())
               && Util.CheckNull(teacher.getStr("remark")).equals(getPara("remark").trim())
               ) {
         // 未找到修改内容
         renderText("2");
-      } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+      } else if (!getPara("name").trim().equals("") && !getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
         // 姓名不是两个以上汉字
         renderText("3");
-      } else if (!getPara("phone").matches("\\d{11}")) {
+      } else if (!getPara("phone").trim().equals("") && !getPara("phone").matches("\\d{11}")) {
         // 联系电话不是11位数字
         renderText("4");
-      } else if (getPara("weixin").matches("^[\\u4e00-\\u9fa5]{0,}$")) {
+      } else if (!getPara("weixin").trim().equals("") && getPara("weixin").matches("^[\\u4e00-\\u9fa5]{0,}$")) {
         // 微信号码含有中文
         renderText("5");
-      } else if (!getPara("email").matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$")) {
+      } else if (!getPara("email").trim().equals("") && !getPara("email").matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$")) {
         // 电子邮箱格式不正确
         renderText("6");
       } else if (getPara("phone").trim().equals("") && getPara("weixin").trim().equals("")) {
@@ -249,13 +249,13 @@ public class TeacherController extends Controller {
               &&  Teacher.dao.find("select * from teacher where phone=?", getPara("phone")).size()!=0) {
         // 该手机号码已存在
         renderText("8");
-      } else if (!Util.CheckNull(teacher.getStr("weixin")).equals(getPara("weixin"))
+      } else if (!Util.CheckNull(teacher.getStr("weixinId")).equals(getPara("weixin"))
               &&  Teacher.dao.find("select * from teacher where weixinId=?", getPara("weixin")).size()!=0) {
         // 该微信号已存在
         renderText("9");
       } else if (!Util.CheckNull(teacher.getStr("email")).equals(getPara("email"))
-              &&  Teacher.dao.find("select * from teacher where email=?", getPara("email")).size()!=0
-              && teacher.getStr("email").trim().equals(getPara(""))) {
+              && Teacher.dao.find("select * from teacher where email=?", getPara("email")).size()!=0
+              && !getPara("email").trim().equals("")) {
         // 该电子邮箱已存在
         renderText("A");
       } else {

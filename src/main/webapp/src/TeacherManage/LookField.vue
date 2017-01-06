@@ -12,15 +12,18 @@
         <mu-text-field label="备注信息" :disabled="edit" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
       </mu-paper>
     </form>
-    <div class="container">
-      <br/>
-      <mu-raised-button label="修改" class="demo-raised-button" labelPosition="before" icon="edit" v-if="edit" @click="goEdit" />
-      <mu-raised-button label="保存" class="demo-raised-button" labelPosition="before" icon="done" v-if="save" @click="goSave" primary/>
-      <mu-raised-button label="删除" class="demo-raised-button" labelPosition="before" icon="delete" secondary @click="goDelete"/>
-      <mu-raised-button label="重置" class="demo-raised-button" labelPosition="before" icon="cached" v-if="save" :disabled="save" backgroundColor="#ffd700" @click="goReset"/>
-      <mu-raised-button label="呼叫" class="demo-raised-button" labelPosition="before" icon="dialer_sip" @click="goCall" backgroundColor="#a4c639"/>
-      <br/>
-    </div>
+    <mu-divider/>
+    <mu-paper>
+      <div class="container">
+        <br/>
+        <mu-raised-button label="修改" class="demo-raised-button" labelPosition="before" icon="edit" v-if="edit" @click="goEdit" />
+        <mu-raised-button label="保存" class="demo-raised-button" labelPosition="before" icon="done" v-if="save" @click="goSave" primary/>
+        <mu-raised-button label="删除" class="demo-raised-button" labelPosition="before" icon="delete" secondary @click="goDelete"/>
+        <mu-raised-button label="重置" class="demo-raised-button" labelPosition="before" icon="cached" v-if="save" :disabled="edit" backgroundColor="#ffd700" @click="goReset"/>
+        <mu-raised-button label="呼叫" class="demo-raised-button" labelPosition="before" icon="dialer_sip" @click="goCall" backgroundColor="#a4c639"/>
+        <br/>
+      </div>
+    </mu-paper>
     <mu-toast v-if="toast" :message="message"/>
   </div>
 </template>
@@ -339,12 +342,11 @@ export default {
   }
 }
 </script>
-<style>
+<style  lang="css">
   .container{
     display: flex;
-    flex-wrap: wrap;
   }
-  .demo-raised-button {
+  .demo-flat-button {
     margin: 12px;
   }
 </style>
