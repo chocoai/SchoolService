@@ -1,13 +1,12 @@
 <template>
   <div id="teacherManage">
-    <bar></bar>
+    <mu-appbar title="">
+      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入教师姓名" @input="query"/>
+    </mu-appbar>
     <mu-list>
       <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.phone" @click="look(teacher.id)">
         <mu-avatar :src="teacher.name" slot="leftAvatar" :size="30"/>
-        <mu-icon-menu slot="right" icon="more_vert" tooltip="操作" :value="teacher.id" @itemClick="dod(teacher.id)">
-          <mu-menu-item title="查看"/>
-          <mu-menu-item title="修改"/>
-          <mu-menu-item title="删除"/>
+        <mu-icon-menu slot="right" icon="keyboard_arrow_right" tooltip="操作">
         </mu-icon-menu>
       </mu-list-item>
     </mu-list>
@@ -16,7 +15,6 @@
 </template>
 
 <script>
-  import Bar from './Bar'
   import Add from './CircleBtn'
   import * as AF from '../Util/AjaxFunction.js'
   export default {
@@ -27,7 +25,6 @@
       }
     },
     components: {
-      'bar': Bar,
       'add': Add
     },
     created: function () {
@@ -36,7 +33,7 @@
       }, (response) => {
       })
       this.$http.get(
-        AF.TeacherQuery,
+        AF.TeacherQueryByName,
         { params:
         {
           name: ''
@@ -55,6 +52,26 @@
       })
     },
     methods: {
+      query (value) {
+        this.$http.get(
+          AF.TeacherQueryByName,
+          { params:
+          {
+            name: value
+          }
+          },
+          {
+            headers:
+            {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            emulateJSON: true
+          }
+        ).then((response) => {
+          this.teachers = response.body
+        }, (response) => {
+        })
+      },
       look (teacherId) {
         window.location.href = '#/look/' + teacherId
       },
@@ -64,4 +81,21 @@
     }
   }
 </script>
-
+<style lang="less">
+  .appbar-search-field{
+    color: #FFF;
+    margin-bottom: 0;
+    &.focus-state {
+      color: #FFF;
+    }
+    .mu-text-field-hint {
+      color: fade(#FFF, 54%);
+    }
+    .mu-text-field-input {
+      color: #FFF;
+    }
+    .mu-text-field-focus-line {
+      background-color: #FFF;
+    }
+  }
+</style>

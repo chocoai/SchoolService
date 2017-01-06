@@ -5,14 +5,22 @@
         <mu-flat-button color="white" label="返回" slot="right" icon="reply" labelPosition="before" @click="reply"/>
       </mu-appbar>
       <mu-paper>
-        <mu-text-field label="教师姓名" disabled underlineShow="false" v-model="name" fullWidth labelFloat icon="person"/><br/>
-        <mu-text-field label="联系电话" disabled underlineShow="false" v-model="phone"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-        <mu-text-field label="微信号码" disabled underlineShow="false" v-model="weixin" fullWidth labelFloat icon="chat"/><br/>
-        <mu-text-field label="电子邮箱" disabled underlineShow="false" v-model="email" fullWidth labelFloat icon="email"/><br/>
-        <mu-text-field label="备注信息" disabled underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
+        <mu-text-field label="教师姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
+        <mu-text-field label="联系电话" :disabled="edit" underlineShow="false" v-model="phone" :errorColor="phoneErrorColor" :errorText="phoneErrorText" @input="checkPhone"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+        <mu-text-field label="微信号码" :disabled="edit" underlineShow="false" v-model="weixin" :errorColor="weixinErrorColor" :errorText="weixinErrorText" @input="checkWeixin" fullWidth labelFloat icon="chat"/><br/>
+        <mu-text-field label="电子邮箱" :disabled="edit" underlineShow="false" v-model="email"  :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
+        <mu-text-field label="备注信息" :disabled="edit" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
       </mu-paper>
     </form>
-    <mu-raised-button label="拨打电话" fullWidth @click="call" primary/>
+    <div class="container">
+      <br/>
+      <mu-raised-button label="修改" class="demo-raised-button" labelPosition="before" icon="edit" v-if="edit" @click="goEdit" />
+      <mu-raised-button label="保存" class="demo-raised-button" labelPosition="before" icon="done" v-if="save" @click="goSave" primary/>
+      <mu-raised-button label="删除" class="demo-raised-button" labelPosition="before" icon="delete" secondary @click="goDelete"/>
+      <mu-raised-button label="重置" class="demo-raised-button" labelPosition="before" icon="cached" v-if="save" :disabled="save" backgroundColor="#ffd700" @click="goReset"/>
+      <mu-raised-button label="呼叫" class="demo-raised-button" labelPosition="before" icon="dialer_sip" @click="goCall" backgroundColor="#a4c639"/>
+      <br/>
+    </div>
     <mu-toast v-if="toast" :message="message"/>
   </div>
 </template>
@@ -24,12 +32,22 @@ export default {
   data () {
     return {
       toast: false,
+      edit: true,
+      save: false,
       teacher: '',
       name: '',
       phone: '',
       weixin: '',
       email: '',
-      remark: ''
+      remark: '',
+      nameErrorText: '',
+      phoneErrorText: '',
+      weixinErrorText: '',
+      emailErrorText: '',
+      nameErrorColor: '',
+      phoneErrorColor: '',
+      weixinErrorColor: '',
+      emailErrorColor: ''
     }
   },
   created () {
@@ -43,12 +61,135 @@ export default {
     reply () {
       window.location.href = '#/'
     },
-    call () {
-      window.location.href = 'wtai://wp//mc;' + this.phone
+    goCall () {
+      window.location.href = 'tel:' + this.phone
+    },
+    goEdit () {
+      this.edit = false
+      this.save = true
+    },
+    goReset () {
+      this.fetchData(this.$route.params.teacherId)
+    },
+    goDelete () {
+      this.$http.get(
+        AF.TeacherDeleteById,
+        { params: {
+          id: this.$route.params.teacherId
+        }
+        }).then((response) => {
+          switch (response.body) {
+            case '0':
+              this.edit = true
+              this.save = false
+              window.location.href = '#/'
+              break
+            case '1':
+              this.message = '该教师已删除！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              window.location.href = '#/'
+              break
+            default:
+          }
+        }, (response) => {
+          this.message = '服务器内部错误！'
+          this.toast = true
+          if (this.toastTimer) clearTimeout(this.toastTimer)
+          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+        })
+    },
+    goSave () {
+      this.$http.get(
+        AF.TeacherEdit,
+        { params: {
+          id: this.$route.params.teacherId,
+          name: this.name,
+          phone: this.phone,
+          weixin: this.weixin,
+          email: this.email,
+          remark: this.remark
+        }
+        }).then((response) => {
+          switch (response.body) {
+            case '0':
+              this.edit = true
+              this.save = false
+              window.location.href = '#/'
+              break
+            case '1':
+              this.message = '要修改的教师不存在！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false }, 1500)
+              break
+            case '2':
+              this.message = '未找到修改内容！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            case '3':
+              this.message = '姓名应为两个以上汉字！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            case '4':
+              this.message = '输入的手机号码应为11位数字！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            case '5':
+              this.message = '输入的微信号不应包含中文！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            case '6':
+              this.message = '输入的电子邮箱格式不正确！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            case '7':
+              this.message = '手机号码和微信号不能同时为空！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            case '8':
+              this.message = '输入的手机号码已存在！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            case '9':
+              this.message = '输入的微信号已存在！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            case 'A':
+              this.message = '输入的电子邮箱已存在！'
+              this.toast = true
+              if (this.toastTimer) clearTimeout(this.toastTimer)
+              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              break
+            default:
+          }
+        }, (response) => {
+          this.message = '服务器内部错误！'
+          this.toast = true
+          if (this.toastTimer) clearTimeout(this.toastTimer)
+          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+        })
     },
     fetchData (teacherId) {
       this.$http.get(
-        AF.TeacherGet,
+        AF.TeacherGetById,
         { params:
         {
           id: teacherId
@@ -65,13 +206,145 @@ export default {
         this.teacher = response.body
         this.name = this.teacher.name
         this.phone = this.teacher.phone
-        this.weixin = this.teacher.weixin
+        this.weixin = this.teacher.weixinId
         this.email = this.teacher.email
         this.remark = this.teacher.remark
-
       }, (response) => {
       })
+    },
+    checkName (value) {
+      this.$http.get(
+        AF.TeacherCheckNameForEdit,
+        { params: {
+          name: value
+        }
+        }).then((response) => {
+          switch (response.body) {
+            case '0':
+              this.nameErrorText = ''
+              this.nameErrorColor = 'green'
+              break
+            case '1':
+              this.nameErrorText = '请输入两个以上汉字！'
+              this.nameErrorColor = 'red'
+              break
+            case '2':
+              this.nameErrorText = '该姓名存在重名情况！'
+              this.nameErrorColor = 'orange'
+              break
+            default:
+              this.nameErrorText = ''
+              this.nameErrorColor = 'blue'
+          }
+        }, (response) => {
+          this.message = '服务器内部错误！'
+          this.toast = true
+          if (this.toastTimer) clearTimeout(this.toastTimer)
+          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+        })
+    },
+    checkPhone (value) {
+      this.$http.get(
+        AF.TeacherCheckPhoneForEdit,
+        { params: {
+          phone: value
+        }
+        }).then((response) => {
+          switch (response.body) {
+            case '0':
+              this.phoneErrorText = '此处为绑定微信的手机号码！'
+              this.phoneErrorColor = 'green'
+              break
+            case '1':
+              this.phoneErrorText = '请输入11位数字！'
+              this.phoneErrorColor = 'red'
+              break
+            case '2':
+              this.phoneErrorText = '该手机号码已使用！'
+              this.phoneErrorColor = 'orange'
+              break
+            default:
+              this.phoneErrorText = ''
+              this.phoneErrorColor = 'blue'
+          }
+        }, (response) => {
+          this.message = '服务器内部错误！'
+          this.toast = true
+          if (this.toastTimer) clearTimeout(this.toastTimer)
+          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+        })
+    },
+    checkWeixin (value) {
+      this.$http.get(
+        AF.TeacherCheckWeixinForEdit,
+        { params: {
+          weixin: value
+        }
+        }).then((response) => {
+          switch (response.body) {
+            case '0':
+              this.weixinErrorText = '此处为微信号，不是微信昵称！'
+              this.weixinErrorColor = 'green'
+              break
+            case '1':
+              this.weixinErrorText = '微信号不应包含中文！'
+              this.weixinErrorColor = 'red'
+              break
+            case '2':
+              this.weixinErrorText = '该微信号已使用！'
+              this.weixinErrorColor = 'orange'
+              break
+            default:
+              this.weixinErrorText = ''
+              this.weixinErrorColor = 'blue'
+          }
+        }, (response) => {
+          this.message = '服务器内部错误！'
+          this.toast = true
+          if (this.toastTimer) clearTimeout(this.toastTimer)
+          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+        })
+    },
+    checkEmail (value) {
+      this.$http.get(
+        AF.TeacherCheckEmailForEdit,
+        { params: {
+          email: value
+        }
+        }).then((response) => {
+          switch (response.body) {
+            case '0':
+              this.emailErrorText = ''
+              this.emailErrorColor = 'green'
+              break
+            case '1':
+              this.emailErrorText = '电子邮箱格式错误！'
+              this.emailErrorColor = 'red'
+              break
+            case '2':
+              this.emailErrorText = '该电子邮箱已使用！'
+              this.emailErrorColor = 'orange'
+              break
+            default:
+              this.emailErrorText = ''
+              this.emailErrorColor = 'blue'
+          }
+        }, (response) => {
+          this.message = '服务器内部错误！'
+          this.toast = true
+          if (this.toastTimer) clearTimeout(this.toastTimer)
+          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+        })
     }
   }
 }
 </script>
+<style>
+  .container{
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .demo-raised-button {
+    margin: 12px;
+  }
+</style>

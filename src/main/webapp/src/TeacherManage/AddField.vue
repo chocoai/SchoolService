@@ -50,7 +50,7 @@ export default {
     },
     checkName (value) {
       this.$http.get(
-        AF.TeacherCheckName,
+        AF.TeacherCheckNameForNew,
         { params: {
           name: value
         }
@@ -81,7 +81,7 @@ export default {
     },
     checkPhone (value) {
       this.$http.get(
-        AF.TeacherCheckPhone,
+        AF.TeacherCheckPhoneForNew,
         { params: {
           phone: value
         }
@@ -112,7 +112,7 @@ export default {
     },
     checkWeixin (value) {
       this.$http.get(
-        AF.TeacherCheckWeixin,
+        AF.TeacherCheckWeixinForNew,
         { params: {
           weixin: value
         }
@@ -143,7 +143,7 @@ export default {
     },
     checkEmail (value) {
       this.$http.get(
-        AF.TeacherCheckEmail,
+        AF.TeacherCheckEmailForNew,
         { params: {
           email: value
         }
