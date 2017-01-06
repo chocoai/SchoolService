@@ -7,3 +7,4 @@ export const TeacherCheckWeixin = `${h}/teacher/checkWeixin`
 export const TeacherCheckEmail = `${h}/teacher/checkEmail`
 export const TeacherSave = `${h}/teacher/save`
 export const TeacherQuery = `${h}/teacher/query`
+export const TeacherGet = `${h}/teacher/get`

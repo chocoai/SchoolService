@@ -2,7 +2,7 @@
   <div id="teacherManage">
     <bar></bar>
     <mu-list>
-      <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.phone">
+      <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.phone" @click="look(teacher.id)">
         <mu-avatar :src="teacher.name" slot="leftAvatar" :size="30"/>
         <mu-icon-menu slot="right" icon="more_vert" tooltip="操作" :value="teacher.id" @itemClick="dod(teacher.id)">
           <mu-menu-item title="查看"/>
@@ -11,11 +11,6 @@
         </mu-icon-menu>
       </mu-list-item>
     </mu-list>
-    <mu-dialog :open="dialog" title="提示" @close="close">
-      {{}}
-      <mu-flat-button slot="actions" @click="close" primary label="取消"/>
-      <mu-flat-button slot="actions" @click="close" primary label="确定"/>
-    </mu-dialog>
     <add iconName="add" hrefLocation="#/add"></add>
   </div>
 </template>
@@ -60,8 +55,8 @@
       })
     },
     methods: {
-      doTheThing (name) {
-        console.log(name)
+      look (teacherId) {
+        window.location.href = '#/look/' + teacherId
       },
       dod (id) {
         console.log(id)

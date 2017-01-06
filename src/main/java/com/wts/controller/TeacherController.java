@@ -108,4 +108,8 @@ public class TeacherController extends Controller {
     List<Record> teachers= Db.find("SELECT * FROM teacher WHERE name LIKE '%"+getPara("name")+"%' ORDER BY id DESC");
     renderJson(teachers);
   }
+  public void get() {
+    Teacher teacher =Teacher.dao.findById(getPara("id"));
+    renderJson(teacher);
+  }
 }

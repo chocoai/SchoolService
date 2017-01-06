@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Main from './Main.vue'
 import Add from './AddField.vue'
+import Look from './LookField.vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 
@@ -45,6 +46,7 @@ Vue.use(VueResource)
 
 const routes = [
   { path: '/add', component: Add },
+  { path: '/look/:teacherId', component: Look },
   { path: '/', component: Main }
 ]
 
