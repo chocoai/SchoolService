@@ -18,7 +18,7 @@ public class TeacherController extends Controller {
   public void index() throws WeixinException{
 //    User u= WP.me.getUserByCode(getPara("code"));
 //    setSessionAttr("user",u);
-//    render("/dist/TeacherManage.html");
+    render("/dist/TeacherManage.html");
   }
 
   public void getName() throws WeixinException {
@@ -84,7 +84,7 @@ public class TeacherController extends Controller {
    * 新增时检测教师电子邮箱
    * */
   public void checkEmailForNew() {
-    if (getPara("weixin")!=null) {
+    if (getPara("email")!=null) {
       if (!getPara("email").matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$")) {
         // 输入内容格式不正确
         renderText("1");

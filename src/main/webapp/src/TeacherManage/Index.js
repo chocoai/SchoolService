@@ -24,6 +24,7 @@ import iconMenu from 'muse-components/iconMenu'
 import dialog from 'muse-components/dialog'
 import { listItem, list } from 'muse-components/list'
 import { menuItem, menu } from 'muse-components/menu'
+import { flexboxItem, flexbox } from 'muse-components/flexbox'
 
 Vue.component(appBar.name, appBar)
 Vue.component(flatButton.name, flatButton)
@@ -38,8 +39,10 @@ Vue.component(iconMenu.name, iconMenu)
 Vue.component(dialog.name, dialog)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)
+Vue.component(flexboxItem.name, flexboxItem)
 Vue.component(list.name, list)
 Vue.component(menu.name, menu)
+Vue.component(flexbox.name, flexbox)
 
 Vue.use(VueRouter)
 Vue.use(VueResource)
