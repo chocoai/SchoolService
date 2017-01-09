@@ -12,5 +12,6 @@ export const TeacherCheckEmailForEdit = `${h}/teacher/checkEmailForEdit`
 export const TeacherSave = `${h}/teacher/save`
 export const TeacherEdit = `${h}/teacher/edit`
 export const TeacherQueryByName = `${h}/teacher/queryByName`
+export const TeacherTotalByName = `${h}/teacher/totalByName`
 export const TeacherGetById = `${h}/teacher/getById`
 export const TeacherDeleteById = `${h}/teacher/deleteById`

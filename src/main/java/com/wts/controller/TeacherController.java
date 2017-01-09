@@ -5,6 +5,7 @@ import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
@@ -270,8 +271,12 @@ public class TeacherController extends Controller {
     }
   }
   public void queryByName() {
-    List<Record> teachers= Db.find("SELECT * FROM teacher WHERE name LIKE '%"+getPara("name")+"%' ORDER BY id DESC");
-    renderJson(teachers);
+    Page<Teacher> teachers=Teacher.dao.paginate2(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("name"));
+    renderJson(teachers.getList());
+  }
+  public void totalByName() {
+    String count = Db.queryLong("select count(*) from teacher where name like '%"+ getPara("name") +"%'").toString();
+    renderText(count);
   }
   public void getById() {
     Teacher teacher =Teacher.dao.findById(getPara("id"));

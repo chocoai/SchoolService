@@ -10,6 +10,8 @@
         </mu-icon-menu>
       </mu-list-item>
     </mu-list>
+    <mu-pagination :total="pageTotal" :current="pageCurrent" :pageSize="pageSize" @pageChange="pageChange">
+    </mu-pagination>
     <add iconName="add" hrefLocation="#/add"></add>
   </div>
 </template>
@@ -21,7 +23,11 @@
     name: 'teacherManage',
     data () {
       return {
-        teachers: []
+        queryName: '',
+        teachers: [],
+        pageTotal: '',
+        pageSize: '',
+        pageCurrent: ''
       }
     },
     components: {
@@ -32,11 +38,14 @@
         window.document.title = response.data
       }, (response) => {
       })
+
       this.$http.get(
         AF.TeacherQueryByName,
         { params:
         {
-          name: ''
+          name: '',
+          pageCurrent: '1',
+          pageSize: '6'
         }
         },
         {
@@ -48,6 +57,20 @@
         }
       ).then((response) => {
         this.teachers = response.body
+      }, (response) => {
+      })
+
+      this.$http.get(
+        AF.TeacherTotalByName,
+        { params:
+        {
+          name: ''
+        }
+        }
+      ).then((response) => {
+        this.pageTotal = response.body
+        this.pageCurrent = '1'
+        console.log(this.pageTotal)
       }, (response) => {
       })
     },
@@ -69,14 +92,35 @@
           }
         ).then((response) => {
           this.teachers = response.body
+          this.queryName = value
         }, (response) => {
         })
       },
       look (teacherId) {
         window.location.href = '#/look/' + teacherId
       },
-      dod (id) {
-        console.log(id)
+      pageChange (newPage) {
+        this.$http.get(
+          AF.TeacherQueryByName,
+          { params:
+          {
+            name: this.queryName,
+            pageCurrent: newPage,
+            pageSize: '6'
+          }
+          },
+          {
+            headers:
+            {
+              'X-Requested-With': 'XMLHttpRequest'
+            },
+            emulateJSON: true
+          }
+        ).then((response) => {
+          this.teachers = response.body
+          this.pageCurrent = newPage
+        }, (response) => {
+        })
       }
     }
   }
