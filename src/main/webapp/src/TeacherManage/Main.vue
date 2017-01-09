@@ -6,12 +6,20 @@
     <mu-list>
       <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.phone" @click="look(teacher.id)">
         <mu-avatar :src="teacher.name" slot="leftAvatar" :size="30"/>
-        <mu-icon-menu slot="right" icon="keyboard_arrow_right" tooltip="操作">
-        </mu-icon-menu>
+        <mu-avatar icon="folder" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
-    <mu-pagination :total="pageTotal" :current="pageCurrent" :pageSize="pageSize" @pageChange="pageChange">
-    </mu-pagination>
+    <mu-flexbox>
+      <mu-flexbox-item class="flex-demo">
+        <mu-icon-button v-if="before" tooltip="上一页" icon="navigate_before" @click="pageBefore"/></mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <div v-if="chip">
+          {{pageCurrent}}/{{pageTotal}}
+        </div>
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <mu-icon-button v-if="next" tooltip="下一页" icon="navigate_next" @click="pageNext"/></mu-flexbox-item>
+    </mu-flexbox>
     <add iconName="add" hrefLocation="#/add"></add>
   </div>
 </template>
@@ -23,10 +31,13 @@
     name: 'teacherManage',
     data () {
       return {
+        before: false,
+        next: false,
+        chip: false,
         queryName: '',
         teachers: [],
         pageTotal: '',
-        pageSize: '',
+        pageSize: '6',
         pageCurrent: ''
       }
     },
@@ -38,49 +49,19 @@
         window.document.title = response.data
       }, (response) => {
       })
-
-      this.$http.get(
-        AF.TeacherQueryByName,
-        { params:
-        {
-          name: '',
-          pageCurrent: '1',
-          pageSize: '6'
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          emulateJSON: true
-        }
-      ).then((response) => {
-        this.teachers = response.body
-      }, (response) => {
-      })
-
-      this.$http.get(
-        AF.TeacherTotalByName,
-        { params:
-        {
-          name: ''
-        }
-        }
-      ).then((response) => {
-        this.pageTotal = response.body
-        this.pageCurrent = '1'
-        console.log(this.pageTotal)
-      }, (response) => {
-      })
+      this.pageCurrent = '1'
+      this.teacherQuery('', '1', this.pageSize)
+      this.teacherTotal('', this.pageSize)
     },
     methods: {
-      query (value) {
+      teacherQuery (queryName, pageCurrent, pageSize) {
         this.$http.get(
           AF.TeacherQueryByName,
           { params:
           {
-            name: value
+            queryName: queryName,
+            pageCurrent: pageCurrent,
+            pageSize: pageSize
           }
           },
           {
@@ -92,35 +73,47 @@
           }
         ).then((response) => {
           this.teachers = response.body
-          this.queryName = value
+          this.pageCurrent = pageCurrent
         }, (response) => {
         })
+      },
+      teacherTotal (queryName, pageSize) {
+        this.$http.get(
+          AF.TeacherTotalByName,
+          { params:
+          {
+            queryName: queryName,
+            pageSize: pageSize
+          }
+          }
+        ).then((response) => {
+          this.pageTotal = response.body
+          this.pageTotal === '0' ? this.chip = false : this.chip = true
+          this.pageTotal === '1' || this.pageTotal === '0' ? this.next = false : this.next = true
+        }, (response) => {
+        })
+      },
+      query (value) {
+        this.queryName = value
+        this.pageCurrent = '1'
+        this.teacherQuery(this.queryName, this.pageCurrent, this.pageSize)
+        this.teacherTotal(this.queryName, this.pageSize)
+        this.before = false
       },
       look (teacherId) {
         window.location.href = '#/look/' + teacherId
       },
-      pageChange (newPage) {
-        this.$http.get(
-          AF.TeacherQueryByName,
-          { params:
-          {
-            name: this.queryName,
-            pageCurrent: newPage,
-            pageSize: '6'
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            emulateJSON: true
-          }
-        ).then((response) => {
-          this.teachers = response.body
-          this.pageCurrent = newPage
-        }, (response) => {
-        })
+      pageBefore () {
+        this.pageCurrent--
+        this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
+        this.next = true
+        this.teacherQuery(this.queryName, this.pageCurrent, this.pageSize)
+      },
+      pageNext () {
+        this.pageCurrent++
+        this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
+        this.before = true
+        this.teacherQuery(this.queryName, this.pageCurrent, this.pageSize)
       }
     }
   }
@@ -141,5 +134,10 @@
     .mu-text-field-focus-line {
       background-color: #FFF;
     }
+  }
+  .flex-demo {
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
   }
 </style>

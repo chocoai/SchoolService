@@ -13,6 +13,7 @@ import Vuex from 'vuex'
 import 'muse-components/styles/base.less' // 加载基础的样式
 import appBar from 'muse-components/appBar'
 import flatButton from 'muse-components/flatButton'
+import iconButton from 'muse-components/iconButton'
 import floatButton from 'muse-components/floatButton'
 import raisedButton from 'muse-components/raisedButton'
 import textField from 'muse-components/textField'
@@ -22,7 +23,7 @@ import toast from 'muse-components/toast'
 import avatar from 'muse-components/avatar'
 import iconMenu from 'muse-components/iconMenu'
 import dialog from 'muse-components/dialog'
-import pagination from 'muse-components/pagination'
+import chip from 'muse-components/chip'
 import { listItem, list } from 'muse-components/list'
 import { menuItem, menu } from 'muse-components/menu'
 import { flexboxItem, flexbox } from 'muse-components/flexbox'
@@ -30,6 +31,7 @@ import { flexboxItem, flexbox } from 'muse-components/flexbox'
 Vue.component(appBar.name, appBar)
 Vue.component(flatButton.name, flatButton)
 Vue.component(floatButton.name, floatButton)
+Vue.component(iconButton.name, iconButton)
 Vue.component(raisedButton.name, raisedButton)
 Vue.component(textField.name, textField)
 Vue.component(divider.name, divider)
@@ -38,7 +40,7 @@ Vue.component(toast.name, toast)
 Vue.component(avatar.name, avatar)
 Vue.component(iconMenu.name, iconMenu)
 Vue.component(dialog.name, dialog)
-Vue.component(pagination.name, pagination)
+Vue.component(chip.name, chip)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)
 Vue.component(flexboxItem.name, flexboxItem)
