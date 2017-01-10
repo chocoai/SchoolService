@@ -271,11 +271,11 @@ public class TeacherController extends Controller {
     }
   }
   public void queryByName() {
-    Page<Teacher> teachers=Teacher.dao.paginate2(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryName"));
+    Page<Teacher> teachers=Teacher.dao.paginate2(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
     renderJson(teachers.getList());
   }
   public void totalByName() {
-    Long count = Db.queryLong("select count(*) from teacher where name like '%"+ getPara("queryName") +"%'");
+    Long count = Db.queryLong("select count(*) from teacher where name like '%"+ getPara("queryString") +"%'");
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {

@@ -64,11 +64,13 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
   state: {
-    count: 0
+    queryString: '',
+    pageCurrent: '1'
   },
   mutations: {
-    increment (state) {
-      state.count++
+    save (state, page) {
+      state.queryString = page.queryString
+      state.pageCurrent = page.pageCurrent
     }
   }
 })

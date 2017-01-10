@@ -3,32 +3,27 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-flat-button color="white" label="返回" slot="right" icon="reply" labelPosition="before" @click="reply"/>
     </mu-appbar>
-    <mu-paper>
-      <mu-text-field label="教师姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-      <mu-text-field label="联系电话" :disabled="edit" underlineShow="false" v-model="phone" :errorColor="phoneErrorColor" :errorText="phoneErrorText" @input="checkPhone"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-      <mu-text-field label="微信号码" :disabled="edit" underlineShow="false" v-model="weixin" :errorColor="weixinErrorColor" :errorText="weixinErrorText" @input="checkWeixin" fullWidth labelFloat icon="chat"/><br/>
-      <mu-text-field label="电子邮箱" :disabled="edit" underlineShow="false" v-model="email"  :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
-      <mu-text-field label="备注信息" :disabled="edit" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
-    </mu-paper>
-    <mu-paper>
-      <div>
-        <mu-flexbox>
-          <mu-flexbox-item class="flex-demo">
-            <mu-raised-button label="修改" class="demo-raised-button" labelPosition="before" icon="edit" v-if="edit" @click="goEdit" />
-            <mu-raised-button label="保存" class="demo-raised-button" labelPosition="before" icon="done" v-if="save" @click="goSave" primary/>
-          </mu-flexbox-item>
-          <mu-flexbox-item class="flex-demo">
-            <mu-raised-button label="删除" class="demo-raised-button" labelPosition="before" icon="delete" secondary @click="openDelete"/>
-          </mu-flexbox-item>
-          <mu-flexbox-item class="flex-demo">
-            <mu-raised-button label="重置" class="demo-raised-button" labelPosition="before" icon="cached" v-if="save" :disabled="edit" backgroundColor="#ffd700" @click="goReset"/>
-            <mu-raised-button label="呼叫" class="demo-raised-button" labelPosition="before" icon="dialer_sip" v-if="edit" @click="goCall" backgroundColor="#a4c639"/>
-          </mu-flexbox-item>
-        </mu-flexbox>
-      </div>
-    </mu-paper>
+    <mu-text-field label="教师姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="联系电话" :disabled="edit" underlineShow="false" v-model="phone" :errorColor="phoneErrorColor" :errorText="phoneErrorText" @input="checkPhone"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-text-field label="微信号码" :disabled="edit" underlineShow="false" v-model="weixin" :errorColor="weixinErrorColor" :errorText="weixinErrorText" @input="checkWeixin" fullWidth labelFloat icon="chat"/><br/>
+    <mu-text-field label="电子邮箱" :disabled="edit" underlineShow="false" v-model="email"  :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
+    <mu-text-field label="备注信息" :disabled="edit" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
+    <mu-flexbox>
+      <mu-flexbox-item class="flex-demo">
+        <mu-raised-button label="修改" class="demo-raised-button" labelPosition="before" icon="edit" v-if="edit" @click="goEdit" primary/>
+        <mu-raised-button label="取消" class="demo-raised-button" labelPosition="before" icon="cancel" v-if="save" @click="goCancel" />
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <mu-raised-button label="删除" class="demo-raised-button" labelPosition="before" icon="delete" v-if="edit" secondary @click="openDelete"/>
+        <mu-raised-button label="保存" class="demo-raised-button" labelPosition="before" icon="done" v-if="save" @click="goSave" primary/>
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <mu-raised-button label="重置" class="demo-raised-button" labelPosition="before" icon="cached" v-if="save" :disabled="edit" backgroundColor="#ffd700" @click="goReset"/>
+        <mu-raised-button label="呼叫" class="demo-raised-button" labelPosition="before" icon="dialer_sip" v-if="edit" @click="goCall" backgroundColor="#a4c639"/>
+      </mu-flexbox-item>
+    </mu-flexbox>
     <mu-toast v-if="toast" :message="message"/>
-    <mu-dialog :open="dialog" title="确认要删除吗?" @close="goClose">
+    <mu-dialog :open="dialog" :title="deleteTitle" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goDelete"/>
     </mu-dialog>
@@ -45,6 +40,7 @@ export default {
       edit: true,
       save: false,
       dialog: false,
+      deleteTitle: '',
       teacher: '',
       name: '',
       phone: '',
@@ -81,6 +77,11 @@ export default {
     goEdit () {
       this.edit = false
       this.save = true
+    },
+    goCancel () {
+      this.edit = true
+      this.save = false
+      this.fetchData(this.$route.params.teacherId)
     },
     goClose () {
       this.dialog = false
@@ -133,6 +134,7 @@ export default {
             case '0':
               this.edit = true
               this.save = false
+              this.$router.go('/')
               window.location.href = '#/'
               break
             case '1':
@@ -226,6 +228,7 @@ export default {
         this.weixin = this.teacher.weixinId
         this.email = this.teacher.email
         this.remark = this.teacher.remark
+        this.deleteTitle = '确认要删除' + this.name + '吗?'
       }, (response) => {
       })
     },

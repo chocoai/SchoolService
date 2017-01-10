@@ -1,24 +1,26 @@
 <template>
   <div id="teacherManage">
     <mu-appbar title="">
-      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入教师姓名" @input="query"/>
+      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入教师姓名" @input="query" :value="queryString"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.phone" @click="look(teacher.id)">
         <mu-avatar :src="teacher.name" slot="leftAvatar" :size="30"/>
-        <mu-avatar icon="folder" slot="rightAvatar" :size="30"/>
+        <mu-avatar icon="link" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-icon-button v-if="before" tooltip="上一页" icon="navigate_before" @click="pageBefore"/></mu-flexbox-item>
+        <mu-raised-button v-if="before" label="上一页" labelPosition="before" icon="navigate_before" @click="pageBefore" />
+      </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
         <div v-if="chip">
           {{pageCurrent}}/{{pageTotal}}
         </div>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-icon-button v-if="next" tooltip="下一页" icon="navigate_next" @click="pageNext"/></mu-flexbox-item>
+        <mu-raised-button v-if="next" label="下一页" labelPosition="before" icon="navigate_next" @click="pageNext" />
+      </mu-flexbox-item>
     </mu-flexbox>
     <add iconName="add" hrefLocation="#/add"></add>
   </div>
@@ -34,7 +36,7 @@
         before: false,
         next: false,
         chip: false,
-        queryName: '',
+        queryString: '',
         teachers: [],
         pageTotal: '',
         pageSize: '6',
@@ -49,17 +51,18 @@
         window.document.title = response.data
       }, (response) => {
       })
-      this.pageCurrent = '1'
-      this.teacherQuery('', '1', this.pageSize)
-      this.teacherTotal('', this.pageSize)
+      this.queryString = this.$store.state.queryString
+      this.pageCurrent = this.$store.state.pageCurrent
+      this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
+      this.teacherTotal(this.queryString, this.pageSize)
     },
     methods: {
-      teacherQuery (queryName, pageCurrent, pageSize) {
+      teacherQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
           AF.TeacherQueryByName,
           { params:
           {
-            queryName: queryName,
+            queryString: queryString,
             pageCurrent: pageCurrent,
             pageSize: pageSize
           }
@@ -74,46 +77,55 @@
         ).then((response) => {
           this.teachers = response.body
           this.pageCurrent = pageCurrent
+          this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
         })
       },
-      teacherTotal (queryName, pageSize) {
+      teacherTotal (queryString, pageSize) {
         this.$http.get(
           AF.TeacherTotalByName,
           { params:
           {
-            queryName: queryName,
+            queryString: queryString,
             pageSize: pageSize
           }
           }
         ).then((response) => {
           this.pageTotal = response.body
           this.pageTotal === '0' ? this.chip = false : this.chip = true
-          this.pageTotal === '1' || this.pageTotal === '0' ? this.next = false : this.next = true
+          this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
         }, (response) => {
         })
       },
       query (value) {
-        this.queryName = value
+        this.queryString = value
         this.pageCurrent = '1'
-        this.teacherQuery(this.queryName, this.pageCurrent, this.pageSize)
-        this.teacherTotal(this.queryName, this.pageSize)
+        this.$store.commit('save', {
+          queryString: this.queryString,
+          pageCurrent: this.pageCurrent
+        })
+        this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.teacherTotal(this.queryString, this.pageSize)
         this.before = false
       },
       look (teacherId) {
         window.location.href = '#/look/' + teacherId
+        this.$store.commit('save', {
+          queryString: this.queryString,
+          pageCurrent: this.pageCurrent
+        })
       },
       pageBefore () {
         this.pageCurrent--
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.teacherQuery(this.queryName, this.pageCurrent, this.pageSize)
+        this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       pageNext () {
         this.pageCurrent++
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.teacherQuery(this.queryName, this.pageCurrent, this.pageSize)
+        this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
       }
     }
   }
