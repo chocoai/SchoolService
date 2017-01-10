@@ -1,7 +1,9 @@
 <template>
-  <div id="teacherManage">
+  <div class="TeacherList">
     <mu-appbar title="">
+      <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入教师姓名" @input="query" :value="queryString"/>
+      <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.phone" @click="look(teacher.id)">
@@ -11,7 +13,7 @@
     </mu-list>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-raised-button v-if="before" label="上一页" labelPosition="before" icon="navigate_before" @click="pageBefore" />
+        <mu-flat-button v-if="before" label="上一页" icon="navigate_before" @click="pageBefore" />
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
         <div v-if="chip">
@@ -19,35 +21,37 @@
         </div>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-raised-button v-if="next" label="下一页" labelPosition="before" icon="navigate_next" @click="pageNext" />
+        <mu-flat-button v-if="next" label="下一页" labelPosition="before" icon="navigate_next" @click="pageNext" />
       </mu-flexbox-item>
     </mu-flexbox>
-    <add iconName="add" hrefLocation="#/add"></add>
+    <br/>
+    <menuList :open="open" v-on:closeMenu="closeMenu"></menuList>
   </div>
 </template>
 
 <script>
-  import Add from './CircleBtn'
-  import * as AF from '../Util/AjaxFunction.js'
+  import * as API from './TeacherAPI.js'
+  import MenuList from '../components/MenuList'
   export default {
-    name: 'teacherManage',
+    name: 'TeacherList',
+    components: {
+      'menuList': MenuList
+    },
     data () {
       return {
         before: false,
         next: false,
         chip: false,
+        open: false,
         queryString: '',
         teachers: [],
         pageTotal: '',
-        pageSize: '6',
+        pageSize: '7',
         pageCurrent: ''
       }
     },
-    components: {
-      'add': Add
-    },
     created: function () {
-      this.$http.get(AF.TeacherGetName).then((response) => {
+      this.$http.get(API.GetName, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }).then((response) => {
         window.document.title = response.data
       }, (response) => {
       })
@@ -57,9 +61,15 @@
       this.teacherTotal(this.queryString, this.pageSize)
     },
     methods: {
+      openMenu () {
+        this.open = true
+      },
+      closeMenu () {
+        this.open = false
+      },
       teacherQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
-          AF.TeacherQueryByName,
+          API.QueryByName,
           { params:
           {
             queryString: queryString,
@@ -83,7 +93,7 @@
       },
       teacherTotal (queryString, pageSize) {
         this.$http.get(
-          AF.TeacherTotalByName,
+          API.TotalByName,
           { params:
           {
             queryString: queryString,
@@ -126,6 +136,9 @@
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
         this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
+      },
+      goAdd () {
+        this.$router.push({ path: '/add' })
       }
     }
   }
@@ -148,7 +161,7 @@
     }
   }
   .flex-demo {
-    height: 32px;
+    height: 70px;
     text-align: center;
     line-height: 32px;
   }

@@ -24,6 +24,7 @@ public class TeacherController extends Controller {
 
   public void getName() throws WeixinException {
 //    User u =(User) getSessionAttr("user");
+    System.out.println(getRequest().getHeader("X-Requested-With"));
     renderText("济南市育明小学");
   }
 

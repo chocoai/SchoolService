@@ -1,0 +1,17 @@
+const h = ''
+// const h = '/ds'
+export const GetName = `${h}/teacher/getName`
+export const CheckNameForNew = `${h}/teacher/checkNameForNew`
+export const CheckPhoneForNew = `${h}/teacher/checkPhoneForNew`
+export const CheckWeixinForNew = `${h}/teacher/checkWeixinForNew`
+export const CheckEmailForNew = `${h}/teacher/checkEmailForNew`
+export const CheckNameForEdit = `${h}/teacher/checkNameForEdit`
+export const CheckPhoneForEdit = `${h}/teacher/checkPhoneForEdit`
+export const CheckWeixinForEdit = `${h}/teacher/checkWeixinForEdit`
+export const CheckEmailForEdit = `${h}/teacher/checkEmailForEdit`
+export const Save = `${h}/teacher/save`
+export const Edit = `${h}/teacher/edit`
+export const QueryByName = `${h}/teacher/queryByName`
+export const TotalByName = `${h}/teacher/totalByName`
+export const GetById = `${h}/teacher/getById`
+export const DeleteById = `${h}/teacher/deleteById`

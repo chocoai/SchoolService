@@ -1,7 +1,7 @@
 <template>
-  <div class="AddField">
+  <div class="TeacherAdd">
     <mu-appbar title="请核实后输入以下信息">
-      <mu-flat-button color="white" label="返回" slot="right" icon="reply" labelPosition="before" @click="reply"/>
+      <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
     <mu-paper>
       <mu-text-field label="教师姓名" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
@@ -10,18 +10,29 @@
       <mu-text-field label="电子邮箱" underlineShow="false" v-model="email" :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
       <mu-text-field label="备注信息" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
     </mu-paper>
-    <mu-raised-button label="新增" fullWidth @click="save" primary/>
-    <mu-toast v-if="toast" :message="message"/>
+    <mu-flexbox>
+      <mu-flexbox-item class="flex-demo">
+        <mu-float-button icon="cached" @click="reset" backgroundColor="orange"/>
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <mu-float-button icon="done" @click="save" backgroundColor="green"/>
+      </mu-flexbox-item>
+    </mu-flexbox>
+    <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
+      <mu-icon :value="icon" :size="36" :color="color"/>{{ message }}
+    </mu-popup>
   </div>
 </template>
 
 <script>
-import * as AF from '../Util/AjaxFunction.js'
+import * as API from './TeacherAPI.js'
 export default {
-  name: 'AddField',
+  name: 'TeacherAdd',
   data () {
     return {
-      toast: false,
+      bottomPopup: false,
+      icon: '',
+      color: '',
       name: '',
       phone: '',
       weixin: '',
@@ -40,15 +51,35 @@ export default {
   },
   methods: {
     reply () {
-      window.location.href = '#/'
+      this.$router.push({ path: '/' })
     },
-    hideToast () {
-      this.toast = false
-      if (this.toastTimer) clearTimeout(this.toastTimer)
+    openPopup (message, icon, color) {
+      this.message = message
+      this.icon = icon
+      this.color = color
+      this.bottomPopup = true
+      setTimeout(() => { this.bottomPopup = false }, 1500)
+    },
+    reset () {
+      this.name = ''
+      this.phone = ''
+      this.weixin = ''
+      this.email = ''
+      this.remark = ''
+      this.nameErrorText = ''
+      this.phoneErrorText = ''
+      this.weixinErrorText = ''
+      this.emailErrorText = ''
+      this.remarkErrorText = ''
+      this.nameErrorColor = ''
+      this.phoneErrorColor = ''
+      this.weixinErrorColor = ''
+      this.emailErrorColor = ''
+      this.remarkErrorColor = ''
     },
     checkName (value) {
       this.$http.get(
-        AF.TeacherCheckNameForNew,
+        API.CheckNameForNew,
         { params: {
           name: value
         }
@@ -71,15 +102,12 @@ export default {
               this.nameErrorColor = 'blue'
           }
         }, (response) => {
-          this.message = '服务器内部错误！'
-          this.toast = true
-          if (this.toastTimer) clearTimeout(this.toastTimer)
-          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
         })
     },
     checkPhone (value) {
       this.$http.get(
-        AF.TeacherCheckPhoneForNew,
+        API.CheckPhoneForNew,
         { params: {
           phone: value
         }
@@ -102,15 +130,12 @@ export default {
               this.phoneErrorColor = 'blue'
           }
         }, (response) => {
-          this.message = '服务器内部错误！'
-          this.toast = true
-          if (this.toastTimer) clearTimeout(this.toastTimer)
-          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
         })
     },
     checkWeixin (value) {
       this.$http.get(
-        AF.TeacherCheckWeixinForNew,
+        API.CheckWeixinForNew,
         { params: {
           weixin: value
         }
@@ -133,15 +158,12 @@ export default {
               this.weixinErrorColor = 'blue'
           }
         }, (response) => {
-          this.message = '服务器内部错误！'
-          this.toast = true
-          if (this.toastTimer) clearTimeout(this.toastTimer)
-          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
         })
     },
     checkEmail (value) {
       this.$http.get(
-        AF.TeacherCheckEmailForNew,
+        API.CheckEmailForNew,
         { params: {
           email: value
         }
@@ -164,15 +186,12 @@ export default {
               this.emailErrorColor = 'blue'
           }
         }, (response) => {
-          this.message = '服务器内部错误！'
-          this.toast = true
-          if (this.toastTimer) clearTimeout(this.toastTimer)
-          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
         })
     },
     save () {
       this.$http.get(
-        AF.TeacherSave,
+        API.Save,
         { params: {
           name: this.name,
           phone: this.phone,
@@ -183,71 +202,59 @@ export default {
         }).then((response) => {
           switch (response.body) {
             case '0':
-              window.location.href = '#/'
+              this.openPopup('保存成功！', 'check_circle', 'green')
+              setTimeout(() => { this.$router.push({ path: '/' }) }, 1000)
               break
             case '1':
-              this.message = '姓名为必填项！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false }, 1500)
+              this.openPopup('姓名为必填项！', 'report_problem', 'orange')
               break
             case '2':
-              this.message = '输入的姓名应该为两个以上汉字！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              this.openPopup('输入的姓名应该为两个以上汉字！', 'report_problem', 'orange')
               break
             case '3':
-              this.message = '手机号码与微信号必须填写其中一项！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              this.openPopup('手机号码与微信号必须填写其中一项！', 'report_problem', 'orange')
               break
             case '4':
-              this.message = '输入的手机号码应为11位数字！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              this.openPopup('输入的手机号码应为11位数字！', 'report_problem', 'orange')
               break
             case '5':
-              this.message = '输入的手机号码已存在！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              this.openPopup('输入的手机号码已存在！', 'report_problem', 'orange')
               break
             case '6':
-              this.message = '输入的微信号不应包含中文！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              this.openPopup('输入的微信号不应包含中文！', 'report_problem', 'orange')
               break
             case '7':
-              this.message = '输入的微信号已存在！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              this.openPopup('输入的微信号已存在！', 'report_problem', 'orange')
               break
             case '8':
-              this.message = '输入的电子邮箱格式不正确！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              this.openPopup('输入的电子邮箱格式不正确！', 'report_problem', 'orange')
               break
             case '9':
-              this.message = '输入的电子邮箱已存在！'
-              this.toast = true
-              if (this.toastTimer) clearTimeout(this.toastTimer)
-              this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+              this.openPopup('输入的电子邮箱已存在！', 'report_problem', 'orange')
               break
             default:
           }
         }, (response) => {
-          this.message = '服务器内部错误！'
-          this.toast = true
-          if (this.toastTimer) clearTimeout(this.toastTimer)
-          this.toastTimer = setTimeout(() => { this.toast = false; this.message = '' }, 1500)
+          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
         })
     }
   }
 }
 </script>
+<style lang="css">
+  .popup-bottom {
+    width: 100%;
+    opacity: .8;
+    height: 48px;
+    line-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 300px;
+  }
+  .flex-demo {
+    height: 70px;
+    text-align: center;
+    line-height: 32px;
+  }
+</style>
