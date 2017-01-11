@@ -12,7 +12,7 @@ var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
 module.exports = {
   entry: {
-    app: './src/main.js',
+    home: './src/Home/Index.js',
     teacherManage: './src/TeacherManage/Index.js'
   },
   output: {
@@ -24,12 +24,11 @@ module.exports = {
     extensions: ['', '.js', '.vue'],
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
-      'vue$': 'vue/dist/vue.common.js',
+      'vue': 'vue/dist/vue.common.js',
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
       'muse-components': 'muse-ui/src',
-      'components': path.resolve(__dirname, '../src/components'),
-      'TeacherManage': path.resolve(__dirname, '../src/TeacherManage')
+      'components': path.resolve(__dirname, '../src/components')
     }
   },
   resolveLoader: {

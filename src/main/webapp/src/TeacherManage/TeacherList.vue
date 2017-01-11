@@ -51,10 +51,6 @@
       }
     },
     created: function () {
-      this.$http.get(API.GetName, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }).then((response) => {
-        window.document.title = response.data
-      }, (response) => {
-      })
       this.queryString = this.$store.state.queryString
       this.pageCurrent = this.$store.state.pageCurrent
       this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
@@ -119,7 +115,7 @@
         this.before = false
       },
       look (teacherId) {
-        window.location.href = '#/look/' + teacherId
+        this.$router.push({ path: '/teacherEdit/' + teacherId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent
@@ -138,7 +134,7 @@
         this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       goAdd () {
-        this.$router.push({ path: '/add' })
+        this.$router.push({ path: '/teacherAdd' })
       }
     }
   }

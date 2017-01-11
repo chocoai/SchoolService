@@ -71,7 +71,7 @@ export default {
   },
   methods: {
     reply () {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/teacherList' })
     },
     openDelete () {
       this.forDelete = true
@@ -113,11 +113,11 @@ export default {
               this.edit = true
               this.save = false
               this.openPopup('删除成功！', 'check_circle', 'green')
-              setTimeout(() => { this.$router.push({ path: '/' }) }, 1000)
+              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
               break
             case '1':
               this.openPopup('要删除的教师不存在！', 'report_problem', 'red')
-              setTimeout(() => { this.$router.push({ path: '/' }) }, 1000)
+              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
               break
             default:
           }
@@ -145,7 +145,7 @@ export default {
               break
             case '1':
               this.openPopup('要修改的教师不存在！', 'report_problem', 'red')
-              setTimeout(() => { this.$router.push({ path: '/' }) }, 1000)
+              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
               break
             case '2':
               this.openPopup('未找到修改内容！', 'report_problem', 'orange')

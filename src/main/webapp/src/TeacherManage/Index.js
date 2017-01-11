@@ -1,15 +1,17 @@
 import Vue from 'vue'
-import TeacherList from './TeacherList.vue'
-import TeacherAdd from './TeacherAdd.vue'
-import TeacherEdit from './TeacherEdit.vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import Vuex from 'vuex'
+
+import TeacherList from './TeacherList.vue'
+import TeacherAdd from './TeacherAdd.vue'
+import TeacherEdit from './TeacherEdit.vue'
+
 // import 'muse-ui/dist/muse-ui.css'
 // import MuseUI from 'muse-ui'
 //
 // Vue.use(MuseUI)
-
+import 'assets/icon.css'
 import 'muse-components/styles/base.less' // 加载基础的样式
 import appBar from 'muse-components/appBar'
 import icon from 'muse-components/icon'
@@ -53,9 +55,10 @@ Vue.use(VueResource)
 Vue.use(Vuex)
 
 const routes = [
-  { path: '/add', component: TeacherAdd },
-  { path: '/look/:teacherId', component: TeacherEdit },
-  { path: '/', component: TeacherList }
+  { path: '/teacherList', component: TeacherList },
+  { path: '/teacherAdd', component: TeacherAdd },
+  { path: '/teacherEdit/:teacherId', component: TeacherEdit },
+  { path: '/', redirect: '/teacherList' }
 ]
 
 const router = new VueRouter({

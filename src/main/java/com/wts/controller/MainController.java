@@ -31,7 +31,7 @@ public class MainController extends Controller {
 //    User u= WP.me.getUserByCode(getPara("code"));
 //    System.out.println(getPara("code"));
 //    setSessionAttr("user",u);
-    render("/dist/TeacherManage.html");
+    render("/static/Home.html");
 ////    renderText("aaa");
 //    try {
 //      //NotifyMessage CM = new NotifyMessage(25,new Text("hello world!!!"),new IdParameter().putUserIds("wts"),false);

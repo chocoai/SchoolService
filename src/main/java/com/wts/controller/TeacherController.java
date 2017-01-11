@@ -19,7 +19,7 @@ public class TeacherController extends Controller {
   public void index() throws WeixinException{
 //    User u= WP.me.getUserByCode(getPara("code"));
 //    setSessionAttr("user",u);
-    render("/dist/TeacherManage.html");
+    render("/static/TeacherManage.html");
   }
 
   public void getName() throws WeixinException {

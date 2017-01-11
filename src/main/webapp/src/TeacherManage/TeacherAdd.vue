@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     reply () {
-      this.$router.push({ path: '/' })
+      this.$router.push({ path: '/teacherList' })
     },
     openPopup (message, icon, color) {
       this.message = message
@@ -203,7 +203,7 @@ export default {
           switch (response.body) {
             case '0':
               this.openPopup('保存成功！', 'check_circle', 'green')
-              setTimeout(() => { this.$router.push({ path: '/' }) }, 1000)
+              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
               break
             case '1':
               this.openPopup('姓名为必填项！', 'report_problem', 'orange')
