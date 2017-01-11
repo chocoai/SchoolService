@@ -1,13 +1,287 @@
+Table: application
+----------------------+--------------+------+-----+---------+---------
+ Field                | Type         | Null | Key | Default | Remarks 
+----------------------+--------------+------+-----+---------+---------
+ id                   | INT(10)      | NO   | PRI |         | 应用序号    
+ name                 | VARCHAR(255) | YES  |     |         | 应用名称    
+ agentId              | INT(10)      | YES  |     |         | 企业应用ID  
+ school_id            | INT(10)      | YES  |     |         | 所属学校    
+ qy_id                | INT(10)      | YES  |     |         | 所属企业号   
+ description          | VARCHAR(255) | YES  |     |         | 企业应用详情  
+ redirect_domain      | VARCHAR(255) | YES  |     |         | 企业应用可信域 
+ report_location_flag | INT(10)      | YES  |     |         | 企业应用是否打开地理位置上报 0：不上报；1：进入会话上报；2：持续上报
+ chat_extension_url   | VARCHAR(255) | YES  |     |         | 关联会话url 
+ isreportuser         | INT(10)      | YES  |     |         | 是否接收用户变更通知。0：不接收；1：接收
+ isreportenter        | INT(10)      | YES  |     |         | 是否上报用户进入应用事件。0：不接收；1：接收
+ type                 | INT(10)      | YES  |     |         | 应用类型。1：消息型；2：主页型
+ home_url             | VARCHAR(255) | YES  |     |         | 主页型应用url。url必须以http或者https开头。消息型应用无需该参数
+----------------------+--------------+------+-----+---------+---------
+
+Table: course
+-------+--------------+------+-----+---------+---------
+ Field | Type         | Null | Key | Default | Remarks 
+-------+--------------+------+-----+---------+---------
+ id    | INT(10)      | NO   | PRI |         | 课程序号    
+ name  | VARCHAR(255) | YES  |     |         | 课程名称    
+ state | INT(10)      | YES  |     |         | 课程状态    
+-------+--------------+------+-----+---------+---------
+
+Table: courseplan
+------------+---------+------+-----+---------+---------
+ Field      | Type    | Null | Key | Default | Remarks 
+------------+---------+------+-----+---------+---------
+ course_id  | INT(10) | YES  |     |         | 课程序号    
+ teacher_id | INT(10) | YES  |     |         | 教师序号    
+ room_id    | INT(10) | YES  |     |         | 班级序号    
+ sequence   | INT(10) | YES  |     |         | 教师序号    
+------------+---------+------+-----+---------+---------
+
+Table: identity
+-------+--------------+------+-----+---------+---------
+ Field | Type         | Null | Key | Default | Remarks 
+-------+--------------+------+-----+---------+---------
+ id    | INT(10)      | NO   | PRI |         | 身份序号    
+ name  | VARCHAR(255) | YES  |     |         | 身份类型    
+-------+--------------+------+-----+---------+---------
+
+Table: menu
+-----------+--------------+------+-----+---------+---------
+ Field     | Type         | Null | Key | Default | Remarks 
+-----------+--------------+------+-----+---------+---------
+ id        | INT(10)      | NO   | PRI |         | 按钮序号    
+ app_id    | INT(10)      | YES  |     |         | 应用ID    
+ name      | VARCHAR(255) | YES  |     |         | 按钮名称    
+ type      | VARCHAR(255) | YES  |     |         | 按钮类型    
+ level     | INT(10)      | YES  |     |         | 按钮级别（1,2）
+ father_id | INT(10)      | YES  |     |         | 父按钮     
+ url       | VARCHAR(255) | YES  |     |         | 链接地址    
+ category  | INT(10)      | YES  |     |         | 1订阅号2服务号3企业号
+ qy_id     | INT(10)      | YES  |     |         | 企业号     
+ fw_id     | INT(10)      | YES  |     |         | 服务号     
+ dy_id     | INT(10)      | YES  |     |         | 订阅号     
+-----------+--------------+------+-----+---------+---------
+
+Table: parent
+---------+--------------+------+-----+---------+---------
+ Field   | Type         | Null | Key | Default | Remarks 
+---------+--------------+------+-----+---------+---------
+ id      | INT(10)      | NO   | PRI |         | 家长序号    
+ number  | VARCHAR(255) | YES  |     |         | 家长证件号码  
+ name    | VARCHAR(255) | YES  |     |         | 家长姓名    
+ sex     | INT(10)      | YES  |     |         | 家长性别    
+ phone   | VARCHAR(255) | YES  |     |         | 联系电话    
+ email   | VARCHAR(255) | YES  |     |         | 电子邮箱    
+ remark  | VARCHAR(255) | YES  |     |         | 家长备注    
+ address | VARCHAR(255) | YES  |     |         | 家庭住址    
+---------+--------------+------+-----+---------+---------
+
+Table: parenttag
+-----------+---------+------+-----+---------+---------
+ Field     | Type    | Null | Key | Default | Remarks 
+-----------+---------+------+-----+---------+---------
+ parent_id | INT(10) | YES  |     |         | 家长序号    
+ tag_id    | INT(10) | YES  |     |         | 标签序号    
+-----------+---------+------+-----+---------+---------
+
+Table: relation
+-------------+---------+------+-----+---------+---------
+ Field       | Type    | Null | Key | Default | Remarks 
+-------------+---------+------+-----+---------+---------
+ parent_id   | INT(10) | YES  |     |         | 家长序号    
+ student_id  | INT(10) | YES  |     |         | 学生序号    
+ identity_id | INT(10) | YES  |     |         | 身份序号    
+ state       | INT(10) | YES  |     |         | 状态      
+-------------+---------+------+-----+---------+---------
+
+Table: room
+------------+--------------+------+-----+---------+---------
+ Field      | Type         | Null | Key | Default | Remarks 
+------------+--------------+------+-----+---------+---------
+ id         | INT(10)      | NO   | PRI |         | 班级序号    
+ name       | VARCHAR(255) | YES  |     |         | 班级名称    
+ code       | VARCHAR(255) | YES  |     |         | 班级编号    
+ state      | INT(10)      | YES  |     |         | 班级状态    
+ school_id  | INT(10)      | YES  |     |         | 学校序号    
+ enter_year | DATETIME(19) | YES  |     |         | 入学时间    
+ blog       | VARCHAR(255) | YES  |     |         | 班级博客    
+------------+--------------+------+-----+---------+---------
+
+Table: school
+---------+--------------+------+-----+---------+---------
+ Field   | Type         | Null | Key | Default | Remarks 
+---------+--------------+------+-----+---------+---------
+ id      | INT(10)      | NO   | PRI |         | 学校序号    
+ name    | VARCHAR(255) | YES  |     |         | 学校名称    
+ code    | VARCHAR(255) | YES  |     |         | 学校编号    
+ address | VARCHAR(255) | YES  |     |         | 学校地址    
+ state   | INT(10)      | YES  |     |         | 学校状态    
+ phone   | VARCHAR(255) | YES  |     |         | 联系电话    
+---------+--------------+------+-----+---------+---------
+
+Table: student
+---------+--------------+------+-----+---------+---------
+ Field   | Type         | Null | Key | Default | Remarks 
+---------+--------------+------+-----+---------+---------
+ id      | INT(10)      | NO   | PRI |         | 学生序号    
+ name    | VARCHAR(255) | YES  |     |         | 学生姓名    
+ number  | VARCHAR(255) | YES  |     |         | 学生身份证号码 
+ code    | VARCHAR(255) | YES  |     |         | 学籍号     
+ sex     | INT(10)      | YES  |     |         | 学生性别    
+ birth   | DATETIME(19) | YES  |     |         | 出生日期    
+ room_id | INT(10)      | YES  |     |         | 班级序号    
+ remark  | VARCHAR(255) | YES  |     |         | 学生备注    
+ state   | INT(10)      | YES  |     |         | 学生状态    
+ phone   | VARCHAR(255) | YES  |     |         | 联系电话    
+ adress  | VARCHAR(255) | YES  |     |         | 联系地址    
+---------+--------------+------+-----+---------+---------
+
+Table: studenttag
+------------+---------+------+-----+---------+---------
+ Field      | Type    | Null | Key | Default | Remarks 
+------------+---------+------+-----+---------+---------
+ student_id | INT(10) | YES  |     |         | 学生序号    
+ tag_id     | INT(10) | YES  |     |         | 标签序号    
+------------+---------+------+-----+---------+---------
+
+Table: tag
+-----------+--------------+------+-----+---------+---------
+ Field     | Type         | Null | Key | Default | Remarks 
+-----------+--------------+------+-----+---------+---------
+ id        | INT(10)      | NO   | PRI |         |  标签序号   
+ name      | VARCHAR(255) | YES  |     |         | 标签名称    
+ type      | INT(10)      | YES  |     |         | 标签类型（1教师、2家长、3学生）
+ state     | INT(10)      | YES  |     |         | 标签状态    
+ school_id | INT(10)      | YES  |     |         | 学校序号    
+ category  | INT(10)      | YES  |     |         | 标签类别（1企业，2订阅，3服务）
+ qy_id     | INT(10)      | YES  |     |         | 企业号     
+ fw_id     | INT(10)      | YES  |     |         | 服务号     
+ dy_id     | INT(10)      | YES  |     |         | 订阅号     
+-----------+--------------+------+-----+---------+---------
+
 Table: teacher
-----------+--------------+------+-----+---------+---------
- Field    | Type         | Null | Key | Default | Remarks 
-----------+--------------+------+-----+---------+---------
- id       | INT(10)      | NO   | PRI |         |         
- name     | VARCHAR(255) | YES  |     |         |         
- phone    | VARCHAR(255) | YES  |     |         |         
- weixinId | VARCHAR(255) | YES  |     |         |         
- email    | VARCHAR(255) | YES  |     |         |         
- remark   | VARCHAR(255) | YES  |     |         |         
- state    | VARCHAR(255) | YES  |     |         |         
-----------+--------------+------+-----+---------+---------
+--------------+--------------+------+-----+---------+---------
+ Field        | Type         | Null | Key | Default | Remarks 
+--------------+--------------+------+-----+---------+---------
+ id           | INT(10)      | NO   | PRI |         | 教师序号    
+ number       | VARCHAR(255) | YES  |     |         | 教师身份证号码 
+ name         | VARCHAR(255) | YES  |     |         | 教师姓名    
+ sex          | INT(10)      | YES  |     |         | 教师性别    
+ phone        | VARCHAR(255) | YES  |     |         | 微信绑定的手机号
+ email        | VARCHAR(255) | YES  |     |         | 微信绑定的电子邮箱
+ remark       | VARCHAR(255) | YES  |     |         | 教师备注    
+ loginAccount | VARCHAR(255) | YES  |     |         | 登录账号    
+ loginPass    | VARCHAR(255) | YES  |     |         | 登录密码    
+ school_id    | INT(10)      | YES  |     |         | 学校序号    
+ state        | INT(10)      | YES  |     |         | 教师状态    
+--------------+--------------+------+-----+---------+---------
+
+Table: teachertag
+------------+---------+------+-----+---------+---------
+ Field      | Type    | Null | Key | Default | Remarks 
+------------+---------+------+-----+---------+---------
+ teacher_id | INT(10) | YES  |     |         | 教师序号    
+ tag_id     | INT(10) | YES  |     |         | 标签序号    
+------------+---------+------+-----+---------+---------
+
+Table: user_dy
+----------------+--------------+------+-----+---------+---------
+ Field          | Type         | Null | Key | Default | Remarks 
+----------------+--------------+------+-----+---------+---------
+ id             | INT(10)      | NO   | PRI |         | 订阅号用户序号 
+ openId         | VARCHAR(255) | YES  |     |         | 微信公共号内的ID
+ unionId        | INT(10)      | YES  |     |         |         
+ nickname       | VARCHAR(255) | YES  |     |         | 昵称      
+ sex            | VARCHAR(255) | YES  |     |         | 性别      
+ city           | VARCHAR(255) | YES  |     |         | 城市      
+ province       | VARCHAR(255) | YES  |     |         | 省份      
+ country        | VARCHAR(255) | YES  |     |         | 国家      
+ language       | VARCHAR(255) | YES  |     |         | 语言      
+ subscribe_time | DATETIME(19) | YES  |     |         | 关注时间    
+ remark         | VARCHAR(255) | YES  |     |         | 备注      
+ groupid        | VARCHAR(255) | YES  |     |         | 用户所在的分组ID
+ headimgurl     | VARCHAR(255) | YES  |     |         | 头像地址    
+ tagid_list     | VARCHAR(255) | YES  |     |         | 用户被打上的标签ID列表
+ school_id      | INT(10)      | YES  |     |         | 学校序号    
+ teacher_id     | INT(10)      | YES  |     |         | 教师序号    
+ parent_id      | INT(10)      | YES  |     |         | 家长序号    
+ student_id     | INT(10)      | YES  |     |         | 学生序号    
+----------------+--------------+------+-----+---------+---------
+
+Table: user_fw
+----------------+--------------+------+-----+---------+---------
+ Field          | Type         | Null | Key | Default | Remarks 
+----------------+--------------+------+-----+---------+---------
+ id             | INT(10)      | NO   | PRI |         | 服务号用户序号 
+ openId         | VARCHAR(255) | YES  |     |         | 微信公共号内的ID
+ unionId        | INT(10)      | YES  |     |         |         
+ nickname       | VARCHAR(255) | YES  |     |         | 昵称      
+ sex            | VARCHAR(255) | YES  |     |         | 性别      
+ city           | VARCHAR(255) | YES  |     |         | 城市      
+ province       | VARCHAR(255) | YES  |     |         | 省份      
+ country        | VARCHAR(255) | YES  |     |         | 国家      
+ language       | VARCHAR(255) | YES  |     |         | 语言      
+ subscribe_time | DATETIME(19) | YES  |     |         | 关注时间    
+ remark         | VARCHAR(255) | YES  |     |         | 备注      
+ groupid        | VARCHAR(255) | YES  |     |         | 用户所在的分组ID
+ headimgurl     | VARCHAR(255) | YES  |     |         | 头像地址    
+ tagid_list     | VARCHAR(255) | YES  |     |         | 用户被打上的标签ID列表
+ school_id      | INT(10)      | YES  |     |         | 学校序号    
+ teacher_id     | INT(10)      | YES  |     |         | 教师序号    
+ parent_id      | INT(10)      | YES  |     |         | 家长序号    
+ student_id     | INT(10)      | YES  |     |         | 学生序号    
+----------------+--------------+------+-----+---------+---------
+
+Table: user_qy
+------------+--------------+------+-----+---------+---------
+ Field      | Type         | Null | Key | Default | Remarks 
+------------+--------------+------+-----+---------+---------
+ id         | INT(10)      | NO   | PRI |         | 企业号用户序号 
+ userId     | VARCHAR(255) | YES  |     |         | 微信号     
+ openId     | VARCHAR(255) | YES  |     |         | 微信号     
+ account    | VARCHAR(255) | YES  |     |         | 微信账户    
+ phone      | VARCHAR(255) | YES  |     |         | 微信电话    
+ email      | VARCHAR(255) | YES  |     |         |  微信电子邮箱 
+ sex        | INT(10)      | YES  |     |         | 性别      
+ state      | INT(10)      | YES  |     |         | 账号状态    
+ teacher_id | INT(10)      | YES  |     |         | 教师序号    
+ parent_id  | INT(10)      | YES  |     |         | 家长序号    
+ student_id | INT(10)      | YES  |     |         | 学生序号    
+ school_id  | INT(10)      | YES  |     |         | 所属学校    
+------------+--------------+------+-----+---------+---------
+
+Table: weixin_dy
+-----------+--------------+------+-----+---------+---------
+ Field     | Type         | Null | Key | Default | Remarks 
+-----------+--------------+------+-----+---------+---------
+ id        | INT(10)      | NO   | PRI |         | 订阅号序号   
+ state     | INT(10)      | YES  |     |         | 状态      
+ appId     | VARCHAR(255) | YES  |     |         | 服务号     
+ appSecret | VARCHAR(255) | YES  |     |         | 密钥      
+ school_id | INT(10)      | YES  |     |         | 学校序号    
+ remark    | VARCHAR(255) | YES  |     |         | 备注      
+-----------+--------------+------+-----+---------+---------
+
+Table: weixin_fw
+-----------+--------------+------+-----+---------+---------
+ Field     | Type         | Null | Key | Default | Remarks 
+-----------+--------------+------+-----+---------+---------
+ id        | INT(10)      | NO   | PRI |         | 服务号序号   
+ state     | INT(10)      | YES  |     |         | 状态      
+ appId     | VARCHAR(255) | YES  |     |         | 服务号     
+ appSecret | VARCHAR(255) | YES  |     |         | 密钥      
+ school_id | INT(10)      | YES  |     |         | 学校序号    
+ remark    | VARCHAR(255) | YES  |     |         | 备注      
+-----------+--------------+------+-----+---------+---------
+
+Table: weixin_qy
+------------+--------------+------+-----+---------+---------
+ Field      | Type         | Null | Key | Default | Remarks 
+------------+--------------+------+-----+---------+---------
+ id         | INT(10)      | NO   | PRI |         | 企业号序号   
+ state      | INT(10)      | YES  |     |         | 企业号状态   
+ corpId     | VARCHAR(255) | YES  |     |         | 企业号     
+ corpSecret | VARCHAR(255) | YES  |     |         | 管理组密钥   
+ school_id  | INT(10)      | YES  |     |         | 学校序号    
+ remark     | VARCHAR(255) | YES  |     |         | 备注      
+------------+--------------+------+-----+---------+---------
 

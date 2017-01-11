@@ -3,14 +3,14 @@
     <mu-appbar :title="schoolName">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
     </mu-appbar>
-    <mu-flexbox orient="vertical">
+    <mu-flexbox orient="vertical" justify="center">
       <mu-flexbox-item >
-        <img :src="sign" />
+        <img :src="sign1" width="360px" height="360px"/>
       </mu-flexbox-item>
     </mu-flexbox>
-    <mu-flexbox orient="vertical">
+    <mu-flexbox orient="vertical" justify="center">
       <mu-flexbox-item >
-        孕育明日希望
+        <img :src="sign2" width="95%" />
       </mu-flexbox-item>
     </mu-flexbox>
     <menuList :open="open" v-on:closeMenu="closeMenu"></menuList>
@@ -19,7 +19,8 @@
 <script>
   import * as API from './HomeAPI.js'
   import MenuList from '../components/MenuList'
-  import sign from 'assets/schoolIcon.jpg'
+  import sign1 from 'assets/schoolIcon.jpg'
+  import sign2 from 'assets/biaoyu.png'
   export default {
     name: 'Home',
     components: {
@@ -27,7 +28,8 @@
     },
     data () {
       return {
-        sign,
+        sign1,
+        sign2,
         open: false,
         schoolName: ''
       }

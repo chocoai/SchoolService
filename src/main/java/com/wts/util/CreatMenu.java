@@ -17,8 +17,11 @@ public class CreatMenu {
 
   private static String CONNECT = BASIC.replaceAll("XXXXX","user%2faddUserPage%2f");
   private static String TEACHER = BASIC.replaceAll("XXXXX","teacher%2f");
+  private static String All = BASIC.replaceAll("XXXXX","");
   public static void main(String[] args) {
+    System.out.println(All);
     try{
+      Button School = new Button("管理系统", All, ButtonType.view);
       // 学校的相关功能
       Button School1_1 = new Button("教师管理", TEACHER, ButtonType.view);
       Button School1_2 = new Button("班级管理", CONNECT, ButtonType.view);
@@ -47,7 +50,10 @@ public class CreatMenu {
       schools.add(School2);
       schools.add(School3);
 
-      ApiResult ret = new WeixinProxy().createMenu(26, schools);
+      List<Button> schoolz = new ArrayList<Button>();
+      schoolz.add(School);
+
+      ApiResult ret = new WeixinProxy().createMenu(26, schoolz);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
       System.exit(0);
     } catch (WeixinException e){

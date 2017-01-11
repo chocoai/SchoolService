@@ -3,13 +3,11 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
-    <mu-paper>
-      <mu-text-field label="教师姓名" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-      <mu-text-field label="联系电话" underlineShow="false" v-model="phone" :errorColor="phoneErrorColor" :errorText="phoneErrorText" @input="checkPhone" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-      <mu-text-field label="微信号码" underlineShow="false" v-model="weixin" :errorColor="weixinErrorColor" :errorText="weixinErrorText" @input="checkWeixin" fullWidth labelFloat icon="chat"/><br/>
-      <mu-text-field label="电子邮箱" underlineShow="false" v-model="email" :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
-      <mu-text-field label="备注信息" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
-    </mu-paper>
+    <mu-text-field label="教师姓名" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="联系电话" underlineShow="false" v-model="phone" :errorColor="phoneErrorColor" :errorText="phoneErrorText" @input="checkPhone" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-text-field label="微信号码" underlineShow="false" v-model="weixin" :errorColor="weixinErrorColor" :errorText="weixinErrorText" @input="checkWeixin" fullWidth labelFloat icon="chat"/><br/>
+    <mu-text-field label="电子邮箱" underlineShow="false" v-model="email" :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
+    <mu-text-field label="备注信息" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="cached" @click="reset" backgroundColor="orange"/>
