@@ -56,7 +56,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // }),
     new HtmlWebpackPlugin({
       title: '主页',
-      filename: '../dist/Home.html',
+      filename: '../dist/static/Home.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'home'],
@@ -72,7 +72,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '教师管理',
-      filename: '../dist/TeacherManage.html',
+      filename: '../dist/static/TeacherManage.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'teacherManage'],
@@ -85,7 +85,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '标签管理',
-      filename: '../dist/TagManage.html',
+      filename: '../dist/static/TagManage.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'tagManage'],

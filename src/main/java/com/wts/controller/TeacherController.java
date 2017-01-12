@@ -1,18 +1,13 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
-import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
-import com.wts.entity.WP;
 import com.wts.entity.model.Teacher;
 import com.wts.util.Util;
-
-import java.util.List;
 
 public class TeacherController extends Controller {
 
@@ -272,7 +267,7 @@ public class TeacherController extends Controller {
     }
   }
   public void queryByName() {
-    Page<Teacher> teachers=Teacher.dao.paginate2(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
+    Page<Teacher> teachers= Teacher.dao.queryByName(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
     renderJson(teachers.getList());
   }
   public void totalByName() {

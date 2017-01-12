@@ -18,7 +18,6 @@ CREATE TABLE `Tag` (
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '标签名称',
 `type` int NULL COMMENT '标签类型（1教师、2家长、3学生）',
 `state` int NULL COMMENT '标签状态',
-`school_id` int NULL COMMENT '学校序号',
 `category` int NULL COMMENT '标签类别（1企业，2订阅，3服务）',
 `qy_id` int NULL COMMENT '企业号',
 `fw_id` int NULL COMMENT '服务号',
@@ -75,10 +74,10 @@ CREATE TABLE `User_qy` (
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT ' 微信电子邮箱',
 `sex` int NULL COMMENT '性别',
 `state` int NULL COMMENT '账号状态',
+`qy_id` int NULL COMMENT '所属企业号',
 `teacher_id` int NULL COMMENT '教师序号',
 `parent_id` int NULL COMMENT '家长序号',
 `student_id` int NULL COMMENT '学生序号',
-`school_id` int NULL COMMENT '所属学校',
 PRIMARY KEY (`id`) 
 );
 
@@ -112,7 +111,7 @@ CREATE TABLE `User_dy` (
 `groupid` varchar(255) CHARACTER SET utf8 NULL COMMENT '用户所在的分组ID',
 `headimgurl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
 `tagid_list` varchar(255) CHARACTER SET utf8 NULL COMMENT '用户被打上的标签ID列表',
-`school_id` int NULL COMMENT '学校序号',
+`dy_id` int NULL COMMENT '所属订阅号',
 `teacher_id` int NULL COMMENT '教师序号',
 `parent_id` int NULL COMMENT '家长序号',
 `student_id` int NULL COMMENT '学生序号',
@@ -159,7 +158,7 @@ CREATE TABLE `User_fw` (
 `groupid` varchar(255) CHARACTER SET utf8 NULL COMMENT '用户所在的分组ID',
 `headimgurl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
 `tagid_list` varchar(255) CHARACTER SET utf8 NULL COMMENT '用户被打上的标签ID列表',
-`school_id` int NULL COMMENT '学校序号',
+`fw_id` int NULL COMMENT '所属服务号',
 `teacher_id` int NULL COMMENT '教师序号',
 `parent_id` int NULL COMMENT '家长序号',
 `student_id` int NULL COMMENT '学生序号',
@@ -208,7 +207,7 @@ CREATE TABLE `Application` (
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `Weixin_qy` (
+CREATE TABLE `School_qy` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '企业号序号',
 `state` int NULL COMMENT '企业号状态',
 `corpId` varchar(255) CHARACTER SET utf8 NULL COMMENT '企业号',
@@ -218,7 +217,7 @@ CREATE TABLE `Weixin_qy` (
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `Weixin_fw` (
+CREATE TABLE `School_fw` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '服务号序号',
 `state` int NULL COMMENT '状态',
 `appId` varchar(255) CHARACTER SET utf8 NULL COMMENT '服务号',
@@ -228,7 +227,7 @@ CREATE TABLE `Weixin_fw` (
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `Weixin_dy` (
+CREATE TABLE `School_dy` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '订阅号序号',
 `state` int NULL COMMENT '状态',
 `appId` varchar(255) CHARACTER SET utf8 NULL COMMENT '服务号',
@@ -245,7 +244,7 @@ ALTER TABLE `Teacher` ADD CONSTRAINT `teacher_school` FOREIGN KEY (`school_id`) 
 ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
 ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
-ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_school` FOREIGN KEY (`qy_id`) REFERENCES `School_qy` (`id`);
 ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
 ALTER TABLE `Student` ADD CONSTRAINT `student_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
 ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
@@ -253,8 +252,8 @@ ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_student` FOREIGN KEY (`student_id`
 ALTER TABLE `Relation` ADD CONSTRAINT `relation_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
 ALTER TABLE `Relation` ADD CONSTRAINT `relation_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `Relation` ADD CONSTRAINT `relation_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
-ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
-ALTER TABLE `User_fw` ADD CONSTRAINT `user_fw_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_school` FOREIGN KEY (`dy_id`) REFERENCES `School_dy` (`id`);
+ALTER TABLE `User_fw` ADD CONSTRAINT `user_fw_school` FOREIGN KEY (`fw_id`) REFERENCES `School_fw` (`id`);
 ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
 ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
@@ -265,18 +264,17 @@ ALTER TABLE `ParentTag` ADD CONSTRAINT `parent_tag` FOREIGN KEY (`parent_id`) RE
 ALTER TABLE `ParentTag` ADD CONSTRAINT `tag_parent` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`);
 ALTER TABLE `StudentTag` ADD CONSTRAINT `student_tag` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `StudentTag` ADD CONSTRAINT `tag_student` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`);
-ALTER TABLE `Tag` ADD CONSTRAINT `tag_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
 ALTER TABLE `Application` ADD CONSTRAINT `app_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
 ALTER TABLE `Application` ADD CONSTRAINT `app_qy` FOREIGN KEY (`qy_id`) REFERENCES `User_qy` (`id`);
 ALTER TABLE `Menu` ADD CONSTRAINT `menu_app` FOREIGN KEY (`app_id`) REFERENCES `Application` (`id`);
 ALTER TABLE `Menu` ADD CONSTRAINT `menu_father` FOREIGN KEY (`father_id`) REFERENCES `Menu` (`id`);
-ALTER TABLE `Weixin_qy` ADD CONSTRAINT `qy_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
-ALTER TABLE `Weixin_fw` ADD CONSTRAINT `fw_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
-ALTER TABLE `Weixin_dy` ADD CONSTRAINT `dy_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
-ALTER TABLE `Menu` ADD CONSTRAINT `menu_qy` FOREIGN KEY (`qy_id`) REFERENCES `Weixin_qy` (`id`);
-ALTER TABLE `Menu` ADD CONSTRAINT `menu_fw` FOREIGN KEY (`fw_id`) REFERENCES `Weixin_fw` (`id`);
-ALTER TABLE `Menu` ADD CONSTRAINT `menu_dy` FOREIGN KEY (`dy_id`) REFERENCES `Weixin_dy` (`id`);
-ALTER TABLE `Tag` ADD CONSTRAINT `tag_qy` FOREIGN KEY (`qy_id`) REFERENCES `Weixin_qy` (`id`);
-ALTER TABLE `Tag` ADD CONSTRAINT `tag_fw` FOREIGN KEY (`fw_id`) REFERENCES `Weixin_fw` (`id`);
-ALTER TABLE `Tag` ADD CONSTRAINT `tag_dy` FOREIGN KEY (`dy_id`) REFERENCES `Weixin_dy` (`id`);
+ALTER TABLE `School_qy` ADD CONSTRAINT `qy_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `School_fw` ADD CONSTRAINT `fw_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `School_dy` ADD CONSTRAINT `dy_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `Menu` ADD CONSTRAINT `menu_qy` FOREIGN KEY (`qy_id`) REFERENCES `School_qy` (`id`);
+ALTER TABLE `Menu` ADD CONSTRAINT `menu_fw` FOREIGN KEY (`fw_id`) REFERENCES `School_fw` (`id`);
+ALTER TABLE `Menu` ADD CONSTRAINT `menu_dy` FOREIGN KEY (`dy_id`) REFERENCES `School_dy` (`id`);
+ALTER TABLE `Tag` ADD CONSTRAINT `tag_qy` FOREIGN KEY (`qy_id`) REFERENCES `School_qy` (`id`);
+ALTER TABLE `Tag` ADD CONSTRAINT `tag_fw` FOREIGN KEY (`fw_id`) REFERENCES `School_fw` (`id`);
+ALTER TABLE `Tag` ADD CONSTRAINT `tag_dy` FOREIGN KEY (`dy_id`) REFERENCES `School_dy` (`id`);
 

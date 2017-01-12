@@ -118,6 +118,42 @@ Table: school
  phone   | VARCHAR(255) | YES  |     |         | 联系电话    
 ---------+--------------+------+-----+---------+---------
 
+Table: school_dy
+-----------+--------------+------+-----+---------+---------
+ Field     | Type         | Null | Key | Default | Remarks 
+-----------+--------------+------+-----+---------+---------
+ id        | INT(10)      | NO   | PRI |         | 订阅号序号   
+ state     | INT(10)      | YES  |     |         | 状态      
+ appId     | VARCHAR(255) | YES  |     |         | 服务号     
+ appSecret | VARCHAR(255) | YES  |     |         | 密钥      
+ school_id | INT(10)      | YES  |     |         | 学校序号    
+ remark    | VARCHAR(255) | YES  |     |         | 备注      
+-----------+--------------+------+-----+---------+---------
+
+Table: school_fw
+-----------+--------------+------+-----+---------+---------
+ Field     | Type         | Null | Key | Default | Remarks 
+-----------+--------------+------+-----+---------+---------
+ id        | INT(10)      | NO   | PRI |         | 服务号序号   
+ state     | INT(10)      | YES  |     |         | 状态      
+ appId     | VARCHAR(255) | YES  |     |         | 服务号     
+ appSecret | VARCHAR(255) | YES  |     |         | 密钥      
+ school_id | INT(10)      | YES  |     |         | 学校序号    
+ remark    | VARCHAR(255) | YES  |     |         | 备注      
+-----------+--------------+------+-----+---------+---------
+
+Table: school_qy
+------------+--------------+------+-----+---------+---------
+ Field      | Type         | Null | Key | Default | Remarks 
+------------+--------------+------+-----+---------+---------
+ id         | INT(10)      | NO   | PRI |         | 企业号序号   
+ state      | INT(10)      | YES  |     |         | 企业号状态   
+ corpId     | VARCHAR(255) | YES  |     |         | 企业号     
+ corpSecret | VARCHAR(255) | YES  |     |         | 管理组密钥   
+ school_id  | INT(10)      | YES  |     |         | 学校序号    
+ remark     | VARCHAR(255) | YES  |     |         | 备注      
+------------+--------------+------+-----+---------+---------
+
 Table: student
 ---------+--------------+------+-----+---------+---------
  Field   | Type         | Null | Key | Default | Remarks 
@@ -144,19 +180,18 @@ Table: studenttag
 ------------+---------+------+-----+---------+---------
 
 Table: tag
------------+--------------+------+-----+---------+---------
- Field     | Type         | Null | Key | Default | Remarks 
------------+--------------+------+-----+---------+---------
- id        | INT(10)      | NO   | PRI |         |  标签序号   
- name      | VARCHAR(255) | YES  |     |         | 标签名称    
- type      | INT(10)      | YES  |     |         | 标签类型（1教师、2家长、3学生）
- state     | INT(10)      | YES  |     |         | 标签状态    
- school_id | INT(10)      | YES  |     |         | 学校序号    
- category  | INT(10)      | YES  |     |         | 标签类别（1企业，2订阅，3服务）
- qy_id     | INT(10)      | YES  |     |         | 企业号     
- fw_id     | INT(10)      | YES  |     |         | 服务号     
- dy_id     | INT(10)      | YES  |     |         | 订阅号     
------------+--------------+------+-----+---------+---------
+----------+--------------+------+-----+---------+---------
+ Field    | Type         | Null | Key | Default | Remarks 
+----------+--------------+------+-----+---------+---------
+ id       | INT(10)      | NO   | PRI |         |  标签序号   
+ name     | VARCHAR(255) | YES  |     |         | 标签名称    
+ type     | INT(10)      | YES  |     |         | 标签类型（1教师、2家长、3学生）
+ state    | INT(10)      | YES  |     |         | 标签状态    
+ category | INT(10)      | YES  |     |         | 标签类别（1企业，2订阅，3服务）
+ qy_id    | INT(10)      | YES  |     |         | 企业号     
+ fw_id    | INT(10)      | YES  |     |         | 服务号     
+ dy_id    | INT(10)      | YES  |     |         | 订阅号     
+----------+--------------+------+-----+---------+---------
 
 Table: teacher
 --------------+--------------+------+-----+---------+---------
@@ -201,7 +236,7 @@ Table: user_dy
  groupid        | VARCHAR(255) | YES  |     |         | 用户所在的分组ID
  headimgurl     | VARCHAR(255) | YES  |     |         | 头像地址    
  tagid_list     | VARCHAR(255) | YES  |     |         | 用户被打上的标签ID列表
- school_id      | INT(10)      | YES  |     |         | 学校序号    
+ dy_id          | INT(10)      | YES  |     |         | 所属订阅号   
  teacher_id     | INT(10)      | YES  |     |         | 教师序号    
  parent_id      | INT(10)      | YES  |     |         | 家长序号    
  student_id     | INT(10)      | YES  |     |         | 学生序号    
@@ -225,7 +260,7 @@ Table: user_fw
  groupid        | VARCHAR(255) | YES  |     |         | 用户所在的分组ID
  headimgurl     | VARCHAR(255) | YES  |     |         | 头像地址    
  tagid_list     | VARCHAR(255) | YES  |     |         | 用户被打上的标签ID列表
- school_id      | INT(10)      | YES  |     |         | 学校序号    
+ fw_id          | INT(10)      | YES  |     |         | 所属服务号   
  teacher_id     | INT(10)      | YES  |     |         | 教师序号    
  parent_id      | INT(10)      | YES  |     |         | 家长序号    
  student_id     | INT(10)      | YES  |     |         | 学生序号    
@@ -243,45 +278,9 @@ Table: user_qy
  email      | VARCHAR(255) | YES  |     |         |  微信电子邮箱 
  sex        | INT(10)      | YES  |     |         | 性别      
  state      | INT(10)      | YES  |     |         | 账号状态    
+ qy_id      | INT(10)      | YES  |     |         | 所属企业号   
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  parent_id  | INT(10)      | YES  |     |         | 家长序号    
  student_id | INT(10)      | YES  |     |         | 学生序号    
- school_id  | INT(10)      | YES  |     |         | 所属学校    
-------------+--------------+------+-----+---------+---------
-
-Table: weixin_dy
------------+--------------+------+-----+---------+---------
- Field     | Type         | Null | Key | Default | Remarks 
------------+--------------+------+-----+---------+---------
- id        | INT(10)      | NO   | PRI |         | 订阅号序号   
- state     | INT(10)      | YES  |     |         | 状态      
- appId     | VARCHAR(255) | YES  |     |         | 服务号     
- appSecret | VARCHAR(255) | YES  |     |         | 密钥      
- school_id | INT(10)      | YES  |     |         | 学校序号    
- remark    | VARCHAR(255) | YES  |     |         | 备注      
------------+--------------+------+-----+---------+---------
-
-Table: weixin_fw
------------+--------------+------+-----+---------+---------
- Field     | Type         | Null | Key | Default | Remarks 
------------+--------------+------+-----+---------+---------
- id        | INT(10)      | NO   | PRI |         | 服务号序号   
- state     | INT(10)      | YES  |     |         | 状态      
- appId     | VARCHAR(255) | YES  |     |         | 服务号     
- appSecret | VARCHAR(255) | YES  |     |         | 密钥      
- school_id | INT(10)      | YES  |     |         | 学校序号    
- remark    | VARCHAR(255) | YES  |     |         | 备注      
------------+--------------+------+-----+---------+---------
-
-Table: weixin_qy
-------------+--------------+------+-----+---------+---------
- Field      | Type         | Null | Key | Default | Remarks 
-------------+--------------+------+-----+---------+---------
- id         | INT(10)      | NO   | PRI |         | 企业号序号   
- state      | INT(10)      | YES  |     |         | 企业号状态   
- corpId     | VARCHAR(255) | YES  |     |         | 企业号     
- corpSecret | VARCHAR(255) | YES  |     |         | 管理组密钥   
- school_id  | INT(10)      | YES  |     |         | 学校序号    
- remark     | VARCHAR(255) | YES  |     |         | 备注      
 ------------+--------------+------+-----+---------+---------
 

@@ -95,6 +95,12 @@
             queryString: queryString,
             pageSize: pageSize
           }
+          },
+          {
+            headers:
+            {
+              'X-Requested-With': 'XMLHttpRequest'
+            }
           }
         ).then((response) => {
           this.pageTotal = response.body
