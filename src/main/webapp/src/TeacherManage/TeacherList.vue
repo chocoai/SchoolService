@@ -26,6 +26,9 @@
     </mu-flexbox>
     <br/>
     <menuList :open="open" v-on:closeMenu="closeMenu"></menuList>
+    <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
+      <mu-icon :value="icon" :size="36" :color="color"/>{{ message }}
+    </mu-popup>
   </div>
 </template>
 
@@ -43,6 +46,10 @@
         next: false,
         chip: false,
         open: false,
+        bottomPopup: false,
+        icon: '',
+        color: '',
+        message: '',
         queryString: '',
         teachers: [],
         pageTotal: '',
@@ -62,6 +69,13 @@
       },
       closeMenu () {
         this.open = false
+      },
+      openPopup (message, icon, color) {
+        this.message = message
+        this.icon = icon
+        this.color = color
+        this.bottomPopup = true
+        setTimeout(() => { this.bottomPopup = false }, 1500)
       },
       teacherQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
@@ -85,6 +99,7 @@
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
+          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
         })
       },
       teacherTotal (queryString, pageSize) {
@@ -107,6 +122,7 @@
           this.pageTotal === '0' ? this.chip = false : this.chip = true
           this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
         }, (response) => {
+          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
         })
       },
       query (value) {

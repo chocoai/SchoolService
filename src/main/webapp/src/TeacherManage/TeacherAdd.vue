@@ -81,6 +81,12 @@ export default {
         { params: {
           name: value
         }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         }).then((response) => {
           switch (response.body) {
             case '0':
@@ -98,6 +104,7 @@ export default {
             default:
               this.nameErrorText = ''
               this.nameErrorColor = 'blue'
+              window.location.href = '/'
           }
         }, (response) => {
           this.openPopup('服务器内部错误！', 'report_problem', 'orange')
@@ -109,6 +116,12 @@ export default {
         { params: {
           phone: value
         }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         }).then((response) => {
           switch (response.body) {
             case '0':
@@ -126,6 +139,7 @@ export default {
             default:
               this.phoneErrorText = ''
               this.phoneErrorColor = 'blue'
+              window.location.href = '/'
           }
         }, (response) => {
           this.openPopup('服务器内部错误！', 'report_problem', 'orange')
@@ -137,6 +151,12 @@ export default {
         { params: {
           weixin: value
         }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         }).then((response) => {
           switch (response.body) {
             case '0':
@@ -154,6 +174,7 @@ export default {
             default:
               this.weixinErrorText = ''
               this.weixinErrorColor = 'blue'
+              window.location.href = '/'
           }
         }, (response) => {
           this.openPopup('服务器内部错误！', 'report_problem', 'orange')
@@ -165,6 +186,12 @@ export default {
         { params: {
           email: value
         }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         }).then((response) => {
           switch (response.body) {
             case '0':
@@ -182,6 +209,7 @@ export default {
             default:
               this.emailErrorText = ''
               this.emailErrorColor = 'blue'
+              window.location.href = '/'
           }
         }, (response) => {
           this.openPopup('服务器内部错误！', 'report_problem', 'orange')
@@ -197,6 +225,12 @@ export default {
           email: this.email,
           remark: this.remark
         }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         }).then((response) => {
           switch (response.body) {
             case '0':
@@ -231,6 +265,7 @@ export default {
               this.openPopup('输入的电子邮箱已存在！', 'report_problem', 'orange')
               break
             default:
+              window.location.href = '/'
           }
         }, (response) => {
           this.openPopup('服务器内部错误！', 'report_problem', 'orange')

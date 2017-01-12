@@ -31,6 +31,10 @@
         sign1,
         sign2,
         open: false,
+        bottomPopup: false,
+        icon: '',
+        color: '',
+        message: '',
         schoolName: ''
       }
     },
@@ -38,6 +42,7 @@
       this.$http.get(API.GetSchoolName, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }).then((response) => {
         this.schoolName = response.data
       }, (response) => {
+        this.openPopup('服务器内部错误！', 'report_problem', 'orange')
       })
     },
     methods: {
@@ -46,6 +51,13 @@
       },
       closeMenu () {
         this.open = false
+      },
+      openPopup (message, icon, color) {
+        this.message = message
+        this.icon = icon
+        this.color = color
+        this.bottomPopup = true
+        setTimeout(() => { this.bottomPopup = false }, 1500)
       }
     }
   }
