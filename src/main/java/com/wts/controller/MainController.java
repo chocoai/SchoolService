@@ -50,7 +50,9 @@ public class MainController extends Controller {
 //    }
 ////    renderText(WP.me.getUserByCode(getPara("code")).getName());
   }
-
+  public void home() throws WeixinException {
+    render("/static/Home.html");
+  }
   public void bind()  throws WeixinException {
     User u= WP.me.getUserByCode(getPara("code"));
     System.out.println(u.getUserId());
