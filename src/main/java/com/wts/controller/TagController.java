@@ -4,6 +4,7 @@ import com.foxinmy.weixin4j.exception.WeixinException;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.wts.entity.model.Tag;
 
 public class TagController extends Controller {
 

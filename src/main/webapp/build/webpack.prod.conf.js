@@ -55,11 +55,27 @@ var webpackConfig = merge(baseWebpackConfig, {
     //   chunksSortMode: 'dependency'
     // }),
     new HtmlWebpackPlugin({
-      title: '主页',
-      filename: '../dist/static/Home.html',
+      title: '登录',
+      filename: '../dist/static/Login.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'home'],
+      chunks: ['vendor', 'manifest', 'login'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '主页',
+      filename: '../dist/static/Sys.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'sys'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

@@ -5,12 +5,12 @@ import com.jfinal.aop.Invocation;
 
 import javax.servlet.http.HttpSession;
 
-public class LoginInterceptor implements Interceptor {
+public class LoginTeacher implements Interceptor {
 
 	public void intercept(Invocation inv) {
 		
 		HttpSession session = inv.getController().getSession();
-		if(session.getAttribute("user") == null){
+		if(session.getAttribute("teacher") == null){
 			inv.getController().redirect("/");
 		}
 		else{

@@ -33,12 +33,4 @@ public abstract class BaseRelation<M extends BaseRelation<M>> extends Model<M> i
 		return get("identity_id");
 	}
 
-	public void setState(java.lang.Integer state) {
-		set("state", state);
-	}
-
-	public java.lang.Integer getState() {
-		return get("state");
-	}
-
 }

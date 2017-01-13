@@ -12,7 +12,8 @@ var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
 module.exports = {
   entry: {
-    home: './src/Home/Index.js',
+    login: './src/Login/Index.js',
+    sys: './src/Sys/Index.js',
     teacherManage: './src/TeacherManage/Index.js',
     tagManage: './src/TagManage/Index.js'
   },

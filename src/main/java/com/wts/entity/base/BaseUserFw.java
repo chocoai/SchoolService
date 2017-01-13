@@ -153,4 +153,12 @@ public abstract class BaseUserFw<M extends BaseUserFw<M>> extends Model<M> imple
 		return get("student_id");
 	}
 
+	public void setState(java.lang.Integer state) {
+		set("state", state);
+	}
+
+	public java.lang.Integer getState() {
+		return get("state");
+	}
+
 }

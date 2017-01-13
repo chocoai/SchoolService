@@ -2,14 +2,15 @@ CREATE TABLE `Teacher` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '教师序号',
 `number` varchar(255) CHARACTER SET utf8 NULL COMMENT '教师身份证号码',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '教师姓名',
-`sex` int NULL COMMENT '教师性别',
+`sex` int NULL COMMENT '教师性别1男2女',
 `phone` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信绑定的手机号',
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信绑定的电子邮箱',
 `remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '教师备注',
-`loginAccount` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录账号',
-`loginPass` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录密码',
+`login` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录账号',
+`pass` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录密码',
 `school_id` int NULL COMMENT '学校序号',
-`state` int NULL COMMENT '教师状态',
+`state` int NULL COMMENT '教师状态1激活2注销3删除',
+`system` int NULL COMMENT '是否系统管理员：1是0否',
 PRIMARY KEY (`id`) 
 );
 
@@ -17,7 +18,7 @@ CREATE TABLE `Tag` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT ' 标签序号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '标签名称',
 `type` int NULL COMMENT '标签类型（1教师、2家长、3学生）',
-`state` int NULL COMMENT '标签状态',
+`state` int NULL COMMENT '标签状态1激活2注销3删除',
 `category` int NULL COMMENT '标签类别（1企业，2订阅，3服务）',
 `qy_id` int NULL COMMENT '企业号',
 `fw_id` int NULL COMMENT '服务号',
@@ -33,7 +34,7 @@ CREATE TABLE `TeacherTag` (
 CREATE TABLE `Course` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '课程序号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程名称',
-`state` int NULL COMMENT '课程状态',
+`state` int NULL COMMENT '课程状态1激活2注销3删除',
 PRIMARY KEY (`id`) 
 );
 
@@ -41,7 +42,7 @@ CREATE TABLE `Room` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '班级序号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级名称',
 `code` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级编号',
-`state` int NULL COMMENT '班级状态',
+`state` int NULL COMMENT '班级状态1激活2注销3删除',
 `school_id` int NULL COMMENT '学校序号',
 `enter_year` datetime NULL COMMENT '入学时间',
 `blog` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级博客',
@@ -53,7 +54,7 @@ CREATE TABLE `School` (
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '学校名称',
 `code` varchar(255) CHARACTER SET utf8 NULL COMMENT '学校编号',
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '学校地址',
-`state` int NULL COMMENT '学校状态',
+`state` int NULL COMMENT '学校状态1激活2注销3删除',
 `phone` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系电话',
 PRIMARY KEY (`id`) 
 );
@@ -72,8 +73,8 @@ CREATE TABLE `User_qy` (
 `account` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信账户',
 `phone` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信电话',
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT ' 微信电子邮箱',
-`sex` int NULL COMMENT '性别',
-`state` int NULL COMMENT '账号状态',
+`sex` int NULL COMMENT '性别1男2女',
+`state` int NULL COMMENT '账号状态1激活2注销3删除',
 `qy_id` int NULL COMMENT '所属企业号',
 `teacher_id` int NULL COMMENT '教师序号',
 `parent_id` int NULL COMMENT '家长序号',
@@ -90,7 +91,7 @@ CREATE TABLE `Student` (
 `birth` datetime NULL COMMENT '出生日期',
 `room_id` int NULL COMMENT '班级序号',
 `remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '学生备注',
-`state` int NULL COMMENT '学生状态',
+`state` int NULL COMMENT '学生状态1激活2注销3删除',
 `phone` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系电话',
 `adress` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系地址',
 PRIMARY KEY (`id`) 
@@ -101,7 +102,7 @@ CREATE TABLE `User_dy` (
 `openId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信公共号内的ID',
 `unionId` int NULL,
 `nickname` varchar(255) CHARACTER SET utf8 NULL COMMENT '昵称',
-`sex` varchar(255) CHARACTER SET utf8 NULL COMMENT '性别',
+`sex` varchar(255) CHARACTER SET utf8 NULL COMMENT '性别1男2女',
 `city` varchar(255) CHARACTER SET utf8 NULL COMMENT '城市',
 `province` varchar(255) CHARACTER SET utf8 NULL COMMENT '省份',
 `country` varchar(255) CHARACTER SET utf8 NULL COMMENT '国家',
@@ -115,6 +116,7 @@ CREATE TABLE `User_dy` (
 `teacher_id` int NULL COMMENT '教师序号',
 `parent_id` int NULL COMMENT '家长序号',
 `student_id` int NULL COMMENT '学生序号',
+`state` int NULL COMMENT '账户状态1激活2注销3删除',
 PRIMARY KEY (`id`) 
 );
 
@@ -122,11 +124,12 @@ CREATE TABLE `Parent` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '家长序号',
 `number` varchar(255) CHARACTER SET utf8 NULL COMMENT '家长证件号码',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '家长姓名',
-`sex` int NULL COMMENT '家长性别',
+`sex` int NULL COMMENT '家长性别1男2女',
 `phone` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系电话',
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT '电子邮箱',
 `remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '家长备注',
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '家庭住址',
+`state` int NULL COMMENT '家长状态1激活2注销3删除',
 PRIMARY KEY (`id`) 
 );
 
@@ -139,8 +142,7 @@ PRIMARY KEY (`id`)
 CREATE TABLE `Relation` (
 `parent_id` int NULL COMMENT '家长序号',
 `student_id` int NULL COMMENT '学生序号',
-`identity_id` int NULL COMMENT '身份序号',
-`state` int NULL COMMENT '状态'
+`identity_id` int NULL COMMENT '身份序号'
 );
 
 CREATE TABLE `User_fw` (
@@ -148,7 +150,7 @@ CREATE TABLE `User_fw` (
 `openId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信公共号内的ID',
 `unionId` int NULL,
 `nickname` varchar(255) CHARACTER SET utf8 NULL COMMENT '昵称',
-`sex` varchar(255) CHARACTER SET utf8 NULL COMMENT '性别',
+`sex` varchar(255) CHARACTER SET utf8 NULL COMMENT '性别1男2女',
 `city` varchar(255) CHARACTER SET utf8 NULL COMMENT '城市',
 `province` varchar(255) CHARACTER SET utf8 NULL COMMENT '省份',
 `country` varchar(255) CHARACTER SET utf8 NULL COMMENT '国家',
@@ -162,6 +164,7 @@ CREATE TABLE `User_fw` (
 `teacher_id` int NULL COMMENT '教师序号',
 `parent_id` int NULL COMMENT '家长序号',
 `student_id` int NULL COMMENT '学生序号',
+`state` int NULL COMMENT '账户状态1激活2注销3删除',
 PRIMARY KEY (`id`) 
 );
 
@@ -209,7 +212,7 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `School_qy` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '企业号序号',
-`state` int NULL COMMENT '企业号状态',
+`state` int NULL COMMENT '企业号状态1激活2注销3删除',
 `corpId` varchar(255) CHARACTER SET utf8 NULL COMMENT '企业号',
 `corpSecret` varchar(255) CHARACTER SET utf8 NULL COMMENT '管理组密钥',
 `school_id` int NULL COMMENT '学校序号',
@@ -219,7 +222,7 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `School_fw` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '服务号序号',
-`state` int NULL COMMENT '状态',
+`state` int NULL COMMENT '服务号状态1激活2注销3删除',
 `appId` varchar(255) CHARACTER SET utf8 NULL COMMENT '服务号',
 `appSecret` varchar(255) CHARACTER SET utf8 NULL COMMENT '密钥',
 `school_id` int NULL COMMENT '学校序号',
@@ -229,7 +232,7 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `School_dy` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '订阅号序号',
-`state` int NULL COMMENT '状态',
+`state` int NULL COMMENT '订阅号状态1激活2注销3删除',
 `appId` varchar(255) CHARACTER SET utf8 NULL COMMENT '服务号',
 `appSecret` varchar(255) CHARACTER SET utf8 NULL COMMENT '密钥',
 `school_id` int NULL COMMENT '学校序号',

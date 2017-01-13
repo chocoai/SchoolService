@@ -7,16 +7,19 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.model.Teacher;
+import com.wts.interceptor.AjaxFunction;
+import com.wts.interceptor.LoginTeacher;
 import com.wts.util.Util;
 
 public class TeacherController extends Controller {
 
-  public void index() throws WeixinException{
+  @Before(LoginTeacher.class)
+  public void index(){
 //    User u= WP.me.getUserByCode(getPara("code"));
 //    setSessionAttr("user",u);
     render("/static/TeacherManage.html");
   }
-
+  @Before({AjaxFunction.class,LoginTeacher.class})
   public void getName() throws WeixinException {
 //    User u =(User) getSessionAttr("user");
     System.out.println(getRequest().getHeader("X-Requested-With"));

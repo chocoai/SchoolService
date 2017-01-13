@@ -27,7 +27,7 @@
     <br/>
     <menuList :open="open" v-on:closeMenu="closeMenu"></menuList>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
-      <mu-icon :value="icon" :size="36" :color="color"/>{{ message }}
+      <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
   </div>
 </template>

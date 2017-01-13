@@ -65,20 +65,20 @@ public abstract class BaseTeacher<M extends BaseTeacher<M>> extends Model<M> imp
 		return get("remark");
 	}
 
-	public void setLoginAccount(java.lang.String loginAccount) {
-		set("loginAccount", loginAccount);
+	public void setLogin(java.lang.String login) {
+		set("login", login);
 	}
 
-	public java.lang.String getLoginAccount() {
-		return get("loginAccount");
+	public java.lang.String getLogin() {
+		return get("login");
 	}
 
-	public void setLoginPass(java.lang.String loginPass) {
-		set("loginPass", loginPass);
+	public void setPass(java.lang.String pass) {
+		set("pass", pass);
 	}
 
-	public java.lang.String getLoginPass() {
-		return get("loginPass");
+	public java.lang.String getPass() {
+		return get("pass");
 	}
 
 	public void setSchoolId(java.lang.Integer schoolId) {
@@ -95,6 +95,14 @@ public abstract class BaseTeacher<M extends BaseTeacher<M>> extends Model<M> imp
 
 	public java.lang.Integer getState() {
 		return get("state");
+	}
+
+	public void setSystem(java.lang.Integer system) {
+		set("system", system);
+	}
+
+	public java.lang.Integer getSystem() {
+		return get("system");
 	}
 
 }

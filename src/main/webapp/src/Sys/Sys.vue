@@ -1,5 +1,5 @@
 <template>
-  <div class="Home">
+  <div class="Sys">
     <mu-appbar :title="schoolName">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
     </mu-appbar>
@@ -17,12 +17,12 @@
   </div>
 </template>
 <script>
-  import * as API from './HomeAPI.js'
+  import * as API from './SysAPI.js'
   import MenuList from '../components/MenuList'
   import sign1 from 'assets/schoolIcon.jpg'
   import sign2 from 'assets/biaoyu.png'
   export default {
-    name: 'Home',
+    name: 'Sys',
     components: {
       'menuList': MenuList
     },

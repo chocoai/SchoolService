@@ -19,20 +19,66 @@ import com.foxinmy.weixin4j.startup.WeixinServerBootstrap;
 import com.foxinmy.weixin4j.tuple.Text;
 import com.foxinmy.weixin4j.type.MediaType;
 import com.foxinmy.weixin4j.util.AesToken;
+import com.jfinal.aop.Before;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
+import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.*;
+import com.wts.entity.model.Teacher;
+import com.wts.interceptor.AjaxFunction;
+import com.wts.interceptor.LoginTeacher;
 
 import java.io.*;
 
-public class MainController extends Controller {
+import static com.wts.util.EncryptUtils.encodeMD5String;
 
-  public void index() throws WeixinException {
+public class MainController extends Controller {
+  public void index() {
+    render("/static/Login.html");
+  }
+  public void login() {
+    Teacher teacher =Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1'", getPara("login"),getPara("pass"));
+    if (teacher!=null) {
+      switch (getPara("type")) {
+        case "1":
+          // 普通教师
+          setSessionAttr("teacher",teacher);
+          renderText("1");
+          break;
+        case "2":
+          switch (teacher.getSystem()) {
+            case 0:
+              // 无管理权限
+              setSessionAttr("teacher",teacher);
+              renderText("3");
+              break;
+            case 1:
+              // 管理人员
+              setSessionAttr("teacher",teacher);
+              renderText("2");
+              break;
+            default:
+              renderText("5");
+              break;
+          }
+          break;
+        default:
+          renderText("5");
+          break;
+      }
+    } else {
+      // 用户名或密码错误
+      renderText("4");
+    }
+
+//    render("/static/Home.html");
+
+
 //    User u= WP.me.getUserByCode(getPara("code"));
 //    System.out.println(getPara("code"));
 //    setSessionAttr("user",u);
-    render("/static/Home.html");
-////    renderText("aaa");
+
+//    renderText("aaa");
 //    try {
 //      //NotifyMessage CM = new NotifyMessage(25,new Text("hello world!!!"),new IdParameter().putUserIds("wts"),false);
 //      //WP.me.sendNotifyMessage(CM);
@@ -50,8 +96,13 @@ public class MainController extends Controller {
 //    }
 ////    renderText(WP.me.getUserByCode(getPara("code")).getName());
   }
-  public void home() throws WeixinException {
-    render("/static/Home.html");
+  @Before(LoginTeacher.class)
+  public void sys() {
+    render("/static/Sys.html");
+  }
+  @Before(LoginTeacher.class)
+  public void home() {
+    renderText("这里是普通教师");
   }
   public void bind()  throws WeixinException {
     User u= WP.me.getUserByCode(getPara("code"));

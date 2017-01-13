@@ -1,15 +1,24 @@
 <template>
   <div class="Login">
     <mu-appbar title="欢迎使用校园管理系统"/>
-    <mu-text-field hintText="用户名" icon="phone" v-model="loginAccount"/><br/>
-    <mu-text-field hintText="密码" icon="phone" v-model="loginPass"/><br/>
-    <mu-raised-button label="登录" fullWidth/>
+    <mu-flexbox>
+      <mu-flexbox-item >
+        <mu-text-field hintText="用户名" icon="face" v-model="login"/><br/>
+        <mu-text-field hintText="密码" icon="blur_on" v-model="pass"/><br/>
+        <mu-select-field hintText="用户类别" icon="settings" v-model="type">
+          <mu-menu-item value="1" title="教师"/>
+          <mu-menu-item value="2" title="管理"/>
+        </mu-select-field>
+      </mu-flexbox-item>
+    </mu-flexbox>
+    <mu-raised-button label="登录" fullWidth @click="loginTo" primary/>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
-      <mu-icon :value="icon" :size="36" :color="color"/>{{ message }}
+      <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
   </div>
 </template>
 <script>
+  import * as API from './LoginAPI.js'
   export default {
     name: 'Login',
     data () {
@@ -19,25 +28,27 @@
         message: '',
         icon: '',
         color: '',
-        loginAccount: '',
-        loginPass: ''
+        login: '',
+        pass: '',
+        type: '1'
       }
     },
     methods: {
-      login () {
-        if (this.loginAccount.toString() === '') {
+      loginTo () {
+        if (this.login.toString() === '') {
           this.openPopup('用户名不能为空！', 'report_problem', 'orange')
-        } else if (this.loginPass.toString() === '') {
+        } else if (this.pass.toString() === '') {
           this.openPopup('密码不能为空！', 'report_problem', 'orange')
         } else {
           this.$http.get(
             API.Login,
             {
               params:
-            {
-              loginAccount: this.loginAccount,
-              loginPass: this.loginPass
-            }
+              {
+                login: this.login,
+                pass: this.pass,
+                type: this.type
+              }
             },
             {
               headers:
@@ -47,20 +58,25 @@
             }
             ).then((response) => {
               switch (response.body) {
-                case '0':
-                  window.location.href = '/'
-                  break
                 case '1':
+                  window.location.href = '/home'
+                  break
+                case '2':
+                  window.location.href = '/sys'
+                  break
+                case '3':
+                  this.openPopup('用户无管理权限！', 'report_problem', 'red')
+                  break
+                case '4':
                   this.openPopup('用户名或密码错误！', 'report_problem', 'red')
                   break
                 default:
-                  this.nameErrorText = ''
-                  this.nameErrorColor = 'blue'
+                  window.location.href = '/'
               }
             }, (response) => {
               this.openPopup('服务器内部错误！', 'report_problem', 'orange')
             })
-         }
+        }
       },
       openPopup (message, icon, color) {
         this.message = message

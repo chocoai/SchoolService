@@ -153,4 +153,12 @@ public abstract class BaseUserDy<M extends BaseUserDy<M>> extends Model<M> imple
 		return get("student_id");
 	}
 
+	public void setState(java.lang.Integer state) {
+		set("state", state);
+	}
+
+	public java.lang.Integer getState() {
+		return get("state");
+	}
+
 }
