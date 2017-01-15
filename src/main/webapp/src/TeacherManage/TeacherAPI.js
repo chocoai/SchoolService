@@ -1,6 +1,7 @@
 const h = ''
 // const h = '/ds'
 export const CheckNameForNew = `${h}/teacher/checkNameForNew`
+export const CheckLoginForNew = `${h}/teacher/checkLoginForNew`
 export const CheckPhoneForNew = `${h}/teacher/checkPhoneForNew`
 export const CheckWeixinForNew = `${h}/teacher/checkWeixinForNew`
 export const CheckEmailForNew = `${h}/teacher/checkEmailForNew`

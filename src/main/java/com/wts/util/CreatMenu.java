@@ -53,7 +53,7 @@ public class CreatMenu {
       List<Button> schoolz = new ArrayList<Button>();
       schoolz.add(School);
 
-      ApiResult ret = new WeixinProxy().createMenu(26, schoolz);
+      ApiResult ret = new WeixinProxy().createMenu(26, schools);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
       System.exit(0);
     } catch (WeixinException e){

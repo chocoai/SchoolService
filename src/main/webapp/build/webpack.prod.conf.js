@@ -99,19 +99,6 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       chunksSortMode: 'dependency'
     }),
-    new HtmlWebpackPlugin({
-      title: '标签管理',
-      filename: '../dist/static/TagManage.html',
-      template: 'html/template.html',
-      inject: true,
-      chunks: ['vendor', 'manifest', 'tagManage'],
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true,
-        removeAttributeQuotes: true
-      },
-      chunksSortMode: 'dependency'
-    }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

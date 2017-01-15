@@ -14,23 +14,6 @@ CREATE TABLE `Teacher` (
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `Tag` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT ' 标签序号',
-`name` varchar(255) CHARACTER SET utf8 NULL COMMENT '标签名称',
-`type` int NULL COMMENT '标签类型（1教师、2家长、3学生）',
-`state` int NULL COMMENT '标签状态1激活2注销3删除',
-`category` int NULL COMMENT '标签类别（1企业，2订阅，3服务）',
-`qy_id` int NULL COMMENT '企业号',
-`fw_id` int NULL COMMENT '服务号',
-`dy_id` int NULL COMMENT '订阅号',
-PRIMARY KEY (`id`) 
-);
-
-CREATE TABLE `TeacherTag` (
-`teacher_id` int NULL COMMENT '教师序号',
-`tag_id` int NULL COMMENT '标签序号'
-);
-
 CREATE TABLE `Course` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '课程序号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程名称',
@@ -60,13 +43,15 @@ PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `CoursePlan` (
+`id` int NOT NULL,
 `course_id` int NULL COMMENT '课程序号',
 `teacher_id` int NULL COMMENT '教师序号',
 `room_id` int NULL COMMENT '班级序号',
-`sequence` int NULL COMMENT '教师序号'
+`sequence` int NULL COMMENT '教师序号',
+PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `User_qy` (
+CREATE TABLE `Enterprise` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '企业号用户序号',
 `userId` varchar(255) NULL COMMENT '微信号',
 `openId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信号',
@@ -75,7 +60,6 @@ CREATE TABLE `User_qy` (
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT ' 微信电子邮箱',
 `sex` int NULL COMMENT '性别1男2女',
 `state` int NULL COMMENT '账号状态1激活2注销3删除',
-`qy_id` int NULL COMMENT '所属企业号',
 `teacher_id` int NULL COMMENT '教师序号',
 `parent_id` int NULL COMMENT '家长序号',
 `student_id` int NULL COMMENT '学生序号',
@@ -97,29 +81,6 @@ CREATE TABLE `Student` (
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `User_dy` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '订阅号用户序号',
-`openId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信公共号内的ID',
-`unionId` int NULL,
-`nickname` varchar(255) CHARACTER SET utf8 NULL COMMENT '昵称',
-`sex` varchar(255) CHARACTER SET utf8 NULL COMMENT '性别1男2女',
-`city` varchar(255) CHARACTER SET utf8 NULL COMMENT '城市',
-`province` varchar(255) CHARACTER SET utf8 NULL COMMENT '省份',
-`country` varchar(255) CHARACTER SET utf8 NULL COMMENT '国家',
-`language` varchar(255) CHARACTER SET utf8 NULL COMMENT '语言',
-`subscribe_time` datetime NULL COMMENT '关注时间',
-`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '备注',
-`groupid` varchar(255) CHARACTER SET utf8 NULL COMMENT '用户所在的分组ID',
-`headimgurl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
-`tagid_list` varchar(255) CHARACTER SET utf8 NULL COMMENT '用户被打上的标签ID列表',
-`dy_id` int NULL COMMENT '所属订阅号',
-`teacher_id` int NULL COMMENT '教师序号',
-`parent_id` int NULL COMMENT '家长序号',
-`student_id` int NULL COMMENT '学生序号',
-`state` int NULL COMMENT '账户状态1激活2注销3删除',
-PRIMARY KEY (`id`) 
-);
-
 CREATE TABLE `Parent` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '家长序号',
 `number` varchar(255) CHARACTER SET utf8 NULL COMMENT '家长证件号码',
@@ -128,6 +89,7 @@ CREATE TABLE `Parent` (
 `phone` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系电话',
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT '电子邮箱',
 `remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '家长备注',
+`work` varchar(255) CHARACTER SET utf8 NULL COMMENT '工作单位',
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '家庭住址',
 `state` int NULL COMMENT '家长状态1激活2注销3删除',
 PRIMARY KEY (`id`) 
@@ -140,144 +102,119 @@ PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `Relation` (
+`id` int NOT NULL,
 `parent_id` int NULL COMMENT '家长序号',
 `student_id` int NULL COMMENT '学生序号',
-`identity_id` int NULL COMMENT '身份序号'
+`identity_id` int NULL COMMENT '身份序号',
+PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `User_fw` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '服务号用户序号',
-`openId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信公共号内的ID',
-`unionId` int NULL,
-`nickname` varchar(255) CHARACTER SET utf8 NULL COMMENT '昵称',
-`sex` varchar(255) CHARACTER SET utf8 NULL COMMENT '性别1男2女',
-`city` varchar(255) CHARACTER SET utf8 NULL COMMENT '城市',
-`province` varchar(255) CHARACTER SET utf8 NULL COMMENT '省份',
-`country` varchar(255) CHARACTER SET utf8 NULL COMMENT '国家',
-`language` varchar(255) CHARACTER SET utf8 NULL COMMENT '语言',
-`subscribe_time` datetime NULL COMMENT '关注时间',
-`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '备注',
-`groupid` varchar(255) CHARACTER SET utf8 NULL COMMENT '用户所在的分组ID',
-`headimgurl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
-`tagid_list` varchar(255) CHARACTER SET utf8 NULL COMMENT '用户被打上的标签ID列表',
-`fw_id` int NULL COMMENT '所属服务号',
+CREATE TABLE `Notice` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '消息序号',
+`content` varchar(999) CHARACTER SET utf8 NULL COMMENT '消息内容',
+`time` datetime NULL COMMENT '发布时间',
 `teacher_id` int NULL COMMENT '教师序号',
-`parent_id` int NULL COMMENT '家长序号',
-`student_id` int NULL COMMENT '学生序号',
-`state` int NULL COMMENT '账户状态1激活2注销3删除',
+`school_id` int NULL COMMENT '学校序号',
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `ParentTag` (
-`parent_id` int NULL COMMENT '家长序号',
-`tag_id` int NULL COMMENT '标签序号'
-);
-
-CREATE TABLE `StudentTag` (
-`student_id` int NULL COMMENT '学生序号',
-`tag_id` int NULL COMMENT '标签序号'
-);
-
-CREATE TABLE `Menu` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '按钮序号',
-`app_id` int NULL COMMENT '应用ID',
-`name` varchar(255) CHARACTER SET utf8 NULL COMMENT '按钮名称',
-`type` varchar(255) CHARACTER SET utf8 NULL COMMENT '按钮类型',
-`level` int NULL COMMENT '按钮级别（1,2）',
-`father_id` int NULL COMMENT '父按钮',
-`url` varchar(255) CHARACTER SET utf8 NULL COMMENT '链接地址',
-`category` int NULL COMMENT '1订阅号2服务号3企业号',
-`qy_id` int NULL COMMENT '企业号',
-`fw_id` int NULL COMMENT '服务号',
-`dy_id` int NULL COMMENT '订阅号',
+CREATE TABLE `Homework` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '作业序号',
+`content` varchar(999) CHARACTER SET utf8 NULL COMMENT '作业内容',
+`time` datetime NULL COMMENT '发布时间',
+`teacher_id` int NULL COMMENT '教师序号',
+`room_id` int NULL COMMENT '班级序号',
+`course_id` int NULL COMMENT '课程序号',
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `Application` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '应用序号',
-`name` varchar(255) CHARACTER SET utf8 NULL COMMENT '应用名称',
-`agentId` int NULL COMMENT '企业应用ID',
+CREATE TABLE `HomeworkRead` (
+`id` int NOT NULL AUTO_INCREMENT,
+`homework_id` int NULL COMMENT '作业序号',
+`parent_id` int NULL COMMENT '家长序号',
+`state` int NULL COMMENT '是否阅读0否1是',
+`time` datetime NULL COMMENT '阅读时间',
+PRIMARY KEY (`id`) 
+);
+
+CREATE TABLE `Leave` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '请假序号',
+`type` int NULL COMMENT '请假类型1病假2事假',
+`flow` int NULL COMMENT '流转过程1申请2批准3未批准',
+`parentContent` varchar(999) CHARACTER SET utf8 NULL COMMENT '请假说明',
+`teacherContent` varchar(999) CHARACTER SET utf8 NULL COMMENT '教师回复',
+`student_id` int NULL COMMENT '请假学生',
+`parent_id` int NULL COMMENT '请假家长',
+`teacher_id` int NULL COMMENT '批准教师',
 `school_id` int NULL COMMENT '所属学校',
-`qy_id` int NULL COMMENT '所属企业号',
-`description` varchar(255) CHARACTER SET utf8 NULL COMMENT '企业应用详情',
-`redirect_domain` varchar(255) CHARACTER SET utf8 NULL COMMENT '企业应用可信域',
-`report_location_flag` int NULL COMMENT '企业应用是否打开地理位置上报 0：不上报；1：进入会话上报；2：持续上报',
-`chat_extension_url` varchar(255) CHARACTER SET utf8 NULL COMMENT '关联会话url',
-`isreportuser` int NULL COMMENT '是否接收用户变更通知。0：不接收；1：接收',
-`isreportenter` int NULL COMMENT '是否上报用户进入应用事件。0：不接收；1：接收',
-`type` int NULL COMMENT '应用类型。1：消息型；2：主页型',
-`home_url` varchar(255) CHARACTER SET utf8 NULL COMMENT '主页型应用url。url必须以http或者https开头。消息型应用无需该参数',
+`time_apply` datetime NULL COMMENT '申请时间',
+`time_ratify` datetime NULL COMMENT '批准时间',
+`time_start` datetime NULL COMMENT '开始时间',
+`time_end` datetime NULL COMMENT '终止时间',
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `School_qy` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '企业号序号',
-`state` int NULL COMMENT '企业号状态1激活2注销3删除',
-`corpId` varchar(255) CHARACTER SET utf8 NULL COMMENT '企业号',
-`corpSecret` varchar(255) CHARACTER SET utf8 NULL COMMENT '管理组密钥',
+CREATE TABLE `Praise` (
+`id` int NOT NULL,
+`content` varchar(999) CHARACTER SET utf8 NULL COMMENT '表扬原因',
+`time` datetime NULL COMMENT '表扬时间',
+`student_id` int NULL COMMENT '学生序号',
+`teacher_id` int NULL COMMENT '教师序号',
+`course_id` int NULL COMMENT '课程序号',
 `school_id` int NULL COMMENT '学校序号',
-`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '备注',
+`room_id` int NULL COMMENT '班级序号',
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `School_fw` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '服务号序号',
-`state` int NULL COMMENT '服务号状态1激活2注销3删除',
-`appId` varchar(255) CHARACTER SET utf8 NULL COMMENT '服务号',
-`appSecret` varchar(255) CHARACTER SET utf8 NULL COMMENT '密钥',
-`school_id` int NULL COMMENT '学校序号',
-`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '备注',
+CREATE TABLE `Grade` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '成绩序号',
+`exam_id` int NULL COMMENT '测试序号',
+`student_id` int NULL COMMENT '学生序号',
+`score` int NULL COMMENT '分数',
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `School_dy` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '订阅号序号',
-`state` int NULL COMMENT '订阅号状态1激活2注销3删除',
-`appId` varchar(255) CHARACTER SET utf8 NULL COMMENT '服务号',
-`appSecret` varchar(255) CHARACTER SET utf8 NULL COMMENT '密钥',
-`school_id` int NULL COMMENT '学校序号',
-`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '备注',
+CREATE TABLE `Exam` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '测试序号',
+`name` varchar(255) CHARACTER SET utf8 NULL COMMENT '测试名称',
+`time` datetime NULL COMMENT '测试时间',
+`course_id` int NULL COMMENT '课程序号',
+`type` int NULL COMMENT '测试类型1随堂测验2单元测验3期末测试',
+`room_id` int NULL COMMENT '班级序号',
+`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '测试备注',
 PRIMARY KEY (`id`) 
 );
 
 
-ALTER TABLE `TeacherTag` ADD CONSTRAINT `teacher_tag` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
-ALTER TABLE `TeacherTag` ADD CONSTRAINT `tag_teacher` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`);
 ALTER TABLE `Teacher` ADD CONSTRAINT `teacher_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
 ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
 ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
-ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_school` FOREIGN KEY (`qy_id`) REFERENCES `School_qy` (`id`);
-ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `Enterprise` ADD CONSTRAINT `enterprise_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
 ALTER TABLE `Student` ADD CONSTRAINT `student_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
-ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
-ALTER TABLE `User_qy` ADD CONSTRAINT `user_qy_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `Enterprise` ADD CONSTRAINT `enterprise_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
+ALTER TABLE `Enterprise` ADD CONSTRAINT `enterprise_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `Relation` ADD CONSTRAINT `relation_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
 ALTER TABLE `Relation` ADD CONSTRAINT `relation_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `Relation` ADD CONSTRAINT `relation_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
-ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_school` FOREIGN KEY (`dy_id`) REFERENCES `School_dy` (`id`);
-ALTER TABLE `User_fw` ADD CONSTRAINT `user_fw_school` FOREIGN KEY (`fw_id`) REFERENCES `School_fw` (`id`);
-ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
-ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
-ALTER TABLE `User_dy` ADD CONSTRAINT `user_dy_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
-ALTER TABLE `User_fw` ADD CONSTRAINT `user_fw_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
-ALTER TABLE `User_fw` ADD CONSTRAINT `user_fw_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
-ALTER TABLE `User_fw` ADD CONSTRAINT `user_fw_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
-ALTER TABLE `ParentTag` ADD CONSTRAINT `parent_tag` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
-ALTER TABLE `ParentTag` ADD CONSTRAINT `tag_parent` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`);
-ALTER TABLE `StudentTag` ADD CONSTRAINT `student_tag` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
-ALTER TABLE `StudentTag` ADD CONSTRAINT `tag_student` FOREIGN KEY (`tag_id`) REFERENCES `Tag` (`id`);
-ALTER TABLE `Application` ADD CONSTRAINT `app_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
-ALTER TABLE `Application` ADD CONSTRAINT `app_qy` FOREIGN KEY (`qy_id`) REFERENCES `User_qy` (`id`);
-ALTER TABLE `Menu` ADD CONSTRAINT `menu_app` FOREIGN KEY (`app_id`) REFERENCES `Application` (`id`);
-ALTER TABLE `Menu` ADD CONSTRAINT `menu_father` FOREIGN KEY (`father_id`) REFERENCES `Menu` (`id`);
-ALTER TABLE `School_qy` ADD CONSTRAINT `qy_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
-ALTER TABLE `School_fw` ADD CONSTRAINT `fw_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
-ALTER TABLE `School_dy` ADD CONSTRAINT `dy_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
-ALTER TABLE `Menu` ADD CONSTRAINT `menu_qy` FOREIGN KEY (`qy_id`) REFERENCES `School_qy` (`id`);
-ALTER TABLE `Menu` ADD CONSTRAINT `menu_fw` FOREIGN KEY (`fw_id`) REFERENCES `School_fw` (`id`);
-ALTER TABLE `Menu` ADD CONSTRAINT `menu_dy` FOREIGN KEY (`dy_id`) REFERENCES `School_dy` (`id`);
-ALTER TABLE `Tag` ADD CONSTRAINT `tag_qy` FOREIGN KEY (`qy_id`) REFERENCES `School_qy` (`id`);
-ALTER TABLE `Tag` ADD CONSTRAINT `tag_fw` FOREIGN KEY (`fw_id`) REFERENCES `School_fw` (`id`);
-ALTER TABLE `Tag` ADD CONSTRAINT `tag_dy` FOREIGN KEY (`dy_id`) REFERENCES `School_dy` (`id`);
+ALTER TABLE `Notice` ADD CONSTRAINT `notice_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `Notice` ADD CONSTRAINT `notice_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `HomeworkRead` ADD CONSTRAINT `check_homework` FOREIGN KEY (`homework_id`) REFERENCES `Homework` (`id`);
+ALTER TABLE `HomeworkRead` ADD CONSTRAINT `check_homework_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
+ALTER TABLE `Homework` ADD CONSTRAINT `homework_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `Homework` ADD CONSTRAINT `homework_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
+ALTER TABLE `Homework` ADD CONSTRAINT `homework_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
+ALTER TABLE `Leave` ADD CONSTRAINT `leave_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `Leave` ADD CONSTRAINT `leave_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
+ALTER TABLE `Leave` ADD CONSTRAINT `leave_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `Leave` ADD CONSTRAINT `leave_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `Praise` ADD CONSTRAINT `praise_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `Praise` ADD CONSTRAINT `praise_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `Praise` ADD CONSTRAINT `praise_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
+ALTER TABLE `Praise` ADD CONSTRAINT `praise_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
+ALTER TABLE `Praise` ADD CONSTRAINT `praise_school` FOREIGN KEY (`school_id`) REFERENCES `School` (`id`);
+ALTER TABLE `Exam` ADD CONSTRAINT `exam_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
+ALTER TABLE `Grade` ADD CONSTRAINT `grade_exam` FOREIGN KEY (`exam_id`) REFERENCES `Exam` (`id`);
+ALTER TABLE `Grade` ADD CONSTRAINT `grade_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `Exam` ADD CONSTRAINT `exam_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
 

@@ -16,22 +16,23 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 public class _MappingKit {
 
 	public static void mapping(ActiveRecordPlugin arp) {
-		arp.addMapping("application", "id", Application.class);
 		arp.addMapping("course", "id", Course.class);
+		arp.addMapping("courseplan", "id", Courseplan.class);
+		arp.addMapping("enterprise", "id", Enterprise.class);
+		arp.addMapping("exam", "id", Exam.class);
+		arp.addMapping("grade", "id", Grade.class);
+		arp.addMapping("homework", "id", Homework.class);
+		arp.addMapping("homeworkread", "id", Homeworkread.class);
 		arp.addMapping("identity", "id", Identity.class);
-		arp.addMapping("menu", "id", Menu.class);
+		arp.addMapping("leave", "id", Leave.class);
+		arp.addMapping("notice", "id", Notice.class);
 		arp.addMapping("parent", "id", Parent.class);
+		arp.addMapping("praise", "id", Praise.class);
+		arp.addMapping("relation", "id", Relation.class);
 		arp.addMapping("room", "id", Room.class);
 		arp.addMapping("school", "id", School.class);
-		arp.addMapping("school_dy", "id", SchoolDy.class);
-		arp.addMapping("school_fw", "id", SchoolFw.class);
-		arp.addMapping("school_qy", "id", SchoolQy.class);
 		arp.addMapping("student", "id", Student.class);
-		arp.addMapping("tag", "id", Tag.class);
 		arp.addMapping("teacher", "id", Teacher.class);
-		arp.addMapping("user_dy", "id", UserDy.class);
-		arp.addMapping("user_fw", "id", UserFw.class);
-		arp.addMapping("user_qy", "id", UserQy.class);
 	}
 }
 

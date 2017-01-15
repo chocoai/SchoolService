@@ -1,11 +1,15 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
+import com.foxinmy.weixin4j.http.weixin.ApiResult;
+import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
+import com.wts.entity.WP;
+import com.wts.entity.model.Enterprise;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.AjaxFunction;
 import com.wts.interceptor.LoginTeacher;
@@ -13,11 +17,19 @@ import com.wts.util.Util;
 
 public class TeacherController extends Controller {
 
-  @Before(LoginTeacher.class)
-  public void index(){
-//    User u= WP.me.getUserByCode(getPara("code"));
-//    setSessionAttr("user",u);
-    render("/static/TeacherManage.html");
+  public void index() throws WeixinException {
+    if (getSessionAttr("teacher") == null) {
+      if (!(getPara("code") == null || getPara("code").equals(""))) {
+        User user = WP.me.getUserByCode(getPara("code"));
+        Teacher teacher = Teacher.dao.findById(Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId()).getTeacherId());
+        setSessionAttr("teacher", teacher);
+        render("/static/TeacherManage.html");
+      } else {
+        redirect("/");
+      }
+    } else {
+      render("/static/TeacherManage.html");
+    }
   }
   @Before({AjaxFunction.class,LoginTeacher.class})
   public void getName() throws WeixinException {
@@ -71,6 +83,24 @@ public class TeacherController extends Controller {
         // 输入内容不能是中文
         renderText("1");
       } else if (Teacher.dao.find("select * from teacher where weixinId=?", getPara("weixin")).size()!=0) {
+        // 该微信号码已存在
+        renderText("2");
+      } else {
+        renderText("0");
+      }
+    } else {
+      renderText("Z");
+    }
+  }
+  /**
+   * 新增时检测教师登录名
+   * */
+  public void checkLoginForNew() {
+    if (getPara("login")!=null) {
+      if (getPara("login").matches("^[\\u4e00-\\u9fa5]{0,}$")) {
+        // 输入内容不能是中文
+        renderText("1");
+      } else if (Teacher.dao.find("select * from teacher where login=?", getPara("login")).size()!=0) {
         // 该微信号码已存在
         renderText("2");
       } else {
@@ -176,43 +206,63 @@ public class TeacherController extends Controller {
 
 
   @Before(Tx.class)
-  public void save() {
+  public void save() throws WeixinException {
     if (getPara("name").trim().equals("")) {
       // 姓名为空
-      renderText("1");
+      renderText("姓名不能为空！");
     } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
       // 输入内容不应为两个以上汉字
-      renderText("2");
+      renderText("姓名应为两个以上汉字");
     } else if (getPara("phone").trim().equals("") && getPara("weixin").trim().equals("")) {
       // 手机号码或微信号为空
-      renderText("3");
+      renderText("微信号和手机号码不能同时为空");
     } else if (!getPara("phone").trim().equals("") && !getPara("phone").matches("\\d{11}")) {
       // 输入内容不是11位数字
-      renderText("4");
+      renderText("手机号码应为11位数字");
     } else if (!getPara("phone").trim().equals("") && Teacher.dao.find("select * from teacher where phone=?", getPara("phone")).size()!=0) {
       // 该手机号码已存在已存在
-      renderText("5");
+      renderText("该手机号码已存在");
     } else if (!getPara("weixin").trim().equals("") && getPara("weixin").matches("^.*[\u4e00-\u9fa5].*$")) {
       // 输入内容不能是中文
-      renderText("6");
+      renderText("微信号中不应包含中文");
     } else if (!getPara("weixin").trim().equals("") && Teacher.dao.find("select * from teacher where weixinId=?", getPara("weixin")).size()!=0) {
       // 该微信号码已存在
-      renderText("7");
+      renderText("该微信号已存在");
     } else if (!getPara("email").trim().equals("") && !getPara("email").matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$")) {
       // 输入内容格式不正确
-      renderText("8");
+      renderText("电子邮箱格式不正确");
     } else if (!getPara("email").trim().equals("") && Teacher.dao.find("select * from teacher where email=?", getPara("email")).size()!=0) {
-      // 该电子邮箱已存在已存在
-      renderText("9");
+      // 该电子邮箱已存在
+      renderText("该电子邮箱已存在");
+    } else if (getPara("login").trim().equals("")) {
+      // 登录名称为空
+      renderText("登录名称不能为空");
+    } else if (!getPara("login").trim().equals("") && getPara("login").matches("^.*[\u4e00-\u9fa5].*$")) {
+      // 输入内容不能是中文
+      renderText("登录名称不应包含中文");
+    } else if (!getPara("login").trim().equals("") && Teacher.dao.find("select * from teacher where login=?", getPara("login")).size()!=0) {
+      // 该微信号码已存在
+      renderText("该登录名称已存在");
     } else {
-      Teacher teacher = new Teacher();
-      teacher.set("name", getPara("name").trim())
-              .set("phone", getPara("phone").trim())
-              .set("weixinId", getPara("weixin").trim())
-              .set("email", getPara("email").trim())
-              .set("remark", getPara("remark").trim())
-              .save();
-      renderText("0");
+      // 用login代替userId
+      User user =new User(getPara("login").trim(),getPara("name").trim());
+      user.setWeixinId(getPara("weixin").trim());
+      user.setEmail(getPara("email").trim());
+      user.setMobile(getPara("phone").trim());
+      ApiResult ret = WP.me.createUser(user);
+      if (ret.getReturnCode().equals("0")) {
+        Teacher teacher = new Teacher();
+        teacher.set("name", getPara("name").trim())
+                .set("login", getPara("login").trim())
+                .set("phone", getPara("phone").trim())
+                .set("weixinId", getPara("weixin").trim())
+                .set("email", getPara("email").trim())
+                .set("remark", getPara("remark").trim())
+                .save();
+        renderText("0");
+      } else {
+        renderText(ret.getReturnMsg());
+      }
     }
   }
 

@@ -11,9 +11,6 @@
         <mu-list-item title="教师管理" @click.native="goTeacherManage">
           <mu-icon slot="left" value="inbox"/>
         </mu-list-item>
-        <mu-list-item title="标签管理" @click.native="goTagManage">
-          <mu-icon slot="left" value="inbox"/>
-        </mu-list-item>
       </mu-list>
     </mu-drawer>
   </div>
@@ -47,9 +44,6 @@
       },
       goTeacherManage () {
         window.location.href = '/teacher'
-      },
-      goTagManage () {
-        window.location.href = '/tag'
       }
     }
   }
