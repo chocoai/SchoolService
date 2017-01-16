@@ -36,6 +36,7 @@ public class MainController extends Controller {
   public void index() {
     render("/static/Login.html");
   }
+
   public void login() {
     Teacher teacher =Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1'", getPara("login"),getPara("pass"));
     if (teacher!=null) {
