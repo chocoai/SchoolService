@@ -50,6 +50,8 @@ public class MainController extends Controller {
             case 0:
               // 无管理权限
               setSessionAttr("teacher",teacher);
+              setCookie("t","t",10);
+              getCookie("t");
               renderText("3");
               break;
             case 1:
