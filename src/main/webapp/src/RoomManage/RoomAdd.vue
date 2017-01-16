@@ -1,22 +1,20 @@
 <template>
-  <div class="TeacherAdd">
+  <div class="RoomAdd">
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
-    <mu-text-field label="教师姓名" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="登录名" underlineShow="false" v-model="login" :errorColor="loginErrorColor" :errorText="loginErrorText" @input="checkLogin" fullWidth labelFloat icon="user"/><br/>
-    <mu-text-field label="联系电话" underlineShow="false" v-model="phone" :errorColor="phoneErrorColor" :errorText="phoneErrorText" @input="checkPhone" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-    <mu-text-field label="微信号" underlineShow="false" v-model="weixin" :errorColor="weixinErrorColor" :errorText="weixinErrorText" @input="checkWeixin" fullWidth labelFloat icon="chat"/><br/>
-    <mu-text-field label="电子邮箱" underlineShow="false" v-model="email" :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
-    <mu-text-field label="备注信息" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
-    <mu-flexbox>
-      <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="cached" @click="reset" backgroundColor="orange"/>
-      </mu-flexbox-item>
-      <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="save" backgroundColor="green"/>
-      </mu-flexbox-item>
-    </mu-flexbox>
+    <mu-select-field v-model="game1" label="入学学年">
+      <mu-menu-item v-for="text,index in yearList" ccc="dddd" ttt="ddd" :value="String(index)" :title="text" />
+    </mu-select-field>
+    <mu-text-field label="入学学年" underlineShow="false" v-model="nameA" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/>级<br/>
+    <mu-select-field v-model="nameOrder" label="班次">
+      <mu-menu-item value="1班" title="1班"/>
+      <mu-menu-item value="2班" title="2班"/>
+      <mu-menu-item value="3班" title="3班"/>
+      <mu-menu-item value="4班" title="4班"/>
+      <mu-menu-item value="5班" title="5班"/>
+      <mu-menu-item value="6班" title="6班"/>
+    </mu-select-field>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
@@ -26,13 +24,15 @@
 <script>
 import * as API from './RoomAPI.js'
 export default {
-  name: 'TeacherAdd',
+  name: 'RoomAdd',
   data () {
     return {
       bottomPopup: false,
       icon: '',
       color: '',
-      name: '',
+      nameA: '',
+      nameOrder: '1班',
+      yearList: [],
       phone: '',
       weixin: '',
       email: '',
@@ -50,9 +50,21 @@ export default {
       emailErrorColor: ''
     }
   },
+   created () {
+    this.list = [
+      new Date().getFullYear() - 7,
+      new Date().getFullYear() - 6,
+      new Date().getFullYear() - 5,
+      new Date().getFullYear() - 4,
+      new Date().getFullYear() - 3,
+      new Date().getFullYear() - 2,
+      new Date().getFullYear() - 1,
+      new Date().getFullYear()
+    ]
+  },
   methods: {
     reply () {
-      this.$router.push({ path: '/teacherList' })
+      this.$router.push({ path: '/roomList' })
     },
     openPopup (message, icon, color) {
       this.message = message

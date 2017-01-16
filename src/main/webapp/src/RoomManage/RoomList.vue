@@ -1,14 +1,12 @@
 <template>
-  <div class="TeacherList">
+  <div class="RoomList">
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
-      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入教师姓名" @input="query" :value="queryString"/>
+      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入班级名称" @input="query" :value="queryString"/>
       <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.phone" @click="look(teacher.id)">
-        <mu-avatar :src="teacher.name" slot="leftAvatar" :size="30"/>
-        <mu-avatar icon="link" slot="rightAvatar" :size="30"/>
+      <mu-list-item v-for="room in rooms" :value="room.id" :title="room.name" :describeText="room.state" @click="look(room.id)">
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -36,7 +34,7 @@
   import * as API from './RoomAPI.js'
   import MenuList from '../components/MenuList'
   export default {
-    name: 'TeacherList',
+    name: 'RoomList',
     components: {
       'menuList': MenuList
     },
@@ -51,7 +49,7 @@
         color: '',
         message: '',
         queryString: '',
-        teachers: [],
+        rooms: [],
         pageTotal: '',
         pageSize: '7',
         pageCurrent: ''
@@ -60,8 +58,8 @@
     created: function () {
       this.queryString = this.$store.state.queryString
       this.pageCurrent = this.$store.state.pageCurrent
-      this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
-      this.teacherTotal(this.queryString, this.pageSize)
+      this.roomQuery(this.queryString, this.pageCurrent, this.pageSize)
+      this.roomTotal(this.queryString, this.pageSize)
     },
     methods: {
       openMenu () {
@@ -77,7 +75,7 @@
         this.bottomPopup = true
         setTimeout(() => { this.bottomPopup = false }, 1500)
       },
-      teacherQuery (queryString, pageCurrent, pageSize) {
+      roomQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
           API.QueryByName,
           { params:
@@ -95,14 +93,14 @@
             emulateJSON: true
           }
         ).then((response) => {
-          this.teachers = response.body
+          this.rooms = response.body
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
           this.openPopup('服务器内部错误！', 'report_problem', 'orange')
         })
       },
-      teacherTotal (queryString, pageSize) {
+      roomTotal (queryString, pageSize) {
         this.$http.get(
           API.TotalByName,
           { params:
@@ -136,8 +134,8 @@
         this.teacherTotal(this.queryString, this.pageSize)
         this.before = false
       },
-      look (teacherId) {
-        this.$router.push({ path: '/teacherEdit/' + teacherId })
+      look (roomId) {
+        this.$router.push({ path: '/roomEdit/' + roomId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent
@@ -156,7 +154,7 @@
         this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       goAdd () {
-        this.$router.push({ path: '/teacherAdd' })
+        this.$router.push({ path: '/roomAdd' })
       }
     }
   }

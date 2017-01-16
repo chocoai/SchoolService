@@ -4,7 +4,7 @@
     <mu-flexbox>
       <mu-flexbox-item >
         <mu-text-field hintText="用户名" icon="face" v-model="login"/><br/>
-        <mu-text-field hintText="密码" icon="blur_on" v-model="pass"/><br/>
+        <mu-text-field hintText="密码" icon="blur_on" v-model="pass" type="password"/><br/>
         <mu-select-field hintText="用户类别" icon="settings" v-model="type">
           <mu-menu-item value="1" title="教师"/>
           <mu-menu-item value="2" title="管理"/>

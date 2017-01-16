@@ -34,7 +34,7 @@ public class Config extends JFinalConfig {
         me.add("/callBack", CallBack.class);
         me.add("/user", UserController.class);
         me.add("/teacher", TeacherController.class);
-        me.add("/school", SchoolController.class);
+        me.add("/room", RoomController.class);
     }
 
     /**
