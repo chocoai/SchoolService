@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import * as API from './RoomAPI.js'
+  import * as API from './TeacherAPI.js'
   import MenuList from '../components/MenuList'
   export default {
     name: 'TeacherList',

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import * as API from './RoomAPI.js'
+import * as API from './TeacherAPI.js'
 export default {
   name: 'TeacherAdd',
   data () {

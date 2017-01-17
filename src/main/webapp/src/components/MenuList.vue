@@ -19,21 +19,15 @@
   </div>
 </template>
 <script>
-  import * as API from './MenuAPI.js'
   export default {
     name: 'Menu',
     props: ['open'],
     data () {
       return {
-        menuTitle: ''
+        menuTitle: '济南市育明小学'
       }
     },
-    created: function () {
-      this.$http.get(API.GetMenuTitle, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }).then((response) => {
-        this.menuTitle = response.data
-      }, (response) => {
-      })
-    },
+
     methods: {
       openMenu () {
         this.open = true

@@ -3,10 +3,9 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
-    <mu-select-field v-model="game1" label="入学学年">
-      <mu-menu-item v-for="text,index in yearList" ccc="dddd" ttt="ddd" :value="String(index)" :title="text" />
+    <mu-select-field v-model="nameYear" label="入学学年">
+      <mu-menu-item v-for="text in yearList" :value="text" :title="text" />
     </mu-select-field>
-    <mu-text-field label="入学学年" underlineShow="false" v-model="nameA" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/>级<br/>
     <mu-select-field v-model="nameOrder" label="班次">
       <mu-menu-item value="1班" title="1班"/>
       <mu-menu-item value="2班" title="2班"/>
@@ -50,21 +49,14 @@ export default {
       emailErrorColor: ''
     }
   },
-   created () {
+  created () {
     this.list = [
-      new Date().getFullYear() - 7,
-      new Date().getFullYear() - 6,
-      new Date().getFullYear() - 5,
-      new Date().getFullYear() - 4,
-      new Date().getFullYear() - 3,
-      new Date().getFullYear() - 2,
-      new Date().getFullYear() - 1,
-      new Date().getFullYear()
+      7, 8
     ]
   },
   methods: {
     reply () {
-      this.$router.push({ path: '/roomList' })
+      this.$router.push({ path: '/RoomList' })
     },
     openPopup (message, icon, color) {
       this.message = message

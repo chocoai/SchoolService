@@ -1,0 +1,6 @@
+    created: function () {
+      this.$http.get(API.GetMenuTitle, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }).then((response) => {
+        this.menuTitle = response.data
+      }, (response) => {
+      })
+    },
