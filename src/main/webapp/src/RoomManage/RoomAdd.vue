@@ -50,8 +50,10 @@ export default {
     }
   },
   created () {
-    this.list = [
-      7, 8
+    this.yearList = [
+      new Date().getFullYear() - 2,
+      new Date().getFullYear() - 1,
+      new Date().getFullYear()
     ]
   },
   methods: {
