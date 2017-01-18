@@ -4,6 +4,7 @@ import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.http.weixin.ApiResult;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.wts.entity.WP;
+import com.wts.util.PinyinTool;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class Test {
   private static Logger logger = Logger.getLogger(Test.class);
 
 
-  public static void main(String[] args) throws WeixinException {
+  public static void main(String[] args) throws Exception {
     // System.out.println("nelson@126.com".matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$"));
     // System.out.println("王".matches("^[\\u4e00-\\u9fa5]{2,}$"));
 //    // 记录debug级别的信息
@@ -30,8 +31,8 @@ public class Test {
     //ApiResult ret = WP.me.createUser(user);
     //System.out.println(ret.getReturnMsg());
 
-     System.out.println("20t6级43班".matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]"));
-
+     //System.out.println("20t6级43班".matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]"));
+      System.out.println(new PinyinTool().toPinYin("王燚硕","",PinyinTool.Type.FIRSTUPPER));
 
   }
 

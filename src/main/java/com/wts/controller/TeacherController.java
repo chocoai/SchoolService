@@ -21,8 +21,13 @@ public class TeacherController extends Controller {
     if (getSessionAttr("teacher") == null) {
       if (!(getPara("code") == null || getPara("code").equals(""))) {
         User user = WP.me.getUserByCode(getPara("code"));
-        Teacher teacher = Teacher.dao.findById(Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId()).getTeacherId());
-        setSessionAttr("teacher", teacher);
+        System.out.println(user.getWeixinId());
+        System.out.println(user.getUserId());
+        System.out.println(user.getAvatar());
+        System.out.println(user.getPosition());
+        System.out.println(user.getPosition());
+//        Teacher teacher = Teacher.dao.findById(Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId()).getTeacherId());
+//        setSessionAttr("teacher", teacher);
         render("/static/TeacherManage.html");
       } else {
         redirect("/");

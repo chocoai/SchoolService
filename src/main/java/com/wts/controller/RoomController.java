@@ -13,11 +13,11 @@ import com.wts.entity.model.Teacher;
 public class RoomController extends Controller {
 
   public void index() throws WeixinException {
+
     if (getSessionAttr("teacher") == null) {
       if (!(getPara("code") == null || getPara("code").equals(""))) {
         User user = WP.me.getUserByCode(getPara("code"));
-        Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId()
-        Teacher teacher = Teacher.dao.findById());
+        Teacher teacher = Teacher.dao.findFirst("select * from teacher where state=1 and login=?", user.getUserId());
         setSessionAttr("teacher", teacher);
         render("/static/RoomManage.html");
       } else {
