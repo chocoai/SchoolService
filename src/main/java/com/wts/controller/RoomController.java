@@ -17,7 +17,7 @@ public class RoomController extends Controller {
     if (getSessionAttr("teacher") == null) {
       if (!(getPara("code") == null || getPara("code").equals(""))) {
         User user = WP.me.getUserByCode(getPara("code"));
-        Teacher teacher = Teacher.dao.findFirst("select * from teacher where state=1 and login=?", user.getUserId());
+        Teacher teacher = Teacher.dao.findFirst("select * from teacher where state=1 and weixinId=?", user.getUserId());
         setSessionAttr("teacher", teacher);
         render("/static/RoomManage.html");
       } else {
