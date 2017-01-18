@@ -73,14 +73,6 @@ public abstract class BaseLeave<M extends BaseLeave<M>> extends Model<M> impleme
 		return get("teacher_id");
 	}
 
-	public void setSchoolId(java.lang.Integer schoolId) {
-		set("school_id", schoolId);
-	}
-
-	public java.lang.Integer getSchoolId() {
-		return get("school_id");
-	}
-
 	public void setTimeApply(java.util.Date timeApply) {
 		set("time_apply", timeApply);
 	}

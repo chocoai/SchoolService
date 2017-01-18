@@ -4,8 +4,10 @@ import com.jfinal.core.Controller;
 import com.wts.util.aes.AesException;
 import com.wts.util.ParamesAPI;
 import com.wts.util.aes.WXBizMsgCrypt;
+import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.PrintWriter;
 
 public class CallBack extends Controller {
@@ -39,43 +41,43 @@ public class CallBack extends Controller {
       out.close();
       out = null;
     } else if (getRequest().getMethod() == "POST") {
-//
-//      this.getRequest().setCharacterEncoding("UTF-8");
-//      this.getResponse().setCharacterEncoding("UTF-8");
-//      // 微信加密签名
-//      String msg_signature = getPara("msg_signature");
-//      // 时间戳
-//      String timestamp = getPara("timestamp");
-//      // 随机数
-//      String nonce = getPara("nonce");
-//      //从请求中读取整个post数据
-//      InputStream inputStream = this.getRequest().getInputStream();
-//      //commons.io.jar 方法
-//      String Post = IOUtils.toString(inputStream, "UTF-8");
-//      String Msg = "";
-//      WXBizMsgCrypt wxcpt = null;
-//      try {
-//        wxcpt = new WXBizMsgCrypt(ParamesAPI.token,ParamesAPI.encodingAESKey,ParamesAPI.corpId);
-//        //解密消息
-//        Msg = wxcpt.DecryptMsg(msg_signature, timestamp, nonce, Post);
-//      } catch (AesException e) {
-//        e.printStackTrace();
-//      }
-//      // 调用核心业务类接收消息、处理消息
-//      String respMessage = CoreService.processRequest(Msg);
-//
-//      // respMessage打印结果
-//      String encryptMsg = "";
-//      try {
-//        //加密回复消息
-//        encryptMsg = wxcpt.EncryptMsg(respMessage, timestamp, nonce);
-//      } catch (AesException e) {
-//        e.printStackTrace();
-//      }
-//      // 响应消息
-//      PrintWriter out = this.getResponse().getWriter();
-//      out.print(encryptMsg);
-//      out.close();
+
+      this.getRequest().setCharacterEncoding("UTF-8");
+      this.getResponse().setCharacterEncoding("UTF-8");
+      // 微信加密签名
+      String msg_signature = getPara("msg_signature");
+      // 时间戳
+      String timestamp = getPara("timestamp");
+      // 随机数
+      String nonce = getPara("nonce");
+      //从请求中读取整个post数据
+      InputStream inputStream = this.getRequest().getInputStream();
+      //commons.io.jar 方法
+      String Post = IOUtils.toString(inputStream, "UTF-8");
+      String Msg = "";
+      WXBizMsgCrypt wxcpt = null;
+      try {
+        wxcpt = new WXBizMsgCrypt(ParamesAPI.token,ParamesAPI.encodingAESKey,ParamesAPI.corpId);
+        //解密消息
+        Msg = wxcpt.DecryptMsg(msg_signature, timestamp, nonce, Post);
+      } catch (AesException e) {
+        e.printStackTrace();
+      }
+      // 调用核心业务类接收消息、处理消息
+      String respMessage = CoreService.processRequest(Msg);
+
+      // respMessage打印结果
+      String encryptMsg = "";
+      try {
+        //加密回复消息
+        encryptMsg = wxcpt.EncryptMsg(respMessage, timestamp, nonce);
+      } catch (AesException e) {
+        e.printStackTrace();
+      }
+      // 响应消息
+      PrintWriter out = this.getResponse().getWriter();
+      out.print(encryptMsg);
+      out.close();
     } else {
 
     }

@@ -17,20 +17,20 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 		return get("id");
 	}
 
-	public void setNumber(java.lang.String number) {
-		set("number", number);
-	}
-
-	public java.lang.String getNumber() {
-		return get("number");
-	}
-
 	public void setName(java.lang.String name) {
 		set("name", name);
 	}
 
 	public java.lang.String getName() {
 		return get("name");
+	}
+
+	public void setMobile(java.lang.String mobile) {
+		set("mobile", mobile);
+	}
+
+	public java.lang.String getMobile() {
+		return get("mobile");
 	}
 
 	public void setSex(java.lang.Integer sex) {
@@ -41,20 +41,20 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 		return get("sex");
 	}
 
-	public void setPhone(java.lang.String phone) {
-		set("phone", phone);
+	public void setAddress(java.lang.String address) {
+		set("address", address);
 	}
 
-	public java.lang.String getPhone() {
-		return get("phone");
+	public java.lang.String getAddress() {
+		return get("address");
 	}
 
-	public void setEmail(java.lang.String email) {
-		set("email", email);
+	public void setEnterpriseId(java.lang.Integer enterpriseId) {
+		set("enterprise_id", enterpriseId);
 	}
 
-	public java.lang.String getEmail() {
-		return get("email");
+	public java.lang.Integer getEnterpriseId() {
+		return get("enterprise_id");
 	}
 
 	public void setRemark(java.lang.String remark) {
@@ -71,14 +71,6 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 
 	public java.lang.String getWork() {
 		return get("work");
-	}
-
-	public void setAddress(java.lang.String address) {
-		set("address", address);
-	}
-
-	public java.lang.String getAddress() {
-		return get("address");
 	}
 
 	public void setState(java.lang.Integer state) {

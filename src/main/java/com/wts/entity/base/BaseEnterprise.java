@@ -33,28 +33,20 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 		return get("openId");
 	}
 
-	public void setAccount(java.lang.String account) {
-		set("account", account);
+	public void setName(java.lang.String name) {
+		set("name", name);
 	}
 
-	public java.lang.String getAccount() {
-		return get("account");
+	public java.lang.String getName() {
+		return get("name");
 	}
 
-	public void setPhone(java.lang.String phone) {
-		set("phone", phone);
+	public void setMobile(java.lang.String mobile) {
+		set("mobile", mobile);
 	}
 
-	public java.lang.String getPhone() {
-		return get("phone");
-	}
-
-	public void setEmail(java.lang.String email) {
-		set("email", email);
-	}
-
-	public java.lang.String getEmail() {
-		return get("email");
+	public java.lang.String getMobile() {
+		return get("mobile");
 	}
 
 	public void setSex(java.lang.Integer sex) {
@@ -65,36 +57,28 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 		return get("sex");
 	}
 
+	public void setEmail(java.lang.String email) {
+		set("email", email);
+	}
+
+	public java.lang.String getEmail() {
+		return get("email");
+	}
+
+	public void setAccount(java.lang.String account) {
+		set("account", account);
+	}
+
+	public java.lang.String getAccount() {
+		return get("account");
+	}
+
 	public void setState(java.lang.Integer state) {
 		set("state", state);
 	}
 
 	public java.lang.Integer getState() {
 		return get("state");
-	}
-
-	public void setTeacherId(java.lang.Integer teacherId) {
-		set("teacher_id", teacherId);
-	}
-
-	public java.lang.Integer getTeacherId() {
-		return get("teacher_id");
-	}
-
-	public void setParentId(java.lang.Integer parentId) {
-		set("parent_id", parentId);
-	}
-
-	public java.lang.Integer getParentId() {
-		return get("parent_id");
-	}
-
-	public void setStudentId(java.lang.Integer studentId) {
-		set("student_id", studentId);
-	}
-
-	public java.lang.Integer getStudentId() {
-		return get("student_id");
 	}
 
 }

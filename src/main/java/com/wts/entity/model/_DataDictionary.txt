@@ -15,25 +15,22 @@ Table: courseplan
  course_id  | INT(10) | YES  |     |         | 课程序号    
  teacher_id | INT(10) | YES  |     |         | 教师序号    
  room_id    | INT(10) | YES  |     |         | 班级序号    
- sequence   | INT(10) | YES  |     |         | 教师序号    
 ------------+---------+------+-----+---------+---------
 
 Table: enterprise
-------------+--------------+------+-----+---------+---------
- Field      | Type         | Null | Key | Default | Remarks 
-------------+--------------+------+-----+---------+---------
- id         | INT(10)      | NO   | PRI |         | 企业号用户序号 
- userId     | VARCHAR(255) | YES  |     |         | 微信号     
- openId     | VARCHAR(255) | YES  |     |         | 微信号     
- account    | VARCHAR(255) | YES  |     |         | 微信账户    
- phone      | VARCHAR(255) | YES  |     |         | 微信电话    
- email      | VARCHAR(255) | YES  |     |         |  微信电子邮箱 
- sex        | INT(10)      | YES  |     |         | 性别1男2女  
- state      | INT(10)      | YES  |     |         | 账号状态1激活2注销3删除
- teacher_id | INT(10)      | YES  |     |         | 教师序号    
- parent_id  | INT(10)      | YES  |     |         | 家长序号    
- student_id | INT(10)      | YES  |     |         | 学生序号    
-------------+--------------+------+-----+---------+---------
+---------+--------------+------+-----+---------+---------
+ Field   | Type         | Null | Key | Default | Remarks 
+---------+--------------+------+-----+---------+---------
+ id      | INT(10)      | NO   | PRI |         | 企业号用户序号 
+ userId  | VARCHAR(255) | YES  |     |         | 微信号     
+ openId  | VARCHAR(255) | YES  |     |         | 微信号     
+ name    | VARCHAR(255) | YES  |     |         | 姓名      
+ mobile  | VARCHAR(255) | YES  |     |         | 手机号码    
+ sex     | INT(10)      | YES  |     |         | 性别0未知1男2女
+ email   | VARCHAR(255) | YES  |     |         | 电子邮箱    
+ account | VARCHAR(255) | YES  |     |         | 账号      
+ state   | INT(10)      | YES  |     |         | 账号状态1关注2未关注3取消关注
+---------+--------------+------+-----+---------+---------
 
 Table: exam
 -----------+--------------+------+-----+---------+---------
@@ -101,7 +98,6 @@ Table: leave
  student_id     | INT(10)      | YES  |     |         | 请假学生    
  parent_id      | INT(10)      | YES  |     |         | 请假家长    
  teacher_id     | INT(10)      | YES  |     |         | 批准教师    
- school_id      | INT(10)      | YES  |     |         | 所属学校    
  time_apply     | DATETIME(19) | YES  |     |         | 申请时间    
  time_ratify    | DATETIME(19) | YES  |     |         | 批准时间    
  time_start     | DATETIME(19) | YES  |     |         | 开始时间    
@@ -116,24 +112,22 @@ Table: notice
  content    | VARCHAR(999) | YES  |     |         | 消息内容    
  time       | DATETIME(19) | YES  |     |         | 发布时间    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
- school_id  | INT(10)      | YES  |     |         | 学校序号    
 ------------+--------------+------+-----+---------+---------
 
 Table: parent
----------+--------------+------+-----+---------+---------
- Field   | Type         | Null | Key | Default | Remarks 
----------+--------------+------+-----+---------+---------
- id      | INT(10)      | NO   | PRI |         | 家长序号    
- number  | VARCHAR(255) | YES  |     |         | 家长证件号码  
- name    | VARCHAR(255) | YES  |     |         | 家长姓名    
- sex     | INT(10)      | YES  |     |         | 家长性别1男2女
- phone   | VARCHAR(255) | YES  |     |         | 联系电话    
- email   | VARCHAR(255) | YES  |     |         | 电子邮箱    
- remark  | VARCHAR(255) | YES  |     |         | 家长备注    
- work    | VARCHAR(255) | YES  |     |         | 工作单位    
- address | VARCHAR(255) | YES  |     |         | 家庭住址    
- state   | INT(10)      | YES  |     |         | 家长状态1激活2注销3删除
----------+--------------+------+-----+---------+---------
+---------------+--------------+------+-----+---------+---------
+ Field         | Type         | Null | Key | Default | Remarks 
+---------------+--------------+------+-----+---------+---------
+ id            | INT(10)      | NO   | PRI |         | 家长序号    
+ name          | VARCHAR(255) | YES  |     |         | 家长姓名    
+ mobile        | VARCHAR(255) | YES  |     |         | 联系电话    
+ sex           | INT(10)      | YES  |     |         | 家长性别0未知1男2女
+ address       | VARCHAR(255) | YES  |     |         | 联系地址    
+ enterprise_id | INT(10)      | YES  |     |         |         
+ remark        | VARCHAR(255) | YES  |     |         | 家长备注    
+ work          | VARCHAR(255) | YES  |     |         | 工作单位    
+ state         | INT(10)      | YES  |     |         | 家长状态1激活2注销3删除
+---------------+--------------+------+-----+---------+---------
 
 Table: praise
 ------------+--------------+------+-----+---------+---------
@@ -145,7 +139,6 @@ Table: praise
  student_id | INT(10)      | YES  |     |         | 学生序号    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  course_id  | INT(10)      | YES  |     |         | 课程序号    
- school_id  | INT(10)      | YES  |     |         | 学校序号    
  room_id    | INT(10)      | YES  |     |         | 班级序号    
 ------------+--------------+------+-----+---------+---------
 
@@ -167,22 +160,9 @@ Table: room
  name       | VARCHAR(255) | YES  |     |         | 班级名称    
  code       | VARCHAR(255) | YES  |     |         | 班级编号    
  state      | INT(10)      | YES  |     |         | 班级状态1激活2注销3删除
- school_id  | INT(10)      | YES  |     |         | 学校序号    
  enter_year | DATETIME(19) | YES  |     |         | 入学时间    
  blog       | VARCHAR(255) | YES  |     |         | 班级博客    
 ------------+--------------+------+-----+---------+---------
-
-Table: school
----------+--------------+------+-----+---------+---------
- Field   | Type         | Null | Key | Default | Remarks 
----------+--------------+------+-----+---------+---------
- id      | INT(10)      | NO   | PRI |         | 学校序号    
- name    | VARCHAR(255) | YES  |     |         | 学校名称    
- code    | VARCHAR(255) | YES  |     |         | 学校编号    
- address | VARCHAR(255) | YES  |     |         | 学校地址    
- state   | INT(10)      | YES  |     |         | 学校状态1激活2注销3删除
- phone   | VARCHAR(255) | YES  |     |         | 联系电话    
----------+--------------+------+-----+---------+---------
 
 Table: student
 ---------+--------------+------+-----+---------+---------
@@ -192,7 +172,7 @@ Table: student
  name    | VARCHAR(255) | YES  |     |         | 学生姓名    
  number  | VARCHAR(255) | YES  |     |         | 学生身份证号码 
  code    | VARCHAR(255) | YES  |     |         | 学籍号     
- sex     | INT(10)      | YES  |     |         | 学生性别    
+ sex     | INT(10)      | YES  |     |         | 学生性别0未知1男2女
  birth   | DATETIME(19) | YES  |     |         | 出生日期    
  room_id | INT(10)      | YES  |     |         | 班级序号    
  remark  | VARCHAR(255) | YES  |     |         | 学生备注    
@@ -202,20 +182,19 @@ Table: student
 ---------+--------------+------+-----+---------+---------
 
 Table: teacher
------------+--------------+------+-----+---------+---------
- Field     | Type         | Null | Key | Default | Remarks 
------------+--------------+------+-----+---------+---------
- id        | INT(10)      | NO   | PRI |         | 教师序号    
- number    | VARCHAR(255) | YES  |     |         | 教师身份证号码 
- name      | VARCHAR(255) | YES  |     |         | 教师姓名    
- sex       | INT(10)      | YES  |     |         | 教师性别1男2女
- phone     | VARCHAR(255) | YES  |     |         | 微信绑定的手机号
- email     | VARCHAR(255) | YES  |     |         | 微信绑定的电子邮箱
- remark    | VARCHAR(255) | YES  |     |         | 教师备注    
- login     | VARCHAR(255) | YES  |     |         | 登录账号    
- pass      | VARCHAR(255) | YES  |     |         | 登录密码    
- school_id | INT(10)      | YES  |     |         | 学校序号    
- state     | INT(10)      | YES  |     |         | 教师状态1激活2注销3删除
- system    | INT(10)      | YES  |     |         | 是否系统管理员：1是0否
------------+--------------+------+-----+---------+---------
+---------------+--------------+------+-----+---------+---------
+ Field         | Type         | Null | Key | Default | Remarks 
+---------------+--------------+------+-----+---------+---------
+ id            | INT(10)      | NO   | PRI |         | 教师序号    
+ name          | VARCHAR(255) | YES  |     |         | 教师姓名    
+ mobile        | VARCHAR(255) | YES  |     |         | 联系电话    
+ sex           | INT(10)      | YES  |     |         | 教师性别0未知1男2女
+ address       | VARCHAR(255) | YES  |     |         | 联系地址    
+ enterprise_id | INT(10)      | YES  |     |         | 人员序号    
+ remark        | VARCHAR(255) | YES  |     |         | 教师备注    
+ login         | VARCHAR(255) | YES  |     |         | 登录名称    
+ pass          | VARCHAR(255) | YES  |     |         | 登录密码    
+ state         | INT(10)      | YES  |     |         | 教师状态1激活2注销3删除
+ system        | INT(10)      | YES  |     |         | 是否系统管理员：1是0否
+---------------+--------------+------+-----+---------+---------
 

@@ -90,7 +90,10 @@ public class MessageUtil {
    * 事件类型：扫二维码
    */
   public static final String EVENT_TYPE_SCAN = "scan";
-
+  /**
+   * 事件类型：进入事件
+   */
+  public static final String EVENT_TYPE_ENTER = "enter_agent";
   /**
    * 解析微信发来的请求（XML）
    *

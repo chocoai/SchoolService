@@ -26,11 +26,11 @@ public class Test {
 //    User user =new User("c","王王");
 //    user.setPartyIds(1);
 //    user.setWeixinId("chnwts");
-    WP.me.inviteUser("chnwts","济南市育明小学欢迎您");
+   // WP.me.inviteUser("chnwts","济南市育明小学欢迎您");
     //ApiResult ret = WP.me.createUser(user);
     //System.out.println(ret.getReturnMsg());
 
-
+     System.out.println("20t6级43班".matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]"));
 
 
   }

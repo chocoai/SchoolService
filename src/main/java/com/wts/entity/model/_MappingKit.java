@@ -30,7 +30,6 @@ public class _MappingKit {
 		arp.addMapping("praise", "id", Praise.class);
 		arp.addMapping("relation", "id", Relation.class);
 		arp.addMapping("room", "id", Room.class);
-		arp.addMapping("school", "id", School.class);
 		arp.addMapping("student", "id", Student.class);
 		arp.addMapping("teacher", "id", Teacher.class);
 	}

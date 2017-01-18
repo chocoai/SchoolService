@@ -1,6 +1,5 @@
-INSERT INTO `School` (name,state) VALUES ('济南市育明小学', '1');
-INSERT INTO `Teacher` (name,state,login,pass,system) VALUES ('王天硕', '1','wts','wts','1');
-INSERT INTO `Enterprise` (userId,state,teacher_id) VALUES ('chnwts', '1', '1');
+INSERT INTO `Enterprise` (userId,name, account, mobile) VALUES ('chnwts', '王天硕', 'wts', '18653145531');
+INSERT INTO `Teacher` (enterprise_id,name,login,mobile,pass,system) VALUES ('1','王天硕', 'wts', '18653145531', 'wts', '1');
 INSERT INTO `Course` (id,name,state) VALUES ('1', '班主任', '1');
 INSERT INTO `Course` (id,name,state) VALUES ('2', '语文', '1');
 INSERT INTO `Course` (id,name,state) VALUES ('3', '数学', '1');

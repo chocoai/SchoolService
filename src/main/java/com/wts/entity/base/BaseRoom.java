@@ -41,14 +41,6 @@ public abstract class BaseRoom<M extends BaseRoom<M>> extends Model<M> implement
 		return get("state");
 	}
 
-	public void setSchoolId(java.lang.Integer schoolId) {
-		set("school_id", schoolId);
-	}
-
-	public java.lang.Integer getSchoolId() {
-		return get("school_id");
-	}
-
 	public void setEnterYear(java.util.Date enterYear) {
 		set("enter_year", enterYear);
 	}

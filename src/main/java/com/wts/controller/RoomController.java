@@ -16,7 +16,8 @@ public class RoomController extends Controller {
     if (getSessionAttr("teacher") == null) {
       if (!(getPara("code") == null || getPara("code").equals(""))) {
         User user = WP.me.getUserByCode(getPara("code"));
-        Teacher teacher = Teacher.dao.findById(Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId()).getTeacherId());
+        Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId()
+        Teacher teacher = Teacher.dao.findById());
         setSessionAttr("teacher", teacher);
         render("/static/RoomManage.html");
       } else {
@@ -38,5 +39,40 @@ public class RoomController extends Controller {
       renderText((count/getParaToInt("pageSize")+1)+"");
     }
   }
+  public void checkNameForNew() {
+    if (getPara("name")!=null) {
+      if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+        // 班级名称不合规格
+        renderText("1");
+      } else if (Teacher.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+        // 班级名称冲突
+        renderText("2");
+      } else {
+        renderText("0");
+      }
+    } else {
+      renderText("Z");
+    }
+  }
+  public void getById() {
+    Room room  =Room.dao.findById(getPara("id"));
+    renderJson(room);
+  }
 
+  public void deleteById() {
+    if (getPara("id") != null) {
+      if (Room.dao.findById(getPara("id")) == null) {
+        // 未找到指定id的教师
+        renderText("1");
+      } else {
+        Room.dao.deleteById(getPara("id"));
+      }
+      renderText("0");
+    } else {
+      renderText("Z");
+    }
+  }
+  public void teacherList() {
+    Teacher.dao.find("select * from teacher");
+  }
 }

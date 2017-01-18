@@ -41,12 +41,4 @@ public abstract class BaseCourseplan<M extends BaseCourseplan<M>> extends Model<
 		return get("room_id");
 	}
 
-	public void setSequence(java.lang.Integer sequence) {
-		set("sequence", sequence);
-	}
-
-	public java.lang.Integer getSequence() {
-		return get("sequence");
-	}
-
 }

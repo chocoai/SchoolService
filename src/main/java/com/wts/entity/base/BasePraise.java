@@ -57,14 +57,6 @@ public abstract class BasePraise<M extends BasePraise<M>> extends Model<M> imple
 		return get("course_id");
 	}
 
-	public void setSchoolId(java.lang.Integer schoolId) {
-		set("school_id", schoolId);
-	}
-
-	public java.lang.Integer getSchoolId() {
-		return get("school_id");
-	}
-
 	public void setRoomId(java.lang.Integer roomId) {
 		set("room_id", roomId);
 	}

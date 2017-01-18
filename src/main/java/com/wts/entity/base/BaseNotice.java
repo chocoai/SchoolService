@@ -41,12 +41,4 @@ public abstract class BaseNotice<M extends BaseNotice<M>> extends Model<M> imple
 		return get("teacher_id");
 	}
 
-	public void setSchoolId(java.lang.Integer schoolId) {
-		set("school_id", schoolId);
-	}
-
-	public java.lang.Integer getSchoolId() {
-		return get("school_id");
-	}
-
 }
