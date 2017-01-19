@@ -2,13 +2,13 @@
   <div class="TeacherList">
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
-      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入教师姓名" @input="query" :value="queryString"/>
+      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
       <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.userId" @click="look(teacher.id)">
         <mu-avatar :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-        <mu-avatar icon="link" slot="rightAvatar" :size="30"/>
+        <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -79,7 +79,7 @@
       },
       teacherQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
-          API.QueryByName,
+          API.Query,
           { params:
           {
             queryString: queryString,

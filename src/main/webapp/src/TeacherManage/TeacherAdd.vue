@@ -3,10 +3,10 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
-    <mu-text-field label="姓名" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="账号" underlineShow="false" v-model="userId" :errorColor="userIdErrorColor" :errorText="userIdErrorText" @input="checkUserId" fullWidth labelFloat icon="assignment"/><br/>
-    <mu-text-field label="手机" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-    <mu-select-field v-model="isManager" label="权限" icon="comment" fullWidth :maxHeight="300">
+    <mu-text-field label="姓名" :disabled="saved" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="账号" :disabled="saved" underlineShow="false" v-model="userId" :errorColor="userIdErrorColor" :errorText="userIdErrorText" @input="checkUserId" fullWidth labelFloat icon="assignment"/><br/>
+    <mu-text-field label="手机" :disabled="saved" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-select-field v-model="isManager" :disabled="saved" label="权限" icon="comment" fullWidth :maxHeight="300">
       <mu-menu-item value="0" title="一般教师"/>
       <mu-menu-item value="1" title="管理人员"/>
     </mu-select-field>
@@ -31,6 +31,7 @@ export default {
   data () {
     return {
       bottomPopup: false,
+      saved: false,
       icon: '',
       color: '',
       name: '',
@@ -63,6 +64,7 @@ export default {
       this.userId = ''
       this.mobile = ''
       this.remark = ''
+      this.saved = false
       this.isManager = '0'
       this.nameErrorText = ''
       this.userIdErrorText = ''
@@ -194,6 +196,7 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
+          this.saved = true
           if (response.body === 'error') {
             window.location.href = '/'
           } else if (response.body === 'OK') {
@@ -202,6 +205,7 @@ export default {
           } else {
             this.openPopup(response.body, 'report_problem', 'orange')
           }
+          this.saved = false
         }, (response) => {
           this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })

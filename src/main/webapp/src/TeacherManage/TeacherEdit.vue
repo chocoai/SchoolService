@@ -6,7 +6,7 @@
     <mu-text-field label="姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
     <mu-text-field label="账号" disabled v-model="userId" fullWidth labelFloat icon="assignment"/><br/>
     <mu-text-field label="手机" :disabled="edit" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-    <mu-select-field v-model="isManager" label="权限" icon="comment" fullWidth :maxHeight="300">
+    <mu-select-field v-model="isManager" label="权限" icon="comment" fullWidth :maxHeight="300" :disabled="edit">
       <mu-menu-item value="0" title="一般教师"/>
       <mu-menu-item value="1" title="管理人员"/>
     </mu-select-field>
@@ -16,17 +16,22 @@
         <mu-float-button icon="cancel" v-if="save" @click="goCancel" secondary/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="delete" v-if="edit"  @click="openDelete" backgroundColor="red"/>
+        <mu-float-button icon="delete" v-if="deletes"  @click="openDelete" backgroundColor="red"/>
+        <mu-float-button icon="compare_arrows" v-if="resave" @click="openResave" backgroundColor="green"/>
         <mu-float-button icon="done" v-if="save" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="cached" v-if="save" @click="goReset" backgroundColor="orange"/>
         <mu-float-button icon="dialer_sip" v-if="edit" @click="goCall" backgroundColor="#6633CC"/>
+        <mu-float-button icon="cached" v-if="save" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="forDelete" :title="deleteTitle" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goDelete" secondary/>
+    </mu-dialog>
+    <mu-dialog :open="forResave" :title="resaveTitle" @close="goClose">
+      <mu-flat-button label="取消" @click="goClose" />
+      <mu-flat-button label="确定" @click="goResave" secondary/>
     </mu-dialog>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
@@ -42,17 +47,22 @@ export default {
     return {
       edit: true,
       save: false,
+      deletes: false,
+      resave: false,
       forDelete: false,
+      forResave: false,
       bottomPopup: false,
       icon: '',
       color: '',
       message: '',
       deleteTitle: '',
+      resaveTitle: '',
       teacher: '',
       name: '',
       mobile: '',
       userId: '',
       isManager: '',
+      state: '',
       nameErrorText: '',
       mobileErrorText: '',
       nameErrorColor: '',
@@ -73,6 +83,9 @@ export default {
     openDelete () {
       this.forDelete = true
     },
+    openResave () {
+      this.forResave = true
+    },
     openPopup (message, icon, color) {
       this.message = message
       this.icon = icon
@@ -86,6 +99,8 @@ export default {
     goEdit () {
       this.edit = false
       this.save = true
+      this.deletes = false
+      this.resave = false
     },
     goCancel () {
       this.edit = true
@@ -94,6 +109,7 @@ export default {
     },
     goClose () {
       this.forDelete = false
+      this.forResave = false
     },
     goReset () {
       this.fetchData(this.$route.params.teacherId)
@@ -117,11 +133,73 @@ export default {
           } else if (response.body === 'OK') {
             this.edit = true
             this.save = false
-            this.openPopup('删除成功!', 'check_circle', 'green')
+            if (this.state.toString() === '1' || this.state.toString() === '2') {
+              this.deletes = true
+              this.resave = false
+            } else {
+              this.deletes = false
+              this.resave = true
+            }
+            this.openPopup('取消关注成功!', 'check_circle', 'green')
             setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-          } else if (response.body === '要删除的教师不存在!') {
+          } else if (response.body === '要取消关注的教师不存在!') {
             this.edit = true
             this.save = false
+            if (this.state.toString() === '1' || this.state.toString() === '2') {
+              this.deletes = true
+              this.resave = false
+            } else {
+              this.deletes = false
+              this.resave = true
+            }
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+        })
+    },
+    goResave () {
+      this.$http.get(
+        API.ResaveById,
+        { params: {
+          id: this.$route.params.teacherId
+        }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        }
+        ).then((response) => {
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.edit = true
+            this.save = false
+            if (this.state.toString() === '1' || this.state.toString() === '2') {
+              this.deletes = true
+              this.resave = false
+            } else {
+              this.deletes = false
+              this.resave = true
+            }
+            this.openPopup('重新邀请关注成功!', 'check_circle', 'green')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else if (response.body === '要重新邀请关注的教师不存在!') {
+            this.edit = true
+            this.save = false
+            if (this.state.toString() === '1' || this.state.toString() === '2') {
+              this.deletes = true
+              this.resave = false
+            } else {
+              this.deletes = false
+              this.resave = true
+            }
             this.openPopup(response.body, 'report_problem', 'red')
             setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
           } else {
@@ -139,7 +217,7 @@ export default {
           id: this.$route.params.teacherId,
           name: this.name,
           mobile: this.mobile,
-          userId: this.userId
+          isManager: this.isManager
         }
         },
         {
@@ -148,45 +226,13 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.edit = true
-              this.save = false
-              this.openPopup('修改成功!', 'check_circle', 'green')
-              break
-            case '1':
-              this.openPopup('要修改的教师不存在!', 'report_problem', 'red')
-              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-              break
-            case '2':
-              this.openPopup('未找到修改内容！', 'report_problem', 'orange')
-              break
-            case '3':
-              this.openPopup('姓名应为两个以上汉字！', 'report_problem', 'orange')
-              break
-            case '4':
-              this.openPopup('输入的手机号码应为11位数字！', 'report_problem', 'orange')
-              break
-            case '5':
-              this.openPopup('输入的微信号不应包含中文！', 'report_problem', 'orange')
-              break
-            case '6':
-              this.openPopup('输入的电子邮箱格式不正确！', 'report_problem', 'orange')
-              break
-            case '7':
-              this.openPopup('手机号码和微信号不能同时为空！', 'report_problem', 'orange')
-              break
-            case '8':
-              this.openPopup('输入的手机号码已存在！', 'report_problem', 'orange')
-              break
-            case '9':
-              this.openPopup('输入的微信号已存在！', 'report_problem', 'orange')
-              break
-            case 'A':
-              this.openPopup('输入的电子邮箱已存在！', 'report_problem', 'orange')
-              break
-            default:
-              window.location.href = '/'
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.openPopup('修改成功！', 'check_circle', 'green')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'orange')
           }
         }, (response) => {
           this.openPopup('服务器内部错误!', 'report_problem', 'orange')
@@ -212,8 +258,17 @@ export default {
         this.name = this.teacher.name
         this.mobile = this.teacher.mobile
         this.userId = this.teacher.userId
-        this.isManager = this.teacher.isManager
-        this.deleteTitle = '确认要删除' + this.name + '吗?'
+        this.isManager = this.teacher.isManager.toString()
+        this.state = this.teacher.state
+        if (this.teacher.state.toString() === '1' || this.teacher.state.toString() === '2') {
+          this.deletes = true
+          this.resave = false
+        } else {
+          this.deletes = false
+          this.resave = true
+        }
+        this.deleteTitle = '确认要取消' + this.name + '的关注吗?'
+        this.resaveTitle = '确认要邀请' + this.name + '再次关注吗?'
       }, (response) => {
       })
     },
@@ -274,7 +329,7 @@ export default {
 </script>
 <style lang="css">
   .flex-demo {
-    height: 70px;
+    height: 170px;
     text-align: center;
     line-height: 32px;
   }

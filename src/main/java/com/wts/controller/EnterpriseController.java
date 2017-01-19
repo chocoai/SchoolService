@@ -32,6 +32,12 @@ public class EnterpriseController extends Controller {
                 .set("state", 1)
                 .update();
       }
+      if (requestMap.get("Event").equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
+        Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=?", FromUserName);
+        enterprise.set("picUrl", "")
+                .set("state", 4)
+                .update();
+      }
     } catch (Exception e) {
       e.printStackTrace();
     }

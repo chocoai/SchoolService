@@ -10,7 +10,7 @@ public class AjaxFunction implements Interceptor {
 	public void intercept(Invocation inv) {
 
 		if(inv.getController().getSession().getAttribute("teacher") == null
-						&& inv.getController().getRequest().getHeader("X-Requested-With").equals("XMLHttpRequest")
+						|| inv.getController().getRequest().getHeader("X-Requested-With") == null
 						){
 			inv.getController().renderText("error");
 		}
