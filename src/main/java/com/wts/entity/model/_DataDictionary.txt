@@ -37,6 +37,7 @@ Table: enterprise
  isTeacher | INT(10)      | YES  |     |         | 是否教师0否1是
  isParent  | INT(10)      | YES  |     |         | 是否家长0否1是
  isManager | INT(10)      | YES  |     |         | 是否管理0否1是
+ picUrl    | VARCHAR(255) | YES  |     |         | 头像地址    
 -----------+--------------+------+-----+---------+---------
 
 Table: exam

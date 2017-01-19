@@ -6,8 +6,8 @@
       <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.phone" @click="look(teacher.id)">
-        <mu-avatar :src="teacher.name" slot="leftAvatar" :size="30"/>
+      <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.userId" @click="look(teacher.id)">
+        <mu-avatar :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
         <mu-avatar icon="link" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
@@ -99,7 +99,7 @@
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
       },
       teacherTotal (queryString, pageSize) {
@@ -122,7 +122,7 @@
           this.pageTotal === '0' ? this.chip = false : this.chip = true
           this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
       },
       query (value) {

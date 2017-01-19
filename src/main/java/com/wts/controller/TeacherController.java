@@ -10,9 +10,9 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
-import com.wts.entity.model.Teacher;
 import com.wts.interceptor.AjaxFunction;
 import com.wts.interceptor.LoginTeacher;
+import com.wts.util.PinyinTool;
 import com.wts.util.Util;
 
 public class TeacherController extends Controller {
@@ -62,32 +62,24 @@ public class TeacherController extends Controller {
    * 新增时检测教师手机号码
    * */
   public void checkMobileForNew() {
-    if (getPara("mobile")!=null) {
-      if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
-        renderText("手机号码格式错误!");
-      } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
-        renderText("该手机号码已存在!");
-      } else {
-        renderText("OK");
-      }
+    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+      renderText("手机号码格式错误!");
+    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+      renderText("该手机号码已存在!");
     } else {
-      renderText("未找到参数!");
+      renderText("OK");
     }
   }
   /**
    * 新增时检测教师账号
    * */
-  public void checkUserForNew() {
-    if (getPara("userId")!=null) {
-      if (getPara("userId").matches("^[\\u4e00-\\u9fa5]{0,}$")) {
-        renderText("不应含有中文字符!");
-      } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
-        renderText("该账号已存在");
-      } else {
-        renderText("OK");
-      }
+  public void checkUserIdForNew() {
+    if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
+      renderText("账号名应为字母或数字的组合!");
+    } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
+      renderText("该账号已存在");
     } else {
-      renderText("未找到参数!");
+      renderText("OK");
     }
   }
 
@@ -95,64 +87,55 @@ public class TeacherController extends Controller {
    * 修改时检测教师姓名
    * */
   public void checkNameForEdit() {
-    if (getPara("name")!=null) {
-      if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-        renderText("请输入两个以上汉字!");
-      } else {
-        renderText("OK");
-      }
+    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+      renderText("请输入两个以上汉字!");
     } else {
-      renderText("未找到参数!");
+      renderText("OK");
     }
   }
   /**
    * 修改时检测教师手机号码
    * */
   public void checkMobileForEdit() {
-    if (getPara("mobile")!=null) {
-      if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
-        renderText("手机号码格式错误!");
-      } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()>=1) {
-        renderText("该手机号码已存在!");
-      } else {
-        renderText("OK");
-      }
+    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+      renderText("手机号码格式错误!");
+    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()>=1) {
+      renderText("该手机号码已存在!");
     } else {
-      renderText("未找到参数!");
+      renderText("OK");
     }
   }
 
 
   @Before(Tx.class)
   public void save()  {
-    if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
       renderText("教师姓名应为两个以上汉字!");
-    } else if (!getPara("mobile").trim().equals("") && !getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+    } else if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
       renderText("手机号码格式不正确!");
-    } else if (!getPara("phone").trim().equals("") && Teacher.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
-    } else if (!getPara("userId").trim().equals("") && getPara("userId").matches("^.*[\u4e00-\u9fa5].*$")) {
-      renderText("账号名中不应包含中文!");
-    } else if (!getPara("userId").trim().equals("") && Teacher.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
+    } else if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
+      renderText("账号名应为字母或数字的组合!");
+    } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
       renderText("该账号名已存在!");
     } else {
-      // 用login代替userId
-      User user =new User(getPara("userId").trim(),getPara("name").trim());
+      User user = new User(getPara("userId").trim(),getPara("name").trim());
       user.setMobile(getPara("mobile").trim());
       user.setPartyIds(1);
-      user.setWeixinId(getPara("weixin").trim());
-      user.setEmail(getPara("email").trim());
       try{
         WP.me.createUser(user);
-
         Enterprise teacher = new Enterprise();
         teacher.set("name", getPara("name").trim())
                 .set("mobile", getPara("mobile").trim())
                 .set("userId", getPara("userId").trim())
-                .set("email", getPara("email").trim())
-                .set("remark", getPara("remark").trim())
+                .set("pass", "wts")
+                .set("state", 2)
+                .set("isManager", getPara("isManager").trim())
+                .set("isTeacher", 1)
+                .set("isParent", 0)
                 .save();
-        renderText("0");
+        renderText("OK");
       }catch(WeixinException e){
         renderText(e.getErrorText());
       }
@@ -167,29 +150,28 @@ public class TeacherController extends Controller {
     } else {
       if (Util.getString(teacher.getStr("name")).equals(getPara("name").trim())
               && Util.getString(teacher.getStr("mobile")).equals(getPara("mobile").trim())
-              && Util.getString(teacher.getStr("userId")).equals(getPara("userId").trim())
-              && Util.getString(teacher.getStr("remark")).equals(getPara("remark").trim())
               ) {
         renderText("未找到修改内容!");
       } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
         renderText("教师姓名应为两个以上汉字!");
       } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
         renderText("手机号码格式错误!");
-      } else if (getPara("userId").matches("^[\\u4e00-\\u9fa5]{0,}$")) {
-        renderText("账号名中不应包含中文!");
       } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
               &&  Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
         renderText("该手机号码已存在!");
-      } else if (!Util.getString(teacher.getStr("userId")).equals(getPara("userId"))
-              &&  Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
-        renderText("该账号已存在!");
       } else {
-        teacher.set("name",getPara("name").trim())
-                .set("mobile",getPara("mobile").trim())
-                .set("userId",getPara("userId").trim())
-                .set("remark",Util.getString(getPara("remark").trim()))
-                .update();
-        renderText("OK");
+        try{
+          User user = WP.me.getUser(teacher.getUserId());
+          user.setName(getPara("name").trim());
+          user.setMobile(getPara("mobile").trim());
+          WP.me.updateUser(user);
+          teacher.set("name",getPara("name").trim())
+                  .set("mobile",getPara("mobile").trim())
+                  .update();
+          renderText("OK");
+        }catch(WeixinException e){
+          renderText(e.getErrorText());
+        }
       }
     }
   }
@@ -218,13 +200,21 @@ public class TeacherController extends Controller {
   public void deleteById() {
     if (getPara("id") != null) {
       if (Enterprise.dao.findById(getPara("id")) == null) {
-        renderText("未找到指定id的教师!");
+        renderText("要删除的教师不存在!");
       } else {
         Enterprise.dao.deleteById(getPara("id"));
       }
       renderText("OK");
     } else {
       renderText("未找到参数!");
+    }
+  }
+
+  public void getUserId() {
+    try {
+      renderText(new PinyinTool().toPinYin(getPara("name"), "", PinyinTool.Type.FIRSTUPPER));
+    } catch (Exception e) {
+      renderText("");
     }
   }
 }

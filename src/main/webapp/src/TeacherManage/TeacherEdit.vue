@@ -3,11 +3,13 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
-    <mu-text-field label="教师姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="联系电话" :disabled="edit" underlineShow="false" v-model="phone" :errorColor="phoneErrorColor" :errorText="phoneErrorText" @input="checkPhone"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-    <mu-text-field label="微信号码" :disabled="edit" underlineShow="false" v-model="weixin" :errorColor="weixinErrorColor" :errorText="weixinErrorText" @input="checkWeixin" fullWidth labelFloat icon="chat"/><br/>
-    <mu-text-field label="电子邮箱" :disabled="edit" underlineShow="false" v-model="email"  :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
-    <mu-text-field label="备注信息" :disabled="edit" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
+    <mu-text-field label="姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="账号" disabled v-model="userId" fullWidth labelFloat icon="assignment"/><br/>
+    <mu-text-field label="手机" :disabled="edit" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-select-field v-model="isManager" label="权限" icon="comment" fullWidth :maxHeight="300">
+      <mu-menu-item value="0" title="一般教师"/>
+      <mu-menu-item value="1" title="管理人员"/>
+    </mu-select-field>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="edit" @click="goEdit" primary/>
@@ -48,18 +50,13 @@ export default {
       deleteTitle: '',
       teacher: '',
       name: '',
-      phone: '',
-      weixin: '',
-      email: '',
-      remark: '',
+      mobile: '',
+      userId: '',
+      isManager: '',
       nameErrorText: '',
-      phoneErrorText: '',
-      weixinErrorText: '',
-      emailErrorText: '',
+      mobileErrorText: '',
       nameErrorColor: '',
-      phoneErrorColor: '',
-      weixinErrorColor: '',
-      emailErrorColor: ''
+      mobileErrorColor: ''
     }
   },
   created () {
@@ -84,7 +81,7 @@ export default {
       setTimeout(() => { this.bottomPopup = false }, 1500)
     },
     goCall () {
-      this.phone.toString() === '' ? this.openPopup('无联系电话！', 'report_problem', 'orange') : window.location.href = 'tel:' + this.phone
+      this.mobile.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.mobile
     },
     goEdit () {
       this.edit = false
@@ -115,22 +112,24 @@ export default {
           }
         }
         ).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.edit = true
-              this.save = false
-              this.openPopup('删除成功！', 'check_circle', 'green')
-              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-              break
-            case '1':
-              this.openPopup('要删除的教师不存在！', 'report_problem', 'red')
-              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-              break
-            default:
-              window.location.href = '/'
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.edit = true
+            this.save = false
+            this.openPopup('删除成功!', 'check_circle', 'green')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else if (response.body === '要删除的教师不存在!') {
+            this.edit = true
+            this.save = false
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
           }
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     },
     goSave () {
@@ -139,10 +138,8 @@ export default {
         { params: {
           id: this.$route.params.teacherId,
           name: this.name,
-          phone: this.phone,
-          weixin: this.weixin,
-          email: this.email,
-          remark: this.remark
+          mobile: this.mobile,
+          userId: this.userId
         }
         },
         {
@@ -155,10 +152,10 @@ export default {
             case '0':
               this.edit = true
               this.save = false
-              this.openPopup('修改成功！', 'check_circle', 'green')
+              this.openPopup('修改成功!', 'check_circle', 'green')
               break
             case '1':
-              this.openPopup('要修改的教师不存在！', 'report_problem', 'red')
+              this.openPopup('要修改的教师不存在!', 'report_problem', 'red')
               setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
               break
             case '2':
@@ -192,7 +189,7 @@ export default {
               window.location.href = '/'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     },
     fetchData (teacherId) {
@@ -213,10 +210,9 @@ export default {
       ).then((response) => {
         this.teacher = response.body
         this.name = this.teacher.name
-        this.phone = this.teacher.phone
-        this.weixin = this.teacher.weixinId
-        this.email = this.teacher.email
-        this.remark = this.teacher.remark
+        this.mobile = this.teacher.mobile
+        this.userId = this.teacher.userId
+        this.isManager = this.teacher.isManager
         this.deleteTitle = '确认要删除' + this.name + '吗?'
       }, (response) => {
       })
@@ -234,33 +230,24 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.nameErrorText = ''
-              this.nameErrorColor = 'green'
-              break
-            case '1':
-              this.nameErrorText = '请输入两个以上汉字！'
-              this.nameErrorColor = 'red'
-              break
-            case '2':
-              this.nameErrorText = '该姓名存在重名情况！'
-              this.nameErrorColor = 'orange'
-              break
-            default:
-              this.nameErrorText = ''
-              this.nameErrorColor = 'blue'
-              window.location.href = '/'
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.nameErrorText = ''
+            this.nameErrorColor = 'green'
+          } else {
+            this.nameErrorText = response.body
+            this.nameErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     },
-    checkPhone (value) {
+    checkMobile (value) {
       this.$http.get(
-        API.CheckPhoneForEdit,
+        API.CheckMobileForEdit,
         { params: {
-          phone: value
+          mobile: value
         }
         },
         {
@@ -269,96 +256,17 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.phoneErrorText = '此处为绑定微信的手机号码！'
-              this.phoneErrorColor = 'green'
-              break
-            case '1':
-              this.phoneErrorText = '请输入11位数字！'
-              this.phoneErrorColor = 'red'
-              break
-            case '2':
-              this.phoneErrorText = '该手机号码已使用！'
-              this.phoneErrorColor = 'orange'
-              break
-            default:
-              this.phoneErrorText = ''
-              this.phoneErrorColor = 'blue'
-              window.location.href = '/'
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.mobileErrorText = ''
+            this.mobileErrorColor = 'green'
+          } else {
+            this.mobileErrorText = response.body
+            this.mobileErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
-        })
-    },
-    checkWeixin (value) {
-      this.$http.get(
-        API.CheckWeixinForEdit,
-        { params: {
-          weixin: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.weixinErrorText = '此处为微信号，不是微信昵称！'
-              this.weixinErrorColor = 'green'
-              break
-            case '1':
-              this.weixinErrorText = '微信号不应包含中文！'
-              this.weixinErrorColor = 'red'
-              break
-            case '2':
-              this.weixinErrorText = '该微信号已使用！'
-              this.weixinErrorColor = 'orange'
-              break
-            default:
-              this.weixinErrorText = ''
-              this.weixinErrorColor = 'blue'
-              window.location.href = '/'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
-        })
-    },
-    checkEmail (value) {
-      this.$http.get(
-        API.CheckEmailForEdit,
-        { params: {
-          email: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.emailErrorText = ''
-              this.emailErrorColor = 'green'
-              break
-            case '1':
-              this.emailErrorText = '电子邮箱格式错误！'
-              this.emailErrorColor = 'red'
-              break
-            case '2':
-              this.emailErrorText = '该电子邮箱已使用！'
-              this.emailErrorColor = 'orange'
-              break
-            default:
-              this.emailErrorText = ''
-              this.emailErrorColor = 'blue'
-              window.location.href = '/'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     }
   }

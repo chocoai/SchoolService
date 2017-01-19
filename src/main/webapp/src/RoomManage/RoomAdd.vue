@@ -51,20 +51,20 @@ export default {
     }
   },
   created: function () {
-      this.$http.get(
-          API.TeacherList,
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            emulateJSON: true
-          }
-        ).then((response) => {
-          this.teachers = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
-        })
+    this.$http.get(
+      API.TeacherList,
+      {
+        headers:
+        {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        emulateJSON: true
+      }
+    ).then((response) => {
+      this.teachers = response.body
+    }, (response) => {
+      this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+    })
   },
   methods: {
     reply () {

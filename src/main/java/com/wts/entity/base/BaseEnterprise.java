@@ -145,4 +145,12 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 		return get("isManager");
 	}
 
+	public void setPicUrl(java.lang.String picUrl) {
+		set("picUrl", picUrl);
+	}
+
+	public java.lang.String getPicUrl() {
+		return get("picUrl");
+	}
+
 }

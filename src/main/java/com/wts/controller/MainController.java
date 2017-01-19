@@ -41,11 +41,11 @@ public class MainController extends Controller {
   public void login() {
     Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
     if (teacher != null) {
-      if (getPara("type").equals("teacher") && teacher.getIsTeacher().equals("1")) {
+      if (getPara("type").equals("teacher") && teacher.getIsTeacher() == 1) {
         setSessionAttr("teacher", teacher);
         setCookie("die", teacher.getId().toString(), 60 * 30);
         renderText("com");
-      } else if (getPara("type").equals("manager") && teacher.getIsManager().equals("1")) {
+      } else if (getPara("type").equals("manager") && teacher.getIsManager() == 1) {
         setSessionAttr("teacher", teacher);
         setCookie("die", teacher.getId().toString(), 60 * 30);
         renderText("sys");

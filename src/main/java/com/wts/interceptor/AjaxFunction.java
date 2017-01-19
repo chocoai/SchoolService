@@ -12,7 +12,7 @@ public class AjaxFunction implements Interceptor {
 		if(inv.getController().getSession().getAttribute("teacher") == null
 						&& inv.getController().getRequest().getHeader("X-Requested-With").equals("XMLHttpRequest")
 						){
-			inv.getController().renderText("O");
+			inv.getController().renderText("error");
 		}
 		else{
 			inv.invoke();

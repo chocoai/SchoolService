@@ -35,10 +35,10 @@
     },
     methods: {
       loginTo () {
-        if (this.login.toString() === '') {
-          this.openPopup('用户名不能为空！', 'report_problem', 'orange')
+        if (this.userId.toString() === '') {
+          this.openPopup('用户名不能为空!', 'report_problem', 'orange')
         } else if (this.pass.toString() === '') {
-          this.openPopup('密码不能为空！', 'report_problem', 'orange')
+          this.openPopup('密码不能为空!', 'report_problem', 'orange')
         } else {
           this.$http.get(
             API.Login,
@@ -65,16 +65,16 @@
                   window.location.href = '/sys'
                   break
                 case 'noPower':
-                  this.openPopup('用户无管理权限！', 'report_problem', 'red')
+                  this.openPopup('用户无管理权限!', 'report_problem', 'red')
                   break
                 case 'error':
-                  this.openPopup('用户名或密码错误！', 'report_problem', 'red')
+                  this.openPopup('用户名或密码错误!', 'report_problem', 'red')
                   break
                 default:
                   window.location.href = '/'
               }
             }, (response) => {
-              this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+              this.openPopup('服务器内部错误!', 'report_problem', 'orange')
             })
         }
       },

@@ -17,7 +17,6 @@
   </div>
 </template>
 <script>
-  import * as API from './SysAPI.js'
   import MenuList from '../components/MenuList'
   import sign1 from 'assets/schoolIcon.jpg'
   import sign2 from 'assets/biaoyu.png'
@@ -35,15 +34,8 @@
         icon: '',
         color: '',
         message: '',
-        schoolName: ''
+        schoolName: '济南市育明小学'
       }
-    },
-    created: function () {
-      this.$http.get(API.GetSchoolName, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }).then((response) => {
-        this.schoolName = response.data
-      }, (response) => {
-        this.openPopup('服务器内部错误！', 'report_problem', 'orange')
-      })
     },
     methods: {
       openMenu () {
