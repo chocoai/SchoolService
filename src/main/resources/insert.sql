@@ -1,9 +1,8 @@
-INSERT INTO `Enterprise` (userId,name, account, mobile) VALUES ('chnwts', '王天硕', 'wts', '18653145531');
-INSERT INTO `Teacher` (enterprise_id,name,login,mobile,pass,system) VALUES ('1','王天硕', 'wts', '18653145531', 'wts', '1');
-INSERT INTO `Course` (id,name,state) VALUES ('1', '班主任', '1');
-INSERT INTO `Course` (id,name,state) VALUES ('2', '语文', '1');
-INSERT INTO `Course` (id,name,state) VALUES ('3', '数学', '1');
-INSERT INTO `Course` (id,name,state) VALUES ('4', '英语', '1');
+INSERT INTO `Enterprise` (userId, name, pass, mobile, state, isTeacher, isParent, isManager) VALUES ('wts', '王天硕', 'wts', '18653145531', 1, 1, 1, 1);
+INSERT INTO `Course` (id,name) VALUES ('1', '班主任');
+INSERT INTO `Course` (id,name) VALUES ('2', '语文');
+INSERT INTO `Course` (id,name) VALUES ('3', '数学');
+INSERT INTO `Course` (id,name) VALUES ('4', '英语');
 INSERT INTO `Identity` (id,name) VALUES ('1', '爸爸');
 INSERT INTO `Identity` (id,name) VALUES ('2', '妈妈');
 INSERT INTO `Identity` (id,name) VALUES ('3', '爷爷');

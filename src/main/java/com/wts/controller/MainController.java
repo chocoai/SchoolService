@@ -24,6 +24,7 @@ import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.*;
+import com.wts.entity.model.Enterprise;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.AjaxFunction;
 import com.wts.interceptor.LoginTeacher;
@@ -38,41 +39,23 @@ public class MainController extends Controller {
   }
 
   public void login() {
-    Teacher teacher =Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1'", getPara("login"),getPara("pass"));
-    if (teacher!=null) {
-      switch (getPara("type")) {
-        case "1":
-          // 普通教师
-          setSessionAttr("teacher",teacher);
-          renderText("1");
-          break;
-        case "2":
-          switch (teacher.getSystem()) {
-            case 0:
-              // 无管理权限
-              setSessionAttr("teacher",teacher);
-              setCookie("t","t",10);
-              getCookie("t");
-              renderText("3");
-              break;
-            case 1:
-              // 管理人员
-              setSessionAttr("teacher",teacher);
-              renderText("2");
-              break;
-            default:
-              renderText("5");
-              break;
-          }
-          break;
-        default:
-          renderText("5");
-          break;
+    Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
+    if (teacher != null) {
+      if (getPara("type").equals("teacher") && teacher.getIsTeacher().equals("1")) {
+        setSessionAttr("teacher", teacher);
+        setCookie("die", teacher.getId().toString(), 60 * 30);
+        renderText("com");
+      } else if (getPara("type").equals("manager") && teacher.getIsManager().equals("1")) {
+        setSessionAttr("teacher", teacher);
+        setCookie("die", teacher.getId().toString(), 60 * 30);
+        renderText("sys");
+      } else {
+        renderText("noPower");
       }
     } else {
-      // 用户名或密码错误
-      renderText("4");
+      renderText("error");
     }
+
 
 //    render("/static/Home.html");
 
@@ -99,6 +82,7 @@ public class MainController extends Controller {
 //    }
 ////    renderText(WP.me.getUserByCode(getPara("code")).getName());
   }
+
   @Before(LoginTeacher.class)
   public void sys() {
     render("/static/Sys.html");

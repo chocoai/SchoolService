@@ -25,36 +25,12 @@ public abstract class BaseRoom<M extends BaseRoom<M>> extends Model<M> implement
 		return get("name");
 	}
 
-	public void setCode(java.lang.String code) {
-		set("code", code);
-	}
-
-	public java.lang.String getCode() {
-		return get("code");
-	}
-
 	public void setState(java.lang.Integer state) {
 		set("state", state);
 	}
 
 	public java.lang.Integer getState() {
 		return get("state");
-	}
-
-	public void setEnterYear(java.util.Date enterYear) {
-		set("enter_year", enterYear);
-	}
-
-	public java.util.Date getEnterYear() {
-		return get("enter_year");
-	}
-
-	public void setBlog(java.lang.String blog) {
-		set("blog", blog);
-	}
-
-	public java.lang.String getBlog() {
-		return get("blog");
 	}
 
 }

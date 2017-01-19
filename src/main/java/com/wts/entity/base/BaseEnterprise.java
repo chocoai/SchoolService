@@ -25,6 +25,14 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 		return get("userId");
 	}
 
+	public void setPass(java.lang.String pass) {
+		set("pass", pass);
+	}
+
+	public java.lang.String getPass() {
+		return get("pass");
+	}
+
 	public void setOpenId(java.lang.String openId) {
 		set("openId", openId);
 	}
@@ -41,12 +49,20 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 		return get("name");
 	}
 
-	public void setMobile(java.lang.String mobile) {
-		set("mobile", mobile);
+	public void setAddress(java.lang.String address) {
+		set("address", address);
 	}
 
-	public java.lang.String getMobile() {
-		return get("mobile");
+	public java.lang.String getAddress() {
+		return get("address");
+	}
+
+	public void setWork(java.lang.String work) {
+		set("work", work);
+	}
+
+	public java.lang.String getWork() {
+		return get("work");
 	}
 
 	public void setSex(java.lang.Integer sex) {
@@ -57,6 +73,22 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 		return get("sex");
 	}
 
+	public void setPhone(java.lang.String phone) {
+		set("phone", phone);
+	}
+
+	public java.lang.String getPhone() {
+		return get("phone");
+	}
+
+	public void setMobile(java.lang.String mobile) {
+		set("mobile", mobile);
+	}
+
+	public java.lang.String getMobile() {
+		return get("mobile");
+	}
+
 	public void setEmail(java.lang.String email) {
 		set("email", email);
 	}
@@ -65,12 +97,20 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 		return get("email");
 	}
 
-	public void setAccount(java.lang.String account) {
-		set("account", account);
+	public void setWeixinId(java.lang.String weixinId) {
+		set("weixinId", weixinId);
 	}
 
-	public java.lang.String getAccount() {
-		return get("account");
+	public java.lang.String getWeixinId() {
+		return get("weixinId");
+	}
+
+	public void setRemark(java.lang.String remark) {
+		set("remark", remark);
+	}
+
+	public java.lang.String getRemark() {
+		return get("remark");
 	}
 
 	public void setState(java.lang.Integer state) {
@@ -79,6 +119,30 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 
 	public java.lang.Integer getState() {
 		return get("state");
+	}
+
+	public void setIsTeacher(java.lang.Integer isTeacher) {
+		set("isTeacher", isTeacher);
+	}
+
+	public java.lang.Integer getIsTeacher() {
+		return get("isTeacher");
+	}
+
+	public void setIsParent(java.lang.Integer isParent) {
+		set("isParent", isParent);
+	}
+
+	public java.lang.Integer getIsParent() {
+		return get("isParent");
+	}
+
+	public void setIsManager(java.lang.Integer isManager) {
+		set("isManager", isManager);
+	}
+
+	public java.lang.Integer getIsManager() {
+		return get("isManager");
 	}
 
 }

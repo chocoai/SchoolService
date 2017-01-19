@@ -25,12 +25,4 @@ public abstract class BaseCourse<M extends BaseCourse<M>> extends Model<M> imple
 		return get("name");
 	}
 
-	public void setState(java.lang.Integer state) {
-		set("state", state);
-	}
-
-	public java.lang.Integer getState() {
-		return get("state");
-	}
-
 }

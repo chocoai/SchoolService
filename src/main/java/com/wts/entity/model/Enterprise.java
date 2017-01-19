@@ -1,5 +1,6 @@
 package com.wts.entity.model;
 
+import com.jfinal.plugin.activerecord.Page;
 import com.wts.entity.base.BaseEnterprise;
 
 /**
@@ -8,4 +9,8 @@ import com.wts.entity.base.BaseEnterprise;
 @SuppressWarnings("serial")
 public class Enterprise extends BaseEnterprise<Enterprise> {
 	public static final Enterprise dao = new Enterprise();
+	public Page<Enterprise> teacherQueryByName(int pageNumber, int pageSize, String name) {
+		return paginate(pageNumber, pageSize, "SELECT *",
+						"FROM enterprise WHERE isTeacher=1 and name LIKE '%"+name+"%' ORDER BY id DESC");
+	}
 }

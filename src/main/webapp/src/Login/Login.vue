@@ -3,11 +3,11 @@
     <mu-appbar title="欢迎使用校园管理系统"/>
     <mu-flexbox>
       <mu-flexbox-item >
-        <mu-text-field hintText="用户名" icon="face" v-model="login"/><br/>
-        <mu-text-field hintText="密码" icon="blur_on" v-model="pass" type="password"/><br/>
-        <mu-select-field hintText="用户类别" icon="settings" v-model="type">
-          <mu-menu-item value="1" title="教师"/>
-          <mu-menu-item value="2" title="管理"/>
+        <mu-text-field hintText="用户名" icon="face" v-model="userId" fullWidth/><br/>
+        <mu-text-field hintText="密码" icon="blur_on" v-model="pass" type="password" fullWidth/><br/>
+        <mu-select-field hintText="用户类别" icon="settings" v-model="type" fullWidth>
+          <mu-menu-item value="teacher" title="教师"/>
+          <mu-menu-item value="manager" title="管理"/>
         </mu-select-field>
       </mu-flexbox-item>
     </mu-flexbox>
@@ -28,9 +28,9 @@
         message: '',
         icon: '',
         color: '',
-        login: '',
+        userId: '',
         pass: '',
-        type: '1'
+        type: 'teacher'
       }
     },
     methods: {
@@ -45,7 +45,7 @@
             {
               params:
               {
-                login: this.login,
+                userId: this.userId,
                 pass: this.pass,
                 type: this.type
               }
@@ -58,16 +58,16 @@
             }
             ).then((response) => {
               switch (response.body) {
-                case '1':
+                case 'com':
                   window.location.href = '/home'
                   break
-                case '2':
+                case 'sys':
                   window.location.href = '/sys'
                   break
-                case '3':
+                case 'noPower':
                   this.openPopup('用户无管理权限！', 'report_problem', 'red')
                   break
-                case '4':
+                case 'error':
                   this.openPopup('用户名或密码错误！', 'report_problem', 'red')
                   break
                 default:

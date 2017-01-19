@@ -26,12 +26,10 @@ public class _MappingKit {
 		arp.addMapping("identity", "id", Identity.class);
 		arp.addMapping("leave", "id", Leave.class);
 		arp.addMapping("notice", "id", Notice.class);
-		arp.addMapping("parent", "id", Parent.class);
 		arp.addMapping("praise", "id", Praise.class);
 		arp.addMapping("relation", "id", Relation.class);
 		arp.addMapping("room", "id", Room.class);
 		arp.addMapping("student", "id", Student.class);
-		arp.addMapping("teacher", "id", Teacher.class);
 	}
 }
 

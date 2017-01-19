@@ -4,7 +4,6 @@ Table: course
 -------+--------------+------+-----+---------+---------
  id    | INT(10)      | NO   | PRI |         | 课程序号    
  name  | VARCHAR(255) | YES  |     |         | 课程名称    
- state | INT(10)      | YES  |     |         | 课程状态1激活2注销3删除
 -------+--------------+------+-----+---------+---------
 
 Table: courseplan
@@ -18,19 +17,27 @@ Table: courseplan
 ------------+---------+------+-----+---------+---------
 
 Table: enterprise
----------+--------------+------+-----+---------+---------
- Field   | Type         | Null | Key | Default | Remarks 
----------+--------------+------+-----+---------+---------
- id      | INT(10)      | NO   | PRI |         | 企业号用户序号 
- userId  | VARCHAR(255) | YES  |     |         | 微信号     
- openId  | VARCHAR(255) | YES  |     |         | 微信号     
- name    | VARCHAR(255) | YES  |     |         | 姓名      
- mobile  | VARCHAR(255) | YES  |     |         | 手机号码    
- sex     | INT(10)      | YES  |     |         | 性别0未知1男2女
- email   | VARCHAR(255) | YES  |     |         | 电子邮箱    
- account | VARCHAR(255) | YES  |     |         | 账号      
- state   | INT(10)      | YES  |     |         | 账号状态1关注2未关注3取消关注
----------+--------------+------+-----+---------+---------
+-----------+--------------+------+-----+---------+---------
+ Field     | Type         | Null | Key | Default | Remarks 
+-----------+--------------+------+-----+---------+---------
+ id        | INT(10)      | NO   | PRI |         | 企业号用户序号 
+ userId    | VARCHAR(255) | YES  |     |         | 微信号     
+ pass      | VARCHAR(255) | YES  |     |         | 登录密码    
+ openId    | VARCHAR(255) | YES  |     |         | 微信号     
+ name      | VARCHAR(255) | YES  |     |         | 姓名      
+ address   | VARCHAR(255) | YES  |     |         | 联系地址    
+ work      | VARCHAR(255) | YES  |     |         | 工作单位    
+ sex       | INT(10)      | YES  |     |         | 性别0未知1男2女
+ phone     | VARCHAR(255) | YES  |     |         | 备用电话    
+ mobile    | VARCHAR(255) | YES  |     |         | 手机号码    
+ email     | VARCHAR(255) | YES  |     |         | 电子邮箱    
+ weixinId  | VARCHAR(255) | YES  |     |         | 微信账号    
+ remark    | VARCHAR(255) | YES  |     |         | 备注信息    
+ state     | INT(10)      | YES  |     |         | 账号状态1关注2未关注3冻结关注4取消关注
+ isTeacher | INT(10)      | YES  |     |         | 是否教师0否1是
+ isParent  | INT(10)      | YES  |     |         | 是否家长0否1是
+ isManager | INT(10)      | YES  |     |         | 是否管理0否1是
+-----------+--------------+------+-----+---------+---------
 
 Table: exam
 -----------+--------------+------+-----+---------+---------
@@ -114,21 +121,6 @@ Table: notice
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
 ------------+--------------+------+-----+---------+---------
 
-Table: parent
----------------+--------------+------+-----+---------+---------
- Field         | Type         | Null | Key | Default | Remarks 
----------------+--------------+------+-----+---------+---------
- id            | INT(10)      | NO   | PRI |         | 家长序号    
- name          | VARCHAR(255) | YES  |     |         | 家长姓名    
- mobile        | VARCHAR(255) | YES  |     |         | 联系电话    
- sex           | INT(10)      | YES  |     |         | 家长性别0未知1男2女
- address       | VARCHAR(255) | YES  |     |         | 联系地址    
- enterprise_id | INT(10)      | YES  |     |         |         
- remark        | VARCHAR(255) | YES  |     |         | 家长备注    
- work          | VARCHAR(255) | YES  |     |         | 工作单位    
- state         | INT(10)      | YES  |     |         | 家长状态1激活2注销3删除
----------------+--------------+------+-----+---------+---------
-
 Table: praise
 ------------+--------------+------+-----+---------+---------
  Field      | Type         | Null | Key | Default | Remarks 
@@ -153,16 +145,13 @@ Table: relation
 -------------+---------+------+-----+---------+---------
 
 Table: room
-------------+--------------+------+-----+---------+---------
- Field      | Type         | Null | Key | Default | Remarks 
-------------+--------------+------+-----+---------+---------
- id         | INT(10)      | NO   | PRI |         | 班级序号    
- name       | VARCHAR(255) | YES  |     |         | 班级名称    
- code       | VARCHAR(255) | YES  |     |         | 班级编号    
- state      | INT(10)      | YES  |     |         | 班级状态1激活2注销3删除
- enter_year | DATETIME(19) | YES  |     |         | 入学时间    
- blog       | VARCHAR(255) | YES  |     |         | 班级博客    
-------------+--------------+------+-----+---------+---------
+-------+--------------+------+-----+---------+---------
+ Field | Type         | Null | Key | Default | Remarks 
+-------+--------------+------+-----+---------+---------
+ id    | INT(10)      | NO   | PRI |         | 班级序号    
+ name  | VARCHAR(255) | YES  |     |         | 班级名称    
+ state | INT(10)      | YES  |     |         | 班级状态1激活2注销3删除
+-------+--------------+------+-----+---------+---------
 
 Table: student
 ---------+--------------+------+-----+---------+---------
@@ -180,21 +169,4 @@ Table: student
  phone   | VARCHAR(255) | YES  |     |         | 联系电话    
  adress  | VARCHAR(255) | YES  |     |         | 联系地址    
 ---------+--------------+------+-----+---------+---------
-
-Table: teacher
----------------+--------------+------+-----+---------+---------
- Field         | Type         | Null | Key | Default | Remarks 
----------------+--------------+------+-----+---------+---------
- id            | INT(10)      | NO   | PRI |         | 教师序号    
- name          | VARCHAR(255) | YES  |     |         | 教师姓名    
- mobile        | VARCHAR(255) | YES  |     |         | 联系电话    
- sex           | INT(10)      | YES  |     |         | 教师性别0未知1男2女
- address       | VARCHAR(255) | YES  |     |         | 联系地址    
- enterprise_id | INT(10)      | YES  |     |         | 人员序号    
- remark        | VARCHAR(255) | YES  |     |         | 教师备注    
- login         | VARCHAR(255) | YES  |     |         | 登录名称    
- pass          | VARCHAR(255) | YES  |     |         | 登录密码    
- state         | INT(10)      | YES  |     |         | 教师状态1激活2注销3删除
- system        | INT(10)      | YES  |     |         | 是否系统管理员：1是0否
----------------+--------------+------+-----+---------+---------
 
