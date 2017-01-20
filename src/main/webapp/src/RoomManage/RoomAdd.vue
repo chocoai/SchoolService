@@ -43,10 +43,10 @@ export default {
       message: '',
       nameErrorText: '',
       nameErrorColor: '',
-      course1: '',
-      course2: '',
-      course3: '',
-      course4: '',
+      course1: [],
+      course2: [],
+      course3: [],
+      course4: [],
       teachers: []
     }
   },
@@ -68,7 +68,7 @@ export default {
   },
   methods: {
     reply () {
-      this.$router.push({ path: '/RoomList' })
+      this.$router.push({ path: '/roomList' })
     },
     openPopup (message, icon, color) {
       this.message = message
@@ -80,6 +80,10 @@ export default {
     reset () {
       this.name = ''
       this.nameErrorColor = ''
+      this.course1 = ''
+      this.course2 = ''
+      this.course3 = ''
+      this.course4 = ''
     },
     checkName (value) {
       this.$http.get(
@@ -94,23 +98,14 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.nameErrorText = ''
-              this.nameErrorColor = 'green'
-              break
-            case '1':
-              this.nameErrorText = '该班级名称不符合规则！'
-              this.nameErrorColor = 'red'
-              break
-            case '2':
-              this.nameErrorText = '该班级名称已存在！'
-              this.nameErrorColor = 'orange'
-              break
-            default:
-              this.nameErrorText = ''
-              this.nameErrorColor = 'blue'
-              window.location.href = '/'
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.nameErrorText = ''
+            this.nameErrorColor = 'green'
+          } else {
+            this.nameErrorText = response.body
+            this.nameErrorColor = 'red'
           }
         }, (response) => {
           this.openPopup('服务器内部错误！', 'report_problem', 'orange')
@@ -120,7 +115,11 @@ export default {
       this.$http.get(
         API.Save,
         { params: {
-          name: this.name
+          name: this.name,
+          course1: this.course1,
+          course2: this.course2,
+          course3: this.course3,
+          course4: this.course4
         }
         },
         {
@@ -129,7 +128,9 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
-          if (response.body === 0) {
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
             this.openPopup('保存成功！', 'check_circle', 'green')
             setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
           } else {

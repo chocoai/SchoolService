@@ -1,30 +1,39 @@
 <template>
-  <div class="TeacherEdit">
+  <div class="RoomEdit">
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
-    <mu-text-field label="教师姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="联系电话" :disabled="edit" underlineShow="false" v-model="phone" :errorColor="phoneErrorColor" :errorText="phoneErrorText" @input="checkPhone"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-    <mu-text-field label="微信号码" :disabled="edit" underlineShow="false" v-model="weixin" :errorColor="weixinErrorColor" :errorText="weixinErrorText" @input="checkWeixin" fullWidth labelFloat icon="chat"/><br/>
-    <mu-text-field label="电子邮箱" :disabled="edit" underlineShow="false" v-model="email"  :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email"/><br/>
-    <mu-text-field label="备注信息" :disabled="edit" underlineShow="false" v-model="remark" fullWidth labelFloat icon="bookmark"/><br/>
+    <mu-text-field v-model="name" label="班级名称" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
+    <mu-select-field v-model="course1" label="班主任" icon="comment" fullWidth :maxHeight="300">
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name" multiple/>
+    </mu-select-field>
+    <mu-select-field v-model="course2" label="语文教师" icon="comment" fullWidth :maxHeight="300">
+      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    </mu-select-field>
+    <mu-select-field v-model="course3" label="数学教师" icon="comment" fullWidth :maxHeight="300">
+      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    </mu-select-field>
+    <mu-select-field v-model="course4" label="英语教师" icon="comment" fullWidth :maxHeight="300">
+      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    </mu-select-field>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="edit" @click="goEdit" primary/>
         <mu-float-button icon="cancel" v-if="save" @click="goCancel" secondary/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="delete" v-if="edit"  @click="openDelete" backgroundColor="red"/>
+        <mu-float-button icon="delete" v-if="deletes"  @click="openDelete" backgroundColor="red"/>
+        <mu-float-button icon="compare_arrows" v-if="resave" @click="openResave" backgroundColor="green"/>
         <mu-float-button icon="done" v-if="save" @click="goSave" backgroundColor="green"/>
-      </mu-flexbox-item>
-      <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="cached" v-if="save" @click="goReset" backgroundColor="orange"/>
-        <mu-float-button icon="dialer_sip" v-if="edit" @click="goCall" backgroundColor="#6633CC"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="forDelete" :title="deleteTitle" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goDelete" secondary/>
+    </mu-dialog>
+    <mu-dialog :open="forResave" :title="resaveTitle" @close="goClose">
+      <mu-flat-button label="取消" @click="goClose" />
+      <mu-flat-button label="确定" @click="goResave" secondary/>
     </mu-dialog>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
@@ -35,35 +44,25 @@
 <script>
 import * as API from './RoomAPI.js'
 export default {
-  name: 'TeacherEdit',
+  name: 'RoomEdit',
   data () {
     return {
-      edit: true,
-      save: false,
-      forDelete: false,
       bottomPopup: false,
       icon: '',
       color: '',
-      message: '',
-      deleteTitle: '',
-      teacher: '',
       name: '',
-      phone: '',
-      weixin: '',
-      email: '',
-      remark: '',
+      message: '',
       nameErrorText: '',
-      phoneErrorText: '',
-      weixinErrorText: '',
-      emailErrorText: '',
       nameErrorColor: '',
-      phoneErrorColor: '',
-      weixinErrorColor: '',
-      emailErrorColor: ''
+      course1: [],
+      course2: [],
+      course3: [],
+      course4: [],
+      teachers: []
     }
   },
   created () {
-    this.fetchData(this.$route.params.teacherId)
+    this.fetchData(this.$route.params.roomId)
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -71,10 +70,13 @@ export default {
   },
   methods: {
     reply () {
-      this.$router.push({ path: '/teacherList' })
+      this.$router.push({ path: '/roomList' })
     },
     openDelete () {
       this.forDelete = true
+    },
+    openResave () {
+      this.forResave = true
     },
     openPopup (message, icon, color) {
       this.message = message
@@ -84,11 +86,13 @@ export default {
       setTimeout(() => { this.bottomPopup = false }, 1500)
     },
     goCall () {
-      this.phone.toString() === '' ? this.openPopup('无联系电话！', 'report_problem', 'orange') : window.location.href = 'tel:' + this.phone
+      this.mobile.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.mobile
     },
     goEdit () {
       this.edit = false
       this.save = true
+      this.deletes = false
+      this.resave = false
     },
     goCancel () {
       this.edit = true
@@ -97,6 +101,7 @@ export default {
     },
     goClose () {
       this.forDelete = false
+      this.forResave = false
     },
     goReset () {
       this.fetchData(this.$route.params.teacherId)
@@ -115,22 +120,86 @@ export default {
           }
         }
         ).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.edit = true
-              this.save = false
-              this.openPopup('删除成功！', 'check_circle', 'green')
-              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-              break
-            case '1':
-              this.openPopup('要删除的教师不存在！', 'report_problem', 'red')
-              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-              break
-            default:
-              window.location.href = '/'
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.edit = true
+            this.save = false
+            if (this.state.toString() === '1' || this.state.toString() === '2') {
+              this.deletes = true
+              this.resave = false
+            } else {
+              this.deletes = false
+              this.resave = true
+            }
+            this.openPopup('取消关注成功!', 'check_circle', 'green')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else if (response.body === '要取消关注的教师不存在!') {
+            this.edit = true
+            this.save = false
+            if (this.state.toString() === '1' || this.state.toString() === '2') {
+              this.deletes = true
+              this.resave = false
+            } else {
+              this.deletes = false
+              this.resave = true
+            }
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
           }
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+        })
+    },
+    goResave () {
+      this.$http.get(
+        API.ResaveById,
+        { params: {
+          id: this.$route.params.teacherId
+        }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        }
+        ).then((response) => {
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.edit = true
+            this.save = false
+            if (this.state.toString() === '1' || this.state.toString() === '2') {
+              this.deletes = true
+              this.resave = false
+            } else {
+              this.deletes = false
+              this.resave = true
+            }
+            this.openPopup('重新邀请关注成功!', 'check_circle', 'green')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else if (response.body === '要重新邀请关注的教师不存在!') {
+            this.edit = true
+            this.save = false
+            if (this.state.toString() === '1' || this.state.toString() === '2') {
+              this.deletes = true
+              this.resave = false
+            } else {
+              this.deletes = false
+              this.resave = true
+            }
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     },
     goSave () {
@@ -139,10 +208,8 @@ export default {
         { params: {
           id: this.$route.params.teacherId,
           name: this.name,
-          phone: this.phone,
-          weixin: this.weixin,
-          email: this.email,
-          remark: this.remark
+          mobile: this.mobile,
+          isManager: this.isManager
         }
         },
         {
@@ -151,56 +218,24 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.edit = true
-              this.save = false
-              this.openPopup('修改成功！', 'check_circle', 'green')
-              break
-            case '1':
-              this.openPopup('要修改的教师不存在！', 'report_problem', 'red')
-              setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-              break
-            case '2':
-              this.openPopup('未找到修改内容！', 'report_problem', 'orange')
-              break
-            case '3':
-              this.openPopup('姓名应为两个以上汉字！', 'report_problem', 'orange')
-              break
-            case '4':
-              this.openPopup('输入的手机号码应为11位数字！', 'report_problem', 'orange')
-              break
-            case '5':
-              this.openPopup('输入的微信号不应包含中文！', 'report_problem', 'orange')
-              break
-            case '6':
-              this.openPopup('输入的电子邮箱格式不正确！', 'report_problem', 'orange')
-              break
-            case '7':
-              this.openPopup('手机号码和微信号不能同时为空！', 'report_problem', 'orange')
-              break
-            case '8':
-              this.openPopup('输入的手机号码已存在！', 'report_problem', 'orange')
-              break
-            case '9':
-              this.openPopup('输入的微信号已存在！', 'report_problem', 'orange')
-              break
-            case 'A':
-              this.openPopup('输入的电子邮箱已存在！', 'report_problem', 'orange')
-              break
-            default:
-              window.location.href = '/'
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.openPopup('修改成功！', 'check_circle', 'green')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'orange')
           }
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     },
-    fetchData (teacherId) {
+    fetchData (roomId) {
       this.$http.get(
         API.GetById,
         { params:
         {
-          id: teacherId
+          id: roomId
         }
         },
         {
@@ -211,13 +246,21 @@ export default {
           emulateJSON: true
         }
       ).then((response) => {
-        this.teacher = response.body
-        this.name = this.teacher.name
-        this.phone = this.teacher.phone
-        this.weixin = this.teacher.weixinId
-        this.email = this.teacher.email
-        this.remark = this.teacher.remark
-        this.deleteTitle = '确认要删除' + this.name + '吗?'
+        this.room = response.body
+        this.name = this.room.name
+        this.mobile = this.teacher.mobile
+        this.userId = this.teacher.userId
+        this.isManager = this.teacher.isManager.toString()
+        this.state = this.teacher.state
+        if (this.room.state.toString() === '1') {
+          this.deletes = true
+          this.resave = false
+        } else {
+          this.deletes = false
+          this.resave = true
+        }
+        this.deleteTitle = '确认要取消' + this.name + '的关注吗?'
+        this.resaveTitle = '确认要邀请' + this.name + '再次关注吗?'
       }, (response) => {
       })
     },
@@ -225,6 +268,7 @@ export default {
       this.$http.get(
         API.CheckNameForEdit,
         { params: {
+          id: this.$route.params.teacherId,
           name: value
         }
         },
@@ -234,139 +278,24 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.nameErrorText = ''
-              this.nameErrorColor = 'green'
-              break
-            case '1':
-              this.nameErrorText = '请输入两个以上汉字！'
-              this.nameErrorColor = 'red'
-              break
-            case '2':
-              this.nameErrorText = '该姓名存在重名情况！'
-              this.nameErrorColor = 'orange'
-              break
-            default:
-              this.nameErrorText = ''
-              this.nameErrorColor = 'blue'
-              window.location.href = '/'
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.nameErrorText = ''
+            this.nameErrorColor = 'green'
+          } else {
+            this.nameErrorText = response.body
+            this.nameErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
-        })
-    },
-    checkPhone (value) {
-      this.$http.get(
-        API.CheckPhoneForEdit,
-        { params: {
-          phone: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.phoneErrorText = '此处为绑定微信的手机号码！'
-              this.phoneErrorColor = 'green'
-              break
-            case '1':
-              this.phoneErrorText = '请输入11位数字！'
-              this.phoneErrorColor = 'red'
-              break
-            case '2':
-              this.phoneErrorText = '该手机号码已使用！'
-              this.phoneErrorColor = 'orange'
-              break
-            default:
-              this.phoneErrorText = ''
-              this.phoneErrorColor = 'blue'
-              window.location.href = '/'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
-        })
-    },
-    checkWeixin (value) {
-      this.$http.get(
-        API.CheckWeixinForEdit,
-        { params: {
-          weixin: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.weixinErrorText = '此处为微信号，不是微信昵称！'
-              this.weixinErrorColor = 'green'
-              break
-            case '1':
-              this.weixinErrorText = '微信号不应包含中文！'
-              this.weixinErrorColor = 'red'
-              break
-            case '2':
-              this.weixinErrorText = '该微信号已使用！'
-              this.weixinErrorColor = 'orange'
-              break
-            default:
-              this.weixinErrorText = ''
-              this.weixinErrorColor = 'blue'
-              window.location.href = '/'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
-        })
-    },
-    checkEmail (value) {
-      this.$http.get(
-        API.CheckEmailForEdit,
-        { params: {
-          email: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          switch (response.body) {
-            case '0':
-              this.emailErrorText = ''
-              this.emailErrorColor = 'green'
-              break
-            case '1':
-              this.emailErrorText = '电子邮箱格式错误！'
-              this.emailErrorColor = 'red'
-              break
-            case '2':
-              this.emailErrorText = '该电子邮箱已使用！'
-              this.emailErrorColor = 'orange'
-              break
-            default:
-              this.emailErrorText = ''
-              this.emailErrorColor = 'blue'
-              window.location.href = '/'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     }
-  }
 }
 </script>
 <style lang="css">
   .flex-demo {
-    height: 70px;
+    height: 170px;
     text-align: center;
     line-height: 32px;
   }
