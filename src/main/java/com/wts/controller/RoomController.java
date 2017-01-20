@@ -8,6 +8,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
+import com.wts.entity.model.Course;
 import com.wts.entity.model.Enterprise;
 import com.wts.entity.model.Room;
 import com.wts.entity.model.Teacher;
@@ -94,6 +95,10 @@ public class RoomController extends Controller {
   public void teacherList() {
     List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise where (isTeacher=1 or isManager=1) and (state=1 or state=2)");
     renderJson(teachers);
+  }
+  public  void courseList() {
+    List<Course> courses = Course.dao.find("select * from course");
+    renderJson(courses);
   }
   @Before({Tx.class,AjaxFunction.class})
   public void save()  {

@@ -75,8 +75,8 @@ public class CoreService {
         // 进入应用
         else if (eventType.equals(MessageUtil.EVENT_TYPE_ENTER)) {
           // TODO 取消订阅后用户不会再收到公众账号发送的消息，因此不需要回复
-          System.out.println("i am here");
-          System.out.println(requestMap.get("AgentID"));
+//          System.out.println("i am here");
+//          System.out.println(requestMap.get("AgentID"));
         }
         // 扫描带参数二维码
         else if (eventType.equals(MessageUtil.EVENT_TYPE_SCAN)) {
