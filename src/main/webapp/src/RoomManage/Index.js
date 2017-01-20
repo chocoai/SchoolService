@@ -7,11 +7,7 @@ import RoomList from './RoomList.vue'
 import RoomAdd from './RoomAdd.vue'
 import RoomEdit from './RoomEdit.vue'
 
-// import 'muse-ui/dist/muse-ui.css'
-// import MuseUI from 'muse-ui'
-//
-// Vue.use(MuseUI)
-import 'assets/icon.css'
+import 'material-design-icons/iconfont/material-icons.css'
 import 'muse-components/styles/base.less' // 加载基础的样式
 import appBar from 'muse-components/appBar'
 import icon from 'muse-components/icon'

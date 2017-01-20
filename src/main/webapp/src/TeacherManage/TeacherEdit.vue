@@ -276,6 +276,7 @@ export default {
       this.$http.get(
         API.CheckNameForEdit,
         { params: {
+          id: this.$route.params.teacherId,
           name: value
         }
         },
@@ -302,6 +303,7 @@ export default {
       this.$http.get(
         API.CheckMobileForEdit,
         { params: {
+          id: this.$route.params.teacherId,
           mobile: value
         }
         },

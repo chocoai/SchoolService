@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Login from './Login.vue'
 import VueResource from 'vue-resource'
 
-import 'assets/icon.css'
+import 'material-design-icons/iconfont/material-icons.css'
 import 'muse-components/styles/base.less' // 加载基础的样式
 import appBar from 'muse-components/appBar'
 import icon from 'muse-components/icon'

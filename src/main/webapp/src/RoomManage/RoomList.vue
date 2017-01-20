@@ -130,8 +130,8 @@
           queryString: this.queryString,
           pageCurrent: this.pageCurrent
         })
-        this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
-        this.teacherTotal(this.queryString, this.pageSize)
+        this.roomQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.roomTotal(this.queryString, this.pageSize)
         this.before = false
       },
       look (roomId) {

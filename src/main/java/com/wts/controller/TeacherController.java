@@ -97,7 +97,8 @@ public class TeacherController extends Controller {
   public void checkMobileForEdit() {
     if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
       renderText("手机号码格式错误!");
-    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()>=1) {
+    } else if (!Enterprise.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
+            && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
     } else {
       renderText("OK");
@@ -169,7 +170,6 @@ public class TeacherController extends Controller {
                   .update();
           renderText("OK");
         } else {
-          System.out.println("2222222");
           try{
             User user = new User(teacher.get("userId").toString(),teacher.get("name").toString());
             user.setMobile(getPara("mobile").trim());

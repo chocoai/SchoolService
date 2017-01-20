@@ -5,6 +5,7 @@ export const CheckNameForEdit = `${h}/room/checkNameForEdit`
 export const Save = `${h}/room/save`
 export const Edit = `${h}/room/edit`
 export const TeacherList = `${h}/room/teacherList`
+export const QueryByName = `${h}/room/queryByName`
 export const TotalByName = `${h}/room/totalByName`
 export const GetById = `${h}/room/getById`
 export const DeleteById = `${h}/room/deleteById`
