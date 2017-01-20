@@ -4,17 +4,17 @@
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
     <mu-text-field v-model="name" label="班级名称" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
-    <mu-select-field v-model="course1" label="班主任" icon="comment" fullWidth :maxHeight="300">
-      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name" multiple/>
+    <mu-select-field v-model="course1" label="班主任" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
     </mu-select-field>
-    <mu-select-field v-model="course2" label="语文教师" icon="comment" fullWidth :maxHeight="300">
-      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    <mu-select-field v-model="course2" label="语文教师" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name"/>
     </mu-select-field>
-    <mu-select-field v-model="course3" label="数学教师" icon="comment" fullWidth :maxHeight="300">
-      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    <mu-select-field v-model="course3" label="数学教师" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name"/>
     </mu-select-field>
-    <mu-select-field v-model="course4" label="英语教师" icon="comment" fullWidth :maxHeight="300">
-      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    <mu-select-field v-model="course4" label="英语教师" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name"/>
     </mu-select-field>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}

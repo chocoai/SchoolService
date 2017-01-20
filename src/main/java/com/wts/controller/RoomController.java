@@ -92,7 +92,7 @@ public class RoomController extends Controller {
   }
   @Before(AjaxFunction.class)
   public void teacherList() {
-    List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise (isTeacher=1 or isManager=1) and (state=1 or state=2)");
+    List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise where (isTeacher=1 or isManager=1) and (state=1 or state=2)");
     renderJson(teachers);
   }
   @Before({Tx.class,AjaxFunction.class})

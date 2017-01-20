@@ -291,6 +291,7 @@ export default {
           this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     }
+  }
 }
 </script>
 <style lang="css">
