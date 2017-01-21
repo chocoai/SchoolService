@@ -4,7 +4,16 @@
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
     <mu-text-field v-model="name" label="班级名称" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
-    <mu-select-field v-for="course in courses" :v-model="course.name" :label="course.name" icon="comment" fullWidth :maxHeight="300" multiple>
+    <mu-select-field v-model="course1" label="班主任" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
+    </mu-select-field>
+    <mu-select-field v-model="course2" label="语文" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
+    </mu-select-field>
+    <mu-select-field v-model="course3" label="数学" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
+    </mu-select-field>
+    <mu-select-field v-model="course4" label="英语" icon="comment" fullWidth :maxHeight="300" multiple>
       <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
     </mu-select-field>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
@@ -34,25 +43,14 @@ export default {
       message: '',
       nameErrorText: '',
       nameErrorColor: '',
-      courses: [],
+      course1: [],
+      course2: [],
+      course3: [],
+      course4: [],
       teachers: []
     }
   },
   created: function () {
-    this.$http.get(
-      API.CourseList,
-      {
-        headers:
-        {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        emulateJSON: true
-      }
-    ).then((response) => {
-      this.courses = response.body
-    }, (response) => {
-      this.openPopup('服务器内部错误！', 'report_problem', 'orange')
-    })
     this.$http.get(
       API.TeacherList,
       {
@@ -114,8 +112,38 @@ export default {
         })
     },
     save () {
-      console.log(this.班主任)
-      console.log(this.数学)
+      console.log(this.course1)
+      console.log(this.course2)
+      console.log(this.course3)
+      console.log(this.course4)
+      this.$http.get(
+        API.Save,
+        { params: {
+          name: this.name,
+          course1: this.course1,
+          course2: this.course2,
+          course3: this.course3,
+          course4: this.course4
+        }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        }).then((response) => {
+          if (response.body === 'error') {
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.nameErrorText = ''
+            this.nameErrorColor = 'green'
+          } else {
+            this.nameErrorText = response.body
+            this.nameErrorColor = 'red'
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+        })
     }
   }
 }

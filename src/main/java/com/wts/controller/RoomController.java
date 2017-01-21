@@ -102,13 +102,29 @@ public class RoomController extends Controller {
   }
   @Before({Tx.class,AjaxFunction.class})
   public void save()  {
-    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-      renderText("班级名称格式应为：XXXX级XX班");
-    } else if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
-      renderText("该班级已存在!");
-    } else {
-
+    String[] course1 = getParaValues("course1[]");
+    String[] course2 = getParaValues("course2[]");
+    String[] course3 = getParaValues("course3[]");
+    String[] course4 = getParaValues("course4[]");
+    if (course1!=null){
+      for (int i = 0 ;i<course1.length;i++){
+        System.out.println(course1[i]);
+      }
     }
+    if (course2!=null){
+      for (String i : course2){
+        System.out.println(i);
+      }
+    }
+
+    renderText("111");
+//    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+//      renderText("班级名称格式应为：XXXX级XX班");
+//    } else if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+//      renderText("该班级已存在!");
+//    } else {
+//
+//    }
   }
   @Before({Tx.class,AjaxFunction.class})
   public void edit()  {
