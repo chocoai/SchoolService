@@ -112,10 +112,6 @@ export default {
         })
     },
     save () {
-      console.log(this.course1)
-      console.log(this.course2)
-      console.log(this.course3)
-      console.log(this.course4)
       this.$http.get(
         API.Save,
         { params: {

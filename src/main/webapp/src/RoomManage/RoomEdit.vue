@@ -248,10 +248,7 @@ export default {
       ).then((response) => {
         this.room = response.body
         this.name = this.room.name
-        this.mobile = this.teacher.mobile
-        this.userId = this.teacher.userId
-        this.isManager = this.teacher.isManager.toString()
-        this.state = this.teacher.state
+        this.state = this.room.state
         if (this.room.state.toString() === '1') {
           this.deletes = true
           this.resave = false
@@ -259,8 +256,28 @@ export default {
           this.deletes = false
           this.resave = true
         }
-        this.deleteTitle = '确认要取消' + this.name + '的关注吗?'
-        this.resaveTitle = '确认要邀请' + this.name + '再次关注吗?'
+      }, (response) => {
+      })
+
+      this.$http.get(
+        API.GetCourseById,
+        { params:
+        {
+          id: roomId
+        }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          emulateJSON: true
+        }
+      ).then((response) => {
+        this.course1 = response.body.course1
+        this.course2 = response.body.course2
+        this.course3 = response.body.course3
+        this.course4 = response.body.course4
       }, (response) => {
       })
     },

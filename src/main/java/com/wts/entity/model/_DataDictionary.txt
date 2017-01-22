@@ -33,11 +33,11 @@ Table: enterprise
  email     | VARCHAR(255) | YES  |     |         | 电子邮箱    
  weixinId  | VARCHAR(255) | YES  |     |         | 微信账号    
  remark    | VARCHAR(255) | YES  |     |         | 备注信息    
+ picUrl    | VARCHAR(255) | YES  |     |         | 头像地址    
  state     | INT(10)      | YES  |     |         | 账号状态1关注2未关注3冻结关注4取消关注
  isTeacher | INT(10)      | YES  |     |         | 是否教师0否1是
  isParent  | INT(10)      | YES  |     |         | 是否家长0否1是
  isManager | INT(10)      | YES  |     |         | 是否管理0否1是
- picUrl    | VARCHAR(255) | YES  |     |         | 头像地址    
 -----------+--------------+------+-----+---------+---------
 
 Table: exam

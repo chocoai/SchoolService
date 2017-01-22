@@ -8,12 +8,10 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
-import com.wts.entity.model.Course;
-import com.wts.entity.model.Enterprise;
-import com.wts.entity.model.Room;
-import com.wts.entity.model.Teacher;
+import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxFunction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoomController extends Controller {
@@ -100,31 +98,58 @@ public class RoomController extends Controller {
     List<Course> courses = Course.dao.find("select * from course");
     renderJson(courses);
   }
+
+  public void getCourseById() {
+    List<Courseplan> course1 = Courseplan.dao.find("select * from courseplan where room_id=? or course_id=1",getPara("id"));
+    List<Courseplan> course2 = Courseplan.dao.find("select * from courseplan where room_id=? or course_id=2",getPara("id"));
+    List<Courseplan> course3 = Courseplan.dao.find("select * from courseplan where room_id=? or course_id=3",getPara("id"));
+    List<Courseplan> course4 = Courseplan.dao.find("select * from courseplan where room_id=? or course_id=4",getPara("id"));
+    List<Object> course = new ArrayList<Object>();
+    course.add(course1);
+    course.add(course2);
+    course.add(course3);
+    course.add(course4);
+    renderJson(course);
+  }
   @Before({Tx.class,AjaxFunction.class})
   public void save()  {
-    String[] course1 = getParaValues("course1[]");
-    String[] course2 = getParaValues("course2[]");
-    String[] course3 = getParaValues("course3[]");
-    String[] course4 = getParaValues("course4[]");
-    if (course1!=null){
-      for (int i = 0 ;i<course1.length;i++){
-        System.out.println(course1[i]);
+    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+      renderText("班级名称格式应为：XXXX级XX班");
+    } else if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+      renderText("该班级已存在!");
+    } else {
+      Room room = new Room();
+      room.set("name",getPara("name")).set("state",1).save();
+      String[] course1 = getParaValues("course1[]");
+      String[] course2 = getParaValues("course2[]");
+      String[] course3 = getParaValues("course3[]");
+      String[] course4 = getParaValues("course4[]");
+      if (course1!=null){
+        for (String i : course1){
+          Courseplan courseplan = new Courseplan();
+          courseplan.set("course_id",1).set("room_id",room.get("id")).set("teacher_id",i).save();
+        }
       }
-    }
-    if (course2!=null){
-      for (String i : course2){
-        System.out.println(i);
+      if (course2!=null){
+        for (String i : course2){
+          Courseplan courseplan = new Courseplan();
+          courseplan.set("course_id",2).set("room_id",room.get("id")).set("teacher_id",i).save();
+        }
       }
+      if (course3!=null){
+        for (String i : course3){
+          Courseplan courseplan = new Courseplan();
+          courseplan.set("course_id",3).set("room_id",room.get("id")).set("teacher_id",i).save();
+        }
+      }
+      if (course4!=null){
+        for (String i : course4){
+          Courseplan courseplan = new Courseplan();
+          courseplan.set("course_id",4).set("room_id",room.get("id")).set("teacher_id",i).save();
+        }
+      }
+      renderText("OK");
     }
-
-    renderText("111");
-//    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-//      renderText("班级名称格式应为：XXXX级XX班");
-//    } else if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
-//      renderText("该班级已存在!");
-//    } else {
-//
-//    }
   }
   @Before({Tx.class,AjaxFunction.class})
   public void edit()  {

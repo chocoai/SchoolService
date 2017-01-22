@@ -39,7 +39,7 @@ public class MainController extends Controller {
   }
 
   public void login() {
-    if (getPara("userId").equals("q") && getPara("pass").equals("1")) {
+    if (getPara("userId").equals("1") && getPara("pass").equals("1")) {
       setSessionAttr("teacher", "");
       renderText("sys");
     } else {
