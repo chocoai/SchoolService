@@ -4,17 +4,17 @@
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
     <mu-text-field v-model="name" label="班级名称" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
-    <mu-select-field v-model="course1" label="班主任" icon="comment" fullWidth :maxHeight="300">
-      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name" multiple/>
+    <mu-select-field v-model="course1" label="班主任" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="String(teacher.id)" :title="teacher.name" />
     </mu-select-field>
-    <mu-select-field v-model="course2" label="语文教师" icon="comment" fullWidth :maxHeight="300">
-      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    <mu-select-field v-model="course2" label="语文教师" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers" :value="String(teacher.id)" :title="teacher.name" />
     </mu-select-field>
-    <mu-select-field v-model="course3" label="数学教师" icon="comment" fullWidth :maxHeight="300">
-      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    <mu-select-field v-model="course3" label="数学教师" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers" :value="String(teacher.id)" :title="teacher.name" />
     </mu-select-field>
-    <mu-select-field v-model="course4" label="英语教师" icon="comment" fullWidth :maxHeight="300">
-      <mu-menu-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" multiple/>
+    <mu-select-field v-model="course4" label="英语教师" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers" :value="String(teacher.id)" :title="teacher.name" />
     </mu-select-field>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
@@ -62,6 +62,20 @@ export default {
     }
   },
   created () {
+    this.$http.get(
+      API.TeacherList,
+      {
+        headers:
+        {
+          'X-Requested-With': 'XMLHttpRequest'
+        },
+        emulateJSON: true
+      }
+    ).then((response) => {
+      this.teachers = response.body
+    }, (response) => {
+      this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+    })
     this.fetchData(this.$route.params.roomId)
   },
   watch: {
@@ -260,10 +274,11 @@ export default {
       })
 
       this.$http.get(
-        API.GetCourseById,
+        API.GetCourseTeacher,
         { params:
         {
-          id: roomId
+          room: roomId,
+          course: 1
         }
         },
         {
@@ -274,10 +289,12 @@ export default {
           emulateJSON: true
         }
       ).then((response) => {
-        this.course1 = response.body.course1
-        this.course2 = response.body.course2
-        this.course3 = response.body.course3
-        this.course4 = response.body.course4
+        /* eslint-disable no-eval  */
+        this.course1 = eval('(' + response.body + ')').course1
+        this.course2 = eval('(' + response.body + ')').course2
+        console.log(this.course1)
+        console.log(this.course2)
+        console.log(this.course3)
       }, (response) => {
       })
     },
@@ -285,7 +302,7 @@ export default {
       this.$http.get(
         API.CheckNameForEdit,
         { params: {
-          id: this.$route.params.teacherId,
+          id: this.$route.params.roomId,
           name: value
         }
         },

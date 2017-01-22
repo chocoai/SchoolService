@@ -6,6 +6,7 @@ export const Save = `${h}/room/save`
 export const Edit = `${h}/room/edit`
 export const TeacherList = `${h}/room/teacherList`
 export const CourseList = `${h}/room/courseList`
+export const GetCourseTeacher = `${h}/room/getCourseTeacher`
 export const QueryByName = `${h}/room/queryByName`
 export const TotalByName = `${h}/room/totalByName`
 export const GetById = `${h}/room/getById`
