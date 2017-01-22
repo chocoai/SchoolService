@@ -77,11 +77,10 @@ export default {
       this.openPopup('服务器内部错误！', 'report_problem', 'orange')
     })
     this.fetchData(this.$route.params.roomId)
-    this.course1 = this.getCourse(this.$route.params.roomId, 1)
-    this.course2 = this.getCourse(this.$route.params.roomId, 2)
-    this.course3 = this.getCourse(this.$route.params.roomId, 3)
-    this.course4 = this.getCourse(this.$route.params.roomId, 4)
-    console.log(this.course1)
+    this.getCourse1(this.$route.params.roomId)
+    this.getCourse2(this.$route.params.roomId)
+    this.getCourse3(this.$route.params.roomId)
+    this.getCourse4(this.$route.params.roomId)
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -278,13 +277,13 @@ export default {
       }, (response) => {
       })
     },
-    getCourse (roomId, courseId) {
+    getCourse1 (roomId) {
       this.$http.get(
         API.GetCourseTeacher,
         { params:
         {
           room: roomId,
-          course: courseId
+          course: 1
         }
         },
         {
@@ -296,8 +295,73 @@ export default {
         }
       ).then((response) => {
         /* eslint-disable no-eval  */
-        console.log(eval('(' + response.body + ')').course)
-        return eval('(' + response.body + ')').course
+        this.course1 = eval('(' + response.body + ')').course
+      }, (response) => {
+      })
+    },
+    getCourse2 (roomId) {
+      this.$http.get(
+        API.GetCourseTeacher,
+        { params:
+        {
+          room: roomId,
+          course: 2
+        }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          emulateJSON: true
+        }
+      ).then((response) => {
+        /* eslint-disable no-eval  */
+        this.course2 = eval('(' + response.body + ')').course
+      }, (response) => {
+      })
+    },
+    getCourse3 (roomId) {
+      this.$http.get(
+        API.GetCourseTeacher,
+        { params:
+        {
+          room: roomId,
+          course: 3
+        }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          emulateJSON: true
+        }
+      ).then((response) => {
+        /* eslint-disable no-eval  */
+        this.course3 = eval('(' + response.body + ')').course
+      }, (response) => {
+      })
+    },
+    getCourse4 (roomId) {
+      this.$http.get(
+        API.GetCourseTeacher,
+        { params:
+        {
+          room: roomId,
+          course: 4
+        }
+        },
+        {
+          headers:
+          {
+            'X-Requested-With': 'XMLHttpRequest'
+          },
+          emulateJSON: true
+        }
+      ).then((response) => {
+        /* eslint-disable no-eval  */
+        this.course4 = eval('(' + response.body + ')').course
       }, (response) => {
       })
     },
