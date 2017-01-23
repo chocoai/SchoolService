@@ -103,7 +103,7 @@ public class RoomController extends Controller {
     renderJson(courses);
   }
 
-  public void getCourseTeacher() {
+  public void getCourseTeachers() {
     List<Courseplan> courseplan = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=?",getPara("room"),getPara("course"));
     if (courseplan.size()!=0) {
       String sp1 = "";
@@ -115,7 +115,7 @@ public class RoomController extends Controller {
       renderText("{}");
     }
   }
-  public void getCourseTeachers() {
+  public void getCourseTeacher() {
     List<Courseplan> courseplan1 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=1",getPara("room"));
     List<Courseplan> courseplan2 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=2",getPara("room"));
     List<Courseplan> courseplan3 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=3",getPara("room"));

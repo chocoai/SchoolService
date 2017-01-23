@@ -131,11 +131,10 @@ export default {
           if (response.body === 'error') {
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.nameErrorText = ''
-            this.nameErrorColor = 'green'
+            this.openPopup('保存成功！', 'check_circle', 'green')
+            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
           } else {
-            this.nameErrorText = response.body
-            this.nameErrorColor = 'red'
+            this.openPopup(response.body, 'report_problem', 'orange')
           }
         }, (response) => {
           this.openPopup('服务器内部错误！', 'report_problem', 'orange')
