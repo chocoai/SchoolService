@@ -10,6 +10,9 @@
       <mu-menu-item value="0" title="一般教师"/>
       <mu-menu-item value="1" title="管理人员"/>
     </mu-select-field>
+    <mu-dialog :open="forSave" title="正在保存" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="edit" @click="goEdit" primary/>
@@ -52,6 +55,7 @@ export default {
       forDelete: false,
       forResave: false,
       bottomPopup: false,
+      forSave: false,
       icon: '',
       color: '',
       message: '',
@@ -129,6 +133,7 @@ export default {
         }
         ).then((response) => {
           if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'red')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.edit = true
@@ -177,6 +182,7 @@ export default {
         }
         ).then((response) => {
           if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'red')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.edit = true
@@ -211,6 +217,7 @@ export default {
         })
     },
     goSave () {
+      this.forSave = true
       this.$http.get(
         API.Edit,
         { params: {
@@ -226,7 +233,9 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
+          this.forSave = false
           if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'red')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.openPopup('修改成功！', 'check_circle', 'green')
@@ -235,6 +244,7 @@ export default {
             this.openPopup(response.body, 'report_problem', 'orange')
           }
         }, (response) => {
+          this.forSave = false
           this.openPopup('服务器内部错误!', 'report_problem', 'orange')
         })
     },
@@ -287,6 +297,7 @@ export default {
           }
         }).then((response) => {
           if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'red')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.nameErrorText = ''
@@ -314,6 +325,7 @@ export default {
           }
         }).then((response) => {
           if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'red')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.mobileErrorText = ''

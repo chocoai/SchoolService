@@ -26,6 +26,7 @@ import dialog from 'muse-components/dialog'
 import chip from 'muse-components/chip'
 import popup from 'muse-components/popup'
 import drawer from 'muse-components/drawer'
+import circularProgress from 'muse-components/circularProgress'
 import selectField from 'muse-components/selectField'
 import { listItem, list } from 'muse-components/list'
 import { menuItem, menu } from 'muse-components/menu'
@@ -44,6 +45,7 @@ Vue.component(dialog.name, dialog)
 Vue.component(chip.name, chip)
 Vue.component(popup.name, popup)
 Vue.component(drawer.name, drawer)
+Vue.component(circularProgress.name, circularProgress)
 Vue.component(selectField.name, selectField)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)

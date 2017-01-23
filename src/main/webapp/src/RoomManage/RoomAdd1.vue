@@ -4,31 +4,24 @@
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
     <mu-text-field v-model="name" label="班级名称" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
-    <mu-flexbox>
-      <mu-flexbox-item class="flex-demo">
-        <mu-flat-button label="语文老师" @click="openCourse1=true"/>
-      </mu-flexbox-item>
-    </mu-flexbox>
+    <mu-select-field v-model="course1" label="班主任" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
+    </mu-select-field>
+    <mu-select-field v-model="course2" label="语文" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
+    </mu-select-field>
+    <mu-select-field v-model="course3" label="数学" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
+    </mu-select-field>
+    <mu-select-field v-model="course4" label="英语" icon="comment" fullWidth :maxHeight="300" multiple>
+      <mu-menu-item v-for="teacher in teachers"  :value="teacher.id" :title="teacher.name"/>
+    </mu-select-field>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
     <mu-dialog :open="forSave" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
-    <mu-drawer right :open="openCourse1" docked="false">
-      <mu-appbar title="请选择语文老师" @click.native="openCourse1=false">
-        <mu-icon-button icon='close' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item v-for="teacher in teachers" :title="teacher.name">
-          <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
-          <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
-          <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course1" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
-        </mu-list-item>
-      </mu-list>
-    </mu-drawer>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="cached" @click="reset" backgroundColor="orange"/>
@@ -54,7 +47,6 @@ export default {
       message: '',
       nameErrorText: '',
       nameErrorColor: '',
-      openCourse1: false,
       course1: [],
       course2: [],
       course3: [],
@@ -125,7 +117,6 @@ export default {
         })
     },
     save () {
-      console.log(this.course1)
       this.forSave = true
       this.$http.get(
         API.Save,

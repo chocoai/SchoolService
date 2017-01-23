@@ -7,7 +7,10 @@
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.userId" @click="look(teacher.id)">
-        <mu-avatar :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
+        <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
+        <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
+        <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
+        <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
         <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>

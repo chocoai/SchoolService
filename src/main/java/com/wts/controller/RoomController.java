@@ -11,6 +11,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxFunction;
+import com.wts.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -115,6 +116,7 @@ public class RoomController extends Controller {
       renderText("{}");
     }
   }
+  @Before(AjaxFunction.class)
   public void getCourseTeacher() {
     List<Courseplan> courseplan1 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=1",getPara("room"));
     List<Courseplan> courseplan2 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=2",getPara("room"));
@@ -193,6 +195,48 @@ public class RoomController extends Controller {
   }
   @Before({Tx.class,AjaxFunction.class})
   public void edit()  {
-
+    Room room = Room.dao.findById(getPara("id"));
+    if (room == null) {
+      renderText("要修改的班级不存在!");
+    } else {
+      if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+        renderText("班级名称格式应为：XXXX级XX班");
+      } else if (!Util.getString(room.getStr("name")).equals(getPara("name"))
+              &&  Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+        renderText("该班级已存在!");
+      } else {
+        room.set("name",getPara("name")).update();
+        Db.update("delete from courseplan where room_id = ?", getPara("id"));
+        String[] course1 = getParaValues("course1[]");
+        String[] course2 = getParaValues("course2[]");
+        String[] course3 = getParaValues("course3[]");
+        String[] course4 = getParaValues("course4[]");
+        if (course1!=null){
+          for (String i : course1){
+            Courseplan courseplan = new Courseplan();
+            courseplan.set("course_id",1).set("room_id",room.get("id")).set("teacher_id",i).save();
+          }
+        }
+        if (course2!=null){
+          for (String i : course2){
+            Courseplan courseplan = new Courseplan();
+            courseplan.set("course_id",2).set("room_id",room.get("id")).set("teacher_id",i).save();
+          }
+        }
+        if (course3!=null){
+          for (String i : course3){
+            Courseplan courseplan = new Courseplan();
+            courseplan.set("course_id",3).set("room_id",room.get("id")).set("teacher_id",i).save();
+          }
+        }
+        if (course4!=null){
+          for (String i : course4){
+            Courseplan courseplan = new Courseplan();
+            courseplan.set("course_id",4).set("room_id",room.get("id")).set("teacher_id",i).save();
+          }
+        }
+        renderText("OK");
+      }
+    }
   }
 }

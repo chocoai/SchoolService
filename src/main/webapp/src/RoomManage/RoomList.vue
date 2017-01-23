@@ -6,7 +6,10 @@
       <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="room in rooms" :value="room.id" :title="room.name" :describeText="room.state" @click="look(room.id)">
+      <mu-list-item v-for="room in rooms" :value="room.id" :title="room.name" @click="look(room.id)">
+        <mu-avatar v-if="room.state.toString() === '1'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">激</mu-avatar>
+        <mu-avatar v-if="room.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">销</mu-avatar>
+        <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -145,13 +148,13 @@
         this.pageCurrent--
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.roomQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       pageNext () {
         this.pageCurrent++
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.teacherQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.roomQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       goAdd () {
         this.$router.push({ path: '/roomAdd' })

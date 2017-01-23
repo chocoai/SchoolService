@@ -19,10 +19,12 @@ import textField from 'muse-components/textField'
 import selectField from 'muse-components/selectField'
 import avatar from 'muse-components/avatar'
 import iconMenu from 'muse-components/iconMenu'
+import checkbox from 'muse-components/checkbox'
 import dialog from 'muse-components/dialog'
 import chip from 'muse-components/chip'
 import popup from 'muse-components/popup'
 import drawer from 'muse-components/drawer'
+import circularProgress from 'muse-components/circularProgress'
 import { listItem, list } from 'muse-components/list'
 import { menuItem, menu } from 'muse-components/menu'
 import { flexboxItem, flexbox } from 'muse-components/flexbox'
@@ -41,6 +43,8 @@ Vue.component(dialog.name, dialog)
 Vue.component(chip.name, chip)
 Vue.component(popup.name, popup)
 Vue.component(drawer.name, drawer)
+Vue.component(checkbox.name, checkbox)
+Vue.component(circularProgress.name, circularProgress)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)
 Vue.component(flexboxItem.name, flexboxItem)
