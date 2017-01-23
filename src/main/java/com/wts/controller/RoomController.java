@@ -114,7 +114,42 @@ public class RoomController extends Controller {
     } else {
       renderText("{}");
     }
+  }
+  public void getCourseTeachers() {
+    List<Courseplan> courseplan1 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=1",getPara("room"));
+    List<Courseplan> courseplan2 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=2",getPara("room"));
+    List<Courseplan> courseplan3 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=3",getPara("room"));
+    List<Courseplan> courseplan4 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=4",getPara("room"));
+    String sp1 = "";
+    String sp2 = "";
+    String sp3 = "";
+    String sp4 = "";
 
+    if (courseplan1.size()!=0) {
+      for (int i = 0; i < courseplan1.size(); i++) {
+        sp1 = sp1 + "'" + courseplan1.get(i).get("teacher_id") + "',";
+      }
+      sp1 = "course1: [" + sp1.substring(0,sp1.length()-1) + "]";
+    }
+    if (courseplan2.size()!=0) {
+      for (int i = 0; i < courseplan2.size(); i++) {
+        sp2 = sp2 + "'" + courseplan2.get(i).get("teacher_id") + "',";
+      }
+      sp2 = "course2: [" + sp2.substring(0,sp2.length()-1) + "]";
+    }
+    if (courseplan3.size()!=0) {
+      for (int i = 0; i < courseplan3.size(); i++) {
+        sp3 = sp3 + "'" + courseplan3.get(i).get("teacher_id") + "',";
+      }
+      sp3 = "course3: [" + sp3.substring(0,sp3.length()-1) + "]";
+    }
+    if (courseplan4.size()!=0) {
+      for (int i = 0; i < courseplan4.size(); i++) {
+        sp4 = sp4 + "'" + courseplan4.get(i).get("teacher_id") + "',";
+      }
+      sp4 = "course4: [" + sp4.substring(0,sp4.length()-1) + "]";
+    }
+    renderText("{"+sp1+","+sp2+","+sp3+","+sp4+"}");
   }
   @Before({Tx.class,AjaxFunction.class})
   public void save()  {
