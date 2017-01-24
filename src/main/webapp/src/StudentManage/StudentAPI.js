@@ -1,0 +1,16 @@
+const h = ''
+// const h = '/ds'
+export const CheckNameForNew = `${h}/student/checkNameForNew`
+export const CheckNameForEdit = `${h}/student/checkNameForEdit`
+export const CheckNumberForNew = `${h}/student/checkNumberForNew`
+export const CheckNumberForEdit = `${h}/student/checkNumberForEdit`
+export const CheckCodeForNew = `${h}/student/checkCodeForNew`
+export const CheckCodeForEdit = `${h}/student/checkCodeForEdit`
+export const RoomList = `${h}/student/roomList`
+export const Save = `${h}/student/save`
+export const Edit = `${h}/student/edit`
+export const QueryByName = `${h}/student/queryByName`
+export const TotalByName = `${h}/student/totalByName`
+export const GetById = `${h}/student/getById`
+export const DeleteById = `${h}/student/deleteById`
+export const ResaveById = `${h}/student/resaveById`

@@ -1,37 +1,12 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
-import com.foxinmy.weixin4j.handler.DebugMessageHandler;
-import com.foxinmy.weixin4j.handler.MessageHandlerAdapter;
-import com.foxinmy.weixin4j.handler.WeixinMessageHandler;
-import com.foxinmy.weixin4j.message.TextMessage;
-import com.foxinmy.weixin4j.model.media.MediaDownloadResult;
-import com.foxinmy.weixin4j.model.paging.Pageable;
-import com.foxinmy.weixin4j.qy.message.ChatMessage;
-import com.foxinmy.weixin4j.qy.message.CustomeMessage;
-import com.foxinmy.weixin4j.qy.message.NotifyMessage;
-import com.foxinmy.weixin4j.qy.model.IdParameter;
 import com.foxinmy.weixin4j.qy.model.User;
-import com.foxinmy.weixin4j.request.WeixinRequest;
-import com.foxinmy.weixin4j.response.TextResponse;
-import com.foxinmy.weixin4j.response.WeixinResponse;
-import com.foxinmy.weixin4j.startup.WeixinServerBootstrap;
-import com.foxinmy.weixin4j.tuple.Text;
-import com.foxinmy.weixin4j.type.MediaType;
-import com.foxinmy.weixin4j.util.AesToken;
 import com.jfinal.aop.Before;
-import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
-import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.*;
 import com.wts.entity.model.Enterprise;
-import com.wts.entity.model.Teacher;
-import com.wts.interceptor.AjaxFunction;
 import com.wts.interceptor.LoginTeacher;
-
-import java.io.*;
-
-import static com.wts.util.EncryptUtils.encodeMD5String;
 
 public class MainController extends Controller {
   public void index() {

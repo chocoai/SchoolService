@@ -1,0 +1,10 @@
+const h = ''
+// const h = '/ds'
+export const CheckNameForNew = `${h}/parent/checkNameForNew`
+export const CheckNameForEdit = `${h}/parent/checkNameForEdit`
+export const Save = `${h}/parent/save`
+export const Edit = `${h}/parent/edit`
+export const QueryByName = `${h}/parent/queryByName`
+export const TotalByName = `${h}/parent/totalByName`
+export const GetById = `${h}/parent/getById`
+export const DeleteById = `${h}/parent/deleteById`

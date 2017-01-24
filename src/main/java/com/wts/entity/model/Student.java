@@ -1,5 +1,6 @@
 package com.wts.entity.model;
 
+import com.jfinal.plugin.activerecord.Page;
 import com.wts.entity.base.BaseStudent;
 
 /**
@@ -8,4 +9,8 @@ import com.wts.entity.base.BaseStudent;
 @SuppressWarnings("serial")
 public class Student extends BaseStudent<Student> {
 	public static final Student dao = new Student();
+	public Page<Student> studentQuery(int pageNumber, int pageSize, String queryString) {
+		return paginate(pageNumber, pageSize, "SELECT *",
+				"FROM student WHERE (name LIKE '%"+queryString+"%' or number LIKE '%"+queryString+"%' or code LIKE '%"+queryString+"%') ORDER BY name ASC");
+	}
 }

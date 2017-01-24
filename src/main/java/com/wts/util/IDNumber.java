@@ -35,6 +35,21 @@ public class IDNumber {
     }
     return "位数错误或字符错误";
   }
+  public static boolean checkIDNumberDetailB(String IDNumber) {
+    if (IDNumber.matches("\\d{17}[0-9,X]")) {
+      if (checkArea(IDNumber)) {
+        if (checkBirth(IDNumber)) {
+          if (checkOut(IDNumber)) {
+            return true;
+          }
+          return false;
+        }
+        return false;
+      }
+      return false;
+    }
+    return false;
+  }
   private static boolean checkArea(String IDNumber) {
     Map<String, String> areaCode = new HashMap<String, String>();
     areaCode.put("0000", "无");

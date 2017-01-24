@@ -191,7 +191,7 @@ public class TeacherController extends Controller {
   }
   @Before(AjaxFunction.class)
   public void totalByName() {
-    Long count = Db.queryLong("select count(*) from enterprise where isTeacher=1 and name like '%"+ getPara("queryString") +"%'");
+    Long count = Db.queryLong("select count(*) from enterprise where isTeacher=1 and (name like '%"+ getPara("queryString") +"%' or mobile LIKE '%"+getPara("queryString")+"%' or userId LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {
@@ -205,10 +205,14 @@ public class TeacherController extends Controller {
   }
   @Before(AjaxFunction.class)
   public void deleteById() {
-    if (Enterprise.dao.findById(getPara("id")) == null) {
+    Enterprise teacher = Enterprise.dao.findById(getPara("id"));
+    if (teacher == null) {
       renderText("要取消关注的教师不存在!");
+    } else if (teacher.get("state").toString().equals("4")) {
+      renderText("该教师已处于取消关注状态!");
+    }  else if (teacher.get("state").toString().equals("3")) {
+      renderText("该教师已处于冻结状态!");
     } else {
-      Enterprise teacher = Enterprise.dao.findById(getPara("id"));
       try {
         WP.me.deleteUser(teacher.getUserId());
         teacher.set("state",4).update();
@@ -220,10 +224,12 @@ public class TeacherController extends Controller {
   }
   @Before(AjaxFunction.class)
   public void resaveById() {
-    if (Enterprise.dao.findById(getPara("id")) == null) {
+    Enterprise teacher = Enterprise.dao.findById(getPara("id"));
+    if (teacher == null) {
       renderText("要重新邀请关注的教师不存在!");
+    } else if (teacher.get("state").toString().equals("2")) {
+      renderText("该教师已处于关注状态!");
     } else {
-      Enterprise teacher = Enterprise.dao.findById(getPara("id"));
       User user = new User(teacher.get("userId").toString(),teacher.get("name").toString());
       user.setMobile(teacher.get("mobile").toString());
       user.setPartyIds(1);

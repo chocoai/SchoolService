@@ -11,3 +11,4 @@ export const QueryByName = `${h}/room/queryByName`
 export const TotalByName = `${h}/room/totalByName`
 export const GetById = `${h}/room/getById`
 export const DeleteById = `${h}/room/deleteById`
+export const ResaveById = `${h}/room/resaveById`

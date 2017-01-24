@@ -85,11 +85,25 @@ public class RoomController extends Controller {
   }
   @Before(AjaxFunction.class)
   public void deleteById() {
-    if (Room.dao.findById(getPara("id")) == null) {
+    Room room = Room.dao.findById(getPara("id"));
+    if (room == null) {
       renderText("未找到指定id的班级");
+    } else if (room.get("state").toString().equals("2")) {
+      renderText("该班级已注销!");
     } else {
-      Room room = Room.dao.findById(getPara("id"));
       room.set("state",2).update();
+      renderText("OK");
+    }
+  }
+  @Before({Tx.class,AjaxFunction.class})
+  public void resaveById() {
+    Room room = Room.dao.findById(getPara("id"));
+    if (room == null) {
+      renderText("要重新激活的班级不存在!");
+    } else if (room.get("state").toString().equals("1")) {
+      renderText("该班级已激活!");
+    } else {
+      room.set("state",1).update();
       renderText("OK");
     }
   }
@@ -343,7 +357,9 @@ public class RoomController extends Controller {
     if (room == null) {
       renderText("要修改的班级不存在!");
     } else {
-      if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+      if (Util.getString(room.getStr("name")).equals(getPara("name").trim())) {
+        renderText("未找到修改内容!");
+      } else if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
         renderText("班级名称格式应为：XXXX级XX班");
       } else if (!Util.getString(room.getStr("name")).equals(getPara("name"))
               &&  Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {

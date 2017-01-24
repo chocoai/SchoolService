@@ -11,6 +11,6 @@ public class Enterprise extends BaseEnterprise<Enterprise> {
 	public static final Enterprise dao = new Enterprise();
 	public Page<Enterprise> teacherQuery(int pageNumber, int pageSize, String queryString) {
 		return paginate(pageNumber, pageSize, "SELECT *",
-						"FROM enterprise WHERE (name LIKE '%"+queryString+"%' or mobile LIKE '%"+queryString+"%' or userId LIKE '%"+queryString+"%') ORDER BY id DESC");
+						"FROM enterprise WHERE isTeacher=1 and (name LIKE '%"+queryString+"%' or mobile LIKE '%"+queryString+"%' or userId LIKE '%"+queryString+"%') ORDER BY name DESC");
 	}
 }
