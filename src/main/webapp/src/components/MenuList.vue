@@ -12,7 +12,10 @@
           <mu-icon slot="left" value="inbox"/>
         </mu-list-item>
         <mu-list-item title="班级管理" @click.native="goRoomManage">
-          <mu-icon slot="left" value="inbox"/>
+          <mu-icon slot="left" value="store"/>
+        </mu-list-item>
+        <mu-list-item title="社团管理" @click.native="goTeamManage">
+          <mu-icon slot="left" value="flag"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -44,6 +47,9 @@
       },
       goRoomManage () {
         window.location.href = '/room'
+      },
+      goTeamManage () {
+        window.location.href = '/team'
       }
     }
   }

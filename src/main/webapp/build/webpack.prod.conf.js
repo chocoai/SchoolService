@@ -112,6 +112,19 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       chunksSortMode: 'dependency'
     }),
+    new HtmlWebpackPlugin({
+      title: '社团管理',
+      filename: '../dist/static/TeamManage.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'teamManage'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

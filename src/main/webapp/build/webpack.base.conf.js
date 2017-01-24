@@ -15,7 +15,8 @@ module.exports = {
     login: './src/Login/Index.js',
     sys: './src/Sys/Index.js',
     teacherManage: './src/TeacherManage/Index.js',
-    roomManage: './src/RoomManage/Index.js'
+    roomManage: './src/RoomManage/Index.js',
+    teamManage: './src/TeamManage/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

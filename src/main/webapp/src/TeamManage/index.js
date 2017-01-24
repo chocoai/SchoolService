@@ -3,9 +3,9 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import Vuex from 'vuex'
 
-import RoomList from './RoomList.vue'
-import RoomAdd from './RoomAdd.vue'
-import RoomEdit from './RoomEdit.vue'
+import TeamList from './TeamList.vue'
+import TeamAdd from './TeamAdd.vue'
+import TeamEdit from './TeamEdit.vue'
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'muse-components/styles/base.less' // 加载基础的样式
@@ -16,7 +16,6 @@ import iconButton from 'muse-components/iconButton'
 import floatButton from 'muse-components/floatButton'
 import raisedButton from 'muse-components/raisedButton'
 import textField from 'muse-components/textField'
-// import selectField from 'muse-components/selectField'
 import avatar from 'muse-components/avatar'
 import iconMenu from 'muse-components/iconMenu'
 import checkbox from 'muse-components/checkbox'
@@ -37,7 +36,6 @@ Vue.component(floatButton.name, floatButton)
 Vue.component(iconButton.name, iconButton)
 Vue.component(raisedButton.name, raisedButton)
 Vue.component(textField.name, textField)
-// Vue.component(selectField.name, selectField)
 Vue.component(avatar.name, avatar)
 Vue.component(iconMenu.name, iconMenu)
 Vue.component(dialog.name, dialog)
@@ -59,10 +57,10 @@ Vue.use(VueResource)
 Vue.use(Vuex)
 
 const routes = [
-  { path: '/roomList', component: RoomList },
-  { path: '/roomAdd', component: RoomAdd },
-  { path: '/roomEdit/:roomId', component: RoomEdit },
-  { path: '/', redirect: '/roomList' }
+  { path: '/teamList', component: TeamList },
+  { path: '/teamAdd', component: TeamAdd },
+  { path: '/teamEdit/:teamId', component: TeamEdit },
+  { path: '/', redirect: '/teamList' }
 ]
 
 const router = new VueRouter({
