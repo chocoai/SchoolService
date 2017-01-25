@@ -11,6 +11,7 @@ import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
 import com.wts.entity.model.Room;
 import com.wts.entity.model.Student;
+import com.wts.entity.model.Team;
 import com.wts.interceptor.AjaxFunction;
 import com.wts.util.Util;
 
@@ -50,9 +51,24 @@ public class StudentController extends Controller {
         renderJson(rooms);
     }
     @Before(AjaxFunction.class)
+    public void teamList() {
+        List<Team> teams = Team.dao.find("select * from team where state=1 order by name");
+        renderJson(teams);
+    }
+    @Before(AjaxFunction.class)
     public void getById() {
         Student student = Student.dao.findById(getPara("id"));
         renderJson(student);
+    }
+    @Before(AjaxFunction.class)
+    public void getRoomName() {
+        Room room = Room.dao.findById(getPara("id"));
+        renderText(room.get("name").toString());
+    }
+    @Before(AjaxFunction.class)
+    public void getTeamName() {
+        Team team = Team.dao.findById(getPara("id"));
+        renderText(team.get("name").toString());
     }
     @Before(AjaxFunction.class)
     public void deleteById() {
@@ -169,6 +185,9 @@ public class StudentController extends Controller {
             if (!Util.getString(getPara("room_id")).equals("")) {
                 student.set("room_id",getPara("room_id"));
             }
+            if (!Util.getString(getPara("team_id")).equals("")) {
+                student.set("team_id",getPara("team_id"));
+            }
             student.set("name",getPara("name"))
                     .set("number",getPara("number"))
                     .set("code",getPara("code"))
@@ -190,6 +209,7 @@ public class StudentController extends Controller {
                     && Util.getString(student.getStr("number")).equals(getPara("number").trim())
                     && Util.getString(student.get("code").toString()).equals(getPara("code").trim())
                     && Util.getString(student.get("room_id").toString()).equals(getPara("room_id").trim())
+                    && Util.getString(student.get("team_id").toString()).equals(getPara("team_id").trim())
                     ) {
                 renderText("未找到修改内容!");
             } else if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
@@ -202,6 +222,9 @@ public class StudentController extends Controller {
             } else {
                 if (!Util.getString(getPara("room_id")).equals("")) {
                     student.set("room_id", getPara("room_id"));
+                }
+                if (!Util.getString(getPara("team_id")).equals("")) {
+                    student.set("team_id",getPara("team_id"));
                 }
                 student.set("name", getPara("name"))
                         .set("number", getPara("number"))

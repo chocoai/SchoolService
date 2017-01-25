@@ -1,10 +1,14 @@
 const h = ''
 // const h = '/ds'
-export const CheckNameForNew = `${h}/parent/checkNameForNew`
-export const CheckNameForEdit = `${h}/parent/checkNameForEdit`
+export const CheckNameForNew = `${h}/teacher/checkNameForNew`
+export const CheckMobileForNew = `${h}/teacher/checkMobileForNew`
+export const CheckUserIdForNew = `${h}/teacher/checkUserIdForNew`
+export const CheckNameForEdit = `${h}/teacher/checkNameForEdit`
+export const CheckMobileForEdit = `${h}/teacher/checkMobileForEdit`
+export const GetUserId = `${h}/teacher/getUserId`
 export const Save = `${h}/parent/save`
 export const Edit = `${h}/parent/edit`
-export const QueryByName = `${h}/parent/queryByName`
+export const Query = `${h}/parent/queryParent`
 export const TotalByName = `${h}/parent/totalByName`
 export const GetById = `${h}/parent/getById`
 export const DeleteById = `${h}/parent/deleteById`

@@ -73,7 +73,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course1" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course1" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -87,7 +87,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course2" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course2" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -101,7 +101,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course3" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course3" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -115,7 +115,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course4" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course4" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -129,7 +129,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course5" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course5" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -143,7 +143,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course6" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course6" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -157,7 +157,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course7" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course7" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -171,7 +171,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course8" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course8" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -185,7 +185,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course9" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course9" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -199,7 +199,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course10" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course10" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -213,7 +213,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course11" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course11" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -227,7 +227,7 @@
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
           <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
-          <mu-checkbox v-model="course12" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+          <mu-checkbox v-model="course12" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -257,6 +257,10 @@ export default {
       deletes: false,
       resave: false,
       forSave: false,
+      forDelete: false,
+      forResave: false,
+      resaveTitle: '',
+      deleteTitle: '',
       icon: '',
       color: '',
       name: '',
@@ -339,7 +343,7 @@ export default {
     ).then((response) => {
       this.teachers = response.body
     }, (response) => {
-      this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+      this.openPopup('服务器内部错误！', 'error', 'red')
     })
     this.fetchData(this.$route.params.roomId)
     this.getCourse(this.$route.params.roomId)
@@ -567,7 +571,7 @@ export default {
         ).then((response) => {
           this.forSave = false
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.edit = true
@@ -591,15 +595,15 @@ export default {
               this.deletes = false
               this.resave = true
             }
-            this.openPopup(response.body, 'report_problem', 'red')
+            this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
           } else {
-            this.openPopup(response.body, 'report_problem', 'red')
+            this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
           }
         }, (response) => {
           this.forSave = false
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     goResave () {
@@ -619,7 +623,7 @@ export default {
         ).then((response) => {
           this.forSave = false
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.edit = true
@@ -643,15 +647,15 @@ export default {
               this.deletes = false
               this.resave = true
             }
-            this.openPopup(response.body, 'report_problem', 'red')
+            this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
           } else {
-            this.openPopup(response.body, 'report_problem', 'red')
+            this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
           }
         }, (response) => {
           this.forSave = false
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     goSave () {
@@ -683,7 +687,7 @@ export default {
         }).then((response) => {
           this.forSave = false
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.openPopup('修改成功！', 'check_circle', 'green')
@@ -693,7 +697,7 @@ export default {
           }
         }, (response) => {
           this.forSave = false
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     fetchData (roomId) {
@@ -722,6 +726,8 @@ export default {
           this.deletes = false
           this.resave = true
         }
+        this.deleteTitle = '确认要注销' + this.name + '吗?'
+        this.resaveTitle = '确认要激活' + this.name + '吗?'
       }, (response) => {
       })
     },
@@ -772,7 +778,7 @@ export default {
           }
         }).then((response) => {
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.nameErrorText = ''
@@ -782,7 +788,7 @@ export default {
             this.nameErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     }
   }

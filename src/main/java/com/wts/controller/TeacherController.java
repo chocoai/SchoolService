@@ -185,7 +185,8 @@ public class TeacherController extends Controller {
       }
     }
   }
-  public void query() {
+  @Before(AjaxFunction.class)
+  public void queryTeacher() {
     Page<Enterprise> teachers= Enterprise.dao.teacherQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
     renderJson(teachers.getList());
   }

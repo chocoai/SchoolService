@@ -9,19 +9,19 @@
           <mu-icon slot="left" value="school"/>
         </mu-list-item>
         <mu-list-item title="教师管理" @click.native="goTeacherManage">
-          <mu-icon slot="left" value="inbox"/>
+          <mu-icon slot="left" value="group"/>
         </mu-list-item>
         <mu-list-item title="班级管理" @click.native="goRoomManage">
           <mu-icon slot="left" value="store"/>
         </mu-list-item>
         <mu-list-item title="社团管理" @click.native="goTeamManage">
-          <mu-icon slot="left" value="flag"/>
+          <mu-icon slot="left" value="account_balance"/>
         </mu-list-item>
         <mu-list-item title="学生管理" @click.native="goStudentManage">
-          <mu-icon slot="left" value="flag"/>
+          <mu-icon slot="left" value="face"/>
         </mu-list-item>
         <mu-list-item title="家长管理" @click.native="goParentManage">
-          <mu-icon slot="left" value="flag"/>
+          <mu-icon slot="left" value="accessibility"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>

@@ -100,7 +100,7 @@ export default {
           }
         }).then((response) => {
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.nameErrorText = ''
@@ -110,7 +110,7 @@ export default {
             this.nameErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
       this.$http.get(
         API.GetUserId,
@@ -130,7 +130,7 @@ export default {
             this.userId = response.body
           }
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     checkUserId (value) {
@@ -147,7 +147,7 @@ export default {
           }
         }).then((response) => {
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.userIdErrorText = ''
@@ -157,7 +157,7 @@ export default {
             this.userIdErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     checkMobile (value) {
@@ -174,7 +174,7 @@ export default {
           }
         }).then((response) => {
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.mobileErrorText = '此处应填写微信绑定的手机号码.'
@@ -184,7 +184,7 @@ export default {
             this.mobileErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     save () {
@@ -207,7 +207,7 @@ export default {
           this.saved = true
           this.forSave = false
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.openPopup('保存成功！', 'check_circle', 'green')
@@ -219,7 +219,7 @@ export default {
           this.forSave = false
         }, (response) => {
           this.forSave = false
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     }
   }

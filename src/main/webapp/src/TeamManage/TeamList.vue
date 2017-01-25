@@ -100,7 +100,7 @@
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
       },
       teamTotal (queryString, pageSize) {
@@ -123,7 +123,7 @@
           this.pageTotal === '0' ? this.chip = false : this.chip = true
           this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
       },
       query (value) {

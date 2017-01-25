@@ -3,12 +3,14 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='add' slot="right" @click="goAdd"/>
+      <mu-icon-button icon='person_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="student in students" :value="student.id" :title="student.name" @click="look(student.id)">
-        <mu-avatar v-if="student.state.toString() === '1'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">激</mu-avatar>
-        <mu-avatar v-if="student.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">销</mu-avatar>
+        <mu-avatar v-if="student.state.toString() === '1' & student.sex.toString() === '1'" icon="account_box" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500"/>
+        <mu-avatar v-if="student.state.toString() === '1' & student.sex.toString() === '2'" icon="account_circle" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500"/>
+        <mu-avatar v-if="student.state.toString() === '2' & student.sex.toString() === '1'" icon="account_box" slot="leftAvatar" :size="40"/>
+        <mu-avatar v-if="student.state.toString() === '2' & student.sex.toString() === '2'" icon="account_circle" slot="leftAvatar" :size="40"/>
         <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
@@ -100,7 +102,7 @@
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
       },
       studentTotal (queryString, pageSize) {
@@ -123,7 +125,7 @@
           this.pageTotal === '0' ? this.chip = false : this.chip = true
           this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
       },
       query (value) {

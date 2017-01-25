@@ -59,6 +59,10 @@ export default {
       deletes: false,
       resave: false,
       forSave: false,
+      forDelete: false,
+      forResave: false,
+      resaveTitle: '',
+      deleteTitle: '',
       icon: '',
       color: '',
       name: '',
@@ -87,7 +91,7 @@ export default {
     ).then((response) => {
       this.teachers = response.body
     }, (response) => {
-      this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+      this.openPopup('服务器内部错误！', 'error', 'red')
     })
     this.fetchData(this.$route.params.teamId)
     this.getTeamTeacher(this.$route.params.teamId)
@@ -156,7 +160,7 @@ export default {
       this.$http.get(
         API.DeleteById,
         { params: {
-          id: this.$route.params.roomId
+          id: this.$route.params.teamId
         }
         },
         {
@@ -168,7 +172,7 @@ export default {
         ).then((response) => {
           this.forSave = false
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.edit = true
@@ -192,15 +196,15 @@ export default {
               this.deletes = false
               this.resave = true
             }
-            this.openPopup(response.body, 'report_problem', 'red')
+            this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
           } else {
-            this.openPopup(response.body, 'report_problem', 'red')
+            this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
           }
         }, (response) => {
           this.forSave = false
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     goResave () {
@@ -220,7 +224,7 @@ export default {
         ).then((response) => {
           this.forSave = false
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.edit = true
@@ -244,15 +248,15 @@ export default {
               this.deletes = false
               this.resave = true
             }
-            this.openPopup(response.body, 'report_problem', 'red')
+            this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
           } else {
-            this.openPopup(response.body, 'report_problem', 'red')
+            this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
           }
         }, (response) => {
           this.forSave = false
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     goSave () {
@@ -273,7 +277,7 @@ export default {
         }).then((response) => {
           this.forSave = false
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.openPopup('修改成功！', 'check_circle', 'green')
@@ -283,7 +287,7 @@ export default {
           }
         }, (response) => {
           this.forSave = false
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
     fetchData (teamId) {
@@ -312,6 +316,8 @@ export default {
           this.deletes = false
           this.resave = true
         }
+        this.deleteTitle = '确认要注销' + this.name + '吗?'
+        this.resaveTitle = '确认要激活' + this.name + '吗?'
       }, (response) => {
       })
     },
@@ -351,7 +357,7 @@ export default {
           }
         }).then((response) => {
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.nameErrorText = ''
@@ -361,7 +367,7 @@ export default {
             this.nameErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
     }
   }

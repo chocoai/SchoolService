@@ -3,11 +3,11 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="reply"/>
     </mu-appbar>
-    <mu-text-field label="姓名" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="账号" underlineShow="false" v-model="userId" :errorColor="userIdErrorColor" :errorText="userIdErrorText" @input="checkUserId" fullWidth labelFloat icon="assignment"/><br/>
-    <mu-text-field label="手机" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-    <mu-text-field label="住址" underlineShow="false" v-model="address" fullWidth labelFloat icon="phone"/><br/>
-    <mu-text-field label="工作" underlineShow="false" v-model="work" fullWidth labelFloat icon="phone"/><br/>
+    <mu-text-field label="姓名" :disabled="saved" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="账号" :disabled="saved" underlineShow="false" v-model="userId" :errorColor="userIdErrorColor" :errorText="userIdErrorText" @input="checkUserId" fullWidth labelFloat icon="assignment"/><br/>
+    <mu-text-field label="手机" :disabled="saved" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-text-field label="住址" :disabled="saved" underlineShow="false" v-model="address" fullWidth labelFloat icon="phone"/><br/>
+    <mu-text-field label="工作" :disabled="saved" underlineShow="false" v-model="work" fullWidth labelFloat icon="phone"/><br/>
     <mu-dialog :open="forSave" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
@@ -32,6 +32,7 @@ export default {
   data () {
     return {
       bottomPopup: false,
+      saved: false,
       forSave: false,
       icon: '',
       color: '',
@@ -68,6 +69,7 @@ export default {
       this.address = ''
       this.work = ''
       this.remark = ''
+      this.saved = false
       this.nameErrorText = ''
       this.userIdErrorText = ''
       this.mobileErrorText = ''
@@ -184,8 +186,7 @@ export default {
           name: this.name,
           userId: this.userId,
           mobile: this.mobile,
-          address: this.address,
-          work: this.work
+          isManager: this.isManager
         }
         },
         {
@@ -194,6 +195,7 @@ export default {
             'X-Requested-With': 'XMLHttpRequest'
           }
         }).then((response) => {
+          this.saved = true
           this.forSave = false
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
@@ -204,6 +206,7 @@ export default {
           } else {
             this.openPopup(response.body, 'report_problem', 'orange')
           }
+          this.saved = false
           this.forSave = false
         }, (response) => {
           this.forSave = false

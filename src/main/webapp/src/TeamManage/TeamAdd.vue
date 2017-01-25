@@ -72,7 +72,7 @@ export default {
     ).then((response) => {
       this.teachers = response.body
     }, (response) => {
-      this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+      this.openPopup('服务器内部错误！', 'error', 'red')
     })
   },
   computed: {
@@ -131,7 +131,7 @@ export default {
           }
         }).then((response) => {
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.nameErrorText = ''
@@ -141,7 +141,7 @@ export default {
             this.nameErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
     },
     save () {
@@ -161,7 +161,7 @@ export default {
         }).then((response) => {
           this.forSave = false
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.openPopup('保存成功！', 'check_circle', 'green')
@@ -171,7 +171,7 @@ export default {
           }
         }, (response) => {
           this.forSave = false
-          this.openPopup('服务器内部错误！', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
     }
   }
