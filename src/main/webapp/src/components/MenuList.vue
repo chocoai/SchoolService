@@ -6,22 +6,22 @@
       </mu-appbar>
       <mu-list>
         <mu-list-item title="主页" @click.native="goHome">
-          <mu-icon slot="left" value="school"/>
+          <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
         <mu-list-item title="教师管理" @click.native="goTeacherManage">
-          <mu-icon slot="left" value="group"/>
+          <mu-icon slot="left" value="group" color="#f44336"/>
         </mu-list-item>
         <mu-list-item title="班级管理" @click.native="goRoomManage">
-          <mu-icon slot="left" value="store"/>
+          <mu-icon slot="left" value="store" color="#9c27b0"/>
         </mu-list-item>
         <mu-list-item title="社团管理" @click.native="goTeamManage">
-          <mu-icon slot="left" value="account_balance"/>
+          <mu-icon slot="left" value="account_balance" color="#673ab7"/>
         </mu-list-item>
         <mu-list-item title="学生管理" @click.native="goStudentManage">
-          <mu-icon slot="left" value="face"/>
+          <mu-icon slot="left" value="face" color="#4caf50"/>
         </mu-list-item>
         <mu-list-item title="家长管理" @click.native="goParentManage">
-          <mu-icon slot="left" value="accessibility"/>
+          <mu-icon slot="left" value="accessibility" color="#ffc107"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>

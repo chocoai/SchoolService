@@ -24,6 +24,9 @@
         <mu-icon-button icon='done' slot="right"/>
       </mu-appbar>
       <mu-list>
+        <mu-list-item title="清空" @click.native="teamTeacher=''">
+          <mu-icon slot="left" value="delete_forever" :size="40"/>
+        </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
           <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
@@ -125,7 +128,7 @@ export default {
   },
   methods: {
     reply () {
-      this.$router.push({ path: '/roomList' })
+      this.$router.push({ path: '/teamList' })
     },
     openDelete () {
       this.forDelete = true
@@ -185,7 +188,7 @@ export default {
               this.resave = true
             }
             this.openPopup('删除成功!', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
+            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
           } else if (response.body === '要删除的班级不存在!') {
             this.edit = true
             this.save = false
@@ -197,10 +200,10 @@ export default {
               this.resave = true
             }
             this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
+            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
           } else {
             this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/roomList' }) }, 1000)
+            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
           }
         }, (response) => {
           this.forSave = false

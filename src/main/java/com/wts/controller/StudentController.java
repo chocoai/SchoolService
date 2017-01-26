@@ -18,6 +18,7 @@ import com.wts.util.Util;
 import java.util.List;
 
 import static com.wts.util.IDNumber.*;
+import static com.wts.util.Util.getString;
 
 public class StudentController extends Controller {
 
@@ -65,10 +66,16 @@ public class StudentController extends Controller {
         Room room = Room.dao.findById(getPara("id"));
         renderText(room.get("name").toString());
     }
+
     @Before(AjaxFunction.class)
     public void getTeamName() {
         Team team = Team.dao.findById(getPara("id"));
         renderText(team.get("name").toString());
+    }
+    @Before(AjaxFunction.class)
+    public void getStudentName() {
+        Student student = Student.dao.findById(getPara("id"));
+        renderText(student.get("name").toString());
     }
     @Before(AjaxFunction.class)
     public void deleteById() {
@@ -113,7 +120,7 @@ public class StudentController extends Controller {
      * */
     @Before(AjaxFunction.class)
     public void checkNameForNew() {
-        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
             renderText("请输入两个以上的汉字!");
         } else {
             renderText("OK");
@@ -124,7 +131,7 @@ public class StudentController extends Controller {
      * */
     @Before(AjaxFunction.class)
     public void checkNameForEdit() {
-        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
             renderText("请输入两个以上汉字!");
         } else {
             renderText("OK");
@@ -174,7 +181,7 @@ public class StudentController extends Controller {
 
     @Before({Tx.class,AjaxFunction.class})
     public void save()  {
-        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
             renderText("请输入两个以上汉字!");
         } else if (!checkIDNumberDetailB(getPara("number"))){
             renderText(checkIDNumberDetail(getPara("number")));
@@ -182,15 +189,16 @@ public class StudentController extends Controller {
             renderText("该证件号码已存在!");
         } else {
             Student student = new Student();
-            if (!Util.getString(getPara("room_id")).equals("")) {
+            if (!getString(getPara("room_id")).equals("")) {
                 student.set("room_id",getPara("room_id"));
             }
-            if (!Util.getString(getPara("team_id")).equals("")) {
+            if (!getString(getPara("team_id")).equals("")) {
                 student.set("team_id",getPara("team_id"));
             }
             student.set("name",getPara("name"))
                     .set("number",getPara("number"))
                     .set("code",getPara("code"))
+                    .set("address", getPara("address"))
                     .set("sex",getSex(getPara("number")))
                     .set("birth",getBirthDate(getPara("number")))
                     .set("state",1)
@@ -202,33 +210,47 @@ public class StudentController extends Controller {
     @Before({Tx.class, AjaxFunction.class})
     public void edit() {
         Student student = Student.dao.findById(getPara("id"));
+        String room,team;
         if (student == null) {
             renderText("要修改的学生不存在!");
         } else {
-            if (Util.getString(student.getStr("name")).equals(getPara("name").trim())
-                    && Util.getString(student.getStr("number")).equals(getPara("number").trim())
-                    && Util.getString(student.get("code").toString()).equals(getPara("code").trim())
-                    && Util.getString(student.get("room_id").toString()).equals(getPara("room_id").trim())
-                    && Util.getString(student.get("team_id").toString()).equals(getPara("team_id").trim())
+            if (student.get("room_id")==null){
+                room="";
+            }else{
+                room=student.get("room_id").toString();
+            }
+            if (student.get("team_id")==null){
+                team="";
+            }else{
+                team=student.get("team_id").toString();
+            }
+            if (getString(student.getStr("name")).equals(getPara("name").trim())
+                    && getString(student.getStr("number")).equals(getPara("number").trim())
+                    && getString(student.getStr("code")).equals(getPara("code").trim())
+                    && (getString(student.getStr("address")).equals(getPara("address").trim())
+                    || ((student.getStr("address"))==null && getPara("address")==null))
+                    && room.equals(getString(getPara("room_id")).trim())
+                    && team.equals(getString(getPara("team_id")).trim())
                     ) {
                 renderText("未找到修改内容!");
-            } else if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+            } else if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
                 renderText("请输入两个以上汉字!");
             } else if (!checkIDNumberDetailB(getPara("number"))) {
                 renderText(checkIDNumberDetail(getPara("number")));
-            } else if (!Student.dao.findById(getPara("id")).get("number").equals(getPara("number"))
+            } else if (!student.getStr("number").equals(getPara("number"))
                     && Student.dao.find("select * from student where number=?", getPara("number")).size() != 0) {
                 renderText("该证件号码已存在!");
             } else {
-                if (!Util.getString(getPara("room_id")).equals("")) {
+                if (!getString(getPara("room_id")).equals("")) {
                     student.set("room_id", getPara("room_id"));
                 }
-                if (!Util.getString(getPara("team_id")).equals("")) {
+                if (!getString(getPara("team_id")).equals("")) {
                     student.set("team_id",getPara("team_id"));
                 }
                 student.set("name", getPara("name"))
                         .set("number", getPara("number"))
                         .set("code", getPara("code"))
+                        .set("address", getPara("address"))
                         .set("sex", getSex(getPara("number")))
                         .set("birth", getBirthDate(getPara("number")))
                         .set("state", 1)

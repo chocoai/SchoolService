@@ -3,14 +3,14 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='add' slot="right" @click="goAdd"/>
+      <mu-icon-button icon='person_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="teacher in teachers" :value="teacher.id" :title="teacher.name" :describeText="teacher.userId" @click="look(teacher.id)">
         <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-        <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
-        <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
-        <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
+        <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+        <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
+        <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
         <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>

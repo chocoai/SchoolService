@@ -6,6 +6,7 @@
     <mu-text-field :disabled="edit" v-model="name" label="姓名" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
     <mu-text-field :disabled="edit" v-model="number" label="证件号码" icon="comment" :errorColor="numberErrorColor" :errorText="numberErrorText" @input="checkNumber" fullWidth labelFloat maxLength="18"/><br/>
     <mu-text-field :disabled="edit" v-model="code" label="学籍号码" icon="comment" :errorColor="codeErrorColor" :errorText="codeErrorText" @input="checkCode" fullWidth labelFloat maxLength="15"/><br/>
+    <mu-text-field :disabled="edit" v-model="address" label="住址" icon="store_mall_directory" fullWidth labelFloat/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-flat-button :disabled="edit" :label="roomName" @click="openRoom=true" :icon="roomIcon" :backgroundColor="roomBack" color="#FFFFFF"/>
@@ -31,11 +32,11 @@
       </mu-appbar>
       <mu-list>
         <mu-list-item title="清空" @click.native="room_id=''">
-          <mu-icon slot="left" value="send"/>
+          <mu-icon slot="left" value="delete_forever" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="room in rooms" :title="room.name">
-          <mu-avatar v-if="room.state.toString() === '1'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">激</mu-avatar>
-          <mu-avatar v-if="room.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">注</mu-avatar>
+          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
+          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#e1bee7"/>
           <mu-radio v-model="room_id" label="" labelLeft :nativeValue="room.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" iconClass="color: #215E21"/>
         </mu-list-item>
       </mu-list>
@@ -46,11 +47,11 @@
       </mu-appbar>
       <mu-list>
         <mu-list-item title="清空" @click.native="team_id=''">
-          <mu-icon slot="left" value="send"/>
+          <mu-icon slot="left" value="delete_forever" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="team in teams" :title="team.name">
-          <mu-avatar v-if="team.state.toString() === '1'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
-          <mu-avatar v-if="team.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
+          <mu-icon v-if="team.state.toString() === '1'" slot="left" :size="40" value="store" color="#673ab7"/>
+          <mu-icon v-if="team.state.toString() === '2'" slot="left" :size="40" value="store" color="#d1c4e9"/>
           <mu-radio v-model="team_id" label="" labelLeft :nativeValue="team.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
         </mu-list-item>
       </mu-list>
@@ -93,6 +94,7 @@ export default {
       name: '',
       number: '',
       code: '',
+      address: '',
       room_id: '',
       team_id: '',
       room: '',
@@ -372,7 +374,9 @@ export default {
           name: this.name,
           number: this.number,
           code: this.code,
-          room_id: this.room_id
+          address: this.address,
+          room_id: this.room_id,
+          team_id: this.team_id
         }
         },
         {
@@ -416,8 +420,7 @@ export default {
         this.name = this.student.name
         this.number = this.student.number
         this.code = this.student.code
-        this.room_id = this.student.room_id
-        this.team_id = this.student.team_id
+        this.address = this.student.address
         this.state = this.student.state
         if (this.student.state.toString() === '1') {
           this.deletes = true
@@ -428,7 +431,8 @@ export default {
         }
         this.deleteTitle = '确认要注销' + this.name + '吗?'
         this.resaveTitle = '确认要激活' + this.name + '吗?'
-        if (this.room_id.toString() !== '') {
+        if (this.student.room_id !== null) {
+          this.room_id = this.student.room_id
           this.$http.get(
             API.GetRoomName,
             { params: {
@@ -448,7 +452,8 @@ export default {
         } else {
           this.roomName = '所属班级'
         }
-        if (this.team_id.toString() !== '') {
+        if (this.student.team_id !== null) {
+          this.team_id = this.student.team_id
           this.$http.get(
             API.GetTeamName,
             { params: {

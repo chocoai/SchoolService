@@ -18,14 +18,14 @@ public class EnterpriseController extends Controller {
     try {
       String UserId = new PinyinTool().toPinYin(getPara("name"), "", PinyinTool.Type.FIRSTUPPER);
       String UserIds;
-      if (Enterprise.dao.findFirst("select userId form enterprise where userId=?",UserId)==null){
+      if (Enterprise.dao.findFirst("select userId from enterprise where userId=?", UserId) == null) {
         renderText(UserId);
       } else {
         int i = 1;
-        do{
+        do {
           UserIds = UserId + i;
           i++;
-        }while (Enterprise.dao.findFirst("select userId form enterprise where userId=?",UserId)==null);
+        } while (Enterprise.dao.findFirst("select userId from enterprise where userId=?", UserIds) != null);
         renderText(UserIds);
       }
     } catch (Exception e) {

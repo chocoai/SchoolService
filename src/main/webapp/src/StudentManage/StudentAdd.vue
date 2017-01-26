@@ -6,6 +6,7 @@
     <mu-text-field v-model="name" label="姓名" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
     <mu-text-field v-model="number" label="证件号码" icon="comment" :errorColor="numberErrorColor" :errorText="numberErrorText" @input="checkNumber" fullWidth labelFloat maxLength="18"/><br/>
     <mu-text-field v-model="code" label="学籍号码" icon="comment" :errorColor="codeErrorColor" :errorText="codeErrorText" @input="checkCode" fullWidth labelFloat maxLength="15"/><br/>
+    <mu-text-field v-model="address" label="住址" icon="store_mall_directory" fullWidth labelFloat/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-flat-button :label="roomName" @click="openRoom=true" :icon="roomIcon" :backgroundColor="roomBack" color="#FFFFFF"/>
@@ -26,11 +27,11 @@
       </mu-appbar>
       <mu-list>
         <mu-list-item title="清空" @click.native="room_id=''">
-          <mu-icon slot="left" value="send"/>
+          <mu-icon slot="left" value="delete_forever" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="room in rooms" :title="room.name">
-          <mu-avatar v-if="room.state.toString() === '1'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">激</mu-avatar>
-          <mu-avatar v-if="room.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">注</mu-avatar>
+          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
+          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#e1bee7"/>
           <mu-radio v-model="room_id" label="" labelLeft :nativeValue="room.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" iconClass="color: #215E21"/>
         </mu-list-item>
       </mu-list>
@@ -41,11 +42,11 @@
       </mu-appbar>
       <mu-list>
         <mu-list-item title="清空" @click.native="team_id=''">
-          <mu-icon slot="left" value="send"/>
+          <mu-icon slot="left" value="delete_forever" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="team in teams" :title="team.name">
-          <mu-avatar v-if="team.state.toString() === '1'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
-          <mu-avatar v-if="team.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
+          <mu-icon v-if="team.state.toString() === '1'" slot="left" :size="40" value="store" color="#673ab7"/>
+          <mu-icon v-if="team.state.toString() === '2'" slot="left" :size="40" value="store" color="#d1c4e9"/>
           <mu-radio v-model="team_id" label="" labelLeft :nativeValue="team.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
         </mu-list-item>
       </mu-list>
@@ -74,6 +75,7 @@ export default {
       name: '',
       number: '',
       code: '',
+      address: '',
       room_id: '',
       team_id: '',
       roomName: '所属班级',
@@ -172,6 +174,7 @@ export default {
       this.number = ''
       this.numberErrorColor = ''
       this.code = ''
+      this.address = ''
       this.codeErrorColor = ''
       this.room_id = ''
       this.team_id = ''
@@ -313,6 +316,7 @@ export default {
           name: this.name,
           number: this.number,
           code: this.code,
+          address: this.address,
           room_id: this.room_id,
           team_id: this.team_id
         }

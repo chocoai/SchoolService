@@ -117,7 +117,11 @@ public class RoomController extends Controller {
     List<Course> courses = Course.dao.find("select * from course");
     renderJson(courses);
   }
-
+  @Before(AjaxFunction.class)
+  public  void studentList() {
+    List<Student> students = Student.dao.find("select * from student where room_id=?",getPara("id"));
+    renderJson(students);
+  }
   public void getCourseTeachers() {
     List<Courseplan> courseplan = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=?",getPara("room"),getPara("course"));
     if (courseplan.size()!=0) {

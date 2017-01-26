@@ -17,11 +17,14 @@
         <mu-icon-button icon='done' slot="right"/>
       </mu-appbar>
       <mu-list>
+        <mu-list-item title="清空" @click.native="teamTeacher=''">
+          <mu-icon slot="left" value="delete_forever" :size="40"/>
+        </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-avatar v-if="teacher.state.toString() === '2'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">未</mu-avatar>
-          <mu-avatar v-if="teacher.state.toString() === '3'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">冻</mu-avatar>
-          <mu-avatar v-if="teacher.state.toString() === '4'" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500">删</mu-avatar>
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="Light Green" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="Indigo" value="sentiment_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="Grey" value="sentiment_very_dissatisfied" :size="40" />
           <mu-checkbox v-model="teamTeacher" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
