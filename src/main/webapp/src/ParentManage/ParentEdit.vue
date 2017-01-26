@@ -294,7 +294,6 @@
     </mu-drawer>
   </div>
 </template>
-
 <script>
 import * as API from './ParentAPI.js'
 export default {
