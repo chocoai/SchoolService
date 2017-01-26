@@ -24,6 +24,7 @@ public class Test {
     // System.out.println("123123124".matches("^1(3|4|5|7|8)\\d{9}$"));
     String aa = null;
     System.out.println(Util.getString(aa));
+
 //    // 记录debug级别的信息
 //    logger.debug("This is debug message.");
 //    // 记录info级别的信息
