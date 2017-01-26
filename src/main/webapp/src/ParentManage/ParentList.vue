@@ -3,7 +3,7 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='add' slot="right" @click="goAdd"/>
+      <mu-icon-button icon='person_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="parent in parents" :value="parent.id" :title="parent.name" :describeText="parent.userId" @click="look(parent.id)">
@@ -80,7 +80,7 @@
         this.bottomPopup = true
         setTimeout(() => { this.bottomPopup = false }, 1500)
       },
-      teacherQuery (queryString, pageCurrent, pageSize) {
+      parentQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
           API.Query,
           { params:

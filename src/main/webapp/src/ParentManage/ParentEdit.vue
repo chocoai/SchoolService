@@ -1238,7 +1238,7 @@ export default {
     max-width: 300px;
   }
   .flex-demo {
-    height: 150px;
+    height: 50px;
     text-align: center;
     line-height: 32px;
   }

@@ -302,18 +302,18 @@ export default {
       nameErrorColor: '',
       userIdErrorColor: '',
       mobileErrorColor: '',
-      roomAble1: true,
-      roomAble2: false,
-      roomAble3: false,
-      roomAble4: false,
-      studentAble1: false,
-      studentAble2: false,
-      studentAble3: false,
-      studentAble4: false,
-      identityAble1: false,
-      identityAble2: false,
-      identityAble3: false,
-      identityAble4: false,
+      roomAble1: false,
+      roomAble2: true,
+      roomAble3: true,
+      roomAble4: true,
+      studentAble1: true,
+      studentAble2: true,
+      studentAble3: true,
+      studentAble4: true,
+      identityAble1: true,
+      identityAble2: true,
+      identityAble3: true,
+      identityAble4: true,
       roomName1: '班级',
       roomName2: '班级',
       roomName3: '班级',
@@ -583,79 +583,79 @@ export default {
     },
     identityAble4: function () {
       if (this.student_id4.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     studentAble4: function () {
       if (this.room_id4.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     roomAble4: function () {
       if (this.identity_id3.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     identityAble3: function () {
       if (this.student_id3.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     studentAble3: function () {
       if (this.room_id3.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     roomAble3: function () {
       if (this.identity_id2.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     identityAble2: function () {
       if (this.student_id2.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     studentAble2: function () {
       if (this.room_id2.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     roomAble2: function () {
       if (this.identity_id1.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     identityAble1: function () {
       if (this.student_id1.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     },
     studentAble1: function () {
       if (this.room_id1.toString() !== '') {
-        return true
-      } else {
         return false
+      } else {
+        return true
       }
     }
   },
@@ -682,18 +682,18 @@ export default {
       this.nameErrorColor = ''
       this.userIdErrorColor = ''
       this.mobileErrorColor = ''
-      this.roomAble1 = true
-      this.roomAble2 = false
-      this.roomAble3 = false
-      this.roomAble4 = false
-      this.studentAble1 = false
-      this.studentAble2 = false
-      this.studentAble3 = false
-      this.studentAble4 = false
-      this.identityAble1 = false
-      this.identityAble2 = false
-      this.identityAble3 = false
-      this.identityAble4 = false
+      this.roomAble1 = false
+      this.roomAble2 = true
+      this.roomAble3 = true
+      this.roomAble4 = true
+      this.studentAble1 = true
+      this.studentAble2 = true
+      this.studentAble3 = true
+      this.studentAble4 = true
+      this.identityAble1 = true
+      this.identityAble2 = true
+      this.identityAble3 = true
+      this.identityAble4 = true
       this.roomName1 = '班级'
       this.roomName2 = '班级'
       this.roomName3 = '班级'
@@ -1233,7 +1233,7 @@ export default {
     max-width: 300px;
   }
   .flex-demo {
-    height: 150px;
+    height: 50px;
     text-align: center;
     line-height: 32px;
   }

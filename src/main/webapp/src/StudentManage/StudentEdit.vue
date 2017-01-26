@@ -372,7 +372,8 @@ export default {
           name: this.name,
           number: this.number,
           code: this.code,
-          room_id: this.room_id
+          room_id: this.room_id,
+          team_id: this.team_id
         }
         },
         {
@@ -416,8 +417,6 @@ export default {
         this.name = this.student.name
         this.number = this.student.number
         this.code = this.student.code
-        this.room_id = this.student.room_id
-        this.team_id = this.student.team_id
         this.state = this.student.state
         if (this.student.state.toString() === '1') {
           this.deletes = true
@@ -428,7 +427,8 @@ export default {
         }
         this.deleteTitle = '确认要注销' + this.name + '吗?'
         this.resaveTitle = '确认要激活' + this.name + '吗?'
-        if (this.room_id.toString() !== '') {
+        if (this.student.room_id !== null) {
+          this.room_id = this.student.room_id
           this.$http.get(
             API.GetRoomName,
             { params: {
@@ -448,7 +448,8 @@ export default {
         } else {
           this.roomName = '所属班级'
         }
-        if (this.team_id.toString() !== '') {
+        if (this.student.team_id !== null) {
+          this.team_id = this.student.team_id
           this.$http.get(
             API.GetTeamName,
             { params: {
