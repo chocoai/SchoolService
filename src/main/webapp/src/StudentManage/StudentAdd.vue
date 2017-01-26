@@ -76,8 +76,6 @@ export default {
       code: '',
       room_id: '',
       team_id: '',
-      room: '',
-      team: '',
       roomName: '所属班级',
       teamName: '所属社团',
       message: '',

@@ -47,12 +47,12 @@ public class StudentController extends Controller {
 
     @Before(AjaxFunction.class)
     public void roomList() {
-        List<Room> rooms = Room.dao.find("select * from room where state=1 order by name");
+        List<Room> rooms = Room.dao.find("select * from room where state=1 order by name desc");
         renderJson(rooms);
     }
     @Before(AjaxFunction.class)
     public void teamList() {
-        List<Team> teams = Team.dao.find("select * from team where state=1 order by name");
+        List<Team> teams = Team.dao.find("select * from team where state=1 order by name desc");
         renderJson(teams);
     }
     @Before(AjaxFunction.class)

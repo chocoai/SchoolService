@@ -87,7 +87,7 @@ public class TeamController extends Controller {
   }
   @Before(AjaxFunction.class)
   public void teacherList() {
-    List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise where (isTeacher=1 or isManager=1) and (state=1 or state=2) order by name");
+    List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise where (isTeacher=1 or isManager=1) and (state=1 or state=2) order by name asc");
     renderJson(teachers);
   }
 

@@ -8,7 +8,11 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
+import com.wts.entity.model.Identity;
+import com.wts.entity.model.Room;
 import com.wts.interceptor.AjaxFunction;
+
+import java.util.List;
 
 public class ParentController extends Controller {
 
@@ -34,6 +38,11 @@ public class ParentController extends Controller {
         } else {
             render("/static/ParentManage.html");
         }
+    }
+    @Before(AjaxFunction.class)
+    public void identityList() {
+        List<Identity> identities = Identity.dao.find("select * from identity order by name asc");
+        renderJson(identities);
     }
     @Before(AjaxFunction.class)
     public void queryParent() {

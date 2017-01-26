@@ -243,12 +243,5 @@ public class TeacherController extends Controller {
       }
     }
   }
-  @Before(AjaxFunction.class)
-  public void getUserId() {
-    try {
-      renderText(new PinyinTool().toPinYin(getPara("name"), "", PinyinTool.Type.FIRSTUPPER));
-    } catch (Exception e) {
-      renderText("");
-    }
-  }
+
 }

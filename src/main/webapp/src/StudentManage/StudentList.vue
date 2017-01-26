@@ -7,10 +7,10 @@
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="student in students" :value="student.id" :title="student.name" @click="look(student.id)">
-        <mu-avatar v-if="student.state.toString() === '1' & student.sex.toString() === '1'" icon="account_box" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500"/>
-        <mu-avatar v-if="student.state.toString() === '1' & student.sex.toString() === '2'" icon="account_circle" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500"/>
-        <mu-avatar v-if="student.state.toString() === '2' & student.sex.toString() === '1'" icon="account_box" slot="leftAvatar" :size="40"/>
-        <mu-avatar v-if="student.state.toString() === '2' & student.sex.toString() === '2'" icon="account_circle" slot="leftAvatar" :size="40"/>
+        <mu-avatar v-if="student.state.toString() === '1' && student.sex.toString() === '1'" icon="account_box" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500"/>
+        <mu-avatar v-if="student.state.toString() === '1' && student.sex.toString() === '2'" icon="account_circle" slot="leftAvatar" :size="40" color="deepOrange300" backgroundColor="purple500"/>
+        <mu-avatar v-if="student.state.toString() === '2' && student.sex.toString() === '1'" icon="account_box" slot="leftAvatar" :size="40"/>
+        <mu-avatar v-if="student.state.toString() === '2' && student.sex.toString() === '2'" icon="account_circle" slot="leftAvatar" :size="40"/>
         <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
