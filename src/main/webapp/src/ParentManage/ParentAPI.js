@@ -5,7 +5,6 @@ export const CheckMobileForNew = `${h}/teacher/checkMobileForNew`
 export const CheckUserIdForNew = `${h}/teacher/checkUserIdForNew`
 export const CheckNameForEdit = `${h}/teacher/checkNameForEdit`
 export const CheckMobileForEdit = `${h}/teacher/checkMobileForEdit`
-export const GetUserId = `${h}/teacher/getUserId`
 export const RoomList = `${h}/student/roomList`
 export const GetRoomName = `${h}/student/getRoomName`
 export const GetUserId = `${h}/enterprise/getUserId`

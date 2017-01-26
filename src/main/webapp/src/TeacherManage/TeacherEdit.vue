@@ -6,10 +6,14 @@
     <mu-text-field label="姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
     <mu-text-field label="账号" disabled v-model="userId" fullWidth labelFloat icon="assignment"/><br/>
     <mu-text-field label="手机" :disabled="edit" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-    <mu-select-field v-model="isManager" label="权限" icon="comment" fullWidth :maxHeight="300" :disabled="edit">
-      <mu-menu-item value="0" title="一般教师"/>
-      <mu-menu-item value="1" title="管理人员"/>
-    </mu-select-field>
+    <mu-flexbox>
+      <mu-flexbox-item class="flex-demo">
+        <mu-switch label="管理人员" v-model="isManager" :disabled="edit"/>
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <mu-switch label="学生家长" v-model="isParent" :disabled="edit"/>
+      </mu-flexbox-item>
+    </mu-flexbox>
     <mu-dialog :open="forSave" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
@@ -65,7 +69,10 @@ export default {
       name: '',
       mobile: '',
       userId: '',
-      isManager: '',
+      isManager: false,
+      isParent: false,
+      isManagers: '',
+      isParents: '',
       state: '',
       nameErrorText: '',
       mobileErrorText: '',
@@ -79,6 +86,22 @@ export default {
   watch: {
     // 如果路由有变化，会再次执行该方法
     '$route': 'fetchData'
+  },
+  computed: {
+    isManagers: function () {
+      if (this.isManager) {
+        return '1'
+      } else {
+        return '0'
+      }
+    },
+    isParents: function () {
+      if (this.isParent) {
+        return '1'
+      } else {
+        return '0'
+      }
+    }
   },
   methods: {
     reply () {
@@ -224,7 +247,8 @@ export default {
           id: this.$route.params.teacherId,
           name: this.name,
           mobile: this.mobile,
-          isManager: this.isManager
+          isManager: this.isManagers,
+          isParent: this.isParents
         }
         },
         {
@@ -268,7 +292,18 @@ export default {
         this.name = this.teacher.name
         this.mobile = this.teacher.mobile
         this.userId = this.teacher.userId
-        this.isManager = this.teacher.isManager.toString()
+        this.isManagers = this.teacher.isManager.toString()
+        this.isParents = this.teacher.isParent.toString()
+        if (this.teacher.isManager.toString() === '0') {
+          this.isManager = false
+        } else {
+          this.isManager = true
+        }
+        if (this.teacher.isParent.toString() === '0') {
+          this.isParent = false
+        } else {
+          this.isParent = true
+        }
         this.state = this.teacher.state
         if (this.teacher.state.toString() === '1' || this.teacher.state.toString() === '2') {
           this.deletes = true

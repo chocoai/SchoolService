@@ -130,9 +130,9 @@ public class TeacherController extends Controller {
                 .set("userId", getPara("userId").trim())
                 .set("pass", "wts")
                 .set("state", 2)
-                .set("isManager", getPara("isManager").trim())
                 .set("isTeacher", 1)
-                .set("isParent", 0)
+                .set("isManager",getPara("isManager").trim())
+                .set("isParent",getPara("isParent").trim())
                 .save();
         renderText("OK");
       }catch(WeixinException e){
@@ -150,6 +150,7 @@ public class TeacherController extends Controller {
       if (Util.getString(teacher.getStr("name")).equals(getPara("name").trim())
               && Util.getString(teacher.getStr("mobile")).equals(getPara("mobile").trim())
               && Util.getString(teacher.get("isManager").toString()).equals(getPara("isManager").trim())
+              && Util.getString(teacher.get("isParent").toString()).equals(getPara("isParent").trim())
               ) {
         renderText("未找到修改内容!");
       } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
@@ -162,11 +163,13 @@ public class TeacherController extends Controller {
       } else {
         if (Util.getString(teacher.getStr("name")).equals(getPara("name").trim())
                 && Util.getString(teacher.getStr("mobile")).equals(getPara("mobile").trim())
-                && !Util.getString(teacher.get("isManager").toString()).equals(getPara("isManager").trim())
-                ){
+                && (!Util.getString(teacher.get("isManager").toString()).equals(Util.getString(getPara("isManager").trim()))
+                || !Util.getString(teacher.get("isParent").toString()).equals(Util.getString(getPara("isParent").trim())))
+        ){
           teacher.set("name",getPara("name").trim())
                   .set("mobile",getPara("mobile").trim())
                   .set("isManager",getPara("isManager").trim())
+                  .set("isParent",getPara("isParent").trim())
                   .update();
           renderText("OK");
         } else {
