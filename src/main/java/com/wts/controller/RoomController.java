@@ -84,7 +84,7 @@ public class RoomController extends Controller {
     renderJson(room);
   }
   @Before(AjaxFunction.class)
-  public void deleteById() {
+  public void inactiveById() {
     Room room = Room.dao.findById(getPara("id"));
     if (room == null) {
       renderText("未找到指定id的班级");
@@ -96,7 +96,7 @@ public class RoomController extends Controller {
     }
   }
   @Before({Tx.class,AjaxFunction.class})
-  public void resaveById() {
+  public void activeById() {
     Room room = Room.dao.findById(getPara("id"));
     if (room == null) {
       renderText("要重新激活的班级不存在!");
@@ -108,20 +108,22 @@ public class RoomController extends Controller {
     }
   }
   @Before(AjaxFunction.class)
-  public void teacherList() {
-    List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise where (isTeacher=1 or isManager=1) and (state=1 or state=2) order by name asc");
-    renderJson(teachers);
+  public void roomList() {
+    List<Room> rooms = Room.dao.find("select * from room where state=1 order by name desc");
+    renderJson(rooms);
   }
+  @Before(AjaxFunction.class)
+  public void getNameById() {
+    Room room = Room.dao.findById(getPara("id"));
+    renderText(room.get("name").toString());
+  }
+
   @Before(AjaxFunction.class)
   public  void courseList() {
     List<Course> courses = Course.dao.find("select * from course");
     renderJson(courses);
   }
-  @Before(AjaxFunction.class)
-  public  void studentList() {
-    List<Student> students = Student.dao.find("select * from student where room_id=?",getPara("id"));
-    renderJson(students);
-  }
+
   public void getCourseTeachers() {
     List<Courseplan> courseplan = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=?",getPara("room"),getPara("course"));
     if (courseplan.size()!=0) {

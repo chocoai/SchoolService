@@ -15,6 +15,8 @@ import com.wts.interceptor.LoginTeacher;
 import com.wts.util.PinyinTool;
 import com.wts.util.Util;
 
+import java.util.List;
+
 public class TeacherController extends Controller {
 
   public void index() throws WeixinException {
@@ -40,71 +42,6 @@ public class TeacherController extends Controller {
       render("/static/TeacherManage.html");
     }
   }
-
-  /**
-   * 新增时检测教师姓名
-  * */
-  @Before(AjaxFunction.class)
-  public void checkNameForNew() {
-    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-      renderText("请输入两个以上的汉字!");
-    } else {
-      renderText("OK");
-    }
-  }
-  /**
-   * 新增时检测教师手机号码
-   * */
-  @Before(AjaxFunction.class)
-  public void checkMobileForNew() {
-    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
-      renderText("手机号码格式错误!");
-    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
-      renderText("该手机号码已存在!");
-    } else {
-      renderText("OK");
-    }
-  }
-  /**
-   * 新增时检测教师账号
-   * */
-  @Before(AjaxFunction.class)
-  public void checkUserIdForNew() {
-    if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
-      renderText("账号名应为字母或数字的组合!");
-    } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
-      renderText("该账号已存在");
-    } else {
-      renderText("OK");
-    }
-  }
-
-  /**
-   * 修改时检测教师姓名
-   * */
-  @Before(AjaxFunction.class)
-  public void checkNameForEdit() {
-    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-      renderText("请输入两个以上汉字!");
-    } else {
-      renderText("OK");
-    }
-  }
-  /**
-   * 修改时检测教师手机号码
-   * */
-  @Before(AjaxFunction.class)
-  public void checkMobileForEdit() {
-    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
-      renderText("手机号码格式错误!");
-    } else if (!Enterprise.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
-            && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
-      renderText("该手机号码已存在!");
-    } else {
-      renderText("OK");
-    }
-  }
-
 
   @Before({Tx.class,AjaxFunction.class})
   public void save()  {
@@ -203,48 +140,10 @@ public class TeacherController extends Controller {
     }
   }
   @Before(AjaxFunction.class)
-  public void getById() {
-    Enterprise teacher = Enterprise.dao.findById(getPara("id"));
-    renderJson(teacher);
+  public void teacherList() {
+    List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise where (isTeacher=1 or isManager=1) and (state=1 or state=2) order by name asc");
+    renderJson(teachers);
   }
-  @Before(AjaxFunction.class)
-  public void deleteById() {
-    Enterprise teacher = Enterprise.dao.findById(getPara("id"));
-    if (teacher == null) {
-      renderText("要取消关注的教师不存在!");
-    } else if (teacher.get("state").toString().equals("4")) {
-      renderText("该教师已处于取消关注状态!");
-    }  else if (teacher.get("state").toString().equals("3")) {
-      renderText("该教师已处于冻结状态!");
-    } else {
-      try {
-        WP.me.deleteUser(teacher.getUserId());
-        teacher.set("state",4).update();
-        renderText("OK");
-      } catch (WeixinException e) {
-        renderText(e.getErrorText());
-      }
-    }
-  }
-  @Before(AjaxFunction.class)
-  public void resaveById() {
-    Enterprise teacher = Enterprise.dao.findById(getPara("id"));
-    if (teacher == null) {
-      renderText("要重新邀请关注的教师不存在!");
-    } else if (teacher.get("state").toString().equals("2")) {
-      renderText("该教师已处于关注状态!");
-    } else {
-      User user = new User(teacher.get("userId").toString(),teacher.get("name").toString());
-      user.setMobile(teacher.get("mobile").toString());
-      user.setPartyIds(1);
-      try {
-        WP.me.createUser(user);
-        teacher.set("state",2).update();
-        renderText("OK");
-      } catch (WeixinException e) {
-        renderText(e.getErrorText());
-      }
-    }
-  }
+
 
 }

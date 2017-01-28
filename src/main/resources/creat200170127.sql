@@ -1,32 +1,18 @@
-CREATE TABLE `Teacher` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '教师序号',
-`enterprise_id` int NULL COMMENT '人员序号',
-`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '教师备注',
-`pass` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录密码',
-`state` int NULL COMMENT '教师状态1激活2注销3删除',
-`system` int NULL COMMENT '是否系统管理员：1是0否',
-PRIMARY KEY (`id`) 
-);
-
 CREATE TABLE `Course` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '课程序号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程名称',
-`state` int NULL COMMENT '课程状态1激活2注销3删除',
 PRIMARY KEY (`id`) 
 );
 
 CREATE TABLE `Room` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '班级序号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级名称',
-`code` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级编号',
 `state` int NULL COMMENT '班级状态1激活2注销3删除',
-`enter_year` datetime NULL COMMENT '入学时间',
-`blog` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级博客',
 PRIMARY KEY (`id`) 
 );
 
 CREATE TABLE `CoursePlan` (
-`id` int NOT NULL,
+`id` int NOT NULL AUTO_INCREMENT,
 `course_id` int NULL COMMENT '课程序号',
 `teacher_id` int NULL COMMENT '教师序号',
 `room_id` int NULL COMMENT '班级序号',
@@ -36,14 +22,18 @@ PRIMARY KEY (`id`)
 CREATE TABLE `Enterprise` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '企业号用户序号',
 `userId` varchar(255) NULL COMMENT '微信号',
+`pass` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录密码',
 `openId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '姓名',
+`sex` int NULL COMMENT '性别0未知1男2女',
 `mobile` varchar(255) CHARACTER SET utf8 NULL COMMENT '手机号码',
-`sex` int NULL COMMENT '性别',
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT '电子邮箱',
-`account` varchar(255) CHARACTER SET utf8 NULL COMMENT '账号',
-`address` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系地址',
-`state` int NULL COMMENT '账号状态1激活2注销3删除',
+`weixinId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信账号',
+`state` int NULL COMMENT '账号状态1关注2未关注3冻结关注4取消关注',
+`isTeacher` int NULL COMMENT '是否教师0否1是',
+`isParent` int NULL COMMENT '是否家长0否1是',
+`isManager` int NULL COMMENT '是否管理0否1是',
+`picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
 PRIMARY KEY (`id`) 
 );
 
@@ -52,22 +42,12 @@ CREATE TABLE `Student` (
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '学生姓名',
 `number` varchar(255) CHARACTER SET utf8 NULL COMMENT '学生身份证号码',
 `code` varchar(255) CHARACTER SET utf8 NULL COMMENT '学籍号',
-`sex` int NULL COMMENT '学生性别',
+`sex` int NULL COMMENT '学生性别0未知1男2女',
 `birth` datetime NULL COMMENT '出生日期',
+`address` varchar(255) CHARACTER SET utf8 NULL COMMENT '家庭地址',
 `room_id` int NULL COMMENT '班级序号',
-`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '学生备注',
+`team_id` int NULL COMMENT '社团序号',
 `state` int NULL COMMENT '学生状态1激活2注销3删除',
-`phone` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系电话',
-`adress` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系地址',
-PRIMARY KEY (`id`) 
-);
-
-CREATE TABLE `Parent` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '家长序号',
-`enterprise_id` int NULL,
-`remark` varchar(255) CHARACTER SET utf8 NULL COMMENT '家长备注',
-`work` varchar(255) CHARACTER SET utf8 NULL COMMENT '工作单位',
-`state` int NULL COMMENT '家长状态1激活2注销3删除',
 PRIMARY KEY (`id`) 
 );
 
@@ -158,31 +138,46 @@ CREATE TABLE `Exam` (
 PRIMARY KEY (`id`) 
 );
 
+CREATE TABLE `Team` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '社团序号',
+`name` varchar(255) CHARACTER SET utf8 NULL COMMENT '社团名称',
+`state` int NULL COMMENT '1激活2注销',
+PRIMARY KEY (`id`) 
+);
+
+CREATE TABLE `TeamPlan` (
+`id` int NOT NULL AUTO_INCREMENT,
+`team_id` int NULL COMMENT '社团序号',
+`teacher_id` int NULL COMMENT '教师序号',
+PRIMARY KEY (`id`) 
+);
+
 
 ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
-ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
 ALTER TABLE `CoursePlan` ADD CONSTRAINT `coursePlan_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
 ALTER TABLE `Student` ADD CONSTRAINT `student_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
-ALTER TABLE `Relation` ADD CONSTRAINT `relation_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
+ALTER TABLE `Relation` ADD CONSTRAINT `relation_parent` FOREIGN KEY (`parent_id`) REFERENCES `Enterprise` (`id`);
 ALTER TABLE `Relation` ADD CONSTRAINT `relation_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `Relation` ADD CONSTRAINT `relation_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
-ALTER TABLE `Notice` ADD CONSTRAINT `notice_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `Notice` ADD CONSTRAINT `notice_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
 ALTER TABLE `HomeworkRead` ADD CONSTRAINT `check_homework` FOREIGN KEY (`homework_id`) REFERENCES `Homework` (`id`);
-ALTER TABLE `HomeworkRead` ADD CONSTRAINT `check_homework_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
-ALTER TABLE `Homework` ADD CONSTRAINT `homework_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `HomeworkRead` ADD CONSTRAINT `check_homework_parent` FOREIGN KEY (`parent_id`) REFERENCES `Enterprise` (`id`);
+ALTER TABLE `Homework` ADD CONSTRAINT `homework_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
 ALTER TABLE `Homework` ADD CONSTRAINT `homework_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
 ALTER TABLE `Homework` ADD CONSTRAINT `homework_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `Leave` ADD CONSTRAINT `leave_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
-ALTER TABLE `Leave` ADD CONSTRAINT `leave_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
-ALTER TABLE `Leave` ADD CONSTRAINT `leave_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `Leave` ADD CONSTRAINT `leave_parent` FOREIGN KEY (`parent_id`) REFERENCES `Enterprise` (`id`);
+ALTER TABLE `Leave` ADD CONSTRAINT `leave_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
 ALTER TABLE `Praise` ADD CONSTRAINT `praise_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
-ALTER TABLE `Praise` ADD CONSTRAINT `praise_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `Praise` ADD CONSTRAINT `praise_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
 ALTER TABLE `Praise` ADD CONSTRAINT `praise_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `Praise` ADD CONSTRAINT `praise_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
 ALTER TABLE `Exam` ADD CONSTRAINT `exam_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `Grade` ADD CONSTRAINT `grade_exam` FOREIGN KEY (`exam_id`) REFERENCES `Exam` (`id`);
 ALTER TABLE `Grade` ADD CONSTRAINT `grade_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `Exam` ADD CONSTRAINT `exam_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
-ALTER TABLE `Teacher` ADD CONSTRAINT `teacher_enterprise` FOREIGN KEY (`enterprise_id`) REFERENCES `Enterprise` (`id`);
-ALTER TABLE `Parent` ADD CONSTRAINT `parent_enterprise` FOREIGN KEY (`enterprise_id`) REFERENCES `Enterprise` (`id`);
+ALTER TABLE `TeamPlan` ADD CONSTRAINT `teamPlan_team` FOREIGN KEY (`team_id`) REFERENCES `Team` (`id`);
+ALTER TABLE `TeamPlan` ADD CONSTRAINT `teamPlan_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
+ALTER TABLE `Student` ADD CONSTRAINT `student_team` FOREIGN KEY (`team_id`) REFERENCES `Team` (`id`);
 

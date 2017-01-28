@@ -1,14 +1,14 @@
 const h = ''
 // const h = '/ds'
+export const TeacherList = `${h}/teacher/teacherList`
 export const CheckNameForNew = `${h}/room/checkNameForNew`
 export const CheckNameForEdit = `${h}/room/checkNameForEdit`
 export const Save = `${h}/room/save`
 export const Edit = `${h}/room/edit`
-export const TeacherList = `${h}/room/teacherList`
 export const CourseList = `${h}/room/courseList`
 export const GetCourseTeacher = `${h}/room/getCourseTeacher`
 export const QueryByName = `${h}/room/queryByName`
 export const TotalByName = `${h}/room/totalByName`
 export const GetById = `${h}/room/getById`
-export const DeleteById = `${h}/room/deleteById`
-export const ResaveById = `${h}/room/resaveById`
+export const InactiveById = `${h}/room/inactiveById`
+export const ActiveById = `${h}/room/activeById`

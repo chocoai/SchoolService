@@ -45,40 +45,24 @@ public class StudentController extends Controller {
             render("/static/StudentManage.html");
         }
     }
-
     @Before(AjaxFunction.class)
-    public void roomList() {
-        List<Room> rooms = Room.dao.find("select * from room where state=1 order by name desc");
-        renderJson(rooms);
-    }
-    @Before(AjaxFunction.class)
-    public void teamList() {
-        List<Team> teams = Team.dao.find("select * from team where state=1 order by name desc");
-        renderJson(teams);
+    public  void studentList() {
+        List<Student> students = Student.dao.find("select * from student where room_id=?",getPara("id"));
+        renderJson(students);
     }
     @Before(AjaxFunction.class)
     public void getById() {
         Student student = Student.dao.findById(getPara("id"));
         renderJson(student);
     }
-    @Before(AjaxFunction.class)
-    public void getRoomName() {
-        Room room = Room.dao.findById(getPara("id"));
-        renderText(room.get("name").toString());
-    }
 
     @Before(AjaxFunction.class)
-    public void getTeamName() {
-        Team team = Team.dao.findById(getPara("id"));
-        renderText(team.get("name").toString());
-    }
-    @Before(AjaxFunction.class)
-    public void getStudentName() {
+    public void getNameById() {
         Student student = Student.dao.findById(getPara("id"));
         renderText(student.get("name").toString());
     }
     @Before(AjaxFunction.class)
-    public void deleteById() {
+    public void inactiveById() {
         Student student = Student.dao.findById(getPara("id"));
         if (student == null) {
             renderText("未找到指定id的学生");
@@ -90,7 +74,7 @@ public class StudentController extends Controller {
         }
     }
     @Before(AjaxFunction.class)
-    public void resaveById() {
+    public void activeById() {
         Student student = Student.dao.findById(getPara("id"));
         if (student == null) {
             renderText("未找到指定id的学生");
@@ -113,28 +97,6 @@ public class StudentController extends Controller {
             renderText((count/getParaToInt("pageSize"))+"");
         } else {
             renderText((count/getParaToInt("pageSize")+1)+"");
-        }
-    }
-    /**
-     * 新增时检测学生姓名
-     * */
-    @Before(AjaxFunction.class)
-    public void checkNameForNew() {
-        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-            renderText("请输入两个以上的汉字!");
-        } else {
-            renderText("OK");
-        }
-    }
-    /**
-     * 修改时检测学生姓名
-     * */
-    @Before(AjaxFunction.class)
-    public void checkNameForEdit() {
-        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-            renderText("请输入两个以上汉字!");
-        } else {
-            renderText("OK");
         }
     }
     /**

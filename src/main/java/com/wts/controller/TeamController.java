@@ -54,6 +54,16 @@ public class TeamController extends Controller {
     }
   }
   @Before(AjaxFunction.class)
+  public void getNameById() {
+    Team team = Team.dao.findById(getPara("id"));
+    renderText(team.get("name").toString());
+  }
+  @Before(AjaxFunction.class)
+  public void teamList() {
+    List<Team> teams = Team.dao.find("select * from team where state=1 order by name desc");
+    renderJson(teams);
+  }
+  @Before(AjaxFunction.class)
   public void checkNameForNew() {
     if (Team.dao.find("select * from team where name=?", getPara("name")).size()!=0) {
       renderText("该社团名称已存在!");
@@ -76,21 +86,29 @@ public class TeamController extends Controller {
     renderJson(team);
   }
   @Before(AjaxFunction.class)
-  public void deleteById() {
-    if (Team.dao.findById(getPara("id")) == null) {
+  public void inactiveById() {
+    Team team = Team.dao.findById(getPara("id"));
+    if (team == null) {
       renderText("未找到指定id的社团");
+    } else if (team.get("state").toString().equals("2")) {
+      renderText("该社团已注销!");
     } else {
-      Team team = Team.dao.findById(getPara("id"));
       team.set("state",2).update();
       renderText("OK");
     }
   }
   @Before(AjaxFunction.class)
-  public void teacherList() {
-    List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise where (isTeacher=1 or isManager=1) and (state=1 or state=2) order by name asc");
-    renderJson(teachers);
+  public void activeById() {
+    Team team = Team.dao.findById(getPara("id"));
+    if (team == null) {
+      renderText("未找到指定id的社团");
+    } else if (team.get("state").toString().equals("1")) {
+      renderText("该社团已激活!");
+    } else {
+      team.set("state",1).update();
+      renderText("OK");
+    }
   }
-
   @Before(AjaxFunction.class)
   public void getTeamTeacher() {
     List<Teamplan> teamPlan = Teamplan.dao.find("select * from teamplan where team_id=?",getPara("team"));

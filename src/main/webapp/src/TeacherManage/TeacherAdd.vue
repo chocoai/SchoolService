@@ -1,7 +1,7 @@
 <template>
   <div class="TeacherAdd">
     <mu-appbar title="请核实后输入以下信息">
-      <mu-icon-button icon='reply' slot="right" @click="reply"/>
+      <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
     <mu-text-field label="姓名" :disabled="saved" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
     <mu-text-field label="账号" :disabled="saved" underlineShow="false" v-model="userId" :errorColor="userIdErrorColor" :errorText="userIdErrorText" @input="checkUserId" fullWidth labelFloat icon="assignment"/><br/>
@@ -19,10 +19,10 @@
     </mu-dialog>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="cached" @click="reset" backgroundColor="orange"/>
+        <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="save" backgroundColor="green"/>
+        <mu-float-button icon="done" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
@@ -75,7 +75,7 @@ export default {
     }
   },
   methods: {
-    reply () {
+    gorReply () {
       this.$router.push({ path: '/teacherList' })
     },
     openPopup (message, icon, color) {
@@ -85,7 +85,7 @@ export default {
       this.bottomPopup = true
       setTimeout(() => { this.bottomPopup = false }, 1500)
     },
-    reset () {
+    goReset () {
       this.name = ''
       this.userId = ''
       this.mobile = ''
@@ -102,7 +102,7 @@ export default {
     },
     checkName (value) {
       this.$http.get(
-        API.CheckNameForNew,
+        API.CheckName,
         { params: {
           name: value
         }
@@ -201,7 +201,7 @@ export default {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
-    save () {
+    goSave () {
       this.forSave = true
       this.$http.get(
         API.Save,

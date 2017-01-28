@@ -42,6 +42,7 @@ public class Config extends JFinalConfig {
         me.add("/team", TeamController.class);
         me.add("/parent", ParentController.class);
         me.add("/student", StudentController.class);
+        me.add("/identity", IdentityController.class);
     }
 
     /**

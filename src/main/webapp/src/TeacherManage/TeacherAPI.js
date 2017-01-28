@@ -1,15 +1,15 @@
 const h = ''
 // const h = '/ds'
-export const CheckNameForNew = `${h}/teacher/checkNameForNew`
-export const CheckUserIdForNew = `${h}/teacher/checkUserIdForNew`
-export const CheckMobileForNew = `${h}/teacher/checkMobileForNew`
-export const CheckNameForEdit = `${h}/teacher/checkNameForEdit`
-export const CheckMobileForEdit = `${h}/teacher/checkMobileForEdit`
+export const CheckName = `${h}/enterprise/checkName`
+export const CheckUserIdForNew = `${h}/enterprise/checkUserIdForNew`
+export const CheckMobileForNew = `${h}/enterprise/checkMobileForNew`
+export const CheckMobileForEdit = `${h}/enterprise/checkMobileForEdit`
+export const GetById = `${h}/enterprise/getById`
+export const InactiveById = `${h}/enterprise/inactiveById`
+export const ActiveById = `${h}/enterprise/activeById`
+export const GetUserId = `${h}/enterprise/getUserId`
 export const Save = `${h}/teacher/save`
 export const Edit = `${h}/teacher/edit`
 export const Query = `${h}/teacher/queryTeacher`
 export const TotalByName = `${h}/teacher/totalByName`
-export const GetById = `${h}/teacher/getById`
-export const DeleteById = `${h}/teacher/deleteById`
-export const ResaveById = `${h}/teacher/resaveById`
-export const GetUserId = `${h}/enterprise/getUserId`
+

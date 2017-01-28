@@ -1,5 +1,6 @@
 package com.wts.controller;
 
+import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -7,12 +8,108 @@ import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
 import com.wts.interceptor.AjaxFunction;
 import com.wts.util.PinyinTool;
+import com.wts.util.Util;
 import com.wts.util.msg.Util.MessageUtil;
 
 import java.util.Map;
 
 public class EnterpriseController extends Controller {
+  /**
+   * 检测姓名
+   * */
+  @Before(AjaxFunction.class)
+  public void checkName() {
+    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+      renderText("请输入两个以上的汉字!");
+    } else {
+      renderText("OK");
+    }
+  }
+  /**
+   * 新增时检测手机号码
+   * */
+  @Before(AjaxFunction.class)
+  public void checkMobileForNew() {
+    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+      renderText("手机号码格式错误!");
+    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+      renderText("该手机号码已存在!");
+    } else {
+      renderText("OK");
+    }
+  }
+  /**
+   * 新增时检测账号
+   * */
+  @Before(AjaxFunction.class)
+  public void checkUserIdForNew() {
+    if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
+      renderText("账号名应为字母或数字的组合!");
+    } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
+      renderText("该账号已存在");
+    } else {
+      renderText("OK");
+    }
+  }
 
+  /**
+   * 修改时检测手机号码
+   * */
+  @Before(AjaxFunction.class)
+  public void checkMobileForEdit() {
+    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+      renderText("手机号码格式错误!");
+    } else if (!Enterprise.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
+            && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+      renderText("该手机号码已存在!");
+    } else {
+      renderText("OK");
+    }
+  }
+  @Before(AjaxFunction.class)
+  public void getById() {
+    Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
+    renderJson(enterprise);
+  }
+  @Before(AjaxFunction.class)
+  public void inactiveById() {
+    Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
+    if (enterprise == null) {
+      renderText("要取消关注的人员不存在!");
+    } else if (enterprise.get("state").toString().equals("4")) {
+      renderText("该人员已处于取消关注状态!");
+    }  else if (enterprise.get("state").toString().equals("3")) {
+      renderText("该人员已处于冻结状态!");
+    } else {
+      try {
+        WP.me.deleteUser(enterprise.getUserId());
+        enterprise.set("state",4).update();
+        renderText("OK");
+      } catch (WeixinException e) {
+        renderText(e.getErrorText());
+      }
+    }
+  }
+  @Before(AjaxFunction.class)
+  public void activeById() {
+    Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
+    if (enterprise == null) {
+      renderText("要重新邀请关注的人员不存在!");
+    } else if (enterprise.get("state").toString().equals("2")) {
+      renderText("该人员已处于关注状态!");
+    } else {
+      User user = new User(enterprise.get("userId").toString(),enterprise.get("name").toString());
+      user.setMobile(enterprise.get("mobile").toString());
+      user.setPartyIds(1);
+      try {
+        WP.me.createUser(user);
+        enterprise.set("state",2).update();
+        renderText("OK");
+      } catch (WeixinException e) {
+        renderText(e.getErrorText());
+      }
+    }
+  }
   @Before(AjaxFunction.class)
   public void getUserId() {
     try {

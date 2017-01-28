@@ -1,7 +1,7 @@
 <template>
   <div class="RoomAdd">
     <mu-appbar title="请核实后输入以下信息">
-      <mu-icon-button icon='reply' slot="right" @click="reply"/>
+      <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field v-model="name" label="班级名称" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
     <mu-sub-header>班级课程：</mu-sub-header>
@@ -261,10 +261,10 @@
     </mu-drawer>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="cached" @click="reset" backgroundColor="orange"/>
+        <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="save" backgroundColor="green"/>
+        <mu-float-button icon="done" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
   </div>
@@ -534,7 +534,7 @@ export default {
     }
   },
   methods: {
-    reply () {
+    goReply () {
       this.$router.push({ path: '/roomList' })
     },
     openPopup (message, icon, color) {
@@ -544,7 +544,7 @@ export default {
       this.bottomPopup = true
       setTimeout(() => { this.bottomPopup = false }, 1500)
     },
-    reset () {
+    goReset () {
       this.name = ''
       this.nameErrorColor = ''
       this.course1 = []
@@ -587,7 +587,7 @@ export default {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
     },
-    save () {
+    goSave () {
       this.forSave = true
       this.$http.get(
         API.Save,

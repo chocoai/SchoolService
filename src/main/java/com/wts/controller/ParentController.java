@@ -40,11 +40,6 @@ public class ParentController extends Controller {
         }
     }
     @Before(AjaxFunction.class)
-    public void identityList() {
-        List<Identity> identities = Identity.dao.find("select * from identity order by id asc");
-        renderJson(identities);
-    }
-    @Before(AjaxFunction.class)
     public void queryParent() {
         Page<Enterprise> parents= Enterprise.dao.parentQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
         renderJson(parents.getList());
@@ -59,53 +54,9 @@ public class ParentController extends Controller {
         }
     }
     @Before(AjaxFunction.class)
-    public void getIdentityName(){
-        Identity identity = Identity.dao.findById(getPara("id"));
-        renderText(identity.get("name").toString());
-    }
-    @Before(AjaxFunction.class)
-    public void getById() {
-        Enterprise parent = Enterprise.dao.findById(getPara("id"));
-        renderJson(parent);
-    }
-    @Before(AjaxFunction.class)
-    public void deleteById() {
-        Enterprise parent = Enterprise.dao.findById(getPara("id"));
-        if (parent == null) {
-            renderText("要取消关注的家长不存在!");
-        } else if (parent.get("state").toString().equals("4")) {
-            renderText("该家长已处于取消关注状态!");
-        }  else if (parent.get("state").toString().equals("3")) {
-            renderText("该家长已处于冻结状态!");
-        } else {
-            try {
-                WP.me.deleteUser(parent.getUserId());
-                parent.set("state",4).update();
-                renderText("OK");
-            } catch (WeixinException e) {
-                renderText(e.getErrorText());
-            }
-        }
-    }
-    @Before(AjaxFunction.class)
-    public void resaveById() {
-        Enterprise parent = Enterprise.dao.findById(getPara("id"));
-        if (parent == null) {
-            renderText("要重新邀请关注的家长不存在!");
-        } else if (parent.get("state").toString().equals("2")) {
-            renderText("该家长已处于关注状态!");
-        } else {
-            User user = new User(parent.get("userId").toString(),parent.get("name").toString());
-            user.setMobile(parent.get("mobile").toString());
-            user.setPartyIds(1);
-            try {
-                WP.me.createUser(user);
-                parent.set("state",2).update();
-                renderText("OK");
-            } catch (WeixinException e) {
-                renderText(e.getErrorText());
-            }
-        }
+    public void getRelation() {
+        List<Relation> relations = Relation.dao.find("select * from relation where parent_id=?",getPara("id"));
+
     }
     @Before({Tx.class,AjaxFunction.class})
     public void save()  {
@@ -119,6 +70,26 @@ public class ParentController extends Controller {
             renderText("账号名应为字母或数字的组合!");
         } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
             renderText("该账号名已存在!");
+        } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                ,getPara("student_id1"),getPara("identity_id1")).size()!=0) {
+            renderText("学生1："+Student.dao.findFirst("select * from student where id=?",getPara("student_id1")).get("name")
+                    +"的" + Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id1")).get("name")
+                    + "已绑定!");
+        } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                ,getPara("student_id2"),getPara("identity_id2")).size()!=0) {
+            renderText("学生2："+Student.dao.findFirst("select * from student where id=?",getPara("student_id2")).get("name")
+                    +"的" + Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id2")).get("name")
+                    + "已绑定!");
+        } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                ,getPara("student_id3"),getPara("identity_id3")).size()!=0) {
+            renderText("学生3："+Student.dao.findFirst("select * from student where id=?",getPara("student_id3")).get("name")
+                    +"的" + Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id3")).get("name")
+                    + "已绑定!");
+        } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                ,getPara("student_id4"),getPara("identity_id4")).size()!=0) {
+            renderText("学生4："+Student.dao.findFirst("select * from student where id=?",getPara("student_id4")).get("name")
+                    +"的" + Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id4")).get("name")
+                    + "已绑定!");
         } else {
             User user = new User(getPara("userId").trim(),getPara("name").trim());
             user.setMobile(getPara("mobile").trim());

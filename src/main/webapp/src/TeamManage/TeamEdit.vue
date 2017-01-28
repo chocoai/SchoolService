@@ -1,7 +1,7 @@
 <template>
   <div class="RoomEdit">
     <mu-appbar title="请核实后输入以下信息">
-      <mu-icon-button icon='reply' slot="right" @click="reply"/>
+      <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field v-model="name" label="社团名称" :disabled="edit" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
     <mu-raised-button label="管理教师" :disabled="edit" @click="openTeamTeacher=true" :icon="teamIcon" :backgroundColor="teamBack" color="#FFFFFF" fullWidth/>
@@ -11,8 +11,8 @@
         <mu-float-button icon="cancel" v-if="save" @click="goCancel" secondary/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="delete" v-if="deletes"  @click="openDelete" backgroundColor="red"/>
-        <mu-float-button icon="compare_arrows" v-if="resave" @click="openResave" backgroundColor="green"/>
+        <mu-float-button icon="delete" v-if="inactive"  @click="openInactive" backgroundColor="red"/>
+        <mu-float-button icon="compare_arrows" v-if="active" @click="openActive" backgroundColor="green"/>
         <mu-float-button icon="done" v-if="save" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
@@ -36,13 +36,13 @@
         </mu-list-item>
       </mu-list>
     </mu-drawer>
-    <mu-dialog :open="forDelete" :title="deleteTitle" @close="goClose">
+    <mu-dialog :open="forInactive" :title="inactiveTitle" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
-      <mu-flat-button label="确定" @click="goDelete" secondary/>
+      <mu-flat-button label="确定" @click="goInactive" secondary/>
     </mu-dialog>
-    <mu-dialog :open="forResave" :title="resaveTitle" @close="goClose">
+    <mu-dialog :open="forActive" :title="activeTitle" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
-      <mu-flat-button label="确定" @click="goResave" secondary/>
+      <mu-flat-button label="确定" @click="goActive" secondary/>
     </mu-dialog>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
@@ -59,13 +59,13 @@ export default {
       bottomPopup: false,
       edit: true,
       save: false,
-      deletes: false,
-      resave: false,
+      inactive: false,
+      active: false,
       forSave: false,
-      forDelete: false,
-      forResave: false,
-      resaveTitle: '',
-      deleteTitle: '',
+      forInactive: false,
+      forActive: false,
+      activeTitle: '',
+      inactiveTitle: '',
       icon: '',
       color: '',
       name: '',
@@ -127,14 +127,14 @@ export default {
     '$route': 'fetchData'
   },
   methods: {
-    reply () {
+    goReply () {
       this.$router.push({ path: '/teamList' })
     },
-    openDelete () {
-      this.forDelete = true
+    openInactive () {
+      this.forInactive = true
     },
-    openResave () {
-      this.forResave = true
+    openActive () {
+      this.forActive = true
     },
     openPopup (message, icon, color) {
       this.message = message
@@ -146,8 +146,8 @@ export default {
     goEdit () {
       this.edit = false
       this.save = true
-      this.deletes = false
-      this.resave = false
+      this.inactive = false
+      this.active = false
     },
     goCancel () {
       this.edit = true
@@ -155,13 +155,13 @@ export default {
       this.fetchData(this.$route.params.roomId)
     },
     goClose () {
-      this.forDelete = false
-      this.forResave = false
+      this.forInactive = false
+      this.forActive = false
     },
-    goDelete () {
+    goInactive () {
       this.forSave = true
       this.$http.get(
-        API.DeleteById,
+        API.InactiveById,
         { params: {
           id: this.$route.params.teamId
         }
@@ -181,11 +181,11 @@ export default {
             this.edit = true
             this.save = false
             if (this.state.toString() === '1') {
-              this.deletes = true
-              this.resave = false
+              this.inactive = true
+              this.active = false
             } else {
-              this.deletes = false
-              this.resave = true
+              this.inactive = false
+              this.active = true
             }
             this.openPopup('删除成功!', 'check_circle', 'green')
             setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
@@ -193,11 +193,11 @@ export default {
             this.edit = true
             this.save = false
             if (this.state.toString() === '1') {
-              this.deletes = true
-              this.resave = false
+              this.inactive = true
+              this.active = false
             } else {
-              this.deletes = false
-              this.resave = true
+              this.inactive = false
+              this.active = true
             }
             this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
@@ -210,10 +210,10 @@ export default {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
     },
-    goResave () {
+    goActive () {
       this.forSave = true
       this.$http.get(
-        API.ResaveById,
+        API.ActiveById,
         { params: {
           id: this.$route.params.teamId
         }
@@ -233,11 +233,11 @@ export default {
             this.edit = true
             this.save = false
             if (this.state.toString() === '1') {
-              this.deletes = true
-              this.resave = false
+              this.inactive = true
+              this.active = false
             } else {
-              this.deletes = false
-              this.resave = true
+              this.inactive = false
+              this.active = true
             }
             this.openPopup('激活成功!', 'check_circle', 'green')
             setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
@@ -245,11 +245,11 @@ export default {
             this.edit = true
             this.save = false
             if (this.state.toString() === '1') {
-              this.deletes = true
-              this.resave = false
+              this.inactive = true
+              this.active = false
             } else {
-              this.deletes = false
-              this.resave = true
+              this.inactive = false
+              this.active = true
             }
             this.openPopup(response.body, 'report_problem', 'orange')
             setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
@@ -313,11 +313,11 @@ export default {
         this.name = this.team.name
         this.state = this.team.state
         if (this.team.state.toString() === '1') {
-          this.deletes = true
-          this.resave = false
+          this.inactive = true
+          this.active = false
         } else {
-          this.deletes = false
-          this.resave = true
+          this.inactive = false
+          this.active = true
         }
         this.deleteTitle = '确认要注销' + this.name + '吗?'
         this.resaveTitle = '确认要激活' + this.name + '吗?'

@@ -1,7 +1,7 @@
 <template>
   <div class="StudentAdd">
     <mu-appbar title="请核实后输入以下信息">
-      <mu-icon-button icon='reply' slot="right" @click="reply"/>
+      <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field v-model="name" label="姓名" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
     <mu-text-field v-model="number" label="证件号码" icon="comment" :errorColor="numberErrorColor" :errorText="numberErrorText" @input="checkNumber" fullWidth labelFloat maxLength="18"/><br/>
@@ -53,10 +53,10 @@
     </mu-drawer>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="cached" @click="reset" backgroundColor="orange"/>
+        <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="save" backgroundColor="green"/>
+        <mu-float-button icon="done" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
   </div>
@@ -158,7 +158,7 @@ export default {
     }
   },
   methods: {
-    reply () {
+    goReply () {
       this.$router.push({ path: '/studentList' })
     },
     openPopup (message, icon, color) {
@@ -168,7 +168,7 @@ export default {
       this.bottomPopup = true
       setTimeout(() => { this.bottomPopup = false }, 1500)
     },
-    reset () {
+    goReset () {
       this.name = ''
       this.nameErrorColor = ''
       this.number = ''
@@ -229,7 +229,7 @@ export default {
     },
     checkName (value) {
       this.$http.get(
-        API.CheckNameForNew,
+        API.CheckName,
         { params: {
           name: value
         }
@@ -308,7 +308,7 @@ export default {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
     },
-    save () {
+    goSave () {
       this.forSave = true
       this.$http.get(
         API.Save,
