@@ -171,17 +171,18 @@ public class ParentController extends Controller {
 
         }
         for (int i=0; i<4; i++){
-            relation[i] = "{'room_id':'"+room_id[i]
-                    +"','student_id':'"+student_id[i]
-                    +"','identity_id':'"+identity_id[i]
-                    +"','roomName':'"+roomName[i]
-                    +"','studentName':'"+studentName[i]
-                    +"','identityName':'"+identityName[i]
-                    +"','roomAble':"+roomAble[i]
-                    +",'studentAble':"+studentAble[i]
-                    +",'identityAble':"+identityAble[i]+"}";
+            int j=i+1;
+            relation[i] = "'room_id"+j+"':'"+room_id[i]
+                    +"','student_id"+j+"':'"+student_id[i]
+                    +"','identity_id"+j+"':'"+identity_id[i]
+                    +"','roomName"+j+"':'"+roomName[i]
+                    +"','studentName"+j+"':'"+studentName[i]
+                    +"','identityName"+j+"':'"+identityName[i]
+                    +"','roomAble"+j+"':"+roomAble[i]
+                    +",'studentAble"+j+"':"+studentAble[i]
+                    +",'identityAble"+j+"':"+identityAble[i];
         }
-        renderText("'relation1':"+relation[0]+"},{'relation2':"+relation[1]+"},{'relation3':"+relation[2]+"},{'relation4':"+relation[3]+"");
+        renderText("{"+relation[0]+","+relation[1]+","+relation[2]+","+relation[3]+"}");
     }
     @Before({Tx.class,AjaxFunction.class})
     public void save()  {

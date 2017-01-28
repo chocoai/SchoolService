@@ -1440,7 +1440,7 @@ export default {
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.openPopup('保存成功！', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/ParentList' }) }, 1000)
+            setTimeout(() => { this.$router.push({ path: '/parentList' }) }, 1000)
           } else {
             this.openPopup(response.body, 'report_problem', 'orange')
           }
