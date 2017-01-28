@@ -22,8 +22,8 @@ public class Test {
     // System.out.println("王".matches("^[\\u4e00-\\u9fa5]{2,}$"));
     // 联系电话的正则
     // System.out.println("123123124".matches("^1(3|4|5|7|8)\\d{9}$"));
-    String aa = null;
-    System.out.println(Util.getString(aa));
+//    String aa = null;
+//    System.out.println(Util.getString(aa));
 //    // 记录debug级别的信息
 //    logger.debug("This is debug message.");
 //    // 记录info级别的信息
@@ -40,7 +40,13 @@ public class Test {
 
      //System.out.println("20t6级43班".matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]"));
       //System.out.println(new PinyinTool().toPinYin("王燚硕","",PinyinTool.Type.FIRSTUPPER));
-
+    int[] integers = {11};
+    for (int i = 0; i < integers.length; i++){
+      System.out.println("第一组："+integers[i]);
+    }
+    for (int i = 0; i<4-integers.length; i++){
+      System.out.println("第二组："+i);
+    }
   }
 
 }

@@ -12,6 +12,7 @@ import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxFunction;
 import com.wts.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ParentController extends Controller {
@@ -53,10 +54,134 @@ public class ParentController extends Controller {
             renderText((count/getParaToInt("pageSize")+1)+"");
         }
     }
-    @Before(AjaxFunction.class)
-    public void getRelation() {
-        List<Relation> relations = Relation.dao.find("select * from relation where parent_id=?",getPara("id"));
 
+    public void getRelation() {
+        List<Relation> relations = Relation.dao.find("select * from relation where parent_id=? order by id asc",getPara("id"));
+        String[] relation = new String[4];
+        String[] room_id = new String[4];
+        String[] student_id = new String[4];
+        String[] identity_id = new String[4];
+        String[] roomName = new String[4];
+        String[] studentName = new String[4];
+        String[] identityName = new String[4];
+        String[] roomAble = new String[4];
+        String[] studentAble = new String[4];
+        String[] identityAble = new String[4];
+
+        if (relations.size() == 1) {
+            student_id[0] = relations.get(0).get("student_id").toString();
+            studentName[0] = Student.dao.findById(student_id[0]).get("name").toString();
+            identity_id[0] = relations.get(0).get("identity_id").toString();
+            identityName[0] = Identity.dao.findById(identity_id[0]).get("name").toString();
+            if (Student.dao.findById(student_id[0]).get("room_id") == null) {
+                room_id[0] = "";
+                roomName[0] = "班级";
+            } else {
+                room_id[0] = Student.dao.findById(student_id[0]).get("room_id").toString();
+                roomName[0] = Room.dao.findById(room_id[0]).get("name").toString();
+            }
+            roomAble[0] = "true";
+            studentAble[0] = "true";
+            identityAble[0] = "true";
+            for (int k = 1; k < 4; k++) {
+                student_id[k] = "";
+                studentName[k] = "姓名";
+                identity_id[k] = "";
+                identityName[k] = "身份";
+                room_id[k] = "";
+                roomName[k] = "班级";
+                roomAble[k] = "false";
+                studentAble[k] = "false";
+                identityAble[k] = "false";
+            }
+        } else if (relations.size() == 2) {
+            for (int i=0 ;i<2;i++){
+                student_id[i] = relations.get(i).get("student_id").toString();
+                studentName[i] = Student.dao.findById(student_id[i]).get("name").toString();
+                identity_id[i] = relations.get(i).get("identity_id").toString();
+                identityName[i] = Identity.dao.findById(identity_id[i]).get("name").toString();
+                if (Student.dao.findById(student_id[i]).get("room_id") == null) {
+                    room_id[i] = "";
+                    roomName[i] = "班级";
+                } else {
+                    room_id[i] = Student.dao.findById(student_id[i]).get("room_id").toString();
+                    roomName[i] = Room.dao.findById(room_id[i]).get("name").toString();
+                }
+                roomAble[i] = "true";
+                studentAble[i] = "true";
+                identityAble[i] = "true";
+            }
+            for (int k = 2; k < 4; k++) {
+                student_id[k] = "";
+                studentName[k] = "姓名";
+                identity_id[k] = "";
+                identityName[k] = "身份";
+                room_id[k] = "";
+                roomName[k] = "班级";
+                roomAble[k] = "false";
+                studentAble[k] = "false";
+                identityAble[k] = "false";
+            }
+        } else if (relations.size() == 3) {
+            for (int i=0 ;i<3;i++){
+                student_id[i] = relations.get(i).get("student_id").toString();
+                studentName[i] = Student.dao.findById(student_id[i]).get("name").toString();
+                identity_id[i] = relations.get(i).get("identity_id").toString();
+                identityName[i] = Identity.dao.findById(identity_id[i]).get("name").toString();
+                if (Student.dao.findById(student_id[i]).get("room_id") == null) {
+                    room_id[i] = "";
+                    roomName[i] = "班级";
+                } else {
+                    room_id[i] = Student.dao.findById(student_id[i]).get("room_id").toString();
+                    roomName[i] = Room.dao.findById(room_id[i]).get("name").toString();
+                }
+                roomAble[i] = "true";
+                studentAble[i] = "true";
+                identityAble[i] = "true";
+            }
+            for (int k = 3; k < 4; k++) {
+                student_id[k] = "";
+                studentName[k] = "姓名";
+                identity_id[k] = "";
+                identityName[k] = "身份";
+                room_id[k] = "";
+                roomName[k] = "班级";
+                roomAble[k] = "false";
+                studentAble[k] = "false";
+                identityAble[k] = "false";
+            }
+        } else if (relations.size() == 4) {
+            for (int i=0 ;i<4;i++){
+                student_id[i] = relations.get(i).get("student_id").toString();
+                studentName[i] = Student.dao.findById(student_id[i]).get("name").toString();
+                identity_id[i] = relations.get(i).get("identity_id").toString();
+                identityName[i] = Identity.dao.findById(identity_id[i]).get("name").toString();
+                if (Student.dao.findById(student_id[i]).get("room_id") == null) {
+                    room_id[i] = "";
+                    roomName[i] = "班级";
+                } else {
+                    room_id[i] = Student.dao.findById(student_id[i]).get("room_id").toString();
+                    roomName[i] = Room.dao.findById(room_id[i]).get("name").toString();
+                }
+                roomAble[i] = "true";
+                studentAble[i] = "true";
+                identityAble[i] = "true";
+            }
+        } else {
+
+        }
+        for (int i=0; i<4; i++){
+            relation[i] = "[room_id:'"+room_id[i]
+                    +"',student_id:'"+student_id[i]
+                    +"',identity_id:'"+identity_id[i]
+                    +"',roomName:'"+roomName[i]
+                    +"',studentName:'"+studentName[i]
+                    +"',identityName:'"+identityName[i]
+                    +"',roomAble:"+roomAble[i]
+                    +",studentAble:"+studentAble[i]
+                    +",identityAble:"+identityAble[i]+"]";
+        }
+        renderText("{relation1:"+relation[0]+"},{relation2:"+relation[1]+"},{relation3:"+relation[2]+"},{relation4:"+relation[3]+"}");
     }
     @Before({Tx.class,AjaxFunction.class})
     public void save()  {
@@ -107,7 +232,7 @@ public class ParentController extends Controller {
                         .save();
                 if (!getPara("student_id1").equals("") && !getPara("identity_id1").equals("")) {
                     Relation relation = new Relation();
-                    relation.set("parent_id", parent.getId())
+                    relation.set("parent_id", parent.get("id"))
                             .set("student_id", getPara("student_id1"))
                             .set("identity_id", getPara("identity_id1")).save();
                 }
@@ -133,6 +258,15 @@ public class ParentController extends Controller {
             }catch(WeixinException e){
                 renderText(e.getErrorText());
             }
+        }
+    }
+    @Before({Tx.class,AjaxFunction.class})
+    public void edit(){
+        Parent parent = Parent.dao.findById(getPara("id"));
+        if (parent == null) {
+            renderText("要修改的家长不存在!");
+        } else {
+            renderText("要修改的家长不存在!");
         }
     }
 }
