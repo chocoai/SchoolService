@@ -171,17 +171,17 @@ public class ParentController extends Controller {
 
         }
         for (int i=0; i<4; i++){
-            relation[i] = "[room_id:'"+room_id[i]
-                    +"',student_id:'"+student_id[i]
-                    +"',identity_id:'"+identity_id[i]
-                    +"',roomName:'"+roomName[i]
-                    +"',studentName:'"+studentName[i]
-                    +"',identityName:'"+identityName[i]
-                    +"',roomAble:"+roomAble[i]
-                    +",studentAble:"+studentAble[i]
-                    +",identityAble:"+identityAble[i]+"]";
+            relation[i] = "{'room_id':'"+room_id[i]
+                    +"','student_id':'"+student_id[i]
+                    +"','identity_id':'"+identity_id[i]
+                    +"','roomName':'"+roomName[i]
+                    +"','studentName':'"+studentName[i]
+                    +"','identityName':'"+identityName[i]
+                    +"','roomAble':"+roomAble[i]
+                    +",'studentAble':"+studentAble[i]
+                    +",'identityAble':"+identityAble[i]+"}";
         }
-        renderText("{relation1:"+relation[0]+"},{relation2:"+relation[1]+"},{relation3:"+relation[2]+"},{relation4:"+relation[3]+"}");
+        renderText("'relation1':"+relation[0]+"},{'relation2':"+relation[1]+"},{'relation3':"+relation[2]+"},{'relation4':"+relation[3]+"");
     }
     @Before({Tx.class,AjaxFunction.class})
     public void save()  {
