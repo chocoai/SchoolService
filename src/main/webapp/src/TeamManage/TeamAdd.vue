@@ -65,13 +65,7 @@ export default {
   created: function () {
     this.$http.get(
       API.TeacherList,
-      {
-        headers:
-        {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        emulateJSON: true
-      }
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.teachers = response.body
     }, (response) => {
