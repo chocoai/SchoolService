@@ -144,100 +144,84 @@ export default {
     goInactive () {
       this.$http.get(
         API.InactiveById,
-        { params: {
-          id: this.$route.params.teacherId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }
-        ).then((response) => {
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1' || this.state.toString() === '2') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup('取消关注成功!', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-          } else if (response.body === '要取消关注的人员不存在!') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1' || this.state.toString() === '2') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        { params: { id: this.$route.params.teacherId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1' || this.state.toString() === '2') {
+            this.inactive = true
+            this.active = false
           } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+            this.inactive = false
+            this.active = true
           }
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+          this.openPopup('取消关注成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        } else if (response.body === '要取消关注的人员不存在!') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1' || this.state.toString() === '2') {
+            this.inactive = true
+            this.active = false
+          } else {
+            this.inactive = false
+            this.active = true
+          }
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        }
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     goActive () {
       this.$http.get(
         API.ActiveById,
-        { params: {
-          id: this.$route.params.teacherId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }
-        ).then((response) => {
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1' || this.state.toString() === '2') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup('重新邀请关注成功!', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-          } else if (response.body === '要重新邀请关注的人员不存在!') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1' || this.state.toString() === '2') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup(response.body, 'report_problem', 'red')
-            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        { params: { id: this.$route.params.teacherId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'red')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1' || this.state.toString() === '2') {
+            this.inactive = true
+            this.active = false
           } else {
-            this.openPopup(response.body, 'report_problem', 'red')
-            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+            this.inactive = false
+            this.active = true
           }
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+          this.openPopup('重新邀请关注成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        } else if (response.body === '要重新邀请关注的人员不存在!') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1' || this.state.toString() === '2') {
+            this.inactive = true
+            this.active = false
+          } else {
+            this.inactive = false
+            this.active = true
+          }
+          this.openPopup(response.body, 'report_problem', 'red')
+          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'red')
+          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        }
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     goSave () {
       this.forSave = true
@@ -249,44 +233,29 @@ export default {
           mobile: this.mobile,
           isManager: this.isManagers,
           isParent: this.isParents
+        } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.openPopup('修改成功！', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
         }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.openPopup('修改成功！', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-          } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-          }
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     fetchData (teacherId) {
       this.$http.get(
         API.GetById,
-        { params:
-        {
-          id: teacherId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          emulateJSON: true
-        }
+        { params: { id: teacherId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.teacher = response.body
         this.name = this.teacher.name
@@ -318,47 +287,32 @@ export default {
       })
     },
     checkName (value) {
-      this.$http.get(
-        API.CheckName,
-        { params: {
-          id: this.$route.params.teacherId,
-          name: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.nameErrorText = ''
-            this.nameErrorColor = 'green'
-          } else {
-            this.nameErrorText = response.body
-            this.nameErrorColor = 'red'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+      if (value === null || value === undefined || value === '') {
+        this.nameErrorText = '姓名为必填项!'
+        this.nameErrorColor = 'orange'
+      } else if (!/^[\u4e00-\u9fa5]{2,}$/.test(value)) {
+        this.nameErrorText = '姓名应为2个以上汉字'
+        this.nameErrorColor = 'orange'
+      } else {
+
+      }
     },
     checkMobile (value) {
-      this.$http.get(
-        API.CheckMobileForEdit,
-        { params: {
-          id: this.$route.params.teacherId,
-          mobile: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
+      if (value === null || value === undefined || value === '') {
+        this.mobileErrorText = '手机号码为必填项!'
+        this.mobileErrorColor = 'orange'
+      } else if (!/^1(3|4|5|7|8)\d{9}$/.test(value)) {
+        this.mobileErrorText = '手机号码格式错误!'
+        this.mobileErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckMobileForEdit,
+          { params: {
+            id: this.$route.params.teacherId,
+            mobile: value
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
@@ -372,6 +326,7 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
+      }
     }
   }
 }

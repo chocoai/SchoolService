@@ -101,65 +101,39 @@ export default {
       this.mobileErrorColor = ''
     },
     checkName (value) {
-      this.$http.get(
-        API.CheckName,
-        { params: {
-          name: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.nameErrorText = ''
-            this.nameErrorColor = 'green'
-          } else {
-            this.nameErrorText = response.body
-            this.nameErrorColor = 'red'
-          }
+      if (value === null || value === undefined || value === '') {
+        this.nameErrorText = '姓名为必填项!'
+        this.nameErrorColor = 'orange'
+        this.userId = ''
+      } else if (!/^[\u4e00-\u9fa5]{2,}$/.test(value)) {
+        this.nameErrorText = '姓名应为2个以上汉字'
+        this.nameErrorColor = 'orange'
+        this.userId = ''
+      } else {
+        this.$http.get(
+          API.GetUserId,
+          { params: { name: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          this.userId = response.body
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
-      this.$http.get(
-        API.GetUserId,
-        { params: {
-          name: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          if (value === '') {
-            this.userId = ''
-          } else {
-            this.userId = response.body
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+      }
     },
     checkUserId (value) {
-      this.$http.get(
-        API.CheckUserIdForNew,
-        { params: {
-          userId: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
+      if (value === null || value === undefined || value === '') {
+        this.userIdErrorText = '账号为必填项!'
+        this.userIdErrorColor = 'orange'
+      } else if (!/^[A-Za-z0-9]+$/.test(value)) {
+        this.userIdErrorText = '账号名应为字母或数字的组合!'
+        this.userIdErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckUserIdForNew,
+          { params: { userId: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
@@ -173,25 +147,26 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
+      }
     },
     checkMobile (value) {
-      this.$http.get(
-        API.CheckMobileForNew,
-        { params: {
-          mobile: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
+      if (value === null || value === undefined || value === '') {
+        this.mobileErrorText = '手机号码为必填项!'
+        this.mobileErrorColor = 'orange'
+      } else if (!/^1(3|4|5|7|8)\d{9}$/.test(value)) {
+        this.mobileErrorText = '手机号码格式错误!'
+        this.mobileErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckMobileForNew,
+          { params: { mobile: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.mobileErrorText = '此处应填写微信绑定的手机号码.'
+            this.mobileErrorText = ''
             this.mobileErrorColor = 'green'
           } else {
             this.mobileErrorText = response.body
@@ -200,6 +175,7 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
+      }
     },
     goSave () {
       this.forSave = true
@@ -211,31 +187,26 @@ export default {
           mobile: this.mobile,
           isManager: this.isManagers,
           isParent: this.isParents
+        } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.saved = true
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.openPopup('保存成功！', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
         }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          this.saved = true
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.openPopup('保存成功！', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-          } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-          }
-          this.saved = false
-          this.forSave = false
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+        this.saved = false
+        this.forSave = false
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     }
   }
 }

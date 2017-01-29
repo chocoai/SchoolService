@@ -83,20 +83,12 @@
       teacherQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
           API.Query,
-          { params:
-          {
+          { params: {
             queryString: queryString,
             pageCurrent: pageCurrent,
             pageSize: pageSize
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            emulateJSON: true
-          }
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           this.teachers = response.body
           this.pageCurrent = pageCurrent
@@ -108,18 +100,11 @@
       teacherTotal (queryString, pageSize) {
         this.$http.get(
           API.TotalByName,
-          { params:
-          {
+          { params: {
             queryString: queryString,
             pageSize: pageSize
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           this.pageTotal = response.body
           this.pageTotal === '0' ? this.chip = false : this.chip = true

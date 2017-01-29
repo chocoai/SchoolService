@@ -420,13 +420,7 @@ export default {
   created: function () {
     this.$http.get(
       API.RoomList,
-      {
-        headers:
-        {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        emulateJSON: true
-      }
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.rooms = response.body
     }, (response) => {
@@ -434,13 +428,7 @@ export default {
     })
     this.$http.get(
       API.IdentityList,
-      {
-        headers:
-        {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        emulateJSON: true
-      }
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.identities = response.body
     }, (response) => {
@@ -452,18 +440,8 @@ export default {
       if (val.toString() !== '') {
         this.$http.get(
           API.StudentList,
-          { params:
-          {
-            id: val
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            emulateJSON: true
-          }
+          { params: { id: val } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           this.students1 = response.body
         }, (response) => {
@@ -477,18 +455,8 @@ export default {
       if (val.toString() !== '') {
         this.$http.get(
           API.StudentList,
-          { params:
-          {
-            id: val
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            emulateJSON: true
-          }
+          { params: { id: val } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           this.students2 = response.body
         }, (response) => {
@@ -502,18 +470,8 @@ export default {
       if (val.toString() !== '') {
         this.$http.get(
           API.StudentList,
-          { params:
-          {
-            id: val
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            emulateJSON: true
-          }
+          { params: { id: val } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           this.students3 = response.body
         }, (response) => {
@@ -527,18 +485,8 @@ export default {
       if (val.toString() !== '') {
         this.$http.get(
           API.StudentList,
-          { params:
-          {
-            id: val
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            },
-            emulateJSON: true
-          }
+          { params: { id: val } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           this.students4 = response.body
         }, (response) => {
@@ -981,20 +929,13 @@ export default {
       if (this.room_id1.toString() !== '') {
         this.$http.get(
           API.GetRoomName,
-          { params: {
-            id: this.room_id1
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.roomName1 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
+          { params: { id: this.room_id1 } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.roomName1 = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'error', 'red')
+        })
       } else {
         this.roomName1 = '班级'
         this.studentName1 = '姓名'
@@ -1009,20 +950,13 @@ export default {
       if (this.room_id2.toString() !== '') {
         this.$http.get(
           API.GetRoomName,
-          { params: {
-            id: this.room_id2
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.roomName2 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
+          { params: { id: this.room_id2 } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.roomName2 = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'error', 'red')
+        })
       } else {
         this.roomName2 = '班级'
         this.studentName2 = '姓名'
@@ -1037,21 +971,13 @@ export default {
       if (this.room_id3.toString() !== '') {
         this.$http.get(
           API.GetRoomName,
-          { params:
-          {
-            id: this.room_id3
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.roomName3 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
+          { params: { id: this.room_id3 } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.roomName3 = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'error', 'red')
+        })
       } else {
         this.roomName3 = '班级'
         this.studentName3 = '姓名'
@@ -1066,20 +992,13 @@ export default {
       if (this.room_id4.toString() !== '') {
         this.$http.get(
           API.GetRoomName,
-          { params: {
-            id: this.room_id4
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.roomName4 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
+          { params: { id: this.room_id4 } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.roomName4 = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'error', 'red')
+        })
       } else {
         this.roomName4 = '班级'
         this.studentName4 = '姓名'
@@ -1097,20 +1016,13 @@ export default {
         if (this.student_id1.toString() !== '') {
           this.$http.get(
             API.GetStudentName,
-            { params: {
-              id: this.student_id1
-            }
-            },
-            {
-              headers:
-              {
-                'X-Requested-With': 'XMLHttpRequest'
-              }
-            }).then((response) => {
-              this.studentName1 = response.body
-            }, (response) => {
-              this.openPopup('服务器内部错误！', 'error', 'red')
-            })
+            { params: { id: this.student_id1 } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+          ).then((response) => {
+            this.studentName1 = response.body
+          }, (response) => {
+            this.openPopup('服务器内部错误！', 'error', 'red')
+          })
         } else {
           this.studentName1 = '姓名'
           this.identityName1 = '身份'
@@ -1127,20 +1039,13 @@ export default {
         if (this.student_id2.toString() !== '') {
           this.$http.get(
             API.GetStudentName,
-            { params: {
-              id: this.student_id2
-            }
-            },
-            {
-              headers:
-              {
-                'X-Requested-With': 'XMLHttpRequest'
-              }
-            }).then((response) => {
-              this.studentName2 = response.body
-            }, (response) => {
-              this.openPopup('服务器内部错误!', 'error', 'red')
-            })
+            { params: { id: this.student_id2 } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+          ).then((response) => {
+            this.studentName2 = response.body
+          }, (response) => {
+            this.openPopup('服务器内部错误!', 'error', 'red')
+          })
         } else {
           this.studentName2 = '姓名'
           this.identityName2 = '身份'
@@ -1157,20 +1062,13 @@ export default {
         if (this.student_id3.toString() !== '') {
           this.$http.get(
             API.GetStudentName,
-            { params: {
-              id: this.student_id3
-            }
-            },
-            {
-              headers:
-              {
-                'X-Requested-With': 'XMLHttpRequest'
-              }
-            }).then((response) => {
-              this.studentName3 = response.body
-            }, (response) => {
-              this.openPopup('服务器内部错误!', 'error', 'red')
-            })
+            { params: { id: this.student_id3 } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+          ).then((response) => {
+            this.studentName3 = response.body
+          }, (response) => {
+            this.openPopup('服务器内部错误!', 'error', 'red')
+          })
         } else {
           this.studentName3 = '姓名'
           this.identityName3 = '身份'
@@ -1187,20 +1085,13 @@ export default {
         if (this.student_id4.toString() !== '') {
           this.$http.get(
             API.GetStudentName,
-            { params: {
-              id: this.student_id4
-            }
-            },
-            {
-              headers:
-              {
-                'X-Requested-With': 'XMLHttpRequest'
-              }
-            }).then((response) => {
-              this.studentName4 = response.body
-            }, (response) => {
-              this.openPopup('服务器内部错误!', 'error', 'red')
-            })
+            { params: { id: this.student_id4 } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+          ).then((response) => {
+            this.studentName4 = response.body
+          }, (response) => {
+            this.openPopup('服务器内部错误!', 'error', 'red')
+          })
         } else {
           this.studentName4 = '姓名'
           this.identityName4 = '身份'
@@ -1214,20 +1105,13 @@ export default {
       if (this.identity_id1.toString() !== '') {
         this.$http.get(
           API.GetIdentityName,
-          { params: {
-            id: this.identity_id1
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.identityName1 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误!', 'error', 'red')
-          })
+          { params: { id: this.identity_id1 } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.identityName1 = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
       } else {
         this.identityName1 = '身份'
         this.identity_id1 = ''
@@ -1238,20 +1122,13 @@ export default {
       if (this.identity_id2.toString() !== '') {
         this.$http.get(
           API.GetIdentityName,
-          { params: {
-            id: this.identity_id2
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.identityName2 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误!', 'error', 'red')
-          })
+          { params: { id: this.identity_id2 } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.identityName2 = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
       } else {
         this.identityName2 = '身份'
         this.identity_id2 = ''
@@ -1262,20 +1139,13 @@ export default {
       if (this.identity_id3.toString() !== '') {
         this.$http.get(
           API.GetIdentityName,
-          { params: {
-            id: this.identity_id3
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.identityName3 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误!', 'error', 'red')
-          })
+          { params: { id: this.identity_id3 } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.identityName3 = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
       } else {
         this.identityName3 = '身份'
         this.identity_id3 = ''
@@ -1286,85 +1156,52 @@ export default {
       if (this.identity_id4.toString() !== '') {
         this.$http.get(
           API.GetIdentityName,
-          { params: {
-            id: this.identity_id4
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.identityName4 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误!', 'error', 'red')
-          })
+          { params: { id: this.identity_id4 } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.identityName4 = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
       } else {
         this.identityName4 = '身份'
         this.identity_id4 = ''
       }
     },
     checkName (value) {
-      this.$http.get(
-        API.CheckName,
-        { params: {
-          name: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.nameErrorText = ''
-            this.nameErrorColor = 'green'
-          } else {
-            this.nameErrorText = response.body
-            this.nameErrorColor = 'red'
-          }
+      if (value === null || value === undefined || value === '') {
+        this.nameErrorText = '姓名为必填项!'
+        this.nameErrorColor = 'orange'
+        this.userId = ''
+      } else if (!/^[\u4e00-\u9fa5]{2,}$/.test(value)) {
+        this.nameErrorText = '姓名应为2个以上汉字'
+        this.nameErrorColor = 'orange'
+        this.userId = ''
+      } else {
+        this.$http.get(
+          API.GetUserId,
+          { params: { name: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          this.userId = response.body
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
-      this.$http.get(
-        API.GetUserId,
-        { params: {
-          name: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          if (value === '') {
-            this.userId = ''
-          } else {
-            this.userId = response.body
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+      }
     },
     checkUserId (value) {
-      this.$http.get(
-        API.CheckUserIdForNew,
-        { params: {
-          userId: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
+      if (value === null || value === undefined || value === '') {
+        this.userIdErrorText = '账号为必填项!'
+        this.userIdErrorColor = 'orange'
+      } else if (!/^[A-Za-z0-9]+$/.test(value)) {
+        this.userIdErrorText = '账号名应为字母或数字的组合!'
+        this.userIdErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckUserIdForNew,
+          { params: { userId: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
@@ -1378,25 +1215,26 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
+      }
     },
     checkMobile (value) {
-      this.$http.get(
-        API.CheckMobileForNew,
-        { params: {
-          mobile: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
+      if (value === null || value === undefined || value === '') {
+        this.mobileErrorText = '手机号码为必填项!'
+        this.mobileErrorColor = 'orange'
+      } else if (!/^1(3|4|5|7|8)\d{9}$/.test(value)) {
+        this.mobileErrorText = '手机号码格式错误!'
+        this.mobileErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckMobileForNew,
+          { params: { mobile: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.mobileErrorText = '此处应填写微信绑定的手机号码.'
+            this.mobileErrorText = ''
             this.mobileErrorColor = 'green'
           } else {
             this.mobileErrorText = response.body
@@ -1405,6 +1243,7 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
+      }
     },
     goSave () {
       this.forSave = true
@@ -1426,29 +1265,24 @@ export default {
           identity_id2: this.identity_id2,
           identity_id3: this.identity_id3,
           identity_id4: this.identity_id4
+        } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.openPopup('保存成功！', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/parentList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
         }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.openPopup('保存成功！', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/parentList' }) }, 1000)
-          } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-          }
-          this.forSave = false
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+        this.forSave = false
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     }
   }
 }

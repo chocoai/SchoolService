@@ -1,6 +1,5 @@
 const h = ''
 // const h = '/ds'
-export const CheckName = `${h}/enterprise/checkName`
 export const CheckMobileForNew = `${h}/enterprise/checkMobileForNew`
 export const CheckUserIdForNew = `${h}/enterprise/checkUserIdForNew`
 export const CheckMobileForEdit = `${h}/enterprise/checkMobileForEdit`

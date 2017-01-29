@@ -45,14 +45,8 @@ public class TeacherController extends Controller {
 
   @Before({Tx.class,AjaxFunction.class})
   public void save()  {
-    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-      renderText("教师姓名应为两个以上汉字!");
-    } else if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
-      renderText("手机号码格式不正确!");
-    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+    if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
-    } else if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
-      renderText("账号名应为字母或数字的组合!");
     } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
       renderText("该账号名已存在!");
     } else {
@@ -90,10 +84,10 @@ public class TeacherController extends Controller {
               && Util.getString(teacher.get("isParent").toString()).equals(getPara("isParent").trim())
               ) {
         renderText("未找到修改内容!");
-      } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-        renderText("教师姓名应为两个以上汉字!");
-      } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
-        renderText("手机号码格式错误!");
+//      } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+//        renderText("教师姓名应为两个以上汉字!");
+//      } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+//        renderText("手机号码格式错误!");
       } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
               &&  Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
         renderText("该手机号码已存在!");
@@ -113,10 +107,10 @@ public class TeacherController extends Controller {
           try{
             User user = new User(teacher.get("userId").toString(),teacher.get("name").toString());
             user.setMobile(getPara("mobile").trim());
-            WP.me.updateUser(user);
             teacher.set("name",getPara("name").trim())
                     .set("mobile",getPara("mobile").trim())
                     .update();
+            WP.me.updateUser(user);
             renderText("OK");
           }catch(WeixinException e){
             renderText(e.getErrorText());

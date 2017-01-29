@@ -186,14 +186,14 @@ public class ParentController extends Controller {
     }
     @Before({Tx.class,AjaxFunction.class})
     public void save()  {
-        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-            renderText("教师姓名应为两个以上汉字!");
-        } else if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
-            renderText("手机号码格式不正确!");
-        } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+//        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+//            renderText("教师姓名应为两个以上汉字!");
+//        } else if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+//            renderText("手机号码格式不正确!");
+//        } else if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
+//            renderText("账号名应为字母或数字的组合!");
+        if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
             renderText("该手机号码已存在!");
-        } else if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
-            renderText("账号名应为字母或数字的组合!");
         } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
             renderText("该账号名已存在!");
         } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
@@ -231,25 +231,33 @@ public class ParentController extends Controller {
                         .set("isManager",0)
                         .set("isParent",1)
                         .save();
-                if (!getPara("student_id1").equals("") && !getPara("identity_id1").equals("")) {
+                if (!getPara("student_id1").equals("") && !getPara("identity_id1").equals("")
+                        && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                        ,getPara("student_id1"),getPara("identity_id1")).size()==0) {
                     Relation relation = new Relation();
                     relation.set("parent_id", parent.get("id"))
                             .set("student_id", getPara("student_id1"))
                             .set("identity_id", getPara("identity_id1")).save();
                 }
-                if (!getPara("student_id2").equals("") && !getPara("identity_id2").equals("")) {
+                if (!getPara("student_id2").equals("") && !getPara("identity_id2").equals("")
+                        && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                        ,getPara("student_id2"),getPara("identity_id2")).size()==0) {
                     Relation relation = new Relation();
                     relation.set("parent_id", parent.getId())
                             .set("student_id", getPara("student_id2"))
                             .set("identity_id", getPara("identity_id2")).save();
                 }
-                if (!getPara("student_id3").equals("") && !getPara("identity_id3").equals("")) {
+                if (!getPara("student_id3").equals("") && !getPara("identity_id3").equals("")
+                        && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                        ,getPara("student_id3"),getPara("identity_id3")).size()==0) {
                     Relation relation = new Relation();
                     relation.set("parent_id", parent.getId())
                             .set("student_id", getPara("student_id3"))
                             .set("identity_id", getPara("identity_id3")).save();
                 }
-                if (!getPara("student_id4").equals("") && !getPara("identity_id4").equals("")) {
+                if (!getPara("student_id4").equals("") && !getPara("identity_id4").equals("")
+                        && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                        ,getPara("student_id4"),getPara("identity_id4")).size()==0) {
                     Relation relation = new Relation();
                     relation.set("parent_id", parent.getId())
                             .set("student_id", getPara("student_id4"))
@@ -263,11 +271,67 @@ public class ParentController extends Controller {
     }
     @Before({Tx.class,AjaxFunction.class})
     public void edit(){
-        Parent parent = Parent.dao.findById(getPara("id"));
+        Enterprise parent = Enterprise.dao.findById(getPara("id"));
         if (parent == null) {
             renderText("要修改的家长不存在!");
         } else {
-            renderText("要修改的家长不存在!");
+//            if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+//                renderText("教师姓名应为两个以上汉字!");
+//            } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+//                renderText("手机号码格式错误!");
+            if (!Util.getString(parent.getStr("mobile")).equals(getPara("mobile"))
+                    &&  Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+                renderText("该手机号码已存在!");
+            } else {
+                try {
+                    Db.update("delete from relation where parent_id = ?", getPara("id"));
+                    if (!getPara("student_id1").equals("") && !getPara("identity_id1").equals("")
+                            && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                            ,getPara("student_id1"),getPara("identity_id1")).size()==0) {
+                        Relation relation = new Relation();
+                        relation.set("parent_id", parent.get("id"))
+                                .set("student_id", getPara("student_id1"))
+                                .set("identity_id", getPara("identity_id1")).save();
+                    }
+                    if (!getPara("student_id2").equals("") && !getPara("identity_id2").equals("")
+                            && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                            ,getPara("student_id2"),getPara("identity_id2")).size()==0) {
+                        Relation relation = new Relation();
+                        relation.set("parent_id", parent.getId())
+                                .set("student_id", getPara("student_id2"))
+                                .set("identity_id", getPara("identity_id2")).save();
+                    }
+                    if (!getPara("student_id3").equals("") && !getPara("identity_id3").equals("")
+                            && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                            ,getPara("student_id3"),getPara("identity_id3")).size()==0) {
+                        Relation relation = new Relation();
+                        relation.set("parent_id", parent.getId())
+                                .set("student_id", getPara("student_id3"))
+                                .set("identity_id", getPara("identity_id3")).save();
+                    }
+                    if (!getPara("student_id4").equals("") && !getPara("identity_id4").equals("")
+                            && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                            ,getPara("student_id4"),getPara("identity_id4")).size()==0) {
+                        Relation relation = new Relation();
+                        relation.set("parent_id", parent.getId())
+                                .set("student_id", getPara("student_id4"))
+                                .set("identity_id", getPara("identity_id4")).save();
+                    }
+                    if (!Util.getString(parent.getStr("name")).equals(getPara("name").trim())
+                            || !Util.getString(parent.getStr("mobile")).equals(getPara("mobile").trim())
+                            ) {
+                        parent.set("name", getPara("name").trim())
+                                .set("mobile", getPara("mobile").trim())
+                                .update();
+                        User user = new User(parent.get("userId").toString(), parent.get("name").toString());
+                        user.setMobile(getPara("mobile").trim());
+                        WP.me.updateUser(user);
+                    }
+                    renderText("OK");
+                } catch (WeixinException e) {
+                    renderText(e.getErrorText());
+                }
+            }
         }
     }
 }

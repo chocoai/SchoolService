@@ -14,25 +14,25 @@ import com.wts.util.msg.Util.MessageUtil;
 import java.util.Map;
 
 public class EnterpriseController extends Controller {
-  /**
-   * 检测姓名
-   * */
-  @Before(AjaxFunction.class)
-  public void checkName() {
-    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-      renderText("请输入两个以上的汉字!");
-    } else {
-      renderText("OK");
-    }
-  }
+//  /**
+//   * 检测姓名
+//   * */
+//  @Before(AjaxFunction.class)
+//  public void checkName() {
+//    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+//      renderText("请输入两个以上的汉字!");
+//    } else {
+//      renderText("OK");
+//    }
+//  }
   /**
    * 新增时检测手机号码
    * */
   @Before(AjaxFunction.class)
   public void checkMobileForNew() {
-    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
-      renderText("手机号码格式错误!");
-    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+//    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+//      renderText("手机号码格式错误!");
+    if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
     } else {
       renderText("OK");
@@ -43,9 +43,9 @@ public class EnterpriseController extends Controller {
    * */
   @Before(AjaxFunction.class)
   public void checkUserIdForNew() {
-    if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
-      renderText("账号名应为字母或数字的组合!");
-    } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
+//    if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
+//      renderText("账号名应为字母或数字的组合!");
+    if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
       renderText("该账号已存在");
     } else {
       renderText("OK");
@@ -57,9 +57,9 @@ public class EnterpriseController extends Controller {
    * */
   @Before(AjaxFunction.class)
   public void checkMobileForEdit() {
-    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
-      renderText("手机号码格式错误!");
-    } else if (!Enterprise.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
+//    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+//      renderText("手机号码格式错误!");
+    if (!Enterprise.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
             && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
     } else {

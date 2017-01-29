@@ -59,9 +59,9 @@ public class RoomController extends Controller {
   }
   @Before(AjaxFunction.class)
   public void checkNameForNew() {
-    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-      renderText("班级名称格式应为：XXXX级XX班");
-    } else if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+//    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+//      renderText("班级名称格式应为：XXXX级XX班");
+    if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
       renderText("该班级已存在!");
     } else {
       renderText("OK");

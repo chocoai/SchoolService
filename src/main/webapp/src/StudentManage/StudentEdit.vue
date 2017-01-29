@@ -121,13 +121,7 @@ export default {
   created () {
     this.$http.get(
       API.RoomList,
-      {
-        headers:
-        {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        emulateJSON: true
-      }
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.rooms = response.body
     }, (response) => {
@@ -135,13 +129,7 @@ export default {
     })
     this.$http.get(
       API.TeamList,
-      {
-        headers:
-        {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        emulateJSON: true
-      }
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.teams = response.body
     }, (response) => {
@@ -205,20 +193,13 @@ export default {
       if (this.room_id.toString() !== '') {
         this.$http.get(
           API.GetRoomName,
-          { params: {
-            id: this.room_id
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.roomName = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
+          { params: { id: this.room_id } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          this.roomName = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'error', 'red')
+        })
       } else {
         this.roomName = '所属班级'
       }
@@ -228,20 +209,13 @@ export default {
       if (this.team_id.toString() !== '') {
         this.$http.get(
           API.GetTeamName,
-          { params: {
-            id: this.team_id
-          }
-          },
-          {
-            headers:
-            {
-              'X-Requested-With': 'XMLHttpRequest'
-            }
-          }).then((response) => {
-            this.teamName = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
+          { params: { id: this.team_id } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          this.teamName = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'error', 'red')
+        })
       } else {
         this.teamName = '所属社团'
       }
@@ -264,106 +238,89 @@ export default {
     goInactive () {
       this.forSave = true
       this.$http.get(
-        API.InactiveById,
-        { params: {
-          id: this.$route.params.studentId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }
-        ).then((response) => {
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup('注销成功!', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
-          } else if (response.body === '要注销的学生不存在!') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        API.InactiveById, id: this.$route.params.studentId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1') {
+            this.inactive = true
+            this.active = false
           } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+            this.inactive = false
+            this.active = true
           }
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+          this.openPopup('注销成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        } else if (response.body === '要注销的学生不存在!') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1') {
+            this.inactive = true
+            this.active = false
+          } else {
+            this.inactive = false
+            this.active = true
+          }
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        }
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     goActive () {
       this.forSave = true
       this.$http.get(
         API.ActiveById,
-        { params: {
-          id: this.$route.params.studentId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }
-        ).then((response) => {
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup('激活成功!', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
-          } else if (response.body === '要激活的学生不存在!') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        { params: { id: this.$route.params.studentId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1') {
+            this.inactive = true
+            this.active = false
           } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+            this.inactive = false
+            this.active = true
           }
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+          this.openPopup('激活成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        } else if (response.body === '要激活的学生不存在!') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1') {
+            this.inactive = true
+            this.active = false
+          } else {
+            this.inactive = false
+            this.active = true
+          }
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        }
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     goSave () {
       this.forSave = true
@@ -377,44 +334,29 @@ export default {
           address: this.address,
           room_id: this.room_id,
           team_id: this.team_id
+        } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.openPopup('修改成功！', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
         }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.openPopup('修改成功！', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/studentList' }) }, 1000)
-          } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-          }
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     fetchData (studentId) {
       this.$http.get(
         API.GetById,
-        { params:
-        {
-          id: studentId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          emulateJSON: true
-        }
+        { params: { id: studentId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
         this.student = response.body
         this.name = this.student.name
@@ -435,20 +377,13 @@ export default {
           this.room_id = this.student.room_id
           this.$http.get(
             API.GetRoomName,
-            { params: {
-              id: this.room_id
-            }
-            },
-            {
-              headers:
-              {
-                'X-Requested-With': 'XMLHttpRequest'
-              }
-            }).then((response) => {
-              this.roomName = response.body
-            }, (response) => {
-              this.openPopup('服务器内部错误！', 'error', 'red')
-            })
+            { params: { id: this.room_id } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+          ).then((response) => {
+            this.roomName = response.body
+          }, (response) => {
+            this.openPopup('服务器内部错误！', 'error', 'red')
+          })
         } else {
           this.roomName = '所属班级'
         }
@@ -456,70 +391,49 @@ export default {
           this.team_id = this.student.team_id
           this.$http.get(
             API.GetTeamName,
-            { params: {
-              id: this.team_id
-            }
-            },
-            {
-              headers:
-              {
-                'X-Requested-With': 'XMLHttpRequest'
-              }
-            }).then((response) => {
-              this.teamName = response.body
-            }, (response) => {
-              this.openPopup('服务器内部错误！', 'error', 'red')
-            })
+            { params: { id: this.team_id } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+          ).then((response) => {
+            this.teamName = response.body
+          }, (response) => {
+            this.openPopup('服务器内部错误！', 'error', 'red')
+          })
         } else {
           this.teamName = '所属社团'
         }
       }, (response) => {
+        this.openPopup('服务器内部错误！', 'error', 'red')
       })
     },
     checkName (value) {
-      this.$http.get(
-        API.CheckName,
-        { params: {
-          id: this.$route.params.studentId,
-          name: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.nameErrorText = ''
-            this.nameErrorColor = 'green'
-          } else {
-            this.nameErrorText = response.body
-            this.nameErrorColor = 'red'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
-        })
+      if (value === null || value === undefined || value === '') {
+        this.nameErrorText = '姓名为必填项!'
+        this.nameErrorColor = 'orange'
+      } else if (!/^[\u4e00-\u9fa5]{2,}$/.test(value)) {
+        this.nameErrorText = '姓名应为2个以上汉字'
+        this.nameErrorColor = 'orange'
+      } else {
+
+      }
     },
     checkNumber (value) {
-      this.$http.get(
-        API.CheckNumberForEdit,
-        { params: {
-          id: this.$route.params.studentId,
-          number: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
+      if (value === null || value === undefined || value === '') {
+        this.nameErrorText = '证件号码为必填项!'
+        this.nameErrorColor = 'orange'
+      } else if (!/\d{17}[0-9,X]/.test(value)) {
+        this.nameErrorText = '证件号码应为18位字符'
+        this.nameErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckNumberForEdit,
+          { params: {
+            id: this.$route.params.studentId,
+            number: value
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
           if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
             this.numberErrorText = ''
@@ -529,7 +443,7 @@ export default {
             this.numberErrorColor = 'red'
           }
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
     },
     checkCode (value) {
@@ -538,27 +452,22 @@ export default {
         { params: {
           id: this.$route.params.studentId,
           code: value
+        } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'red')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.codeErrorText = ''
+          this.codeErrorColor = 'green'
+        } else {
+          this.codeErrorText = response.body
+          this.codeErrorColor = 'red'
         }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.codeErrorText = ''
-            this.codeErrorColor = 'green'
-          } else {
-            this.codeErrorText = response.body
-            this.codeErrorColor = 'red'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'report_problem', 'orange')
-        })
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+      })
     }
   }
 }
