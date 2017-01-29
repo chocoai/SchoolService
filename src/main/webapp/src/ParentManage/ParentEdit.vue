@@ -329,12 +329,14 @@ export default {
     return {
       edit: true,
       save: false,
+      able: false,
       inactive: false,
       active: false,
       forInactive: false,
       forActive: false,
       bottomPopup: false,
       forSave: false,
+      relation: '',
       icon: '',
       color: '',
       parent: '',
@@ -359,7 +361,7 @@ export default {
       studentNumber2: false,
       studentNumber3: false,
       studentNumber4: false,
-      roomAble1: true,
+      roomAble1: false,
       roomAble2: false,
       roomAble3: false,
       roomAble4: false,
@@ -748,81 +750,84 @@ export default {
       }
     },
     identityAble4: function () {
-      if (this.student_id4.toString() !== '') {
+      if (this.student_id4.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     studentAble4: function () {
-      if (this.room_id4.toString() !== '') {
+      if (this.room_id4.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     roomAble4: function () {
-      if (this.identity_id3.toString() !== '') {
+      if (this.identity_id3.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     identityAble3: function () {
-      if (this.student_id3.toString() !== '') {
+      if (this.student_id3.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     studentAble3: function () {
-      if (this.room_id3.toString() !== '') {
+      if (this.room_id3.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     roomAble3: function () {
-      if (this.identity_id2.toString() !== '') {
+      if (this.identity_id2.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     identityAble2: function () {
-      if (this.student_id2.toString() !== '') {
+      if (this.student_id2.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     studentAble2: function () {
-      if (this.room_id2.toString() !== '') {
+      if (this.room_id2.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     roomAble2: function () {
-      if (this.identity_id1.toString() !== '') {
+      if (this.identity_id1.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     identityAble1: function () {
-      if (this.student_id1.toString() !== '') {
+      if (this.student_id1.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
     },
     studentAble1: function () {
-      if (this.room_id1.toString() !== '') {
+      if (this.room_id1.toString() !== '' && this.able) {
         return false
       } else {
         return true
       }
+    },
+    roomAble1: function () {
+      return !this.able
     }
   },
   methods: {
@@ -922,12 +927,38 @@ export default {
       this.save = true
       this.inactive = false
       this.active = false
+      this.able = true
+      this.roomAble1 = this.relation.roomAble1
+      this.roomAble2 = this.relation.roomAble2
+      this.roomAble3 = this.relation.roomAble3
+      this.roomAble4 = this.relation.roomAble4
+      this.studentAble1 = this.relation.studentAble1
+      this.studentAble2 = this.relation.studentAble2
+      this.studentAble3 = this.relation.studentAble3
+      this.studentAble4 = this.relation.studentAble4
+      this.identityAble1 = this.relation.identityAble1
+      this.identityAble2 = this.relation.identityAble2
+      this.identityAble3 = this.relation.identityAble3
+      this.identityAble4 = this.relation.identityAble4
     },
     goCancel () {
       this.edit = true
       this.save = false
       this.fetchData(this.$route.params.parentId)
       this.getRelation(this.$route.params.parentId)
+      this.able = false
+      this.roomAble1 = false
+      this.roomAble2 = false
+      this.roomAble3 = false
+      this.roomAble4 = false
+      this.studentAble1 = false
+      this.studentAble2 = false
+      this.studentAble3 = false
+      this.studentAble4 = false
+      this.identityAble1 = false
+      this.identityAble2 = false
+      this.identityAble3 = false
+      this.identityAble4 = false
     },
     goClose () {
       this.forInactive = false
@@ -1473,43 +1504,31 @@ export default {
         }
       ).then((response) => {
         /* eslint-disable no-eval  */
-        var relation = eval('(' + response.body + ')')
-        this.room_id1 = relation.room_id1
-        this.room_id2 = relation.room_id2
-        this.room_id3 = relation.room_id3
-        this.room_id4 = relation.room_id4
-        this.student_id1 = relation.student_id1
-        this.student_id2 = relation.student_id2
-        this.student_id3 = relation.student_id3
-        this.student_id4 = relation.student_id4
-        this.identity_id1 = relation.identity_id1
-        this.identity_id2 = relation.identity_id2
-        this.identity_id3 = relation.identity_id3
-        this.identity_id4 = relation.identity_id4
-        this.roomName1 = relation.roomName1
-        this.roomName2 = relation.roomName2
-        this.roomName3 = relation.roomName3
-        this.roomName4 = relation.roomName4
-        this.studentName1 = relation.studentName1
-        this.studentName2 = relation.studentName2
-        this.studentName3 = relation.studentName3
-        this.studentName4 = relation.studentName4
-        this.identityName1 = relation.identityName1
-        this.identityName2 = relation.identityName2
-        this.identityName3 = relation.identityName3
-        this.identityName4 = relation.identityName4
-        this.roomAble1 = relation.roomAble1
-        this.roomAble2 = relation.roomAble2
-        this.roomAble3 = relation.roomAble3
-        this.roomAble4 = relation.roomAble4
-        this.studentAble1 = relation.studentAble1
-        this.studentAble2 = relation.studentAble2
-        this.studentAble3 = relation.studentAble3
-        this.studentAble4 = relation.studentAble4
-        this.identityAble1 = relation.identityAble1
-        this.identityAble2 = relation.identityAble2
-        this.identityAble3 = relation.identityAble3
-        this.identityAble4 = relation.identityAble4
+        this.relation = eval('(' + response.body + ')')
+        this.room_id1 = this.relation.room_id1
+        this.room_id2 = this.relation.room_id2
+        this.room_id3 = this.relation.room_id3
+        this.room_id4 = this.relation.room_id4
+        this.student_id1 = this.relation.student_id1
+        this.student_id2 = this.relation.student_id2
+        this.student_id3 = this.relation.student_id3
+        this.student_id4 = this.relation.student_id4
+        this.identity_id1 = this.relation.identity_id1
+        this.identity_id2 = this.relation.identity_id2
+        this.identity_id3 = this.relation.identity_id3
+        this.identity_id4 = this.relation.identity_id4
+        this.roomName1 = this.relation.roomName1
+        this.roomName2 = this.relation.roomName2
+        this.roomName3 = this.relation.roomName3
+        this.roomName4 = this.relation.roomName4
+        this.studentName1 = this.relation.studentName1
+        this.studentName2 = this.relation.studentName2
+        this.studentName3 = this.relation.studentName3
+        this.studentName4 = this.relation.studentName4
+        this.identityName1 = this.relation.identityName1
+        this.identityName2 = this.relation.identityName2
+        this.identityName3 = this.relation.identityName3
+        this.identityName4 = this.relation.identityName4
       }, (response) => {
       })
     },
