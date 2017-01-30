@@ -55,12 +55,15 @@
         <mu-float-button icon="cancel" v-if="save" @click="goCancel" secondary/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="delete" v-if="deletes"  @click="openDelete" backgroundColor="red"/>
-        <mu-float-button icon="compare_arrows" v-if="resave" @click="openResave" backgroundColor="green"/>
+        <mu-float-button icon="delete" v-if="inactive"  @click="openInactive" backgroundColor="red"/>
+        <mu-float-button icon="compare_arrows" v-if="active" @click="openActive" backgroundColor="green"/>
         <mu-float-button icon="done" v-if="save" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="forSave" title="正在保存" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
+    <mu-dialog :open="forRead" title="正在读取" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
     <mu-drawer right :open="openCourse1" docked="false">
@@ -293,6 +296,7 @@ export default {
       inactive: false,
       active: false,
       forSave: false,
+      forRead: true,
       forInactive: false,
       forActive: false,
       activeTitle: '',
@@ -751,11 +755,13 @@ export default {
         this.course10 = coursez.course10
         this.course11 = coursez.course11
         this.course12 = coursez.course12
+        this.forRead = false
       }, (response) => {
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
-    if (value === null || value === undefined || value === '') {
+    checkName (value) {
+      if (value === null || value === undefined || value === '') {
         this.nameErrorText = '班级名称为必填项!'
         this.nameErrorColor = 'orange'
       } else if (!/\d{4}[\u7ea7]\d{1,2}[\u73ed]/.test(value)) {

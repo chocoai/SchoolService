@@ -12,9 +12,11 @@ import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
 import com.wts.interceptor.AjaxFunction;
 import com.wts.interceptor.LoginTeacher;
+import com.wts.util.ParamesAPI;
 import com.wts.util.PinyinTool;
 import com.wts.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherController extends Controller {
@@ -55,6 +57,15 @@ public class TeacherController extends Controller {
       user.setPartyIds(1);
       try{
         WP.me.createUser(user);
+        List<String> userIds = new ArrayList<String>();
+        userIds.add(getPara("userId").trim());
+        WP.me.addTagUsers(ParamesAPI.teacherTagId,userIds,new ArrayList<Integer>());
+        if (getPara("isManager").trim().equals("1")) {
+          WP.me.addTagUsers(ParamesAPI.managerTagId,userIds,new ArrayList<Integer>());
+        }
+        if (getPara("isParent").trim().equals("1")) {
+          WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
+        }
         Enterprise teacher = new Enterprise();
         teacher.set("name", getPara("name").trim())
                 .set("mobile", getPara("mobile").trim())
@@ -78,43 +89,52 @@ public class TeacherController extends Controller {
     if (teacher == null) {
       renderText("要修改的教师不存在!");
     } else {
-      if (Util.getString(teacher.getStr("name")).equals(getPara("name").trim())
-              && Util.getString(teacher.getStr("mobile")).equals(getPara("mobile").trim())
-              && Util.getString(teacher.get("isManager").toString()).equals(getPara("isManager").trim())
-              && Util.getString(teacher.get("isParent").toString()).equals(getPara("isParent").trim())
-              ) {
-        renderText("未找到修改内容!");
+//      if (Util.getString(teacher.getStr("name")).equals(getPara("name").trim())
+//              && Util.getString(teacher.getStr("mobile")).equals(getPara("mobile").trim())
+//              && Util.getString(teacher.get("isManager").toString()).equals(getPara("isManager").trim())
+//              && Util.getString(teacher.get("isParent").toString()).equals(getPara("isParent").trim())
+//              ) {
+//        renderText("未找到修改内容!");
 //      } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
 //        renderText("教师姓名应为两个以上汉字!");
 //      } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
 //        renderText("手机号码格式错误!");
-      } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
+      if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
               &&  Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
         renderText("该手机号码已存在!");
       } else {
-        if (Util.getString(teacher.getStr("name")).equals(getPara("name").trim())
-                && Util.getString(teacher.getStr("mobile")).equals(getPara("mobile").trim())
-                && (!Util.getString(teacher.get("isManager").toString()).equals(Util.getString(getPara("isManager").trim()))
-                || !Util.getString(teacher.get("isParent").toString()).equals(Util.getString(getPara("isParent").trim())))
-        ){
+        try{
+          if (!Util.getString(teacher.getStr("name")).equals(getPara("name").trim())
+                  && !Util.getString(teacher.getStr("mobile")).equals(getPara("mobile").trim())) {
+            User user = new User(teacher.get("userId").toString(), teacher.get("name").toString());
+            user.setMobile(getPara("mobile").trim());
+            WP.me.updateUser(user);
+          }
+          List<String> userIds = new ArrayList<String>();
+          userIds.add(teacher.get("userId").toString().trim());
+          if (!Util.getString(teacher.get("isManager").toString()).equals(getPara("isManager").trim())) {
+            if (getPara("isManager").trim().equals("1")) {
+              WP.me.addTagUsers(ParamesAPI.managerTagId,userIds,new ArrayList<Integer>());
+            } else {
+              WP.me.deleteTagUsers(ParamesAPI.managerTagId,userIds,new ArrayList<Integer>());
+            }
+          }
+          if (!Util.getString(teacher.get("isParent").toString()).equals(getPara("isParent").trim())) {
+            if (getPara("isParent").trim().equals("1")) {
+              WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
+            } else {
+              WP.me.deleteTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
+            }
+          }
           teacher.set("name",getPara("name").trim())
                   .set("mobile",getPara("mobile").trim())
                   .set("isManager",getPara("isManager").trim())
                   .set("isParent",getPara("isParent").trim())
                   .update();
           renderText("OK");
-        } else {
-          try{
-            User user = new User(teacher.get("userId").toString(),teacher.get("name").toString());
-            user.setMobile(getPara("mobile").trim());
-            teacher.set("name",getPara("name").trim())
-                    .set("mobile",getPara("mobile").trim())
-                    .update();
-            WP.me.updateUser(user);
-            renderText("OK");
-          }catch(WeixinException e){
-            renderText(e.getErrorText());
-          }
+        }catch(WeixinException e){
+          System.out.println(e.getErrorText());
+          renderText(e.getErrorText());
         }
       }
     }

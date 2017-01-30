@@ -10,6 +10,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxFunction;
+import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
 import java.util.ArrayList;
@@ -222,6 +223,9 @@ public class ParentController extends Controller {
             user.setPartyIds(1);
             try{
                 WP.me.createUser(user);
+                List<String> userIds = new ArrayList<String>();
+                userIds.add(getPara("userId").trim());
+                WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
                 Enterprise parent = new Enterprise();
                 parent.set("name", getPara("name").trim())
                         .set("mobile", getPara("mobile").trim())

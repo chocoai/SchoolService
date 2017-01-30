@@ -240,7 +240,8 @@ export default {
     goInactive () {
       this.forSave = true
       this.$http.get(
-        API.InactiveById, id: this.$route.params.studentId } },
+        API.InactiveById,
+        { params: { id: this.$route.params.studentId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.forSave = false
@@ -447,6 +448,7 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
+      }
     },
     checkCode (value) {
       if (value === null || value === undefined || value === '') {

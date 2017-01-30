@@ -17,16 +17,20 @@ public class MainController extends Controller {
       setSessionAttr("teacher", "");
       renderText("sys");
     } else {
-      Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
-      if (teacher != null) {
-        if (getPara("type").equals("teacher") && teacher.getIsTeacher() == 1) {
-          setSessionAttr("teacher", teacher);
-          setCookie("die", teacher.getId().toString(), 60 * 30);
-          renderText("com");
-        } else if (getPara("type").equals("manager") && teacher.getIsManager() == 1) {
-          setSessionAttr("teacher", teacher);
-          setCookie("die", teacher.getId().toString(), 60 * 30);
-          renderText("sys");
+      Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
+      if (enterprise != null) {
+        if (getPara("type").equals("teacher") && enterprise.getIsTeacher() == 1) {
+          setSessionAttr("teacher", enterprise);
+          setCookie("die", enterprise.getId().toString(), 60 * 30);
+          renderText("forTeacher");
+        } else if (getPara("type").equals("manager") && enterprise.getIsManager() == 1) {
+          setSessionAttr("teacher", enterprise);
+          setCookie("die", enterprise.getId().toString(), 60 * 30);
+          renderText("forManager");
+        } else if (getPara("type").equals("parent") && enterprise.getIsParent() == 1) {
+          setSessionAttr("parent", enterprise);
+          setCookie("die", enterprise.getId().toString(), 60 * 30);
+          renderText("forParent");
         } else {
           renderText("noPower");
         }

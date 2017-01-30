@@ -8,6 +8,7 @@
         <mu-select-field hintText="用户类别" icon="settings" v-model="type" fullWidth>
           <mu-menu-item value="teacher" title="教师"/>
           <mu-menu-item value="manager" title="管理"/>
+          <mu-menu-item value="parent" title="家长"/>
         </mu-select-field>
       </mu-flexbox-item>
     </mu-flexbox>
@@ -42,40 +43,35 @@
         } else {
           this.$http.get(
             API.Login,
-            {
-              params:
-              {
-                userId: this.userId,
-                pass: this.pass,
-                type: this.type
-              }
-            },
-            {
-              headers:
-              {
-                'X-Requested-With': 'XMLHttpRequest'
-              }
+            { params: {
+              userId: this.userId,
+              pass: this.pass,
+              type: this.type
+            } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+          ).then((response) => {
+            switch (response.body) {
+              case 'forManager':
+                window.location.href = '/forManager'
+                break
+              case 'forTeacher':
+                window.location.href = '/forTeacher'
+                break
+              case 'forParent':
+                window.location.href = '/forParent'
+                break
+              case 'noPower':
+                this.openPopup('用户无管理权限!', 'report_problem', 'red')
+                break
+              case 'error':
+                this.openPopup('用户名或密码错误!', 'report_problem', 'red')
+                break
+              default:
+                window.location.href = '/'
             }
-            ).then((response) => {
-              switch (response.body) {
-                case 'com':
-                  window.location.href = '/home'
-                  break
-                case 'sys':
-                  window.location.href = '/sys'
-                  break
-                case 'noPower':
-                  this.openPopup('用户无管理权限!', 'report_problem', 'red')
-                  break
-                case 'error':
-                  this.openPopup('用户名或密码错误!', 'report_problem', 'red')
-                  break
-                default:
-                  window.location.href = '/'
-              }
-            }, (response) => {
-              this.openPopup('服务器内部错误!', 'report_problem', 'orange')
-            })
+          }, (response) => {
+            this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+          })
         }
       },
       openPopup (message, icon, color) {

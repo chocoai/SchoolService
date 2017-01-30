@@ -193,7 +193,7 @@ export default {
       if (this.team_id.toString() !== '') {
         this.$http.get(
           API.GetTeamName,
-          { params: { id: this.team_id } ,
+          { params: { id: this.team_id } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           this.teamName = response.body
@@ -241,6 +241,7 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
+      }
     },
     checkCode (value) {
       if (value === null || value === undefined || value === '') {
@@ -275,7 +276,6 @@ export default {
         this.addressErrorText = ''
         this.addressErrorColor = 'green'
       }
-    }
     },
     goSave () {
       this.forSave = true

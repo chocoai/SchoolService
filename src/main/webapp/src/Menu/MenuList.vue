@@ -36,7 +36,6 @@
         menuTitle: '济南市育明小学'
       }
     },
-
     methods: {
       openMenu () {
         this.open = true

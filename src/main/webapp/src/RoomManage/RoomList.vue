@@ -35,7 +35,7 @@
 
 <script>
   import * as API from './RoomAPI.js'
-  import MenuList from '../components/MenuList'
+  import MenuList from '../Menu/MenuList'
   export default {
     name: 'RoomList',
     components: {

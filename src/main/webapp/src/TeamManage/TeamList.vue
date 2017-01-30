@@ -35,7 +35,7 @@
 
 <script>
   import * as API from './TeamAPI.js'
-  import MenuList from '../components/MenuList'
+  import MenuList from '../Menu/MenuList'
   export default {
     name: 'TeamList',
     components: {

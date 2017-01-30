@@ -37,7 +37,7 @@
 
 <script>
   import * as API from './ParentAPI.js'
-  import MenuList from '../components/MenuList'
+  import MenuList from '../Menu/MenuList'
   export default {
     name: 'ParentList',
     components: {
@@ -88,7 +88,7 @@
             pageCurrent: pageCurrent,
             pageSize: pageSize
           } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' },  emulateJSON: true }
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           this.parents = response.body
           this.pageCurrent = pageCurrent

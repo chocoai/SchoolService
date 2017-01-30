@@ -299,7 +299,7 @@ export default {
       })
     },
     checkName (value) {
-    if (value === null || value === undefined || value === '') {
+      if (value === null || value === undefined || value === '') {
         this.nameErrorText = '社团名称为必填项!'
         this.nameErrorColor = 'orange'
       } else {

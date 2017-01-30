@@ -7,10 +7,13 @@ import com.jfinal.core.Controller;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
 import com.wts.interceptor.AjaxFunction;
+import com.wts.util.ParamesAPI;
 import com.wts.util.PinyinTool;
 import com.wts.util.Util;
 import com.wts.util.msg.Util.MessageUtil;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class EnterpriseController extends Controller {
@@ -103,6 +106,17 @@ public class EnterpriseController extends Controller {
       user.setPartyIds(1);
       try {
         WP.me.createUser(user);
+        List<String> userIds = new ArrayList<String>();
+        userIds.add(enterprise.get("userId").toString());
+        if (enterprise.get("isTeacher").toString().trim().equals("1")) {
+          WP.me.addTagUsers(ParamesAPI.teacherTagId, userIds, new ArrayList<Integer>());
+        }
+        if (enterprise.get("isManager").toString().trim().equals("1")) {
+          WP.me.addTagUsers(ParamesAPI.managerTagId,userIds,new ArrayList<Integer>());
+        }
+        if (enterprise.get("isParent").toString().trim().equals("1")) {
+          WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
+        }
         enterprise.set("state",2).update();
         renderText("OK");
       } catch (WeixinException e) {

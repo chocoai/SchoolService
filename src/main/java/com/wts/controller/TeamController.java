@@ -1,7 +1,10 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
+import com.foxinmy.weixin4j.qy.message.NotifyMessage;
+import com.foxinmy.weixin4j.qy.model.IdParameter;
 import com.foxinmy.weixin4j.qy.model.User;
+import com.foxinmy.weixin4j.tuple.Text;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
@@ -10,6 +13,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxFunction;
+import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
 import java.util.List;
@@ -135,6 +139,14 @@ public class TeamController extends Controller {
         for (String i : teamTeacher){
           Teamplan teamplan = new Teamplan();
           teamplan.set("team_id",team.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+team.getName()+"的管理老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       renderText("OK");
@@ -157,6 +169,14 @@ public class TeamController extends Controller {
           for (String i : teamTeacher){
             Teamplan teamplan = new Teamplan();
             teamplan.set("team_id",team.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+team.getName()+"的管理老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         renderText("OK");

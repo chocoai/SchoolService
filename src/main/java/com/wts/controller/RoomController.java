@@ -1,7 +1,10 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
+import com.foxinmy.weixin4j.qy.message.NotifyMessage;
+import com.foxinmy.weixin4j.qy.model.IdParameter;
 import com.foxinmy.weixin4j.qy.model.User;
+import com.foxinmy.weixin4j.tuple.Text;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
@@ -11,6 +14,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxFunction;
+import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
 import java.util.ArrayList;
@@ -263,9 +267,9 @@ public class RoomController extends Controller {
   }
   @Before({Tx.class,AjaxFunction.class})
   public void save()  {
-    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-      renderText("班级名称格式应为：XXXX级XX班");
-    } else if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+//    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+//      renderText("班级名称格式应为：XXXX级XX班");
+    if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
       renderText("该班级已存在!");
     } else {
       Room room = new Room();
@@ -286,72 +290,168 @@ public class RoomController extends Controller {
         for (String i : course1){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",1).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的班主任"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course2!=null){
         for (String i : course2){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",2).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的语文老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course3!=null){
         for (String i : course3){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",3).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的数学老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course4!=null){
         for (String i : course4){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",4).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的英语老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course5!=null){
         for (String i : course5){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",5).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的音乐老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course6!=null){
         for (String i : course6){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",6).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的体育老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course7!=null){
         for (String i : course7){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",7).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的美术老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course8!=null){
         for (String i : course8){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",8).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的科学老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course9!=null){
         for (String i : course9){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",9).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的计算机老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course10!=null){
         for (String i : course10){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",10).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的品生老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course11!=null){
         for (String i : course11){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",11).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的品社老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       if (course12!=null){
         for (String i : course12){
           Courseplan courseplan = new Courseplan();
           courseplan.set("course_id",12).set("room_id",room.get("id")).set("teacher_id",i).save();
+          Enterprise teacher = Enterprise.dao.findById(i);
+          if (teacher.getState()==1){
+            try {
+              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的传统文化老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+            } catch (Exception e) {
+              renderText(e.getMessage());
+            }
+          }
         }
       }
       renderText("OK");
@@ -363,11 +463,11 @@ public class RoomController extends Controller {
     if (room == null) {
       renderText("要修改的班级不存在!");
     } else {
-      if (Util.getString(room.getStr("name")).equals(getPara("name").trim())) {
-        renderText("未找到修改内容!");
-      } else if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-        renderText("班级名称格式应为：XXXX级XX班");
-      } else if (!Util.getString(room.getStr("name")).equals(getPara("name"))
+//      if (Util.getString(room.getStr("name")).equals(getPara("name").trim())) {
+//        renderText("未找到修改内容!");
+//      } else if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+//        renderText("班级名称格式应为：XXXX级XX班");
+      if (!Util.getString(room.getStr("name")).equals(getPara("name"))
               &&  Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
         renderText("该班级已存在!");
       } else {
@@ -389,72 +489,168 @@ public class RoomController extends Controller {
           for (String i : course1){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",1).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的班主任"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course2!=null){
           for (String i : course2){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",2).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的语文老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course3!=null){
           for (String i : course3){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",3).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的数学老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course4!=null){
           for (String i : course4){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",4).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的英语老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course5!=null){
           for (String i : course5){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",5).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的音乐老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course6!=null){
           for (String i : course6){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",6).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的体育老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course7!=null){
           for (String i : course7){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",7).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的美术老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course8!=null){
           for (String i : course8){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",8).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的科学老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course9!=null){
           for (String i : course9){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",9).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的计算机老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course10!=null){
           for (String i : course10){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",10).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的品生老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course11!=null){
           for (String i : course11){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",11).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的品社老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         if (course12!=null){
           for (String i : course12){
             Courseplan courseplan = new Courseplan();
             courseplan.set("course_id",12).set("room_id",room.get("id")).set("teacher_id",i).save();
+            Enterprise teacher = Enterprise.dao.findById(i);
+            if (teacher.getState()==1){
+              try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的传统文化老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+              } catch (Exception e) {
+                renderText(e.getMessage());
+              }
+            }
           }
         }
         renderText("OK");

@@ -16,51 +16,82 @@ public class CreatMenu {
   private static String BASIC = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ParamesAPI.corpId+"&redirect_uri=http%3a%2f%2f"+ParamesAPI.URL+"%2f"+"XXXXX"+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
 
   private static String CONNECT = BASIC.replaceAll("XXXXX","user%2faddUserPage%2f");
+  private static String All = BASIC.replaceAll("XXXXX","");
+
+  // 校园管理入口菜单
   private static String TEACHER = BASIC.replaceAll("XXXXX","teacher%2f");
   private static String ROOM = BASIC.replaceAll("XXXXX","room%2f");
-  private static String All = BASIC.replaceAll("XXXXX","");
-  public static void main(String[] args) {
-    try{
-      Button School = new Button("管理系统", All, ButtonType.view);
-      // 学校的相关功能
-      Button School1_1 = new Button("教师管理", TEACHER, ButtonType.view);
-      Button School1_2 = new Button("班级管理", ROOM, ButtonType.view);
-      Button School1_3 = new Button("家长管理", CONNECT, ButtonType.view);
-      Button School1_4 = new Button("学生管理", CONNECT, ButtonType.view);
-      Button School1_5 = new Button("公告管理", CONNECT, ButtonType.view);
+  private static String TEAM = BASIC.replaceAll("XXXXX","team%2f");
+  private static String STUDENT = BASIC.replaceAll("XXXXX","student%2f");
+  private static String PARENT = BASIC.replaceAll("XXXXX","parent%2f");
 
-      Button School2_1 = new Button("校长信箱", CONNECT, ButtonType.view);
-      Button School2_2 = new Button("", CONNECT, ButtonType.view);
-      Button School2_3 = new Button("", CONNECT, ButtonType.view);
-      Button School2_4 = new Button("", CONNECT, ButtonType.view);
-      Button School2_5 = new Button("", CONNECT, ButtonType.view);
+  public static void CreateManager (){
+    Button manager_1 = new Button("教师管理", TEACHER, ButtonType.view);
+    Button manager_2 = new Button("班级管理", ROOM, ButtonType.view);
+    Button manager_3 = new Button("社团管理", TEAM, ButtonType.view);
+    Button manager_4 = new Button("学生管理", STUDENT, ButtonType.view);
+    Button manager_5 = new Button("家长管理", PARENT, ButtonType.view);
 
-      Button School3_1 = new Button("班级公告", CONNECT, ButtonType.view);
-      Button School3_2 = new Button("班级作业", CONNECT, ButtonType.view);
-      Button School3_3 = new Button("班级红榜", CONNECT, ButtonType.view);
-      Button School3_4 = new Button("班级成绩", CONNECT, ButtonType.view);
-      Button School3_5 = new Button("班级考勤", CONNECT, ButtonType.view);
+    Button managerButton = new Button("综合管理", manager_1, manager_2, manager_3, manager_4, manager_5);
 
-      Button School1 = new Button("综合管理", School1_1, School1_2, School1_3, School1_4, School1_5);
-      Button School2 = new Button("公告信息", School2_1);
-      Button School3 = new Button("班级情况", School3_1, School3_2, School3_3, School3_4, School3_5);
-
-      List<Button> schools = new ArrayList<Button>();
-      schools.add(School1);
-      schools.add(School2);
-      schools.add(School3);
-
-      List<Button> schoolz = new ArrayList<Button>();
-      schoolz.add(School);
-
-      ApiResult ret = new WeixinProxy().createMenu(26, schools);
+    List<Button> managers = new ArrayList<Button>();
+    managers.add(managerButton);
+    try {
+      ApiResult ret = new WeixinProxy().createMenu(ParamesAPI.managerId, managers);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
-      System.exit(0);
     } catch (WeixinException e){
-      logger.error(e.getMessage());
       System.out.println(e.getMessage());
-      System.exit(0);
     }
+  }
+
+
+
+
+
+
+  public static void main(String[] args) {
+    CreateManager();
+//    try{
+//      Button School = new Button("管理系统", All, ButtonType.view);
+//      // 学校的相关功能
+//      Button School1_1 = new Button("教师管理", TEACHER, ButtonType.view);
+//      Button School1_2 = new Button("班级管理", ROOM, ButtonType.view);
+//      Button School1_3 = new Button("家长管理", CONNECT, ButtonType.view);
+//      Button School1_4 = new Button("学生管理", CONNECT, ButtonType.view);
+//      Button School1_5 = new Button("公告管理", CONNECT, ButtonType.view);
+//
+//      Button School2_1 = new Button("校长信箱", CONNECT, ButtonType.view);
+//      Button School2_2 = new Button("", CONNECT, ButtonType.view);
+//      Button School2_3 = new Button("", CONNECT, ButtonType.view);
+//      Button School2_4 = new Button("", CONNECT, ButtonType.view);
+//      Button School2_5 = new Button("", CONNECT, ButtonType.view);
+//
+//      Button School3_1 = new Button("班级公告", CONNECT, ButtonType.view);
+//      Button School3_2 = new Button("班级作业", CONNECT, ButtonType.view);
+//      Button School3_3 = new Button("班级红榜", CONNECT, ButtonType.view);
+//      Button School3_4 = new Button("班级成绩", CONNECT, ButtonType.view);
+//      Button School3_5 = new Button("班级考勤", CONNECT, ButtonType.view);
+//
+//      Button School1 = new Button("综合管理", School1_1, School1_2, School1_3, School1_4, School1_5);
+//      Button School2 = new Button("公告信息", School2_1);
+//      Button School3 = new Button("班级情况", School3_1, School3_2, School3_3, School3_4, School3_5);
+//
+//      List<Button> schools = new ArrayList<Button>();
+//      schools.add(School1);
+//      schools.add(School2);
+//      schools.add(School3);
+//
+//      List<Button> schoolz = new ArrayList<Button>();
+//      schoolz.add(School);
+//
+//      ApiResult ret = new WeixinProxy().createMenu(26, schools);
+//      System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
+//      System.exit(0);
+//    } catch (WeixinException e){
+//      logger.error(e.getMessage());
+//      System.out.println(e.getMessage());
+//      System.exit(0);
+//    }
 //    // 家长的相关功能
 //    Button Parent1_1 = new Button("关联学生", CONNECT, ButtonType.view);
 //    Button Parent1_2 = new Button("取消关联", CONNECT, ButtonType.view);

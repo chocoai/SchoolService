@@ -37,7 +37,7 @@
 
 <script>
   import * as API from './TeacherAPI.js'
-  import MenuList from '../components/MenuList'
+  import MenuList from '../Menu/MenuList'
   export default {
     name: 'TeacherList',
     components: {

@@ -17,7 +17,7 @@
   </div>
 </template>
 <script>
-  import MenuList from '../components/MenuList'
+  import MenuList from '../Menu/MenuList'
   import sign1 from 'assets/schoolIcon.jpg'
   import sign2 from 'assets/biaoyu.png'
   export default {
