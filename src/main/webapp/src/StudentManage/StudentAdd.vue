@@ -6,7 +6,7 @@
     <mu-text-field v-model="name" label="姓名" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
     <mu-text-field v-model="number" label="证件号码" icon="comment" :errorColor="numberErrorColor" :errorText="numberErrorText" @input="checkNumber" fullWidth labelFloat maxLength="18"/><br/>
     <mu-text-field v-model="code" label="学籍号码" icon="comment" :errorColor="codeErrorColor" :errorText="codeErrorText" @input="checkCode" fullWidth labelFloat maxLength="15"/><br/>
-    <mu-text-field v-model="address" label="住址" icon="store_mall_directory" fullWidth labelFloat/><br/>
+    <mu-text-field v-model="address" label="住址" icon="store_mall_directory" :errorColor="addressErrorColor" :errorText="addressErrorText" @input="checkAddress" fullWidth labelFloat/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-flat-button :label="roomName" @click="openRoom=true" :icon="roomIcon" :backgroundColor="roomBack" color="#FFFFFF"/>
@@ -93,6 +93,8 @@ export default {
       numberErrorColor: '',
       codeErrorText: '',
       codeErrorColor: '',
+      addressErrorText: '',
+      addressErrorColor: '',
       rooms: [],
       teams: []
     }
@@ -162,8 +164,9 @@ export default {
       this.number = ''
       this.numberErrorColor = ''
       this.code = ''
-      this.address = ''
       this.codeErrorColor = ''
+      this.address = ''
+      this.addressErrorColor = ''
       this.room_id = ''
       this.team_id = ''
       this.roomName = '所属班级'
@@ -240,24 +243,39 @@ export default {
         })
     },
     checkCode (value) {
-      this.$http.get(
-        API.CheckCodeForNew,
-        { params: { code: value } },
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-      ).then((response) => {
-        if (response.body === 'error') {
-          this.openPopup('请重新登录!', 'report_problem', 'orange')
-          window.location.href = '/'
-        } else if (response.body === 'OK') {
-          this.codeErrorText = ''
-          this.codeErrorColor = 'green'
-        } else {
-          this.codeErrorText = response.body
-          this.codeErrorColor = 'red'
-        }
-      }, (response) => {
-        this.openPopup('服务器内部错误！', 'error', 'red')
-      })
+      if (value === null || value === undefined || value === '') {
+        this.codeErrorText = '学籍号码为必填项!'
+        this.codeErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckCodeForNew,
+          { params: { code: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.codeErrorText = ''
+            this.codeErrorColor = 'green'
+          } else {
+            this.codeErrorText = response.body
+            this.codeErrorColor = 'red'
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'error', 'red')
+        })
+      }
+    },
+    checkAddress (value) {
+      if (value === null || value === undefined || value === '') {
+        this.addressErrorText = '住址为必填项!'
+        this.addressErrorColor = 'orange'
+      } else {
+        this.addressErrorText = ''
+        this.addressErrorColor = 'green'
+      }
+    }
     },
     goSave () {
       this.forSave = true

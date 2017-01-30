@@ -115,18 +115,15 @@ export default {
       this.teamTeacher = []
     },
     checkName (value) {
-      this.$http.get(
-        API.CheckNameForNew,
-        { params: {
-          name: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
+      if (value === null || value === undefined || value === '') {
+        this.nameErrorText = '社团名称为必填项!'
+        this.nameErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckNameForNew,
+          { params: { name: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
@@ -140,6 +137,7 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
+      }
     },
     goSave () {
       this.forSave = true

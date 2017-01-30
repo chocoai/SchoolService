@@ -84,13 +84,7 @@ export default {
   created () {
     this.$http.get(
       API.TeacherList,
-      {
-        headers:
-        {
-          'X-Requested-With': 'XMLHttpRequest'
-        },
-        emulateJSON: true
-      }
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.teachers = response.body
     }, (response) => {
@@ -162,105 +156,89 @@ export default {
       this.forSave = true
       this.$http.get(
         API.InactiveById,
-        { params: {
-          id: this.$route.params.teamId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }
-        ).then((response) => {
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup('删除成功!', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
-          } else if (response.body === '要删除的班级不存在!') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        { params: { id: this.$route.params.teamId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1') {
+            this.inactive = true
+            this.active = false
           } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+            this.inactive = false
+            this.active = true
           }
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+          this.openPopup('删除成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        } else if (response.body === '要删除的班级不存在!') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1') {
+            this.inactive = true
+            this.active = false
+          } else {
+            this.inactive = false
+            this.active = true
+          }
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        }
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     goActive () {
       this.forSave = true
       this.$http.get(
         API.ActiveById,
-        { params: {
-          id: this.$route.params.teamId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }
-        ).then((response) => {
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup('激活成功!', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
-          } else if (response.body === '要激活的社团不存在!') {
-            this.edit = true
-            this.save = false
-            if (this.state.toString() === '1') {
-              this.inactive = true
-              this.active = false
-            } else {
-              this.inactive = false
-              this.active = true
-            }
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        { params: { id: this.$route.params.teamId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1') {
+            this.inactive = true
+            this.active = false
           } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+            this.inactive = false
+            this.active = true
           }
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+          this.openPopup('激活成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        } else if (response.body === '要激活的社团不存在!') {
+          this.edit = true
+          this.save = false
+          if (this.state.toString() === '1') {
+            this.inactive = true
+            this.active = false
+          } else {
+            this.inactive = false
+            this.active = true
+          }
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        }
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     goSave () {
       this.forSave = true
@@ -270,44 +248,29 @@ export default {
           id: this.$route.params.teamId,
           name: this.name,
           teamTeacher: this.teamTeacher
+        } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.forSave = false
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.openPopup('修改成功！', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
         }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
-          this.forSave = false
-          if (response.body === 'error') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
-          } else if (response.body === 'OK') {
-            this.openPopup('修改成功！', 'check_circle', 'green')
-            setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
-          } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-          }
-        }, (response) => {
-          this.forSave = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
+      }, (response) => {
+        this.forSave = false
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
     },
     fetchData (teamId) {
       this.$http.get(
         API.GetById,
-        { params:
-        {
-          id: teamId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          emulateJSON: true
-        }
+        { params: { id: teamId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
         this.team = response.body
         this.name = this.team.name
@@ -327,18 +290,8 @@ export default {
     getTeamTeacher (teamId) {
       this.$http.get(
         API.GetTeamTeacher,
-        { params:
-        {
-          team: teamId
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          },
-          emulateJSON: true
-        }
+        { params: { team: teamId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
         /* eslint-disable no-eval  */
         this.teamTeacher = eval('(' + response.body + ')').teamTeachers
@@ -346,19 +299,18 @@ export default {
       })
     },
     checkName (value) {
-      this.$http.get(
-        API.CheckNameForEdit,
-        { params: {
-          id: this.$route.params.teamId,
-          name: value
-        }
-        },
-        {
-          headers:
-          {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then((response) => {
+    if (value === null || value === undefined || value === '') {
+        this.nameErrorText = '社团名称为必填项!'
+        this.nameErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.CheckNameForEdit,
+          { params: {
+            id: this.$route.params.teamId,
+            name: value
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
@@ -372,6 +324,7 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
+      }
     }
   }
 }
