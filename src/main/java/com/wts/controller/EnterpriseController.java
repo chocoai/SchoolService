@@ -9,14 +9,15 @@ import com.wts.entity.model.Enterprise;
 import com.wts.interceptor.AjaxFunction;
 import com.wts.util.ParamesAPI;
 import com.wts.util.PinyinTool;
-import com.wts.util.Util;
 import com.wts.util.msg.Util.MessageUtil;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class EnterpriseController extends Controller {
+  private static Logger logger = Logger.getLogger(EnterpriseController.class);
 //  /**
 //   * 检测姓名
 //   * */
@@ -79,14 +80,14 @@ public class EnterpriseController extends Controller {
     Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
     if (enterprise == null) {
       renderText("要取消关注的人员不存在!");
-    } else if (enterprise.get("state").toString().equals("4")) {
+    } else if (enterprise.get("state").toString().equals("3")) {
       renderText("该人员已处于取消关注状态!");
-    }  else if (enterprise.get("state").toString().equals("3")) {
+    }  else if (enterprise.get("state").toString().equals("2")) {
       renderText("该人员已处于冻结状态!");
     } else {
       try {
         WP.me.deleteUser(enterprise.getUserId());
-        enterprise.set("state",4).update();
+        enterprise.set("state",3).update();
         renderText("OK");
       } catch (WeixinException e) {
         renderText(e.getErrorText());
@@ -98,7 +99,7 @@ public class EnterpriseController extends Controller {
     Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
     if (enterprise == null) {
       renderText("要重新邀请关注的人员不存在!");
-    } else if (enterprise.get("state").toString().equals("2")) {
+    } else if (enterprise.get("state").toString().equals("1")) {
       renderText("该人员已处于关注状态!");
     } else {
       User user = new User(enterprise.get("userId").toString(),enterprise.get("name").toString());
@@ -117,7 +118,7 @@ public class EnterpriseController extends Controller {
         if (enterprise.get("isParent").toString().trim().equals("1")) {
           WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
         }
-        enterprise.set("state",2).update();
+        enterprise.set("state",1).update();
         renderText("OK");
       } catch (WeixinException e) {
         renderText(e.getErrorText());
@@ -143,9 +144,26 @@ public class EnterpriseController extends Controller {
       renderText("");
     }
   }
+  @Before(AjaxFunction.class)
+  public void update() {
+    try {
+      Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=?", getPara("userId"));
+      if (enterprise.getState().equals("1")){
+        User user = WP.me.getUser(getPara("userId"));
+        enterprise.set("sex", user.getGender())
+                .set("picUrl", user.getAvatar())
+                .update();
+        renderText("");
+      }
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+      renderText("");
+    }
+  }
+
   /**
    * 处理微信发来的关注
-   *
+   *账号状态1关注2已冻结3取消关注4未关注
    * @param request
    */
   public static void subscribe(String request) {
@@ -165,7 +183,7 @@ public class EnterpriseController extends Controller {
       if (requestMap.get("Event").equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
         Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=?", FromUserName);
         enterprise.set("picUrl", "")
-                .set("state", 4)
+                .set("state", 3)
                 .update();
       }
     } catch (Exception e) {

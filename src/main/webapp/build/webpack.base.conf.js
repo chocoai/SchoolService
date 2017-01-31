@@ -13,12 +13,12 @@ var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 module.exports = {
   entry: {
     login: './src/Login/Index.js',
-    sys: './src/Sys/Index.js',
-    teacherManage: './src/TeacherManage/Index.js',
-    roomManage: './src/RoomManage/Index.js',
-    teamManage: './src/TeamManage/Index.js',
-    parentManage: './src/ParentManage/Index.js',
-    studentManage: './src/StudentManage/Index.js'
+    homeForManager: './src/ForManager/Home/Index.js',
+    teacherForManager: './src/ForManager/Teacher/Index.js',
+    roomForManager: './src/ForManager/Room/Index.js',
+    teamForManager: './src/ForManager/Team/Index.js',
+    parentForManager: './src/ForManager/Parent/Index.js',
+    studentForManager: './src/ForManager/Student/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

@@ -15,7 +15,7 @@ public class MainController extends Controller {
   public void login() {
     if (getPara("userId").equals("1") && getPara("pass").equals("1")) {
       setSessionAttr("teacher", "");
-      renderText("sys");
+      renderText("forManager");
     } else {
       Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
       if (enterprise != null) {
@@ -65,13 +65,18 @@ public class MainController extends Controller {
 ////    renderText(WP.me.getUserByCode(getPara("code")).getName());
 
   @Before(LoginTeacher.class)
-  public void sys() {
-    render("/static/Sys.html");
+  public void forManager() {
+    render("/static/HomeForManager.html");
   }
   @Before(LoginTeacher.class)
-  public void home() {
-    renderText("这里是普通教师");
+  public void forTeacher() {
+    render("/static/HomeForTeacher.html");
   }
+  @Before(LoginTeacher.class)
+  public void forParent() {
+    render("/static/HomeForParent.html");
+  }
+
   public void bind()  throws WeixinException {
     User u= WP.me.getUserByCode(getPara("code"));
     System.out.println(u.getUserId());

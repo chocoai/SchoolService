@@ -20,7 +20,7 @@ import java.util.List;
 
 public class TeamController extends Controller {
 
-  public void index() throws WeixinException {
+  public void forManager() throws WeixinException {
     // 检测session中是否存在teacher
     if (getSessionAttr("teacher") == null) {
       // 检测cookie中是否存在EnterpriseId
@@ -30,17 +30,18 @@ public class TeamController extends Controller {
           User user = WP.me.getUserByCode(getPara("code"));
           Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId());
           setSessionAttr("teacher", teacher);
-          render("/static/TeamManage.html");
+          setCookie("die", teacher.getId().toString(), 60 * 30);
+          render("/static/TeamForManager.html");
         } else {
           redirect("/");
         }
       } else {
         Enterprise teacher = Enterprise.dao.findById(getCookie("die"));
         setSessionAttr("teacher", teacher);
-        render("/static/TeamManage.html");
+        render("/static/TeamForManager.html");
       }
     } else {
-      render("/static/TeamManage.html");
+      render("/static/TeamForManager.html");
     }
   }
   @Before(AjaxFunction.class)

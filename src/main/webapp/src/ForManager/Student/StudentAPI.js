@@ -4,6 +4,7 @@ export const TeamList = `${h}/team/teamList`
 export const GetTeamName = `${h}/team/getNameById`
 export const RoomList = `${h}/room/roomList`
 export const GetRoomName = `${h}/room/getNameById`
+export const GetParent = `${h}/student/getParentById`
 export const CheckNumberForNew = `${h}/student/checkNumberForNew`
 export const CheckNumberForEdit = `${h}/student/checkNumberForEdit`
 export const CheckCodeForNew = `${h}/student/checkCodeForNew`

@@ -21,7 +21,7 @@ import java.util.List;
 
 public class TeacherController extends Controller {
 
-  public void index() throws WeixinException {
+  public void forManager() throws WeixinException {
     // 检测session中是否存在teacher
     if (getSessionAttr("teacher") == null) {
       // 检测cookie中是否存在EnterpriseId
@@ -31,17 +31,18 @@ public class TeacherController extends Controller {
           User user = WP.me.getUserByCode(getPara("code"));
           Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId());
           setSessionAttr("teacher", teacher);
-          render("/static/TeacherManage.html");
+          setCookie("die", teacher.getId().toString(), 60 * 30);
+          render("/static/TeacherForManager.html");
         } else {
           redirect("/");
         }
       } else {
         Enterprise teacher = Enterprise.dao.findById(getCookie("die"));
         setSessionAttr("teacher", teacher);
-        render("/static/TeacherManage.html");
+        render("/static/TeacherForManager.html");
       }
     } else {
-      render("/static/TeacherManage.html");
+      render("/static/TeacherForManager.html");
     }
   }
 
@@ -71,7 +72,7 @@ public class TeacherController extends Controller {
                 .set("mobile", getPara("mobile").trim())
                 .set("userId", getPara("userId").trim())
                 .set("pass", "wts")
-                .set("state", 2)
+                .set("state", 4)
                 .set("isTeacher", 1)
                 .set("isManager",getPara("isManager").trim())
                 .set("isParent",getPara("isParent").trim())

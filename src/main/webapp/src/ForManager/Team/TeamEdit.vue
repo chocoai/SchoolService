@@ -1,22 +1,19 @@
 <template>
-  <div class="TeacherEdit">
+  <div class="RoomEdit">
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
-    <mu-text-field label="姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="账号" disabled v-model="userId" fullWidth labelFloat icon="assignment"/><br/>
-    <mu-text-field label="手机" :disabled="edit" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-text-field v-model="name" label="社团名称" :disabled="edit" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
+    <mu-sub-header>管理教师：</mu-sub-header>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-switch label="管理人员" v-model="isManager" :disabled="edit"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-switch label="学生家长" v-model="isParent" :disabled="edit"/>
+        <mu-flat-button :label="teamName" :disabled="edit" @click="openTeamTeacher=true" :icon="teamIcon" :backgroundColor="teamBack" color="#FFFFFF"/>
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
       </mu-flexbox-item>
     </mu-flexbox>
-    <mu-dialog :open="forSave" title="正在保存" >
-      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
-    </mu-dialog>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="edit" @click="goEdit" primary/>
@@ -27,11 +24,27 @@
         <mu-float-button icon="compare_arrows" v-if="active" @click="openActive" backgroundColor="green"/>
         <mu-float-button icon="done" v-if="save" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
-      <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="dialer_sip" v-if="edit" @click="goCall" backgroundColor="#6633CC"/>
-        <mu-float-button icon="cached" v-if="save" @click="goReset" backgroundColor="orange"/>
-      </mu-flexbox-item>
     </mu-flexbox>
+    <mu-dialog :open="forSave" title="正在保存" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
+    <mu-drawer right :open="openTeamTeacher" docked="false">
+      <mu-appbar title="请选择管理老师" @click.native="openTeamTeacher=false">
+        <mu-icon-button icon='done' slot="right"/>
+      </mu-appbar>
+      <mu-list>
+        <mu-list-item title="清空" @click.native="teamTeacher=''">
+          <mu-icon slot="left" value="delete_forever" :size="40"/>
+        </mu-list-item>
+        <mu-list-item v-for="teacher in teachers" :title="teacher.name">
+          <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
+          <mu-checkbox v-model="teamTeacher" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
+        </mu-list-item>
+      </mu-list>
+    </mu-drawer>
     <mu-dialog :open="forInactive" :title="inactiveTitle" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goInactive" secondary/>
@@ -47,65 +60,78 @@
 </template>
 
 <script>
-import * as API from './TeacherAPI.js'
+import * as API from './TeamAPI.js'
 export default {
-  name: 'TeacherEdit',
+  name: 'TeamEdit',
   data () {
     return {
+      bottomPopup: false,
       edit: true,
       save: false,
       inactive: false,
       active: false,
+      forSave: false,
       forInactive: false,
       forActive: false,
-      bottomPopup: false,
-      forSave: false,
+      activeTitle: '',
+      inactiveTitle: '',
       icon: '',
       color: '',
-      message: '',
-      inactiveTitle: '',
-      activeTitle: '',
-      teacher: '',
       name: '',
-      mobile: '',
-      userId: '',
-      isManager: false,
-      isParent: false,
-      isManagers: '',
-      isParents: '',
-      state: '',
+      message: '',
       nameErrorText: '',
-      mobileErrorText: '',
       nameErrorColor: '',
-      mobileErrorColor: ''
+      team: '',
+      teamIcon: 'bookmark_border',
+      teamBack: '#66CCCC',
+      teamName: '未设置',
+      openTeamTeacher: false,
+      teamTeacher: [],
+      teachers: []
     }
   },
   created () {
-    this.fetchData(this.$route.params.teacherId)
+    this.$http.get(
+      API.TeacherList,
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+    ).then((response) => {
+      this.teachers = response.body
+    }, (response) => {
+      this.openPopup('服务器内部错误！', 'error', 'red')
+    })
+    this.fetchData(this.$route.params.teamId)
+    this.getTeamTeacher(this.$route.params.teamId)
+  },
+  computed: {
+    teamBack: function () {
+      if (this.teamTeacher.length > 0) {
+        return '#9999CC'
+      } else {
+        return '#66CCCC'
+      }
+    },
+    teamIcon: function () {
+      if (this.teamTeacher.length > 0) {
+        return 'bookmark'
+      } else {
+        return 'bookmark_border'
+      }
+    },
+    teamName: function () {
+      if (this.teamTeacher.length > 0) {
+        return '已设置'
+      } else {
+        return '未设置'
+      }
+    }
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
     '$route': 'fetchData'
   },
-  computed: {
-    isManagers: function () {
-      if (this.isManager) {
-        return '1'
-      } else {
-        return '0'
-      }
-    },
-    isParents: function () {
-      if (this.isParent) {
-        return '1'
-      } else {
-        return '0'
-      }
-    }
-  },
   methods: {
     goReply () {
-      this.$router.push({ path: '/teacherList' })
+      this.$router.push({ path: '/teamList' })
     },
     openInactive () {
       this.forInactive = true
@@ -120,9 +146,6 @@ export default {
       this.bottomPopup = true
       setTimeout(() => { this.bottomPopup = false }, 1500)
     },
-    goCall () {
-      this.mobile.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.mobile
-    },
     goEdit () {
       this.edit = false
       this.save = true
@@ -132,40 +155,39 @@ export default {
     goCancel () {
       this.edit = true
       this.save = false
-      this.fetchData(this.$route.params.teacherId)
+      this.fetchData(this.$route.params.roomId)
     },
     goClose () {
       this.forInactive = false
       this.forActive = false
     },
-    goReset () {
-      this.fetchData(this.$route.params.teacherId)
-    },
     goInactive () {
+      this.forSave = true
       this.$http.get(
         API.InactiveById,
-        { params: { id: this.$route.params.teacherId } },
+        { params: { id: this.$route.params.teamId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
+        this.forSave = false
         if (response.body === 'error') {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
         } else if (response.body === 'OK') {
           this.edit = true
           this.save = false
-          if (this.state.toString() === '1' || this.state.toString() === '2') {
+          if (this.state.toString() === '1') {
             this.inactive = true
             this.active = false
           } else {
             this.inactive = false
             this.active = true
           }
-          this.openPopup('取消关注成功!', 'check_circle', 'green')
-          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-        } else if (response.body === '要取消关注的人员不存在!') {
+          this.openPopup('删除成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        } else if (response.body === '要删除的班级不存在!') {
           this.edit = true
           this.save = false
-          if (this.state.toString() === '1' || this.state.toString() === '2') {
+          if (this.state.toString() === '1') {
             this.inactive = true
             this.active = false
           } else {
@@ -173,53 +195,57 @@ export default {
             this.active = true
           }
           this.openPopup(response.body, 'report_problem', 'orange')
-          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
-          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
         }
       }, (response) => {
+        this.forSave = false
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     goActive () {
+      this.forSave = true
       this.$http.get(
         API.ActiveById,
-        { params: { id: this.$route.params.teacherId } },
+        { params: { id: this.$route.params.teamId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
+        this.forSave = false
         if (response.body === 'error') {
-          this.openPopup('请重新登录!', 'report_problem', 'red')
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
         } else if (response.body === 'OK') {
           this.edit = true
           this.save = false
-          if (this.state.toString() === '1' || this.state.toString() === '2') {
+          if (this.state.toString() === '1') {
             this.inactive = true
             this.active = false
           } else {
             this.inactive = false
             this.active = true
           }
-          this.openPopup('重新邀请关注成功!', 'check_circle', 'green')
-          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
-        } else if (response.body === '要重新邀请关注的人员不存在!') {
+          this.openPopup('激活成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
+        } else if (response.body === '要激活的社团不存在!') {
           this.edit = true
           this.save = false
-          if (this.state.toString() === '1' || this.state.toString() === '2') {
+          if (this.state.toString() === '1') {
             this.inactive = true
             this.active = false
           } else {
             this.inactive = false
             this.active = true
           }
-          this.openPopup(response.body, 'report_problem', 'red')
-          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
         } else {
-          this.openPopup(response.body, 'report_problem', 'red')
-          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
         }
       }, (response) => {
+        this.forSave = false
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
@@ -228,11 +254,9 @@ export default {
       this.$http.get(
         API.Edit,
         { params: {
-          id: this.$route.params.teacherId,
+          id: this.$route.params.teamId,
           name: this.name,
-          mobile: this.mobile,
-          isManager: this.isManagers,
-          isParent: this.isParents
+          teamTeacher: this.teamTeacher
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
@@ -242,7 +266,7 @@ export default {
           window.location.href = '/'
         } else if (response.body === 'OK') {
           this.openPopup('修改成功！', 'check_circle', 'green')
-          setTimeout(() => { this.$router.push({ path: '/teacherList' }) }, 1000)
+          setTimeout(() => { this.$router.push({ path: '/teamList' }) }, 1000)
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
         }
@@ -251,65 +275,48 @@ export default {
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
-    fetchData (teacherId) {
+    fetchData (teamId) {
       this.$http.get(
         API.GetById,
-        { params: { id: teacherId } },
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        { params: { id: teamId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
-        this.teacher = response.body
-        this.name = this.teacher.name
-        this.mobile = this.teacher.mobile
-        this.userId = this.teacher.userId
-        this.isManagers = this.teacher.isManager.toString()
-        this.isParents = this.teacher.isParent.toString()
-        if (this.teacher.isManager.toString() === '0') {
-          this.isManager = false
-        } else {
-          this.isManager = true
-        }
-        if (this.teacher.isParent.toString() === '0') {
-          this.isParent = false
-        } else {
-          this.isParent = true
-        }
-        this.state = this.teacher.state
-        if (this.teacher.state.toString() === '1' || this.teacher.state.toString() === '2') {
+        this.team = response.body
+        this.name = this.team.name
+        this.state = this.team.state
+        if (this.team.state.toString() === '1') {
           this.inactive = true
           this.active = false
         } else {
           this.inactive = false
           this.active = true
         }
-        this.inactiveTitle = '确认要取消' + this.name + '的关注吗?'
-        this.activeTitle = '确认要邀请' + this.name + '再次关注吗?'
+        this.deleteTitle = '确认要注销' + this.name + '吗?'
+        this.resaveTitle = '确认要激活' + this.name + '吗?'
+      }, (response) => {
+      })
+    },
+    getTeamTeacher (teamId) {
+      this.$http.get(
+        API.GetTeamTeacher,
+        { params: { team: teamId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+      ).then((response) => {
+        /* eslint-disable no-eval  */
+        this.teamTeacher = eval('(' + response.body + ')').teamTeachers
       }, (response) => {
       })
     },
     checkName (value) {
       if (value === null || value === undefined || value === '') {
-        this.nameErrorText = '姓名为必填项!'
+        this.nameErrorText = '社团名称为必填项!'
         this.nameErrorColor = 'orange'
-      } else if (!/^[\u4e00-\u9fa5]{2,}$/.test(value)) {
-        this.nameErrorText = '姓名应为2个以上汉字'
-        this.nameErrorColor = 'orange'
-      } else {
-
-      }
-    },
-    checkMobile (value) {
-      if (value === null || value === undefined || value === '') {
-        this.mobileErrorText = '手机号码为必填项!'
-        this.mobileErrorColor = 'orange'
-      } else if (!/^1(3|4|5|7|8)\d{9}$/.test(value)) {
-        this.mobileErrorText = '手机号码格式错误!'
-        this.mobileErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.CheckMobileForEdit,
+          API.CheckNameForEdit,
           { params: {
-            id: this.$route.params.teacherId,
-            mobile: value
+            id: this.$route.params.teamId,
+            name: value
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -317,11 +324,11 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.mobileErrorText = ''
-            this.mobileErrorColor = 'green'
+            this.nameErrorText = ''
+            this.nameErrorColor = 'green'
           } else {
-            this.mobileErrorText = response.body
-            this.mobileErrorColor = 'red'
+            this.nameErrorText = response.body
+            this.nameErrorColor = 'red'
           }
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
@@ -332,11 +339,6 @@ export default {
 }
 </script>
 <style lang="css">
-  .flex-demo {
-    height: 170px;
-    text-align: center;
-    line-height: 32px;
-  }
   .popup-bottom {
     width: 100%;
     opacity: .8;
@@ -346,5 +348,10 @@ export default {
     align-items: center;
     justify-content: center;
     max-width: 300px;
+  }
+  .flex-demo {
+    height: 170px;
+    text-align: center;
+    line-height: 32px;
   }
 </style>

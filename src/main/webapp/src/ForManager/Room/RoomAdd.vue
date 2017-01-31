@@ -65,9 +65,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course1" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
         </mu-list-item>
       </mu-list>
@@ -82,9 +82,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course2" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -99,9 +99,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course3" label="" labelLeft  :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -116,9 +116,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course4" label="" labelLeft  :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -133,9 +133,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course5" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -150,9 +150,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course6" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -167,9 +167,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course7" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -184,9 +184,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course8" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -201,9 +201,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course9" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -218,9 +218,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course10" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -235,9 +235,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course11" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
@@ -252,9 +252,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="course12" label="" labelLeft :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>

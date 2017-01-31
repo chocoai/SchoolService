@@ -61,16 +61,16 @@
                 window.location.href = '/forParent'
                 break
               case 'noPower':
-                this.openPopup('用户无管理权限!', 'report_problem', 'red')
+                this.openPopup('用户无管理权限!', 'report_problem', 'orange')
                 break
               case 'error':
-                this.openPopup('用户名或密码错误!', 'report_problem', 'red')
+                this.openPopup('用户名或密码错误!', 'report_problem', 'orange')
                 break
               default:
                 window.location.href = '/'
             }
           }, (response) => {
-            this.openPopup('服务器内部错误!', 'report_problem', 'orange')
+            this.openPopup('服务器内部错误!', 'error', 'red')
           })
         }
       },

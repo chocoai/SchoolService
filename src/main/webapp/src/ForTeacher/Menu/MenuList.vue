@@ -8,19 +8,16 @@
         <mu-list-item title="主页" @click.native="goHome">
           <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
-        <mu-list-item title="教师管理" @click.native="goTeacherManage">
-          <mu-icon slot="left" value="group" color="#f44336"/>
-        </mu-list-item>
-        <mu-list-item title="班级管理" @click.native="goRoomManage">
+        <mu-list-item title="班级成员" @click.native="goRoom">
           <mu-icon slot="left" value="store" color="#9c27b0"/>
         </mu-list-item>
-        <mu-list-item title="社团管理" @click.native="goTeamManage">
+        <mu-list-item title="班级信息" @click.native="goTeam">
           <mu-icon slot="left" value="account_balance" color="#673ab7"/>
         </mu-list-item>
-        <mu-list-item title="学生管理" @click.native="goStudentManage">
+        <mu-list-item title="请销假" @click.native="goStudent">
           <mu-icon slot="left" value="face" color="#4caf50"/>
         </mu-list-item>
-        <mu-list-item title="家长管理" @click.native="goParentManage">
+        <mu-list-item title="" @click.native="goParent">
           <mu-icon slot="left" value="accessibility" color="#ffc107"/>
         </mu-list-item>
       </mu-list>
@@ -45,22 +42,22 @@
         this.$emit('closeMenu')
       },
       goHome () {
-        window.location.href = '/'
+        window.location.href = '/forManager'
       },
-      goTeacherManage () {
-        window.location.href = '/teacher'
+      goTeacher () {
+        window.location.href = '/teacher/forManager'
       },
-      goRoomManage () {
-        window.location.href = '/room'
+      goRoom () {
+        window.location.href = '/room/forManager'
       },
-      goTeamManage () {
-        window.location.href = '/team'
+      goTeam () {
+        window.location.href = '/team/forManager'
       },
-      goStudentManage () {
-        window.location.href = '/student'
+      goStudent () {
+        window.location.href = '/student/forManager'
       },
-      goParentManage () {
-        window.location.href = '/parent'
+      goParent () {
+        window.location.href = '/parent/forManager'
       }
     }
   }

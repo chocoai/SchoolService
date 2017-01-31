@@ -1,7 +1,10 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
+import com.foxinmy.weixin4j.qy.message.NotifyMessage;
+import com.foxinmy.weixin4j.qy.model.IdParameter;
 import com.foxinmy.weixin4j.qy.model.User;
+import com.foxinmy.weixin4j.tuple.Text;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
@@ -18,7 +21,7 @@ import java.util.List;
 
 public class ParentController extends Controller {
 
-    public void index() throws WeixinException {
+    public void forManager() throws WeixinException {
         // 检测session中是否存在teacher
         if (getSessionAttr("teacher") == null) {
             // 检测cookie中是否存在EnterpriseId
@@ -28,17 +31,18 @@ public class ParentController extends Controller {
                     User user = WP.me.getUserByCode(getPara("code"));
                     Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId());
                     setSessionAttr("teacher", teacher);
-                    render("/static/ParentManage.html");
+                    setCookie("die", teacher.getId().toString(), 60 * 30);
+                    render("/static/ParentForManager.html");
                 } else {
                     redirect("/");
                 }
             } else {
                 Enterprise teacher = Enterprise.dao.findById(getCookie("die"));
                 setSessionAttr("teacher", teacher);
-                render("/static/ParentManage.html");
+                render("/static/ParentForManager.html");
             }
         } else {
-            render("/static/ParentManage.html");
+            render("/static/ParentForManager.html");
         }
     }
     @Before(AjaxFunction.class)
@@ -57,7 +61,7 @@ public class ParentController extends Controller {
     }
 
     public void getRelation() {
-        List<Relation> relations = Relation.dao.find("select * from relation where parent_id=? order by id asc",getPara("id"));
+        List<Relation> relations = Relation.dao.find("select * from relation where parent_id=? order by id asc",getPara("parentId"));
         String[] relation = new String[4];
         String[] room_id = new String[4];
         String[] student_id = new String[4];
@@ -169,7 +173,17 @@ public class ParentController extends Controller {
                 identityAble[i] = "true";
             }
         } else {
-
+            for (int k = 0; k < 4; k++) {
+                student_id[k] = "";
+                studentName[k] = "姓名";
+                identity_id[k] = "";
+                identityName[k] = "身份";
+                room_id[k] = "";
+                roomName[k] = "班级";
+                roomAble[k] = "false";
+                studentAble[k] = "false";
+                identityAble[k] = "false";
+            }
         }
         for (int i=0; i<4; i++){
             int j=i+1;
@@ -230,7 +244,7 @@ public class ParentController extends Controller {
                 parent.set("name", getPara("name").trim())
                         .set("mobile", getPara("mobile").trim())
                         .set("userId", getPara("userId").trim())
-                        .set("state", 2)
+                        .set("state", 4)
                         .set("isTeacher", 0)
                         .set("isManager",0)
                         .set("isParent",1)
@@ -242,6 +256,13 @@ public class ParentController extends Controller {
                     relation.set("parent_id", parent.get("id"))
                             .set("student_id", getPara("student_id1"))
                             .set("identity_id", getPara("identity_id1")).save();
+                    if (parent.getState()==1){
+                        try {
+                            WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Student.dao.findFirst("select * from student where id=?",getPara("student_id1")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id1")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                        } catch (Exception e) {
+                            renderText(e.getMessage());
+                        }
+                    }
                 }
                 if (!getPara("student_id2").equals("") && !getPara("identity_id2").equals("")
                         && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
@@ -250,6 +271,13 @@ public class ParentController extends Controller {
                     relation.set("parent_id", parent.getId())
                             .set("student_id", getPara("student_id2"))
                             .set("identity_id", getPara("identity_id2")).save();
+                    if (parent.getState()==1){
+                        try {
+                            WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Student.dao.findFirst("select * from student where id=?",getPara("student_id2")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id2")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                        } catch (Exception e) {
+                            renderText(e.getMessage());
+                        }
+                    }
                 }
                 if (!getPara("student_id3").equals("") && !getPara("identity_id3").equals("")
                         && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
@@ -258,6 +286,13 @@ public class ParentController extends Controller {
                     relation.set("parent_id", parent.getId())
                             .set("student_id", getPara("student_id3"))
                             .set("identity_id", getPara("identity_id3")).save();
+                    if (parent.getState()==1){
+                        try {
+                            WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Student.dao.findFirst("select * from student where id=?",getPara("student_id3")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id3")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                        } catch (Exception e) {
+                            renderText(e.getMessage());
+                        }
+                    }
                 }
                 if (!getPara("student_id4").equals("") && !getPara("identity_id4").equals("")
                         && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
@@ -266,6 +301,13 @@ public class ParentController extends Controller {
                     relation.set("parent_id", parent.getId())
                             .set("student_id", getPara("student_id4"))
                             .set("identity_id", getPara("identity_id4")).save();
+                    if (parent.getState()==1){
+                        try {
+                            WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Student.dao.findFirst("select * from student where id=?",getPara("student_id4")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id4")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                        } catch (Exception e) {
+                            renderText(e.getMessage());
+                        }
+                    }
                 }
                 renderText("OK");
             }catch(WeixinException e){
@@ -296,6 +338,13 @@ public class ParentController extends Controller {
                         relation.set("parent_id", parent.get("id"))
                                 .set("student_id", getPara("student_id1"))
                                 .set("identity_id", getPara("identity_id1")).save();
+                        if (parent.getState()==1){
+                            try {
+                                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Student.dao.findFirst("select * from student where id=?",getPara("student_id1")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id1")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                            } catch (Exception e) {
+                                renderText(e.getMessage());
+                            }
+                        }
                     }
                     if (!getPara("student_id2").equals("") && !getPara("identity_id2").equals("")
                             && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
@@ -304,6 +353,13 @@ public class ParentController extends Controller {
                         relation.set("parent_id", parent.getId())
                                 .set("student_id", getPara("student_id2"))
                                 .set("identity_id", getPara("identity_id2")).save();
+                        if (parent.getState()==1){
+                            try {
+                                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Student.dao.findFirst("select * from student where id=?",getPara("student_id2")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id2")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                            } catch (Exception e) {
+                                renderText(e.getMessage());
+                            }
+                        }
                     }
                     if (!getPara("student_id3").equals("") && !getPara("identity_id3").equals("")
                             && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
@@ -312,6 +368,13 @@ public class ParentController extends Controller {
                         relation.set("parent_id", parent.getId())
                                 .set("student_id", getPara("student_id3"))
                                 .set("identity_id", getPara("identity_id3")).save();
+                        if (parent.getState()==1){
+                            try {
+                                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Student.dao.findFirst("select * from student where id=?",getPara("student_id3")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id3")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                            } catch (Exception e) {
+                                renderText(e.getMessage());
+                            }
+                        }
                     }
                     if (!getPara("student_id4").equals("") && !getPara("identity_id4").equals("")
                             && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
@@ -320,6 +383,13 @@ public class ParentController extends Controller {
                         relation.set("parent_id", parent.getId())
                                 .set("student_id", getPara("student_id4"))
                                 .set("identity_id", getPara("identity_id4")).save();
+                        if (parent.getState()==1){
+                            try {
+                                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Student.dao.findFirst("select * from student where id=?",getPara("student_id4")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id4")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                            } catch (Exception e) {
+                                renderText(e.getMessage());
+                            }
+                        }
                     }
                     if (!Util.getString(parent.getStr("name")).equals(getPara("name").trim())
                             || !Util.getString(parent.getStr("mobile")).equals(getPara("mobile").trim())

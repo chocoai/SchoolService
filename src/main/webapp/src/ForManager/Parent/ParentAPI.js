@@ -7,6 +7,7 @@ export const GetUserId = `${h}/enterprise/getUserId`
 export const GetById = `${h}/enterprise/getById`
 export const InactiveById = `${h}/enterprise/inactiveById`
 export const ActiveById = `${h}/enterprise/activeById`
+export const Update = `${h}/enterprise/update`
 export const RoomList = `${h}/room/roomList`
 export const GetRoomName = `${h}/room/getNameById`
 export const GetStudentName = `${h}/student/getNameById`

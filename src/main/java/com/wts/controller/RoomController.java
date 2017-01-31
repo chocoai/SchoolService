@@ -24,7 +24,7 @@ import static com.jfinal.plugin.activerecord.Db.find;
 
 public class RoomController extends Controller {
 
-  public void index() throws WeixinException {
+  public void forManager() throws WeixinException {
 // 检测session中是否存在teacher
     if (getSessionAttr("teacher") == null) {
       // 检测cookie中是否存在EnterpriseId
@@ -34,17 +34,18 @@ public class RoomController extends Controller {
           User user = WP.me.getUserByCode(getPara("code"));
           Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId());
           setSessionAttr("teacher", teacher);
-          render("/static/RoomManage.html");
+          setCookie("die", teacher.getId().toString(), 60 * 30);
+          render("/static/RoomForManager.html");
         } else {
           redirect("/");
         }
       } else {
         Enterprise teacher = Enterprise.dao.findById(getCookie("die"));
         setSessionAttr("teacher", teacher);
-        render("/static/RoomManage.html");
+        render("/static/RoomForManager.html");
       }
     } else {
-      render("/static/RoomManage.html");
+      render("/static/RoomForManager.html");
     }
   }
   @Before(AjaxFunction.class)
@@ -142,18 +143,18 @@ public class RoomController extends Controller {
   }
   @Before(AjaxFunction.class)
   public void getCourseTeacher() {
-    List<Courseplan> courseplan1 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=1",getPara("room"));
-    List<Courseplan> courseplan2 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=2",getPara("room"));
-    List<Courseplan> courseplan3 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=3",getPara("room"));
-    List<Courseplan> courseplan4 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=4",getPara("room"));
-    List<Courseplan> courseplan5 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=5",getPara("room"));
-    List<Courseplan> courseplan6 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=6",getPara("room"));
-    List<Courseplan> courseplan7 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=7",getPara("room"));
-    List<Courseplan> courseplan8 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=8",getPara("room"));
-    List<Courseplan> courseplan9 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=9",getPara("room"));
-    List<Courseplan> courseplan10 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=10",getPara("room"));
-    List<Courseplan> courseplan11 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=11",getPara("room"));
-    List<Courseplan> courseplan12 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=12",getPara("room"));
+    List<Courseplan> courseplan1 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=1",getPara("roomId"));
+    List<Courseplan> courseplan2 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=2",getPara("roomId"));
+    List<Courseplan> courseplan3 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=3",getPara("roomId"));
+    List<Courseplan> courseplan4 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=4",getPara("roomId"));
+    List<Courseplan> courseplan5 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=5",getPara("roomId"));
+    List<Courseplan> courseplan6 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=6",getPara("roomId"));
+    List<Courseplan> courseplan7 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=7",getPara("roomId"));
+    List<Courseplan> courseplan8 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=8",getPara("roomId"));
+    List<Courseplan> courseplan9 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=9",getPara("roomId"));
+    List<Courseplan> courseplan10 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=10",getPara("roomId"));
+    List<Courseplan> courseplan11 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=11",getPara("roomId"));
+    List<Courseplan> courseplan12 = Courseplan.dao.find("select * from courseplan where room_id=? and course_id=12",getPara("roomId"));
 
     String sp1 = "";
     String sp2 = "";

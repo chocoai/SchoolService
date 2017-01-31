@@ -5,7 +5,15 @@
     </mu-appbar>
     <mu-text-field v-model="name" label="社团名称" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
     <mu-sub-header>管理教师：</mu-sub-header>
-    <mu-raised-button :label="teamName"  @click="openTeamTeacher=true" :icon="teamIcon" :backgroundColor="teamBack" color="#FFFFFF" fullWidth/>
+    <mu-flexbox>
+      <mu-flexbox-item class="flex-demo">
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <mu-flat-button :label="teamName" @click="openTeamTeacher=true" :icon="teamIcon" :backgroundColor="teamBack" color="#FFFFFF"/>
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+      </mu-flexbox-item>
+    </mu-flexbox>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
@@ -22,9 +30,9 @@
         </mu-list-item>
         <mu-list-item v-for="teacher in teachers" :title="teacher.name">
           <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
-          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="Light Green" value="sentiment_neutral" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="Indigo" value="sentiment_dissatisfied" :size="40" />
-          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="Grey" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+          <mu-icon v-if="teacher.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
           <mu-checkbox v-model="teamTeacher" :nativeValue="teacher.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>

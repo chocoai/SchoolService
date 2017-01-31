@@ -888,6 +888,13 @@ export default {
       this.identityAble2 = this.relation.identityAble2
       this.identityAble3 = this.relation.identityAble3
       this.identityAble4 = this.relation.identityAble4
+      this.$http.get(
+        API.Update,
+        { params: { userId: this.userId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+      ).then((response) => {
+      }, (response) => {
+      })
     },
     goCancel () {
       this.edit = true
@@ -1311,7 +1318,7 @@ export default {
     getRelation (parentId) {
       this.$http.get(
         API.GetRelation,
-        { params: { id: parentId } },
+        { params: { parentId: parentId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
         /* eslint-disable no-eval  */
