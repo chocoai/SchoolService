@@ -9,8 +9,10 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
-import com.wts.interceptor.AjaxFunction;
-import com.wts.util.Util;
+import com.wts.interceptor.Ajax;
+import com.wts.interceptor.AjaxManager;
+import com.wts.interceptor.AjaxTeacher;
+import com.wts.interceptor.Login;
 
 import java.util.List;
 
@@ -20,45 +22,108 @@ import static com.wts.util.Util.getString;
 public class StudentController extends Controller {
 
     public void forManager() throws WeixinException {
-        // 检测session中是否存在teacher
-        if (getSessionAttr("teacher") == null) {
+        // 检测session中是否存在manager
+        if (getSessionAttr("manager") == null || ((Enterprise) getSessionAttr("manager")).getIsManager() != 1) {
             // 检测cookie中是否存在EnterpriseId
             if (getCookie("die") == null || getCookie("die").equals("")) {
                 // 检测是否来自微信请求
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId());
-                    setSessionAttr("teacher", teacher);
-                    setCookie("die", teacher.getId().toString(), 60 * 30);
-                    render("/static/StudentForManager.html");
+                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isManager=1 and userId=?", user.getUserId());
+                    // 检测是否有权限
+                    if (enterprise != null) {
+                        setSessionAttr("manager", enterprise);
+                        setCookie("die", enterprise.getId().toString(), 60 * 30);
+                        render("/static/StudentForManager.html");
+                    } else {
+                        redirect("/");
+                    }
                 } else {
                     redirect("/");
                 }
             } else {
-                Enterprise teacher = Enterprise.dao.findById(getCookie("die"));
-                setSessionAttr("teacher", teacher);
+                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+                setSessionAttr("manager", enterprise);
                 render("/static/StudentForManager.html");
             }
         } else {
             render("/static/StudentForManager.html");
         }
     }
-    @Before(AjaxFunction.class)
+    public void forRoomTeacher() throws WeixinException {
+        // 检测session中是否存在teacher
+        if (getSessionAttr("teacher") == null || ((Enterprise) getSessionAttr("teacher")).getIsTeacher() != 1) {
+            // 检测cookie中是否存在EnterpriseId
+            if (getCookie("die") == null || getCookie("die").equals("")) {
+                // 检测是否来自微信请求
+                if (!(getPara("code") == null || getPara("code").equals(""))) {
+                    User user = WP.me.getUserByCode(getPara("code"));
+                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
+                    // 检测是否有权限
+                    if (enterprise != null) {
+                        setSessionAttr("teacher", enterprise);
+                        setCookie("die", enterprise.getId().toString(), 60 * 30);
+                        render("/static/StudentOfRoomForTeacher.html");
+                    } else {
+                        redirect("/");
+                    }
+                } else {
+                    redirect("/");
+                }
+            } else {
+                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+                setSessionAttr("teacher", enterprise);
+                render("/static/StudentOfRoomForTeacher.html");
+            }
+        } else {
+            render("/static/StudentOfRoomForTeacher.html");
+        }
+    }
+    public void forTeamTeacher() throws WeixinException {
+        // 检测session中是否存在teacher
+        if (getSessionAttr("teacher") == null || ((Enterprise) getSessionAttr("teacher")).getIsTeacher() != 1) {
+            // 检测cookie中是否存在EnterpriseId
+            if (getCookie("die") == null || getCookie("die").equals("")) {
+                // 检测是否来自微信请求
+                if (!(getPara("code") == null || getPara("code").equals(""))) {
+                    User user = WP.me.getUserByCode(getPara("code"));
+                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
+                    // 检测是否有权限
+                    if (enterprise != null) {
+                        setSessionAttr("teacher", enterprise);
+                        setCookie("die", enterprise.getId().toString(), 60 * 30);
+                        render("/static/StudentOfTeamForTeacher.html");
+                    } else {
+                        redirect("/");
+                    }
+                } else {
+                    redirect("/");
+                }
+            } else {
+                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+                setSessionAttr("teacher", enterprise);
+                render("/static/StudentOfTeamForTeacher.html");
+            }
+        } else {
+            render("/static/StudentOfTeamForTeacher.html");
+        }
+    }
+    @Before(AjaxManager.class)
     public  void studentList() {
         List<Student> students = Student.dao.find("select * from student where room_id=?",getPara("id"));
         renderJson(students);
     }
-    @Before(AjaxFunction.class)
+    @Before({Login.class, Ajax.class})
     public void getById() {
         Student student = Student.dao.findById(getPara("id"));
         renderJson(student);
     }
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void getNameById() {
         Student student = Student.dao.findById(getPara("id"));
         renderText(student.get("name").toString());
     }
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void inactiveById() {
         Student student = Student.dao.findById(getPara("id"));
         if (student == null) {
@@ -70,7 +135,7 @@ public class StudentController extends Controller {
             renderText("OK");
         }
     }
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void activeById() {
         Student student = Student.dao.findById(getPara("id"));
         if (student == null) {
@@ -82,14 +147,42 @@ public class StudentController extends Controller {
             renderText("OK");
         }
     }
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void queryByName() {
         Page<Student> students= Student.dao.studentQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
         renderJson(students.getList());
     }
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void totalByName() {
         Long count = Db.queryLong("select count(*) from student where (name like '%"+ getPara("queryString") +"%' or number LIKE '%"+getPara("queryString")+"%' or code LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
+        if (count%getParaToInt("pageSize")==0) {
+            renderText((count/getParaToInt("pageSize"))+"");
+        } else {
+            renderText((count/getParaToInt("pageSize")+1)+"");
+        }
+    }
+    @Before(AjaxTeacher.class)
+    public void queryByNameRoomId() {
+        Page<Student> students= Student.dao.studentQueryByRoomId(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"),getPara("roomId"));
+        renderJson(students.getList());
+    }
+    @Before(AjaxTeacher.class)
+    public void totalByNameRoomId() {
+        Long count = Db.queryLong("select count(*) from student where room_id = "+getPara("roomId")+" and (name like '%"+ getPara("queryString") +"%' or number LIKE '%"+getPara("queryString")+"%' or code LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
+        if (count%getParaToInt("pageSize")==0) {
+            renderText((count/getParaToInt("pageSize"))+"");
+        } else {
+            renderText((count/getParaToInt("pageSize")+1)+"");
+        }
+    }
+    @Before(AjaxTeacher.class)
+    public void queryByNameTeamId() {
+        Page<Student> students= Student.dao.studentQueryByTeamId(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"),getPara("teamId"));
+        renderJson(students.getList());
+    }
+    @Before(AjaxTeacher.class)
+    public void totalByNameTeamId() {
+        Long count = Db.queryLong("select count(*) from student where team_id = "+getPara("teamId")+" and (name like '%"+ getPara("queryString") +"%' or number LIKE '%"+getPara("queryString")+"%' or code LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
         if (count%getParaToInt("pageSize")==0) {
             renderText((count/getParaToInt("pageSize"))+"");
         } else {
@@ -99,7 +192,7 @@ public class StudentController extends Controller {
     /**
      * 新增时检测学生证件号码
      * */
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void checkNumberForNew() {
         if (!checkIDNumberDetailB(getPara("number"))){
             renderText(checkIDNumberDetail(getPara("number")));
@@ -112,7 +205,7 @@ public class StudentController extends Controller {
     /**
      * 修改时检测学生证件号码
      * */
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void checkNumberForEdit() {
         if (!checkIDNumberDetailB(getPara("number"))){
             renderText(checkIDNumberDetail(getPara("number")));
@@ -126,19 +219,19 @@ public class StudentController extends Controller {
     /**
      * 新增时检测学生学籍号
      * */
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void checkCodeForNew() {
         renderText("OK");
     }
     /**
      * 修改时检测学生学籍号
      * */
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void checkCodeForEdit() {
         renderText("OK");
     }
 
-    @Before(AjaxFunction.class)
+    @Before({Login.class, Ajax.class})
     public void getParentById(){
         Relation relation1 = Relation.dao.findFirst("select * from relation where student_id=? and identity_id=1",getPara("studentId"));
         Relation relation2 = Relation.dao.findFirst("select * from relation where student_id=? and identity_id=2",getPara("studentId"));
@@ -191,7 +284,7 @@ public class StudentController extends Controller {
         renderText("{"+r1+","+r2+","+r3+","+r4+","+r5+","+r6+"}");
     }
 
-    @Before({Tx.class,AjaxFunction.class})
+    @Before({Tx.class,AjaxManager.class})
     public void save()  {
 //        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
 //            renderText("请输入两个以上汉字!");
@@ -219,7 +312,7 @@ public class StudentController extends Controller {
         }
     }
 
-    @Before({Tx.class, AjaxFunction.class})
+    @Before({Tx.class, AjaxManager.class})
     public void edit() {
         Student student = Student.dao.findById(getPara("id"));
         String room,team;

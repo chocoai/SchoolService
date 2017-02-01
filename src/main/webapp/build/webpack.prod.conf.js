@@ -151,6 +151,58 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       chunksSortMode: 'dependency'
     }),
+    new HtmlWebpackPlugin({
+      title: '主页',
+      filename: '../dist/static/HomeForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'homeForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '学生管理',
+      filename: '../dist/static/StudentOfRoomForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'studentOfRoomForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '学生管理',
+      filename: '../dist/static/StudentOfTeamForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'studentOfTeamForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '班级消息',
+      filename: '../dist/static/RoomworkForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'roomworkForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

@@ -19,11 +19,12 @@ public class CreatMenu {
   private static String All = BASIC.replaceAll("XXXXX","");
 
   // 校园管理入口菜单
-  private static String TEACHER = BASIC.replaceAll("XXXXX","teacher%2f");
-  private static String ROOM = BASIC.replaceAll("XXXXX","room%2f");
-  private static String TEAM = BASIC.replaceAll("XXXXX","team%2f");
-  private static String STUDENT = BASIC.replaceAll("XXXXX","student%2f");
-  private static String PARENT = BASIC.replaceAll("XXXXX","parent%2f");
+  private static String TEACHER = BASIC.replaceAll("XXXXX","teacher%2fforManager%2f");
+  private static String ROOM = BASIC.replaceAll("XXXXX","room%2fforManager%2f");
+  private static String TEAM = BASIC.replaceAll("XXXXX","team%2fforManager%2f");
+  private static String STUDENT = BASIC.replaceAll("XXXXX","student%2fforManager%2f");
+  private static String PARENT = BASIC.replaceAll("XXXXX","parent%2fforManager%2f");
+
 
   public static void CreateManager (){
     Button manager_1 = new Button("教师管理", TEACHER, ButtonType.view);
@@ -43,14 +44,35 @@ public class CreatMenu {
       System.out.println(e.getMessage());
     }
   }
+  // 班级管理入口菜单
+  private static String CLASSROOM = BASIC.replaceAll("XXXXX","student%2fforRoomTeacher%2f");
+  private static String TEAMROOM = BASIC.replaceAll("XXXXX","student%2fforTeamTeacher%2f");
 
+  public static void CreateTeacher (){
+    Button teacher_1 = new Button("班级学生", CLASSROOM, ButtonType.view);
+    Button teacher_2 = new Button("社团学生", TEAMROOM, ButtonType.view);
+    Button teacher_3 = new Button("社团学生", TEAMROOM, ButtonType.view);
+    Button teacher_4 = new Button("社团学生", TEAMROOM, ButtonType.view);
+    Button teacher_5 = new Button("社团学生", TEAMROOM, ButtonType.view);
 
+    Button managerButton = new Button("综合管理", teacher_1, teacher_2, teacher_3, teacher_4, teacher_5);
+
+    List<Button> managers = new ArrayList<Button>();
+    managers.add(managerButton);
+    try {
+      ApiResult ret = new WeixinProxy().createMenu(ParamesAPI.teacherId, managers);
+      System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
+    } catch (WeixinException e){
+      System.out.println(e.getMessage());
+    }
+  }
 
 
 
 
   public static void main(String[] args) {
     CreateManager();
+    CreateTeacher();
 //    try{
 //      Button School = new Button("管理系统", All, ButtonType.view);
 //      // 学校的相关功能

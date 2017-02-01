@@ -737,7 +737,7 @@ export default {
     },
     getCourse (roomId) {
       this.$http.get(
-        API.GetCourseTeacher,
+        API.GetRoomTeacher,
         { params: { roomId: roomId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
@@ -769,7 +769,7 @@ export default {
         this.nameErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.CheckNameForNew,
+          API.CheckNameForEdit,
           { params: {
             id: this.$route.params.roomId,
             name: value

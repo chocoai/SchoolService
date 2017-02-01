@@ -1,0 +1,10 @@
+const h = ''
+// const h = '/ds'
+export const TeacherTeamList = `${h}/team/teacherTeamList`
+export const TeacherTeamFirst = `${h}/team/teacherTeamFirst`
+export const GetRoomName = `${h}/room/getNameById`
+export const GetTeamName = `${h}/team/getNameById`
+export const QueryByName = `${h}/student/queryByNameTeamId`
+export const TotalByName = `${h}/student/totalByNameTeamId`
+export const GetById = `${h}/student/getById`
+export const GetParent = `${h}/student/getParentById`

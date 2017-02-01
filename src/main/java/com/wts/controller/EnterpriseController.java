@@ -6,7 +6,7 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
-import com.wts.interceptor.AjaxFunction;
+import com.wts.interceptor.AjaxManager;
 import com.wts.util.ParamesAPI;
 import com.wts.util.PinyinTool;
 import com.wts.util.msg.Util.MessageUtil;
@@ -21,7 +21,7 @@ public class EnterpriseController extends Controller {
 //  /**
 //   * 检测姓名
 //   * */
-//  @Before(AjaxFunction.class)
+//  @Before(AjaxManager.class)
 //  public void checkName() {
 //    if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
 //      renderText("请输入两个以上的汉字!");
@@ -32,7 +32,7 @@ public class EnterpriseController extends Controller {
   /**
    * 新增时检测手机号码
    * */
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void checkMobileForNew() {
 //    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
 //      renderText("手机号码格式错误!");
@@ -45,7 +45,7 @@ public class EnterpriseController extends Controller {
   /**
    * 新增时检测账号
    * */
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void checkUserIdForNew() {
 //    if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
 //      renderText("账号名应为字母或数字的组合!");
@@ -59,7 +59,7 @@ public class EnterpriseController extends Controller {
   /**
    * 修改时检测手机号码
    * */
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void checkMobileForEdit() {
 //    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
 //      renderText("手机号码格式错误!");
@@ -70,12 +70,12 @@ public class EnterpriseController extends Controller {
       renderText("OK");
     }
   }
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void getById() {
     Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
     renderJson(enterprise);
   }
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void inactiveById() {
     Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
     if (enterprise == null) {
@@ -94,7 +94,7 @@ public class EnterpriseController extends Controller {
       }
     }
   }
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void activeById() {
     Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
     if (enterprise == null) {
@@ -125,7 +125,7 @@ public class EnterpriseController extends Controller {
       }
     }
   }
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void getUserId() {
     try {
       String UserId = new PinyinTool().toPinYin(getPara("name"), "", PinyinTool.Type.FIRSTUPPER);
@@ -144,7 +144,7 @@ public class EnterpriseController extends Controller {
       renderText("");
     }
   }
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void update() {
     try {
       Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=?", getPara("userId"));

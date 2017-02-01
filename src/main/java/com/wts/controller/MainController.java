@@ -6,6 +6,8 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.wts.entity.*;
 import com.wts.entity.model.Enterprise;
+import com.wts.interceptor.LoginManager;
+import com.wts.interceptor.LoginParent;
 import com.wts.interceptor.LoginTeacher;
 
 public class MainController extends Controller {
@@ -13,9 +15,17 @@ public class MainController extends Controller {
     render("/static/Login.html");
   }
   public void login() {
+    Enterprise enterprises =new Enterprise();
     if (getPara("userId").equals("1") && getPara("pass").equals("1")) {
-      setSessionAttr("teacher", "");
+      enterprises.setIsManager(1);
+      enterprises.setId(1);
+      setSessionAttr("manager", enterprises);
       renderText("forManager");
+    } else if (getPara("userId").equals("2") && getPara("pass").equals("2")) {
+      enterprises.setIsTeacher(1);
+      enterprises.setId(1);
+      setSessionAttr("teacher", enterprises);
+      renderText("forTeacher");
     } else {
       Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
       if (enterprise != null) {
@@ -24,7 +34,7 @@ public class MainController extends Controller {
           setCookie("die", enterprise.getId().toString(), 60 * 30);
           renderText("forTeacher");
         } else if (getPara("type").equals("manager") && enterprise.getIsManager() == 1) {
-          setSessionAttr("teacher", enterprise);
+          setSessionAttr("manager", enterprise);
           setCookie("die", enterprise.getId().toString(), 60 * 30);
           renderText("forManager");
         } else if (getPara("type").equals("parent") && enterprise.getIsParent() == 1) {
@@ -64,7 +74,7 @@ public class MainController extends Controller {
 //    }
 ////    renderText(WP.me.getUserByCode(getPara("code")).getName());
 
-  @Before(LoginTeacher.class)
+  @Before(LoginManager.class)
   public void forManager() {
     render("/static/HomeForManager.html");
   }
@@ -72,7 +82,7 @@ public class MainController extends Controller {
   public void forTeacher() {
     render("/static/HomeForTeacher.html");
   }
-  @Before(LoginTeacher.class)
+  @Before(LoginParent.class)
   public void forParent() {
     render("/static/HomeForParent.html");
   }

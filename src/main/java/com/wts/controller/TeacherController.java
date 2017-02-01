@@ -1,7 +1,6 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
-import com.foxinmy.weixin4j.http.weixin.ApiResult;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -10,10 +9,8 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
-import com.wts.interceptor.AjaxFunction;
-import com.wts.interceptor.LoginTeacher;
+import com.wts.interceptor.AjaxManager;
 import com.wts.util.ParamesAPI;
-import com.wts.util.PinyinTool;
 import com.wts.util.Util;
 
 import java.util.ArrayList;
@@ -23,22 +20,27 @@ public class TeacherController extends Controller {
 
   public void forManager() throws WeixinException {
     // 检测session中是否存在teacher
-    if (getSessionAttr("teacher") == null) {
+    if (getSessionAttr("manager") == null || ((Enterprise)getSessionAttr("manager")).getIsManager()!=1) {
       // 检测cookie中是否存在EnterpriseId
       if (getCookie("die") == null || getCookie("die").equals("")) {
         // 检测是否来自微信请求
         if (!(getPara("code") == null || getPara("code").equals(""))) {
           User user = WP.me.getUserByCode(getPara("code"));
-          Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId());
-          setSessionAttr("teacher", teacher);
-          setCookie("die", teacher.getId().toString(), 60 * 30);
-          render("/static/TeacherForManager.html");
+          Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isManager=1 and userId=?", user.getUserId());
+          // 检测是否有权限
+          if (enterprise != null) {
+            setSessionAttr("manager", enterprise);
+            setCookie("die", enterprise.getId().toString(), 60 * 30);
+            render("/static/TeacherForManager.html");
+          } else {
+            redirect("/");
+          }
         } else {
           redirect("/");
         }
       } else {
-        Enterprise teacher = Enterprise.dao.findById(getCookie("die"));
-        setSessionAttr("teacher", teacher);
+        Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+        setSessionAttr("manager", enterprise);
         render("/static/TeacherForManager.html");
       }
     } else {
@@ -46,7 +48,7 @@ public class TeacherController extends Controller {
     }
   }
 
-  @Before({Tx.class,AjaxFunction.class})
+  @Before({Tx.class,AjaxManager.class})
   public void save()  {
     if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
@@ -84,7 +86,7 @@ public class TeacherController extends Controller {
     }
   }
 
-  @Before({Tx.class,AjaxFunction.class})
+  @Before({Tx.class,AjaxManager.class})
   public void edit() {
     Enterprise teacher = Enterprise.dao.findById(getPara("id"));
     if (teacher == null) {
@@ -140,12 +142,12 @@ public class TeacherController extends Controller {
       }
     }
   }
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void queryTeacher() {
     Page<Enterprise> teachers= Enterprise.dao.teacherQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
     renderJson(teachers.getList());
   }
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void totalByName() {
     Long count = Db.queryLong("select count(*) from enterprise where isTeacher=1 and (name like '%"+ getPara("queryString") +"%' or mobile LIKE '%"+getPara("queryString")+"%' or userId LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
     if (count%getParaToInt("pageSize")==0) {
@@ -154,7 +156,7 @@ public class TeacherController extends Controller {
       renderText((count/getParaToInt("pageSize")+1)+"");
     }
   }
-  @Before(AjaxFunction.class)
+  @Before(AjaxManager.class)
   public void teacherList() {
     List<Enterprise> teachers = Enterprise.dao.find("select * from enterprise where (isTeacher=1 or isManager=1) and (state=1 or state=2) order by name asc");
     renderJson(teachers);

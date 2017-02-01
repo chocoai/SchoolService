@@ -8,17 +8,14 @@
         <mu-list-item title="主页" @click.native="goHome">
           <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
-        <mu-list-item title="班级成员" @click.native="goRoom">
-          <mu-icon slot="left" value="store" color="#9c27b0"/>
+        <mu-list-item title="班级学生" @click.native="goStudentOfRoom">
+          <mu-icon slot="left" value="face" color="#9c27b0"/>
         </mu-list-item>
-        <mu-list-item title="班级信息" @click.native="goTeam">
-          <mu-icon slot="left" value="account_balance" color="#673ab7"/>
+        <mu-list-item title="社团学生" @click.native="goStudentOfTeam">
+          <mu-icon slot="left" value="face" color="#673ab7"/>
         </mu-list-item>
-        <mu-list-item title="请销假" @click.native="goStudent">
-          <mu-icon slot="left" value="face" color="#4caf50"/>
-        </mu-list-item>
-        <mu-list-item title="" @click.native="goParent">
-          <mu-icon slot="left" value="accessibility" color="#ffc107"/>
+        <mu-list-item title="班级消息" @click.native="goRoomwork">
+          <mu-icon slot="left" value="face" color="#673ab7"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -42,22 +39,16 @@
         this.$emit('closeMenu')
       },
       goHome () {
-        window.location.href = '/forManager'
+        window.location.href = '/forTeacher'
       },
-      goTeacher () {
-        window.location.href = '/teacher/forManager'
+      goStudentOfRoom () {
+        window.location.href = '/student/forRoomTeacher'
       },
-      goRoom () {
-        window.location.href = '/room/forManager'
+      goStudentOfTeam () {
+        window.location.href = '/student/forTeamTeacher'
       },
-      goTeam () {
-        window.location.href = '/team/forManager'
-      },
-      goStudent () {
-        window.location.href = '/student/forManager'
-      },
-      goParent () {
-        window.location.href = '/parent/forManager'
+      goRoomwork () {
+        window.location.href = '/roomwork/forTeacher'
       }
     }
   }

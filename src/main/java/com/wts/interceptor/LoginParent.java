@@ -6,11 +6,12 @@ import com.wts.entity.model.Enterprise;
 
 import javax.servlet.http.HttpSession;
 
-public class LoginTeacher implements Interceptor {
+public class LoginParent implements Interceptor {
 
     public void intercept(Invocation inv) {
+
         HttpSession session = inv.getController().getSession();
-        if (session.getAttribute("teacher") == null || ((Enterprise) session.getAttribute("teacher")).getIsTeacher() != 1) {
+        if (session.getAttribute("parent") == null || ((Enterprise) session.getAttribute("parent")).getIsParent() != 1) {
             inv.getController().redirect("/");
         } else {
             inv.invoke();

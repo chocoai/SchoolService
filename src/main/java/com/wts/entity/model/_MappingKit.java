@@ -17,21 +17,23 @@ public class _MappingKit {
 
 	public static void mapping(ActiveRecordPlugin arp) {
 		arp.addMapping("course", "id", Course.class);
-		arp.addMapping("courseplan", "id", Courseplan.class);
 		arp.addMapping("enterprise", "id", Enterprise.class);
 		arp.addMapping("exam", "id", Exam.class);
 		arp.addMapping("grade", "id", Grade.class);
-		arp.addMapping("homework", "id", Homework.class);
-		arp.addMapping("homeworkread", "id", Homeworkread.class);
 		arp.addMapping("identity", "id", Identity.class);
 		arp.addMapping("leave", "id", Leave.class);
 		arp.addMapping("notice", "id", Notice.class);
 		arp.addMapping("praise", "id", Praise.class);
 		arp.addMapping("relation", "id", Relation.class);
 		arp.addMapping("room", "id", Room.class);
+		arp.addMapping("roomplan", "id", Roomplan.class);
+		arp.addMapping("roomwork", "id", Roomwork.class);
+		arp.addMapping("roomworkread", "id", Roomworkread.class);
 		arp.addMapping("student", "id", Student.class);
 		arp.addMapping("team", "id", Team.class);
 		arp.addMapping("teamplan", "id", Teamplan.class);
+		arp.addMapping("teamwork", "id", Teamwork.class);
+		arp.addMapping("teamworkread", "id", Teamworkread.class);
 	}
 }
 

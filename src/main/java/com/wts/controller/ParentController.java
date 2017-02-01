@@ -12,7 +12,7 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
-import com.wts.interceptor.AjaxFunction;
+import com.wts.interceptor.AjaxManager;
 import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
@@ -23,34 +23,39 @@ public class ParentController extends Controller {
 
     public void forManager() throws WeixinException {
         // 检测session中是否存在teacher
-        if (getSessionAttr("teacher") == null) {
+        if (getSessionAttr("manager") == null || ((Enterprise)getSessionAttr("manager")).getIsManager()!=1) {
             // 检测cookie中是否存在EnterpriseId
             if (getCookie("die") == null || getCookie("die").equals("")) {
                 // 检测是否来自微信请求
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where state=1 and userId=?", user.getUserId());
-                    setSessionAttr("teacher", teacher);
-                    setCookie("die", teacher.getId().toString(), 60 * 30);
-                    render("/static/ParentForManager.html");
+                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isManager=1 and userId=?", user.getUserId());
+                    // 检测是否有权限
+                    if (enterprise != null) {
+                        setSessionAttr("manager", enterprise);
+                        setCookie("die", enterprise.getId().toString(), 60 * 30);
+                        render("/static/ParentForManager.html");
+                    } else {
+                        redirect("/");
+                    }
                 } else {
                     redirect("/");
                 }
             } else {
-                Enterprise teacher = Enterprise.dao.findById(getCookie("die"));
-                setSessionAttr("teacher", teacher);
+                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+                setSessionAttr("manager", enterprise);
                 render("/static/ParentForManager.html");
             }
         } else {
             render("/static/ParentForManager.html");
         }
     }
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void queryParent() {
         Page<Enterprise> parents= Enterprise.dao.parentQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
         renderJson(parents.getList());
     }
-    @Before(AjaxFunction.class)
+    @Before(AjaxManager.class)
     public void totalByName() {
         Long count = Db.queryLong("select count(*) from enterprise where isParent=1 and (name like '%"+ getPara("queryString") +"%' or mobile LIKE '%"+getPara("queryString")+"%' or userId LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
         if (count%getParaToInt("pageSize")==0) {
@@ -199,7 +204,7 @@ public class ParentController extends Controller {
         }
         renderText("{"+relation[0]+","+relation[1]+","+relation[2]+","+relation[3]+"}");
     }
-    @Before({Tx.class,AjaxFunction.class})
+    @Before({Tx.class,AjaxManager.class})
     public void save()  {
 //        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
 //            renderText("教师姓名应为两个以上汉字!");
@@ -315,7 +320,7 @@ public class ParentController extends Controller {
             }
         }
     }
-    @Before({Tx.class,AjaxFunction.class})
+    @Before({Tx.class,AjaxManager.class})
     public void edit(){
         Enterprise parent = Enterprise.dao.findById(getPara("id"));
         if (parent == null) {
