@@ -192,8 +192,8 @@
           pageCurrent: this.pageCurrent,
           room_id: this.room_id
         })
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
-        this.studentTotal(this.queryString, this.pageSize, this.room_id)
+        this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
+        this.roomworkTotal(this.queryString, this.pageSize, this.room_id)
         this.before = false
       },
       look (studentId) {
@@ -208,13 +208,13 @@
         this.pageCurrent--
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
       },
       pageNext () {
         this.pageCurrent++
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
       },
       goAdd () {
         if (this.room_id.toString() !== '') {

@@ -108,9 +108,9 @@ public class StudentController extends Controller {
             render("/static/StudentOfTeamForTeacher.html");
         }
     }
-    @Before(AjaxManager.class)
+    @Before({Ajax.class,Login.class})
     public  void studentList() {
-        List<Student> students = Student.dao.find("select * from student where room_id=?",getPara("id"));
+        List<Student> students = Student.dao.find("select * from student where state=1 and room_id=?",getPara("id"));
         renderJson(students);
     }
     @Before({Login.class, Ajax.class})

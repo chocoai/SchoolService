@@ -80,6 +80,7 @@ CREATE TABLE `Roomwork` (
 `teacher_id` int NULL COMMENT '教师序号',
 `room_id` int NULL COMMENT '班级序号',
 `course_id` int NULL COMMENT '课程序号',
+`state` int NULL COMMENT '消息状态1可用2注销',
 PRIMARY KEY (`id`) 
 );
 
@@ -158,6 +159,7 @@ CREATE TABLE `Teamwork` (
 `time` datetime NULL COMMENT '发布时间',
 `teacher_id` int NULL COMMENT '教师序号',
 `team_id` int NULL COMMENT '班级序号',
+`state` int NULL COMMENT '消息状态1可用2注销',
 PRIMARY KEY (`id`) 
 );
 

@@ -1,18 +1,27 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
+import com.foxinmy.weixin4j.qy.message.NotifyMessage;
+import com.foxinmy.weixin4j.qy.model.IdParameter;
 import com.foxinmy.weixin4j.qy.model.User;
+import com.foxinmy.weixin4j.tuple.Text;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.tx.Tx;
+import com.jfinal.template.ext.directive.Str;
 import com.wts.entity.WP;
-import com.wts.entity.model.Enterprise;
-import com.wts.entity.model.Room;
-import com.wts.entity.model.Roomwork;
+import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.AjaxTeacher;
+import com.wts.util.ParamesAPI;
+
+import java.util.Collections;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class RoomworkController extends Controller {
@@ -45,7 +54,6 @@ public class RoomworkController extends Controller {
             render("/static/RoomworkForTeacher.html");
         }
     }
-
     @Before(AjaxTeacher.class)
     public void queryByRoomId() {
         Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name", "FROM roomwork left join course on roomwork.course_id=course.id WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY course.id DESC");
@@ -59,5 +67,50 @@ public class RoomworkController extends Controller {
         } else {
             renderText((count/getParaToInt("pageSize")+1)+"");
         }
+    }
+    @Before({Tx.class,AjaxTeacher.class})
+    public void save(){
+        Roomwork roomwork = new Roomwork();
+        roomwork.set("content",getPara("content"))
+                .set("room_id",getPara("room_id"))
+                .set("course_id",getPara("course_id"))
+                .set("state",1)
+                .set("time",new Date())
+                .set("teacher_id",((Enterprise) getSessionAttr("teacher")).getId())
+                .save();
+        String[] studentId = getParaValues("student_id[]");
+        List<Relation> relations = Relation.dao.find("select parent_id from relation where identity_id=999");
+        for (String i : studentId) {
+            if (Relation.dao.find("select parent_id from relation where student_id=?", i).size() != 0) {
+                relations.addAll(Relation.dao.find("select parent_id from relation where student_id=?", i));
+            }
+        }
+        List<Relation> relationNew = new LinkedList<Relation>();
+        for(Relation s: relations){
+            if(Collections.frequency(relationNew, s) < 1) relationNew.add(s);
+        }
+        IdParameter idParameter = new IdParameter();
+        for (Relation relation :relationNew){
+            if (Enterprise.dao.findById(relation.getParentId()).getState()==1){
+                idParameter.putUserIds(Enterprise.dao.findById(relation.getParentId()).getUserId());
+                Roomworkread roomworkread = new Roomworkread();
+                roomworkread.set("roomwork_id",roomwork.getId())
+                        .set("parent_id",relation.getParentId())
+                        .set("state",0)
+                        .save();
+            }
+        }
+        StringBuffer buffer = new StringBuffer();
+        buffer.append("所属班级："+Room.dao.findById(getPara("room_id")).getName()).append("\n");
+        buffer.append("消息类型："+Course.dao.findById(getPara("course_id")).getName()).append("\n");
+        buffer.append("发布教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).getName()).append("\n");
+        buffer.append("消息内容："+getPara("content")).append("\n");
+        buffer.append("<a href=\"http://www.baidu.com\">确认已读点击这里</a>");
+        try {
+            WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text(buffer.toString()), idParameter, false));
+        } catch (Exception e) {
+            renderText(e.getMessage());
+        }
+        renderText("OK");
     }
 }
