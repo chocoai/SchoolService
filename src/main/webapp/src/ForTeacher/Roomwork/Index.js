@@ -19,7 +19,7 @@ import textField from 'muse-components/textField'
 import selectField from 'muse-components/selectField'
 import avatar from 'muse-components/avatar'
 import iconMenu from 'muse-components/iconMenu'
-import radio from 'muse-components/radio'
+import checkbox from 'muse-components/checkbox'
 import dialog from 'muse-components/dialog'
 import chip from 'muse-components/chip'
 import popup from 'muse-components/popup'
@@ -43,7 +43,7 @@ Vue.component(dialog.name, dialog)
 Vue.component(chip.name, chip)
 Vue.component(popup.name, popup)
 Vue.component(drawer.name, drawer)
-Vue.component(radio.name, radio)
+Vue.component(checkbox.name, checkbox)
 Vue.component(circularProgress.name, circularProgress)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)

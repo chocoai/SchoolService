@@ -3,7 +3,7 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='add' slot="right" @click="goAdd"/>
+      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-raised-button :label="roomName" icon="cached" fullWidth labelPosition="after" @click="openRoom=true"/>
     <mu-list>
@@ -30,8 +30,6 @@
       </mu-appbar>
       <mu-list>
         <mu-list-item v-for="room in rooms" :title="room.name">
-          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
-          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
           <mu-radio v-model="room_id" label="" labelLeft :nativeValue="room.id" slot="right" iconClass="color: #215E21"/>
         </mu-list-item>
       </mu-list>

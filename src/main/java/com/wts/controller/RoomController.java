@@ -126,12 +126,12 @@ public class RoomController extends Controller {
   }
   @Before(AjaxTeacher.class)
   public void teacherRoomList() {
-    List<Record> rooms = Db.find("select DISTINCT room_id as id,room.name,room.state from roomplan left join room on room.id=roomplan.room_id where teacher_id=?",((Enterprise) getSessionAttr("teacher")).getId());
+    List<Record> rooms = Db.find("select DISTINCT room_id as id,room.name,room.state from roomplan left join room on room.id=roomplan.room_id where room.state=1 and teacher_id=?",((Enterprise) getSessionAttr("teacher")).getId());
     renderJson(rooms);
   }
   @Before(AjaxTeacher.class)
   public void teacherRoomFirst() {
-    Roomplan roomplan = Roomplan.dao.findFirst("select DISTINCT room_id as id from roomplan where teacher_id=?",((Enterprise) getSessionAttr("teacher")).get("id").toString());
+    Roomplan roomplan = Roomplan.dao.findFirst("select DISTINCT room_id as id from roomplan left join room on room.id=roomplan.room_id  where room.state=1 and teacher_id=?",((Enterprise) getSessionAttr("teacher")).get("id").toString());
     if (roomplan!=null){
         renderText(roomplan.get("id").toString());
     }else{

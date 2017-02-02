@@ -3,7 +3,7 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入社团名称" @input="query" :value="queryString"/>
-      <mu-icon-button icon='add' slot="right" @click="goAdd"/>
+      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="team in teams" :value="team.id" :title="team.name" @click="look(team.id)">
