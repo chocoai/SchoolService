@@ -150,7 +150,17 @@ export default {
       this.$router.push({ path: '/roomworkList' })
     },
     goInactive () {
-      console.log('111')
+      this.$http.get(
+        API.Inactive,
+        { params: { id: this.$route.params.roomworkId } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+      ).then((response) => {
+      }, (response) => {
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'orange')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+      })
     },
     openPopup (message, icon, color) {
       this.message = message
