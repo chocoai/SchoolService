@@ -27,6 +27,9 @@
     <mu-dialog :open="forSends" title="正在再次发送" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
+    <mu-dialog :open="forInactives" title="正在注销消息" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
     <mu-dialog :open="forSend" title="确定向未阅读家长再次推送消息?" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goSend" secondary/>
@@ -72,6 +75,7 @@ export default {
       bottomPopup: false,
       forSend: false,
       forSends: false,
+      forInactives: false,
       forInactive: false,
       openRead: false,
       openUnread: false,
@@ -150,6 +154,8 @@ export default {
       this.$router.push({ path: '/roomworkList' })
     },
     goInactive () {
+      this.forInactive = false
+      this.forInactives = true
       this.$http.get(
         API.Inactive,
         { params: { id: this.$route.params.roomworkId } },
@@ -160,6 +166,12 @@ export default {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
         } else if (response.body === 'OK') {
+          this.
+          this.openPopup('注销成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
+        }else{
+
+        }
       })
     },
     openPopup (message, icon, color) {
