@@ -41,15 +41,12 @@ public class RoomworkReadController extends Controller {
     }
   }
   public void getReadRoomwork(){
-    Roomworkread roomworkread = Roomworkread.dao.findById(getPara("id"));
-    List<Record> students = Db.find("select distinct student.`name` as sname,student.sex,identity.`name` as dname,enterprise.`name` as pname,roomworkread.time" +
-            " from (((((student" +
-            " left join relation on student.id = relation.student_id)" +
-            " left join identity on identity.id = relation.parent_id)" +
-            " left join enterprise on enterprise.id = relation.parent_id)" +
-            " left join roomworkread on roomworkread.parent_id=relation.parent_id)" +
-            " left join roomwork on roomworkread.roomwork_id = roomwork.id)" +
-            " where roomwork.id=? and roomworkread.state=1",roomworkread.getRoomworkId());
+    List<Record> students = Db.find("select student.`name` as sname,student.sex,student.number,identity.`name` as dname,roomworkread.time" +
+            " from (((roomworkread " +
+            " left join student on roomworkread.student_id=student.id)" +
+            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
+            " left join identity on roomworkread.identity_id=identity.id)" +
+            " where roomworkread.roomwork_id=? and roomworkread.state=1",getPara("id"));
     if (students.size()!=0){
       renderJson(students);
     }else{
@@ -57,41 +54,49 @@ public class RoomworkReadController extends Controller {
     }
   }
   public void getUnreadRoomwork(){
-    Roomworkread roomworkread = Roomworkread.dao.findById(getPara("id"));
-    List<Record> students = Db.find("select student.`name` as sname,student.sex,count(distinct student.number)" +
-            " from (((((student" +
-            " left join relation on student.id = relation.student_id)" +
-            " left join identity on identity.id = relation.parent_id)" +
-            " left join enterprise on enterprise.id = relation.parent_id)" +
-            " left join roomworkread on roomworkread.parent_id=relation.parent_id)" +
-            " left join roomwork on roomworkread.roomwork_id = roomwork.id)" +
-            " where roomwork.id=? and roomworkread.state=0",roomworkread.getRoomworkId());
-    if (!students.get(0).get("count(distinct student.number)").toString().equals("0")){
+    List<Record> students = Db.find("select DISTINCT student.`name` as sname,student.sex,student.number,student.id as id" +
+            " from (((roomworkread " +
+            " left join student on roomworkread.student_id=student.id)" +
+            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
+            " left join identity on roomworkread.identity_id=identity.id)" +
+            " where roomworkread.roomwork_id=? and roomworkread.state=0 and " +
+            " student.number not in (" +
+            " select DISTINCT student.number" +
+            " from (((roomworkread " +
+            " left join student on roomworkread.student_id=student.id)" +
+            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
+            " left join identity on roomworkread.identity_id=identity.id)" +
+            " where roomworkread.roomwork_id=? and roomworkread.state=1)",getPara("id"),getPara("id"));
+    if (students.size()!=0){
       renderJson(students);
     }else{
       renderText("null");
     }
   }
   public void send() {
-    Roomworkread roomworkread = Roomworkread.dao.findById(getPara("id"));
-    Roomwork roomwork = Roomwork.dao.findById(roomworkread.getId());
-    List<Student> students = Student.dao.find("select distinct student.id" +
-            " from (((((student" +
-            " left join relation on student.id = relation.student_id)" +
-            " left join identity on identity.id = relation.parent_id)" +
-            " left join enterprise on enterprise.id = relation.parent_id)" +
-            " left join roomworkread on roomworkread.parent_id=relation.parent_id)" +
-            " left join roomwork on roomworkread.roomwork_id = roomwork.id)" +
-            " where roomwork.id=? and roomworkread.state=0", roomworkread.getRoomworkId());
-    if (students.size() == 1 && students.get(0).get("count(distinct student.number)").toString().equals("0")) {
-      renderText("无学生");
+    List<Record> roomworkread = Db.find("select DISTINCT student.`name` as sname,student.sex,student.number,student.id as id" +
+            " from (((roomworkread " +
+            " left join student on roomworkread.student_id=student.id)" +
+            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
+            " left join identity on roomworkread.identity_id=identity.id)" +
+            " where roomworkread.roomwork_id=? and roomworkread.state=0 and " +
+            " student.number not in (" +
+            " select DISTINCT student.number" +
+            " from (((roomworkread " +
+            " left join student on roomworkread.student_id=student.id)" +
+            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
+            " left join identity on roomworkread.identity_id=identity.id)" +
+            " where roomworkread.roomwork_id=? and roomworkread.state=1)",getPara("roomwork_id"),getPara("roomwork_id"));
+    Roomwork roomwork = Roomwork.dao.findById(getPara("roomwork_id"));
+    if (roomworkread.size() == 0) {
+      renderText("全部学生的家长都已阅读!");
     } else if(roomwork.getState()==2) {
       renderText("该消息已注销，无法追加发送!");
     } else {
-      List<Relation> relations = Relation.dao.find("select parent_id from relation where identity_id=999");
-      for (Student i : students) {
-        if (Relation.dao.find("select parent_id from relation where student_id=?", i.get("id")).size() != 0) {
-          relations.addAll(Relation.dao.find("select parent_id from relation where student_id=?", i.get("id")));
+      List<Relation> relations = Relation.dao.find("select * from relation where identity_id=999");
+      for (Record i : roomworkread) {
+        if (Relation.dao.find("select * from relation where student_id=?", i.get("id")).size() != 0) {
+          relations.addAll(Relation.dao.find("select * from relation where student_id=?", i.get("id")));
         }
       }
       List<Relation> relationNew = new LinkedList<Relation>();
@@ -109,7 +114,7 @@ public class RoomworkReadController extends Controller {
       StringBuffer buffer = new StringBuffer();
       buffer.append("班级："+Room.dao.findById(roomwork.getRoomId()).getName()).append("\n");
       buffer.append("类型："+Course.dao.findById(roomwork.getCourseId()).getName()).append("\n");
-      buffer.append("教师："+Enterprise.dao.findById(roomwork.getTeacherId())).append("\n");
+      buffer.append("教师："+Enterprise.dao.findById(roomwork.getTeacherId()).getName()).append("\n");
       buffer.append("时间："+dateFm.format(roomwork.get("time"))).append("\n");
       buffer.append("内容："+roomwork.getContent()).append("\n");
       buffer.append("<a href=\""+roomworkRead+"\">确认已读点击这里</a>");

@@ -88,6 +88,8 @@ CREATE TABLE `RoomworkRead` (
 `id` int NOT NULL AUTO_INCREMENT,
 `roomwork_id` int NULL COMMENT '作业序号',
 `parent_id` int NULL COMMENT '家长序号',
+`student_id` int NULL COMMENT '学生序号',
+`identity_id` int NULL COMMENT '身份序号',
 `state` int NULL COMMENT '是否阅读0否1是',
 `time` datetime NULL COMMENT '阅读时间',
 PRIMARY KEY (`id`) 
@@ -167,6 +169,8 @@ CREATE TABLE `TeamworkRead` (
 `id` int NOT NULL AUTO_INCREMENT,
 `teamwork_id` int NULL COMMENT '作业序号',
 `parent_id` int NULL COMMENT '家长序号',
+`student_id` int NULL COMMENT '学生序号',
+`identity_id` int NULL COMMENT '身份序号',
 `state` int NULL COMMENT '是否阅读0否1是',
 `time` datetime NULL COMMENT '阅读时间',
 PRIMARY KEY (`id`) 
@@ -204,4 +208,8 @@ ALTER TABLE `Teamwork` ADD CONSTRAINT `teamwork_teacher` FOREIGN KEY (`teacher_i
 ALTER TABLE `Teamwork` ADD CONSTRAINT `teamwork_team` FOREIGN KEY (`team_id`) REFERENCES `Team` (`id`);
 ALTER TABLE `TeamworkRead` ADD CONSTRAINT `check_teamwork` FOREIGN KEY (`teamwork_id`) REFERENCES `Teamwork` (`id`);
 ALTER TABLE `TeamworkRead` ADD CONSTRAINT `check_teamwork_parent` FOREIGN KEY (`parent_id`) REFERENCES `Enterprise` (`id`);
+ALTER TABLE `RoomworkRead` ADD CONSTRAINT `check_roomwork_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `RoomworkRead` ADD CONSTRAINT `check_roomwork_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
+ALTER TABLE `TeamworkRead` ADD CONSTRAINT `check_teamwork_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `TeamworkRead` ADD CONSTRAINT `check_teamwork_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
 
