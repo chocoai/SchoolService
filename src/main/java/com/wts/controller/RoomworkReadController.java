@@ -6,11 +6,10 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
-import com.wts.entity.model.Enterprise;
-import com.wts.entity.model.Roomworkread;
-import com.wts.interceptor.AjaxParent;
+import com.wts.entity.model.*;
 
 import java.util.Date;
+import java.util.List;
 
 public class RoomworkReadController extends Controller {
   @Before(Tx.class)
@@ -29,4 +28,17 @@ public class RoomworkReadController extends Controller {
       render("/html/read.html");
     }
   }
+  public void getReadRoomwork(){
+    Roomworkread roomworkread = Roomworkread.dao.findById(getPara("id"));
+    List<Student> students = Student.dao.find("select student.`name` as sname,student.sex,identity.`name` as dname,enterprise.`name` as pname,roomworkread.time,count(distinct student.number)" +
+            "from (((((student" +
+            "left join relation on student.id = relation.student_id)" +
+            "left join identity on identity.id = relation.parent_id)" +
+            "left join enterprise on enterprise.id = relation.parent_id)" +
+            "left join roomworkread on roomworkread.parent_id=relation.parent_id)" +
+            "left join roomwork on roomworkread.roomwork_id = roomwork.id)" +
+            "where roomwork.id=? and roomworkread.state=?",roomworkread.getRoomworkId(),getPara("state"));
+    renderJson(students);
+  }
+
 }

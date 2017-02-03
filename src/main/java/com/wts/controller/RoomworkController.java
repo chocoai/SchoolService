@@ -18,6 +18,7 @@ import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.AjaxTeacher;
 import com.wts.util.ParamesAPI;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
@@ -55,6 +56,11 @@ public class RoomworkController extends Controller {
         } else {
             render("/static/RoomworkForTeacher.html");
         }
+    }
+    @Before(AjaxTeacher.class)
+    public void getById() {
+        Roomwork roomwork = Roomwork.dao.findById(getPara("id"));
+        renderJson(roomwork);
     }
     @Before(AjaxTeacher.class)
     public void queryByRoomId() {
@@ -105,13 +111,14 @@ public class RoomworkController extends Controller {
                             .save();
                 }
             }
+            SimpleDateFormat dateFm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //格式化当前系统日期
             String roomworkRead = BASIC.replaceAll("XXXXX","roomworkRead%2freadRoomwork%3froomworkId%3d"+roomwork.getId().toString());
             StringBuffer buffer = new StringBuffer();
-            buffer.append("所属班级："+Room.dao.findById(getPara("room_id")).getName()).append("\n");
-            buffer.append("消息类型："+Course.dao.findById(getPara("course_id")).getName()).append("\n");
-            buffer.append("发布教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).getName()).append("\n");
-            buffer.append("发布时间："+roomwork.get("time").toString()).append("\n");
-            buffer.append("消息内容："+getPara("content")).append("\n");
+            buffer.append("班级："+Room.dao.findById(getPara("room_id")).getName()).append("\n");
+            buffer.append("类型："+Course.dao.findById(getPara("course_id")).getName()).append("\n");
+            buffer.append("教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).getName()).append("\n");
+            buffer.append("时间："+dateFm.format(roomwork.get("time"))).append("\n");
+            buffer.append("内容："+getPara("content")).append("\n");
             buffer.append("<a href=\""+roomworkRead+"\">确认已读点击这里</a>");
             try {
                 WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text(buffer.toString()), idParameter, false));

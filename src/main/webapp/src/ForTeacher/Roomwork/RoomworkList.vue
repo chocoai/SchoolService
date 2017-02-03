@@ -196,8 +196,8 @@
         this.roomworkTotal(this.queryString, this.pageSize, this.room_id)
         this.before = false
       },
-      look (studentId) {
-        this.$router.push({ path: '/studentEdit/' + studentId })
+      look (roomworkId) {
+        this.$router.push({ path: '/roomworkEdit/' + roomworkId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent,

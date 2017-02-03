@@ -6,7 +6,10 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
+import com.wts.entity.model.Room;
+import com.wts.interceptor.Ajax;
 import com.wts.interceptor.AjaxManager;
+import com.wts.interceptor.Login;
 import com.wts.util.ParamesAPI;
 import com.wts.util.PinyinTool;
 import com.wts.util.msg.Util.MessageUtil;
@@ -74,6 +77,11 @@ public class EnterpriseController extends Controller {
   public void getById() {
     Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
     renderJson(enterprise);
+  }
+  @Before({Login.class, Ajax.class})
+  public void getNameById() {
+    Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
+    renderText(enterprise.get("name").toString());
   }
   @Before(AjaxManager.class)
   public void inactiveById() {

@@ -87,6 +87,13 @@ public class MainController extends Controller {
     render("/static/HomeForParent.html");
   }
 
+  public void exit() {
+    setSessionAttr("manager", "");
+    setSessionAttr("teacher", "");
+    setSessionAttr("parent", "");
+    redirect("/");
+  }
+
   public void bind()  throws WeixinException {
     User u= WP.me.getUserByCode(getPara("code"));
     System.out.println(u.getUserId());

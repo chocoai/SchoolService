@@ -17,7 +17,6 @@ import floatButton from 'muse-components/floatButton'
 import raisedButton from 'muse-components/raisedButton'
 import textField from 'muse-components/textField'
 import subHeader from 'muse-components/subHeader'
-import selectField from 'muse-components/selectField'
 import avatar from 'muse-components/avatar'
 import iconMenu from 'muse-components/iconMenu'
 import checkbox from 'muse-components/checkbox'
@@ -38,7 +37,6 @@ Vue.component(floatButton.name, floatButton)
 Vue.component(iconButton.name, iconButton)
 Vue.component(raisedButton.name, raisedButton)
 Vue.component(textField.name, textField)
-Vue.component(selectField.name, selectField)
 Vue.component(subHeader.name, subHeader)
 Vue.component(avatar.name, avatar)
 Vue.component(iconMenu.name, iconMenu)
@@ -59,7 +57,6 @@ Vue.component(flexbox.name, flexbox)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(Vuex)
-
 const routes = [
   { path: '/roomworkList', component: RoomworkList },
   { path: '/roomworkAdd', component: RoomworkAdd },

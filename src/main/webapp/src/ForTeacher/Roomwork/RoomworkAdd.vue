@@ -154,7 +154,7 @@ export default {
   },
   computed: {
     saveAble: function () {
-      if (this.contentErrorText.toString() === 'OK') {
+      if (this.contentErrorText.toString() === 'OK' && this.student_id.toString !== '') {
         return false
       } else {
         return true
@@ -309,6 +309,7 @@ export default {
     },
     goSave () {
       this.forSave = true
+      this.forSaved = false
       this.$http.get(
         API.Save,
         { params: {
