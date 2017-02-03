@@ -286,9 +286,9 @@ public class StudentController extends Controller {
 
     @Before({Tx.class,AjaxManager.class})
     public void save()  {
-//        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-//            renderText("请输入两个以上汉字!");
-        if (!checkIDNumberDetailB(getPara("number"))){
+        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+            renderText("学生姓名为两个以上汉字!");
+        } else if (!checkIDNumberDetailB(getPara("number"))){
             renderText(checkIDNumberDetail(getPara("number")));
         } else if (Student.dao.find("select * from student where number=?", getPara("number")).size()!=0) {
             renderText("该证件号码已存在!");
@@ -338,8 +338,8 @@ public class StudentController extends Controller {
                     && team.equals(getString(getPara("team_id")).trim())
                     ) {
                 renderText("未找到修改内容!");
-//            } else if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-//                renderText("请输入两个以上汉字!");
+            } else if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+                renderText("学生姓名为两个以上汉字!");
             } else if (!checkIDNumberDetailB(getPara("number"))) {
                 renderText(checkIDNumberDetail(getPara("number")));
             } else if (!student.getStr("number").equals(getPara("number"))

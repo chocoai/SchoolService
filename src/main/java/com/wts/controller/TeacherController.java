@@ -50,7 +50,11 @@ public class TeacherController extends Controller {
 
   @Before({Tx.class,AjaxManager.class})
   public void save()  {
-    if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+    if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+      renderText("教师姓名应为两个以上汉字!");
+    } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+      renderText("手机号码格式错误!");
+    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
     } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
       renderText("该账号名已存在!");
@@ -98,11 +102,11 @@ public class TeacherController extends Controller {
 //              && Util.getString(teacher.get("isParent").toString()).equals(getPara("isParent").trim())
 //              ) {
 //        renderText("未找到修改内容!");
-//      } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-//        renderText("教师姓名应为两个以上汉字!");
-//      } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
-//        renderText("手机号码格式错误!");
-      if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
+       if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+        renderText("教师姓名应为两个以上汉字!");
+      } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+        renderText("手机号码格式错误!");
+      } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
               &&  Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
         renderText("该手机号码已存在!");
       } else {

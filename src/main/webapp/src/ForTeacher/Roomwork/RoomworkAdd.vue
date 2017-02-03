@@ -3,14 +3,12 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
-    <mu-text-field label="内容" underlineShow="false" v-model="content" :errorColor="contentErrorColor" :errorText="contentErrorText"  fullWidth labelFloat icon="note"  multiLine :rows="6" :rowsMax="9"/><br/>
+    <mu-text-field label="内容" underlineShow="false" v-model="content" :errorColor="contentErrorColor" :errorText="contentErrorText" @input="checkContent" fullWidth labelFloat icon="note" multiLine :rows="9" :rowsMax="12" :maxLength="500"/><br/>
     <mu-sub-header>请分别选择班级、课程、发送范围后保存并自动发送</mu-sub-header>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-flat-button :label="roomName" @click="openRoom=true" :icon="roomIcon" :backgroundColor="roomBack" color="#FFFFFF"/>
       </mu-flexbox-item>
-    </mu-flexbox>
-    <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-flat-button :label="courseName" @click="openCourse=true" :icon="courseIcon" :backgroundColor="courseBack" color="#FFFFFF"/>
       </mu-flexbox-item>
@@ -20,7 +18,7 @@
         <mu-flat-button :label="studentName" @click="openStudent=true" :icon="studentIcon" :backgroundColor="studentBack" color="#FFFFFF"/>
       </mu-flexbox-item>
     </mu-flexbox>
-    <mu-dialog :open="forSave" title="正在保存" >
+    <mu-dialog :open="forSave" title="正在保存并发送" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
     <mu-flexbox>
@@ -28,9 +26,13 @@
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="goSave" backgroundColor="green"/>
+        <mu-float-button icon="done" @click="forSaved=true" :disabled="saveAble" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
+    <mu-dialog :open="forSaved" title="确定保存并发送消息?" @close="goClose">
+      <mu-flat-button label="取消" @click="goClose" />
+      <mu-flat-button label="确定" @click="goSave" secondary/>
+    </mu-dialog>
     <mu-drawer right :open="openRoom" docked="false">
       <mu-appbar title="请选择所属班级" @click.native="closeRoom">
         <mu-icon-button icon='done' slot="right"/>
@@ -83,6 +85,7 @@ export default {
     return {
       bottomPopup: false,
       forSave: false,
+      forSaved: false,
       icon: '',
       color: '',
       room_id: '',
@@ -109,7 +112,8 @@ export default {
       content: '',
       message: '',
       contentErrorText: '',
-      contentErrorColor: ''
+      contentErrorColor: '',
+      saveAble: true
     }
   },
   created: function () {
@@ -149,6 +153,13 @@ export default {
     })
   },
   computed: {
+    saveAble: function () {
+      if (this.contentErrorText.toString() === 'OK') {
+        return false
+      } else {
+        return true
+      }
+    },
     roomBack: function () {
       if (this.room_id.toString() !== '') {
         return '#9999CC'
@@ -193,6 +204,9 @@ export default {
     }
   },
   watch: {
+    goClose () {
+      this.forSaved = false
+    },
     room_id: function (val) {
       if (val.toString() !== '') {
         this.$http.get(
@@ -285,9 +299,11 @@ export default {
       if (value === null || value === undefined || value === '') {
         this.contentErrorText = '内容为必填项!'
         this.contentErrorColor = 'orange'
-        this.userId = ''
+      } else if (value.length > 500) {
+        this.contentErrorText = '内容不得超过500字符'
+        this.contentErrorColor = 'orange'
       } else {
-        this.contentErrorText = ''
+        this.contentErrorText = 'OK'
         this.contentErrorColor = 'green'
       }
     },

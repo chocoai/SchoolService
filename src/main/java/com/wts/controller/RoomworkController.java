@@ -25,6 +25,8 @@ import java.util.List;
 
 
 public class RoomworkController extends Controller {
+    private static String BASIC = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ParamesAPI.corpId+"&redirect_uri=http%3a%2f%2f"+ParamesAPI.URL+"%2f"+"XXXXX"+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
+
     public void forTeacher() throws WeixinException {
         // 检测session中是否存在teacher
         if (getSessionAttr("teacher") == null || ((Enterprise) getSessionAttr("teacher")).getIsTeacher() != 1) {
@@ -70,47 +72,53 @@ public class RoomworkController extends Controller {
     }
     @Before({Tx.class,AjaxTeacher.class})
     public void save(){
-        Roomwork roomwork = new Roomwork();
-        roomwork.set("content",getPara("content"))
-                .set("room_id",getPara("room_id"))
-                .set("course_id",getPara("course_id"))
-                .set("state",1)
-                .set("time",new Date())
-                .set("teacher_id",((Enterprise) getSessionAttr("teacher")).getId())
-                .save();
-        String[] studentId = getParaValues("student_id[]");
-        List<Relation> relations = Relation.dao.find("select parent_id from relation where identity_id=999");
-        for (String i : studentId) {
-            if (Relation.dao.find("select parent_id from relation where student_id=?", i).size() != 0) {
-                relations.addAll(Relation.dao.find("select parent_id from relation where student_id=?", i));
+        if (getPara("content").length()>500){
+            renderText("输入内容超过500字符!");
+        }else{
+            Roomwork roomwork = new Roomwork();
+            roomwork.set("content",getPara("content"))
+                    .set("room_id",getPara("room_id"))
+                    .set("course_id",getPara("course_id"))
+                    .set("state",1)
+                    .set("time",new Date())
+                    .set("teacher_id",((Enterprise) getSessionAttr("teacher")).getId())
+                    .save();
+            String[] studentId = getParaValues("student_id[]");
+            List<Relation> relations = Relation.dao.find("select parent_id from relation where identity_id=999");
+            for (String i : studentId) {
+                if (Relation.dao.find("select parent_id from relation where student_id=?", i).size() != 0) {
+                    relations.addAll(Relation.dao.find("select parent_id from relation where student_id=?", i));
+                }
             }
-        }
-        List<Relation> relationNew = new LinkedList<Relation>();
-        for(Relation s: relations){
-            if(Collections.frequency(relationNew, s) < 1) relationNew.add(s);
-        }
-        IdParameter idParameter = new IdParameter();
-        for (Relation relation :relationNew){
-            if (Enterprise.dao.findById(relation.getParentId()).getState()==1){
-                idParameter.putUserIds(Enterprise.dao.findById(relation.getParentId()).getUserId());
-                Roomworkread roomworkread = new Roomworkread();
-                roomworkread.set("roomwork_id",roomwork.getId())
-                        .set("parent_id",relation.getParentId())
-                        .set("state",0)
-                        .save();
+            List<Relation> relationNew = new LinkedList<Relation>();
+            for(Relation s: relations){
+                if(Collections.frequency(relationNew, s) < 1) relationNew.add(s);
             }
+            IdParameter idParameter = new IdParameter();
+            for (Relation relation :relationNew){
+                if (Enterprise.dao.findById(relation.getParentId()).getState()==1){
+                    idParameter.putUserIds(Enterprise.dao.findById(relation.getParentId()).getUserId());
+                    Roomworkread roomworkread = new Roomworkread();
+                    roomworkread.set("roomwork_id",roomwork.getId())
+                            .set("parent_id",relation.getParentId())
+                            .set("state",0)
+                            .save();
+                }
+            }
+            String roomworkRead = BASIC.replaceAll("XXXXX","roomworkRead%2freadRoomwork%3froomworkId%3d"+roomwork.getId().toString());
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("所属班级："+Room.dao.findById(getPara("room_id")).getName()).append("\n");
+            buffer.append("消息类型："+Course.dao.findById(getPara("course_id")).getName()).append("\n");
+            buffer.append("发布教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).getName()).append("\n");
+            buffer.append("发布时间："+roomwork.get("time").toString()).append("\n");
+            buffer.append("消息内容："+getPara("content")).append("\n");
+            buffer.append("<a href=\""+roomworkRead+"\">确认已读点击这里</a>");
+            try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text(buffer.toString()), idParameter, false));
+            } catch (Exception e) {
+                renderText(e.getMessage());
+            }
+            renderText("OK");
         }
-        StringBuffer buffer = new StringBuffer();
-        buffer.append("所属班级："+Room.dao.findById(getPara("room_id")).getName()).append("\n");
-        buffer.append("消息类型："+Course.dao.findById(getPara("course_id")).getName()).append("\n");
-        buffer.append("发布教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).getName()).append("\n");
-        buffer.append("消息内容："+getPara("content")).append("\n");
-        buffer.append("<a href=\"http://www.baidu.com\">确认已读点击这里</a>");
-        try {
-            WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text(buffer.toString()), idParameter, false));
-        } catch (Exception e) {
-            renderText(e.getMessage());
-        }
-        renderText("OK");
     }
 }

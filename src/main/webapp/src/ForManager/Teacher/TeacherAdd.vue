@@ -22,7 +22,7 @@
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="goSave" backgroundColor="green"/>
+        <mu-float-button :disabled="saveAble" icon="done" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
@@ -55,10 +55,18 @@ export default {
       mobileErrorText: '',
       nameErrorColor: '',
       userIdErrorColor: '',
-      mobileErrorColor: ''
+      mobileErrorColor: '',
+      saveAble: true
     }
   },
   computed: {
+    saveAble: function () {
+      if (this.nameErrorText.toString() === 'OK' && this.userIdErrorText.toString() === 'OK' && this.mobileErrorText.toString() === 'OK') {
+        return false
+      } else {
+        return true
+      }
+    },
     isManagers: function () {
       if (this.isManager) {
         return '1'
@@ -105,7 +113,7 @@ export default {
         this.nameErrorText = '姓名为必填项!'
         this.nameErrorColor = 'orange'
         this.userId = ''
-      } else if (!/^[\u4e00-\u9fa5]{2,}$/.test(value)) {
+      } else if (!value.match(/^[\u4e00-\u9fa5]{2,}$/)) {
         this.nameErrorText = '姓名应为2个以上汉字'
         this.nameErrorColor = 'orange'
         this.userId = ''
@@ -116,6 +124,8 @@ export default {
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           this.userId = response.body
+          this.nameErrorText = 'OK'
+          this.nameErrorColor = 'green'
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
@@ -125,7 +135,7 @@ export default {
       if (value === null || value === undefined || value === '') {
         this.userIdErrorText = '账号为必填项!'
         this.userIdErrorColor = 'orange'
-      } else if (!/^[A-Za-z0-9]+$/.test(value)) {
+      } else if (!value.match(/^[A-Za-z0-9]+$/)) {
         this.userIdErrorText = '账号名应为字母或数字的组合!'
         this.userIdErrorColor = 'orange'
       } else {
@@ -138,7 +148,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.userIdErrorText = ''
+            this.userIdErrorText = 'OK'
             this.userIdErrorColor = 'green'
           } else {
             this.userIdErrorText = response.body
@@ -153,7 +163,7 @@ export default {
       if (value === null || value === undefined || value === '') {
         this.mobileErrorText = '手机号码为必填项!'
         this.mobileErrorColor = 'orange'
-      } else if (!/^1(3|4|5|7|8)\d{9}$/.test(value)) {
+      } else if (!value.match(/^1(3|4|5|7|8)\d{9}$/)) {
         this.mobileErrorText = '手机号码格式错误!'
         this.mobileErrorColor = 'orange'
       } else {
@@ -166,7 +176,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.mobileErrorText = ''
+            this.mobileErrorText = 'OK'
             this.mobileErrorColor = 'green'
           } else {
             this.mobileErrorText = response.body

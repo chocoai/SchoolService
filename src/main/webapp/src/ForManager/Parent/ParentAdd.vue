@@ -96,7 +96,7 @@
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="goSave" backgroundColor="green"/>
+        <mu-float-button icon="done" @click="goSave" :disabled="saveAble" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
@@ -414,7 +414,8 @@ export default {
       identity_id1: '',
       identity_id2: '',
       identity_id3: '',
-      identity_id4: ''
+      identity_id4: '',
+      saveAble: true
     }
   },
   created: function () {
@@ -498,6 +499,13 @@ export default {
     }
   },
   computed: {
+    saveAble: function () {
+      if (this.nameErrorText.toString() === 'OK' && this.userIdErrorText.toString() === 'OK' && this.mobileErrorText.toString() === 'OK') {
+        return false
+      } else {
+        return true
+      }
+    },
     studentNumberLabel: function () {
       return '学生' + this.studentNumber
     },
@@ -1184,6 +1192,8 @@ export default {
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           this.userId = response.body
+          this.nameErrorText = 'OK'
+          this.nameErrorColor = 'green'
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
@@ -1206,7 +1216,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.userIdErrorText = ''
+            this.userIdErrorText = 'OK'
             this.userIdErrorColor = 'green'
           } else {
             this.userIdErrorText = response.body
@@ -1234,7 +1244,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.mobileErrorText = ''
+            this.mobileErrorText = 'OK'
             this.mobileErrorColor = 'green'
           } else {
             this.mobileErrorText = response.body

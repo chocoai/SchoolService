@@ -22,7 +22,7 @@
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="delete" v-if="inactive"  @click="openInactive" backgroundColor="red"/>
         <mu-float-button icon="compare_arrows" v-if="active" @click="openActive" backgroundColor="green"/>
-        <mu-float-button icon="done" v-if="save" @click="goSave" backgroundColor="green"/>
+        <mu-float-button icon="done" v-if="save" :disabled="saveAble" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="forSave" title="正在保存" >
@@ -87,7 +87,8 @@ export default {
       teamName: '未设置',
       openTeamTeacher: false,
       teamTeacher: [],
-      teachers: []
+      teachers: [],
+      saveAble: true
     }
   },
   created () {
@@ -103,6 +104,13 @@ export default {
     this.getTeamTeacher(this.$route.params.teamId)
   },
   computed: {
+    saveAble: function () {
+      if (this.nameErrorText.toString() === 'OK') {
+        return false
+      } else {
+        return true
+      }
+    },
     teamBack: function () {
       if (this.teamTeacher.length > 0) {
         return '#9999CC'
@@ -324,7 +332,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.nameErrorText = ''
+            this.nameErrorText = 'OK'
             this.nameErrorColor = 'green'
           } else {
             this.nameErrorText = response.body

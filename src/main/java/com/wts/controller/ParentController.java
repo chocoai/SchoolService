@@ -206,13 +206,13 @@ public class ParentController extends Controller {
     }
     @Before({Tx.class,AjaxManager.class})
     public void save()  {
-//        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-//            renderText("教师姓名应为两个以上汉字!");
-//        } else if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
-//            renderText("手机号码格式不正确!");
-//        } else if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
-//            renderText("账号名应为字母或数字的组合!");
-        if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+            renderText("家长姓名应为两个以上汉字!");
+        } else if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+            renderText("手机号码格式不正确!");
+        } else if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
+            renderText("账号名应为字母或数字的组合!");
+        } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
             renderText("该手机号码已存在!");
         } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
             renderText("该账号名已存在!");
@@ -326,11 +326,11 @@ public class ParentController extends Controller {
         if (parent == null) {
             renderText("要修改的家长不存在!");
         } else {
-//            if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-//                renderText("教师姓名应为两个以上汉字!");
-//            } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
-//                renderText("手机号码格式错误!");
-            if (!Util.getString(parent.getStr("mobile")).equals(getPara("mobile"))
+            if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+                renderText("家长姓名应为两个以上汉字!");
+            } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+                renderText("手机号码格式错误!");
+            } else if (!Util.getString(parent.getStr("mobile")).equals(getPara("mobile"))
                     &&  Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
                 renderText("该手机号码已存在!");
             } else {

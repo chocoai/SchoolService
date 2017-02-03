@@ -42,7 +42,7 @@
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="goSave" backgroundColor="green"/>
+        <mu-float-button icon="done" @click="goSave" :disabled="saveAble" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
   </div>
@@ -67,7 +67,8 @@ export default {
       teamName: '未设置',
       openTeamTeacher: false,
       teamTeacher: [],
-      teachers: []
+      teachers: [],
+      saveAble: true
     }
   },
   created: function () {
@@ -81,6 +82,13 @@ export default {
     })
   },
   computed: {
+    saveAble: function () {
+      if (this.nameErrorText.toString() === 'OK') {
+        return false
+      } else {
+        return true
+      }
+    },
     teamBack: function () {
       if (this.teamTeacher.length > 0) {
         return '#9999CC'
@@ -136,7 +144,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.nameErrorText = ''
+            this.nameErrorText = 'OK'
             this.nameErrorColor = 'green'
           } else {
             this.nameErrorText = response.body

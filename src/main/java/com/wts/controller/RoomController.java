@@ -301,9 +301,9 @@ public class RoomController extends Controller {
   }
   @Before({Tx.class,AjaxManager.class})
   public void save()  {
-//    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-//      renderText("班级名称格式应为：XXXX级XX班");
-    if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+      renderText("班级名称格式应为：XXXX级XX班");
+    } else if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
       renderText("该班级已存在!");
     } else {
       Room room = new Room();
@@ -499,9 +499,9 @@ public class RoomController extends Controller {
     } else {
 //      if (Util.getString(room.getStr("name")).equals(getPara("name").trim())) {
 //        renderText("未找到修改内容!");
-//      } else if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-//        renderText("班级名称格式应为：XXXX级XX班");
-      if (!Util.getString(room.getStr("name")).equals(getPara("name"))
+      if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+        renderText("班级名称格式应为：XXXX级XX班");
+      } else if (!Util.getString(room.getStr("name")).equals(getPara("name"))
               &&  Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
         renderText("该班级已存在!");
       } else {

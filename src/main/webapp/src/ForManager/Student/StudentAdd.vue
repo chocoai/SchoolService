@@ -56,7 +56,7 @@
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="goSave" backgroundColor="green"/>
+        <mu-float-button icon="done" @click="goSave" :disabled="saveAble" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
   </div>
@@ -96,7 +96,8 @@ export default {
       addressErrorText: '',
       addressErrorColor: '',
       rooms: [],
-      teams: []
+      teams: [],
+      saveAble: true
     }
   },
   created: function () {
@@ -118,6 +119,13 @@ export default {
     })
   },
   computed: {
+    saveAble: function () {
+      if (this.nameErrorText.toString() === 'OK' && this.numberErrorText.toString() === 'OK' && this.codeErrorText.toString() === 'OK' && this.addressErrorText.toString() === 'OK') {
+        return false
+      } else {
+        return true
+      }
+    },
     roomBack: function () {
       if (this.room_id.toString() !== '') {
         return '#9999CC'
@@ -212,7 +220,8 @@ export default {
         this.nameErrorText = '姓名应为2个以上汉字'
         this.nameErrorColor = 'orange'
       } else {
-
+        this.nameErrorText = 'OK'
+        this.nameErrorColor = 'green'
       }
     },
     checkNumber (value) {
@@ -232,7 +241,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.numberErrorText = ''
+            this.numberErrorText = 'OK'
             this.numberErrorColor = 'green'
           } else {
             this.numberErrorText = response.body
@@ -257,7 +266,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.codeErrorText = ''
+            this.codeErrorText = 'OK'
             this.codeErrorColor = 'green'
           } else {
             this.codeErrorText = response.body
@@ -273,7 +282,7 @@ export default {
         this.addressErrorText = '住址为必填项!'
         this.addressErrorColor = 'orange'
       } else {
-        this.addressErrorText = ''
+        this.addressErrorText = 'OK'
         this.addressErrorColor = 'green'
       }
     },

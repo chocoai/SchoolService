@@ -25,7 +25,7 @@
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="delete" v-if="inactive"  @click="openInactive" backgroundColor="red"/>
         <mu-float-button icon="compare_arrows" v-if="active" @click="openActive" backgroundColor="green"/>
-        <mu-float-button icon="done" v-if="save" @click="goSave" backgroundColor="green"/>
+        <mu-float-button icon="done" v-if="save" :disabled="saveAble" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="dialer_sip" v-if="edit" @click="goCall" backgroundColor="#6633CC"/>
@@ -77,7 +77,8 @@ export default {
       nameErrorText: '',
       mobileErrorText: '',
       nameErrorColor: '',
-      mobileErrorColor: ''
+      mobileErrorColor: '',
+      saveAble: true
     }
   },
   created () {
@@ -88,6 +89,13 @@ export default {
     '$route': 'fetchData'
   },
   computed: {
+    saveAble: function () {
+      if (this.nameErrorText.toString() === 'OK' && this.mobileErrorText.toString() === 'OK') {
+        return false
+      } else {
+        return true
+      }
+    },
     isManagers: function () {
       if (this.isManager) {
         return '1'
@@ -301,7 +309,8 @@ export default {
         this.nameErrorText = '姓名应为2个以上汉字'
         this.nameErrorColor = 'orange'
       } else {
-
+        this.nameErrorText = 'OK'
+        this.nameErrorColor = 'green'
       }
     },
     checkMobile (value) {
@@ -324,7 +333,7 @@ export default {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.mobileErrorText = ''
+            this.mobileErrorText = 'OK'
             this.mobileErrorColor = 'green'
           } else {
             this.mobileErrorText = response.body
