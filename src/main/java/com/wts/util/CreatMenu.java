@@ -47,12 +47,13 @@ public class CreatMenu {
   // 班级管理入口菜单
   private static String CLASSROOM = BASIC.replaceAll("XXXXX","student%2fforRoomTeacher%2f");
   private static String TEAMROOM = BASIC.replaceAll("XXXXX","student%2fforTeamTeacher%2f");
+  private static String ROOMWORK = BASIC.replaceAll("XXXXX","roomwork%2fforTeacher%2f");
 
   public static void CreateTeacher (){
     Button teacher_1 = new Button("班级学生", CLASSROOM, ButtonType.view);
     Button teacher_2 = new Button("社团学生", TEAMROOM, ButtonType.view);
-    Button teacher_3 = new Button("社团学生", TEAMROOM, ButtonType.view);
-    Button teacher_4 = new Button("社团学生", TEAMROOM, ButtonType.view);
+    Button teacher_3 = new Button("班级消息", ROOMWORK, ButtonType.view);
+    Button teacher_4 = new Button("社团消息", TEAMROOM, ButtonType.view);
     Button teacher_5 = new Button("社团学生", TEAMROOM, ButtonType.view);
 
     Button managerButton = new Button("综合管理", teacher_1, teacher_2, teacher_3, teacher_4, teacher_5);

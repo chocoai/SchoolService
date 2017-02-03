@@ -40,7 +40,7 @@
         <mu-icon-button icon='clear' slot="right"/>
       </mu-appbar>
       <mu-list>
-        <mu-list-item v-for="student in students" :title="student.sname" :describeText="student.dname" :afterText="student.pname">
+        <mu-list-item v-for="student in students" :title="student.sname" :describeText="student.time" :afterText="student.dname">
           <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" color="#00bcd4" value="account_box"/>
           <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" color="#e91e63" value="account_circle" />
         </mu-list-item>
@@ -51,7 +51,7 @@
         <mu-icon-button icon='clear' slot="right"/>
       </mu-appbar>
       <mu-list>
-        <mu-list-item v-for="student in studentz" :title="student.sname" :describeText="student.dname" :afterText="student.pname">
+        <mu-list-item v-for="student in studentz" :title="student.sname">
           <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" color="#00bcd4" value="account_box"/>
           <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" color="#e91e63" value="account_circle" />
         </mu-list-item>
@@ -178,7 +178,11 @@ export default {
         { params: { id: roomworkId, state: 1 } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.students = response.body
+        if (response.body.toString() !== 'null') {
+          this.students = response.body
+        } else {
+          this.students = []
+        }
       }, (response) => {
       })
       this.$http.get(
@@ -186,7 +190,11 @@ export default {
         { params: { id: roomworkId, state: 0 } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.studentz = response.body
+        if (response.body.toString() !== 'null') {
+          this.studentz = response.body
+        } else {
+          this.studentz = []
+        }
       }, (response) => {
       })
     },

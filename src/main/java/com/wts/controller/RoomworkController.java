@@ -112,7 +112,7 @@ public class RoomworkController extends Controller {
                 }
             }
             SimpleDateFormat dateFm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //格式化当前系统日期
-            String roomworkRead = BASIC.replaceAll("XXXXX","roomworkRead%2freadRoomwork%3froomworkId%3d"+roomwork.getId().toString());
+            String roomworkRead = BASIC.replaceAll("XXXXX","roomworkread%2freadRoomwork%3froomworkId%3d"+roomwork.getId().toString());
             StringBuffer buffer = new StringBuffer();
             buffer.append("班级："+Room.dao.findById(getPara("room_id")).getName()).append("\n");
             buffer.append("类型："+Course.dao.findById(getPara("course_id")).getName()).append("\n");

@@ -15,7 +15,7 @@
           <mu-icon slot="left" value="face" color="#673ab7"/>
         </mu-list-item>
         <mu-list-item title="班级消息" @click.native="goRoomwork">
-          <mu-icon slot="left" value="note" color="#673ab7"/>
+          <mu-icon slot="left" value="note" color="#9c27b0"/>
         </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="#212121"/>
