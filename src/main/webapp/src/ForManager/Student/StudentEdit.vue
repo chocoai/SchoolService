@@ -698,8 +698,8 @@ export default {
         this.nameErrorText = '证件号码为必填项!'
         this.nameErrorColor = 'orange'
       } else if (!/\d{17}[0-9,X]/.test(value)) {
-        this.nameErrorText = '证件号码应为18位字符'
-        this.nameErrorColor = 'orange'
+        this.numberErrorText = '证件号码应为18位字符'
+        this.numberErrorColor = 'orange'
       } else {
         this.$http.get(
           API.CheckNumberForEdit,

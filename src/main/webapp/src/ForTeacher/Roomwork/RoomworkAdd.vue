@@ -204,9 +204,6 @@ export default {
     }
   },
   watch: {
-    goClose () {
-      this.forSaved = false
-    },
     room_id: function (val) {
       if (val.toString() !== '') {
         this.$http.get(
@@ -265,6 +262,9 @@ export default {
     }
   },
   methods: {
+    goClose () {
+      this.forSaved = false
+    },
     gorReply () {
       this.$router.push({ path: '/roomworkList' })
     },
