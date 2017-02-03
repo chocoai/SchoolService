@@ -161,7 +161,6 @@ export default {
         { params: { id: this.$route.params.roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
-      }, (response) => {
         if (response.body === 'error') {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
@@ -170,8 +169,11 @@ export default {
           this.openPopup('注销成功!', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
         }else{
-
+          this.openPopup(response.body, 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
         }
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     openPopup (message, icon, color) {
