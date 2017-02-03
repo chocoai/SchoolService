@@ -95,7 +95,7 @@ public class RoomController extends Controller {
     Room room = Room.dao.findById(getPara("id"));
     renderJson(room);
   }
-  @Before(AjaxManager.class)
+  @Before({Tx.class,AjaxManager.class})
   public void inactiveById() {
     Room room = Room.dao.findById(getPara("id"));
     if (room == null) {

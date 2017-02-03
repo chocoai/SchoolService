@@ -62,6 +62,18 @@ public class RoomworkController extends Controller {
         Roomwork roomwork = Roomwork.dao.findById(getPara("id"));
         renderJson(roomwork);
     }
+    @Before({Tx.class,AjaxManager.class})
+    public void inactiveById() {
+        Roomwork roomwork = Roomwork.dao.findById(getPara("id"));
+        if (roomwork == null) {
+            renderText("未找到指定id的消息");
+        } else if (roomwork.get("state").toString().equals("2")) {
+            renderText("该消息已注销!");
+        } else {
+            roomwork.set("state",2).update();
+            renderText("OK");
+        }
+    }
     @Before(AjaxTeacher.class)
     public void queryByRoomId() {
         Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name", "FROM roomwork left join course on roomwork.course_id=course.id WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY course.id DESC");

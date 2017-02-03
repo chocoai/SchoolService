@@ -170,6 +170,7 @@ export default {
         this.room_id = this.roomwork.room_id
         this.course_id = this.roomwork.course_id
         this.time = this.roomwork.time
+        this.content = this.roomwork.content
         this.state = this.roomwork.state
       }, (response) => {
       })
