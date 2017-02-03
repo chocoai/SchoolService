@@ -13,7 +13,6 @@ import com.wts.interceptor.AjaxParent;
 import java.util.Date;
 
 public class RoomworkReadController extends Controller {
-
   @Before(Tx.class)
   public void readRoomwork()  throws WeixinException {
     User user = WP.me.getUserByCode(getPara("code"));
