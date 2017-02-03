@@ -72,10 +72,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '主页',
-      filename: '../dist/static/Sys.html',
+      filename: '../dist/static/HomeForManager.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'sys'],
+      chunks: ['vendor', 'manifest', 'homeForManager'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -88,10 +88,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '教师管理',
-      filename: '../dist/static/TeacherManage.html',
+      filename: '../dist/static/TeacherForManager.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'teacherManage'],
+      chunks: ['vendor', 'manifest', 'teacherForManager'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -101,10 +101,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '班级管理',
-      filename: '../dist/static/RoomManage.html',
+      filename: '../dist/static/RoomForManager.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'roomManage'],
+      chunks: ['vendor', 'manifest', 'roomForManager'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -114,10 +114,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '社团管理',
-      filename: '../dist/static/TeamManage.html',
+      filename: '../dist/static/TeamForManager.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'teamManage'],
+      chunks: ['vendor', 'manifest', 'teamForManager'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -127,10 +127,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '家长管理',
-      filename: '../dist/static/ParentManage.html',
+      filename: '../dist/static/ParentForManager.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'parentManage'],
+      chunks: ['vendor', 'manifest', 'parentForManager'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -140,10 +140,62 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '学生管理',
-      filename: '../dist/static/StudentManage.html',
+      filename: '../dist/static/StudentForManager.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'studentManage'],
+      chunks: ['vendor', 'manifest', 'studentForManager'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '主页',
+      filename: '../dist/static/HomeForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'homeForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '学生管理',
+      filename: '../dist/static/StudentOfRoomForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'studentOfRoomForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '学生管理',
+      filename: '../dist/static/StudentOfTeamForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'studentOfTeamForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '班级消息',
+      filename: '../dist/static/RoomworkForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'roomworkForTeacher'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

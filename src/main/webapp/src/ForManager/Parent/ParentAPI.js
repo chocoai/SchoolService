@@ -1,0 +1,22 @@
+const h = ''
+// const h = '/ds'
+export const CheckMobileForNew = `${h}/enterprise/checkMobileForNew`
+export const CheckUserIdForNew = `${h}/enterprise/checkUserIdForNew`
+export const CheckMobileForEdit = `${h}/enterprise/checkMobileForEdit`
+export const GetUserId = `${h}/enterprise/getUserId`
+export const GetById = `${h}/enterprise/getById`
+export const InactiveById = `${h}/enterprise/inactiveById`
+export const ActiveById = `${h}/enterprise/activeById`
+export const Update = `${h}/enterprise/update`
+export const RoomList = `${h}/room/roomList`
+export const GetRoomName = `${h}/room/getNameById`
+export const GetStudentName = `${h}/student/getNameById`
+export const StudentList = `${h}/student/studentList`
+export const IdentityList = `${h}/identity/identityList`
+export const GetIdentityName = `${h}/identity/getNameById`
+export const GetRelation = `${h}/parent/getRelation`
+export const Save = `${h}/parent/save`
+export const Edit = `${h}/parent/edit`
+export const Query = `${h}/parent/queryParent`
+export const TotalByName = `${h}/parent/totalByName`
+

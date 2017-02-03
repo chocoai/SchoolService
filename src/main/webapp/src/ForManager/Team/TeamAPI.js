@@ -1,0 +1,13 @@
+const h = ''
+// const h = '/ds'
+export const TeacherList = `${h}/teacher/teacherList`
+export const CheckNameForNew = `${h}/team/checkNameForNew`
+export const CheckNameForEdit = `${h}/team/checkNameForEdit`
+export const Save = `${h}/team/save`
+export const Edit = `${h}/team/edit`
+export const GetTeamTeacher = `${h}/team/getTeamTeacher`
+export const QueryByName = `${h}/team/queryByName`
+export const TotalByName = `${h}/team/totalByName`
+export const GetById = `${h}/team/getById`
+export const InactiveById = `${h}/team/inactiveById`
+export const ActiveById = `${h}/team/activeById`

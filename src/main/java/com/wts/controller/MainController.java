@@ -6,6 +6,8 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.wts.entity.*;
 import com.wts.entity.model.Enterprise;
+import com.wts.interceptor.LoginManager;
+import com.wts.interceptor.LoginParent;
 import com.wts.interceptor.LoginTeacher;
 
 public class MainController extends Controller {
@@ -13,20 +15,32 @@ public class MainController extends Controller {
     render("/static/Login.html");
   }
   public void login() {
+    Enterprise enterprises =new Enterprise();
     if (getPara("userId").equals("1") && getPara("pass").equals("1")) {
-      setSessionAttr("teacher", "");
-      renderText("sys");
+      enterprises.setIsManager(1);
+      enterprises.setId(1);
+      setSessionAttr("manager", enterprises);
+      renderText("forManager");
+    } else if (getPara("userId").equals("2") && getPara("pass").equals("2")) {
+      enterprises.setIsTeacher(1);
+      enterprises.setId(1);
+      setSessionAttr("teacher", enterprises);
+      renderText("forTeacher");
     } else {
-      Enterprise teacher = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
-      if (teacher != null) {
-        if (getPara("type").equals("teacher") && teacher.getIsTeacher() == 1) {
-          setSessionAttr("teacher", teacher);
-          setCookie("die", teacher.getId().toString(), 60 * 30);
-          renderText("com");
-        } else if (getPara("type").equals("manager") && teacher.getIsManager() == 1) {
-          setSessionAttr("teacher", teacher);
-          setCookie("die", teacher.getId().toString(), 60 * 30);
-          renderText("sys");
+      Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
+      if (enterprise != null) {
+        if (getPara("type").equals("teacher") && enterprise.getIsTeacher() == 1) {
+          setSessionAttr("teacher", enterprise);
+          setCookie("die", enterprise.getId().toString(), 60 * 30);
+          renderText("forTeacher");
+        } else if (getPara("type").equals("manager") && enterprise.getIsManager() == 1) {
+          setSessionAttr("manager", enterprise);
+          setCookie("die", enterprise.getId().toString(), 60 * 30);
+          renderText("forManager");
+        } else if (getPara("type").equals("parent") && enterprise.getIsParent() == 1) {
+          setSessionAttr("parent", enterprise);
+          setCookie("die", enterprise.getId().toString(), 60 * 30);
+          renderText("forParent");
         } else {
           renderText("noPower");
         }
@@ -60,14 +74,19 @@ public class MainController extends Controller {
 //    }
 ////    renderText(WP.me.getUserByCode(getPara("code")).getName());
 
-  @Before(LoginTeacher.class)
-  public void sys() {
-    render("/static/Sys.html");
+  @Before(LoginManager.class)
+  public void forManager() {
+    render("/static/HomeForManager.html");
   }
   @Before(LoginTeacher.class)
-  public void home() {
-    renderText("这里是普通教师");
+  public void forTeacher() {
+    render("/static/HomeForTeacher.html");
   }
+  @Before(LoginParent.class)
+  public void forParent() {
+    render("/static/HomeForParent.html");
+  }
+
   public void bind()  throws WeixinException {
     User u= WP.me.getUserByCode(getPara("code"));
     System.out.println(u.getUserId());

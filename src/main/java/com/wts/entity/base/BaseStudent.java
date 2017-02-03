@@ -57,6 +57,14 @@ public abstract class BaseStudent<M extends BaseStudent<M>> extends Model<M> imp
 		return get("birth");
 	}
 
+	public void setAddress(java.lang.String address) {
+		set("address", address);
+	}
+
+	public java.lang.String getAddress() {
+		return get("address");
+	}
+
 	public void setRoomId(java.lang.Integer roomId) {
 		set("room_id", roomId);
 	}
@@ -65,12 +73,12 @@ public abstract class BaseStudent<M extends BaseStudent<M>> extends Model<M> imp
 		return get("room_id");
 	}
 
-	public void setRemark(java.lang.String remark) {
-		set("remark", remark);
+	public void setTeamId(java.lang.Integer teamId) {
+		set("team_id", teamId);
 	}
 
-	public java.lang.String getRemark() {
-		return get("remark");
+	public java.lang.Integer getTeamId() {
+		return get("team_id");
 	}
 
 	public void setState(java.lang.Integer state) {
@@ -79,22 +87,6 @@ public abstract class BaseStudent<M extends BaseStudent<M>> extends Model<M> imp
 
 	public java.lang.Integer getState() {
 		return get("state");
-	}
-
-	public void setPhone(java.lang.String phone) {
-		set("phone", phone);
-	}
-
-	public java.lang.String getPhone() {
-		return get("phone");
-	}
-
-	public void setAdress(java.lang.String adress) {
-		set("adress", adress);
-	}
-
-	public java.lang.String getAdress() {
-		return get("adress");
 	}
 
 }

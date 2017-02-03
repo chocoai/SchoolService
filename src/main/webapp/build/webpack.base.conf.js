@@ -4,7 +4,7 @@ var utils = require('./utils')
 var projectRoot = path.resolve(__dirname, '../')
 
 var env = process.env.NODE_ENV
-// check env & config/index.js to decide weither to enable CSS Sourcemaps for the
+// check env & config/Index.js to decide weither to enable CSS Sourcemaps for the
 // various preprocessor loaders added to vue-loader at the end of this file
 var cssSourceMapDev = (env === 'development' && config.dev.cssSourceMap)
 var cssSourceMapProd = (env === 'production' && config.build.productionSourceMap)
@@ -13,12 +13,16 @@ var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 module.exports = {
   entry: {
     login: './src/Login/Index.js',
-    sys: './src/Sys/Index.js',
-    teacherManage: './src/TeacherManage/Index.js',
-    roomManage: './src/RoomManage/Index.js',
-    teamManage: './src/TeamManage/Index.js',
-    parentManage: './src/ParentManage/Index.js',
-    studentManage: './src/StudentManage/Index.js'
+    homeForManager: './src/ForManager/Home/Index.js',
+    teacherForManager: './src/ForManager/Teacher/Index.js',
+    roomForManager: './src/ForManager/Room/Index.js',
+    teamForManager: './src/ForManager/Team/Index.js',
+    parentForManager: './src/ForManager/Parent/Index.js',
+    studentForManager: './src/ForManager/Student/Index.js',
+    homeForTeacher: './src/ForTeacher/Home/Index.js',
+    studentOfRoomForTeacher: './src/ForTeacher/StudentOfRoom/Index.js',
+    studentOfTeamForTeacher: './src/ForTeacher/StudentOfTeam/Index.js',
+    roomworkForTeacher: './src/ForTeacher/Roomwork/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

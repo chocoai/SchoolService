@@ -49,36 +49,12 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 		return get("name");
 	}
 
-	public void setAddress(java.lang.String address) {
-		set("address", address);
-	}
-
-	public java.lang.String getAddress() {
-		return get("address");
-	}
-
-	public void setWork(java.lang.String work) {
-		set("work", work);
-	}
-
-	public java.lang.String getWork() {
-		return get("work");
-	}
-
 	public void setSex(java.lang.Integer sex) {
 		set("sex", sex);
 	}
 
 	public java.lang.Integer getSex() {
 		return get("sex");
-	}
-
-	public void setPhone(java.lang.String phone) {
-		set("phone", phone);
-	}
-
-	public java.lang.String getPhone() {
-		return get("phone");
 	}
 
 	public void setMobile(java.lang.String mobile) {
@@ -103,14 +79,6 @@ public abstract class BaseEnterprise<M extends BaseEnterprise<M>> extends Model<
 
 	public java.lang.String getWeixinId() {
 		return get("weixinId");
-	}
-
-	public void setRemark(java.lang.String remark) {
-		set("remark", remark);
-	}
-
-	public java.lang.String getRemark() {
-		return get("remark");
 	}
 
 	public void setState(java.lang.Integer state) {
