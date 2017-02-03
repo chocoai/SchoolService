@@ -137,6 +137,7 @@ Table: roomwork
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  room_id    | INT(10)      | YES  |     |         | 班级序号    
  course_id  | INT(10)      | YES  |     |         | 课程序号    
+ state      | INT(10)      | YES  |     |         |         
 ------------+--------------+------+-----+---------+---------
 
 Table: roomworkread
@@ -193,6 +194,7 @@ Table: teamwork
  time       | DATETIME(19) | YES  |     |         | 发布时间    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  team_id    | INT(10)      | YES  |     |         | 班级序号    
+ state      | INT(10)      | YES  |     |         |         
 ------------+--------------+------+-----+---------+---------
 
 Table: teamworkread

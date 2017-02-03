@@ -140,7 +140,6 @@ public class TeacherController extends Controller {
                   .update();
           renderText("OK");
         }catch(WeixinException e){
-          System.out.println(e.getErrorText());
           renderText(e.getErrorText());
         }
       }

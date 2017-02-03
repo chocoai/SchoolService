@@ -21,7 +21,7 @@
         <mu-float-button v-if="states" icon="delete" @click="forInactive=true" backgroundColor="red"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="forSend=true" backgroundColor="green"/>
+        <mu-float-button v-if="states" icon="done" @click="forSend=true" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="forSends" title="正在再次发送" >
@@ -166,11 +166,11 @@ export default {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
         } else if (response.body === 'OK') {
-          this.
+          this.forInactives = false
           this.openPopup('注销成功!', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
-        }else{
-
+        } else {
+          this.openPopup(response.body, 'report_problem', 'orange')
         }
       })
     },
@@ -198,7 +198,7 @@ export default {
       })
       this.$http.get(
         API.GetReadRoomwork,
-        { params: { id: roomworkId, state: 1 } },
+        { params: { id: roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         if (response.body.toString() !== 'null') {
@@ -209,8 +209,8 @@ export default {
       }, (response) => {
       })
       this.$http.get(
-        API.GetReadRoomwork,
-        { params: { id: roomworkId, state: 0 } },
+        API.GetUnreadRoomwork,
+        { params: { id: roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         if (response.body.toString() !== 'null') {
@@ -226,7 +226,7 @@ export default {
       this.$http.get(
         API.Save,
         { params: {
-          content: this.content,
+          roomwork_id: this.$route.params.roomworkId,
           room_id: this.room_id,
           course_id: this.course_id,
           student_id: this.student_id

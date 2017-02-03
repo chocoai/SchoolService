@@ -14,3 +14,4 @@ export const GetById = `${h}/roomwork/getById`
 export const Save = `${h}/roomwork/save`
 export const Inactive = `${h}/roomwork/inactiveById`
 export const GetReadRoomwork = `${h}/roomworkread/getReadRoomwork`
+export const GetUnreadRoomwork = `${h}/roomworkread/getUnreadRoomwork`
