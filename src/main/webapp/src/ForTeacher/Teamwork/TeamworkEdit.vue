@@ -104,7 +104,7 @@ export default {
         { params: { id: val } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
-        this.reamName = response.body
+        this.teamName = response.body
       }, (response) => {
         this.openPopup('服务器内部错误！', 'error', 'red')
       })
@@ -130,7 +130,7 @@ export default {
   },
   computed: {
     titleAll: function () {
-      return this.teamName + '->' + this.teacherName + '老师'
+      return this.teamName + '-' + this.teacherName + '老师'
     }
   },
   methods: {

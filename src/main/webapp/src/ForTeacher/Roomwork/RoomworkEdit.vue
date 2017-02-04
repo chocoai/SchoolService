@@ -143,7 +143,7 @@ export default {
   },
   computed: {
     titleAll: function () {
-      return this.roomName + '->' + this.courseName + '->' + this.teacherName + '老师'
+      return this.roomName + '-' + this.courseName + '-' + this.teacherName + '老师'
     }
   },
   methods: {

@@ -91,7 +91,7 @@ public class TeamworkController extends Controller {
   }
   @Before(AjaxTeacher.class)
   public void queryByTeamId() {
-    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*", "FROM teamwork WHERE teamwork.team_id = "+ getPara("teamId") +" and teamwork.content LIKE '%"+getPara("queryString")+"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY teamwork.id DESC");
+    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*,team.name", "FROM teamwork left join team on teamwork.team_id=team.id WHERE teamwork.team_id = "+ getPara("teamId") +" and teamwork.content LIKE '%"+getPara("queryString")+"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY teamwork.id DESC");
     renderJson(teamworks.getList());
   }
   @Before(AjaxTeacher.class)
@@ -142,7 +142,7 @@ public class TeamworkController extends Controller {
       SimpleDateFormat dateFm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //格式化当前系统日期
       String teamworkRead = BASIC.replaceAll("XXXXX","teamworkread%2freadTeamwork%3fteamworkId%3d"+teamwork.getId().toString());
       StringBuffer buffer = new StringBuffer();
-      buffer.append("社团："+Team.dao.findById(getPara("room_id")).getName()).append("\n");
+      buffer.append("社团："+Team.dao.findById(getPara("team_id")).getName()).append("\n");
       buffer.append("教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).getName()).append("\n");
       buffer.append("时间："+dateFm.format(teamwork.get("time"))).append("\n");
       buffer.append("内容："+getPara("content")).append("\n");
