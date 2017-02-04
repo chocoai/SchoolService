@@ -93,33 +93,15 @@ export default {
   },
   created: function () {
     this.$http.get(
-      API.TeacherRoomList,
+      API.TeacherTeamList,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
-      this.rooms = response.body
+      this.teams = response.body
       this.$http.get(
-        API.TeacherRoomFirst,
+        API.TeacherTeamFirst,
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
-        this.room_id = response.body
-        this.$http.get(
-          API.RoomCourseList,
-          { params: { id: this.room_id } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.courses = response.body
-          this.$http.get(
-            API.RoomCourseFirst,
-            { params: { id: this.room_id } },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-          ).then((response) => {
-            this.course_id = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
+        this.team_id = response.body
       }, (response) => {
         this.openPopup('服务器内部错误！', 'error', 'red')
       })
