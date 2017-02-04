@@ -67,9 +67,11 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `Notice` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '消息序号',
+`title` varchar(255) CHARACTER SET utf8 NULL COMMENT '通知标题',
 `content` varchar(999) CHARACTER SET utf8 NULL COMMENT '消息内容',
 `time` datetime NULL COMMENT '发布时间',
 `teacher_id` int NULL COMMENT '教师序号',
+`type` int NULL COMMENT '通知类型1全部1教师3家长',
 PRIMARY KEY (`id`) 
 );
 
