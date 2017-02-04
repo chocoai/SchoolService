@@ -29,14 +29,19 @@ public class RoomworkReadController extends Controller {
     User user = WP.me.getUserByCode(getPara("code"));
     Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
     Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("roomworkId"),enterprise.getId());
-    if (roomworkread.getState()==0){
-      roomworkread.set("state",1)
-              .set("time",new Date())
-              .update();
-      setAttr("readMessage","确认读取!");
-      render("/html/read.html");
+    if (Roomwork.dao.findById(roomworkread.getRoomworkId()).getState() == 1) {
+      if (roomworkread.getState() == 0) {
+        roomworkread.set("state", 1)
+                .set("time", new Date())
+                .update();
+        setAttr("readMessage", "确认读取!");
+        render("/html/read.html");
+      } else {
+        setAttr("readMessage", "本消息您已经确认读取!");
+        render("/html/read.html");
+      }
     } else {
-      setAttr("readMessage","本消息您已经确认读取!");
+      setAttr("readMessage", "该消息已经失效，无需确认读取!");
       render("/html/read.html");
     }
   }

@@ -130,7 +130,7 @@ export default {
   },
   computed: {
     titleAll: function () {
-      return this.teamName + '_' + this.teacherName + '老师'
+      return this.teamName + '->' + this.teacherName + '老师'
     }
   },
   methods: {
@@ -151,7 +151,6 @@ export default {
         { params: { id: this.$route.params.teamworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
-      }, (response) => {
         if (response.body === 'error') {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
@@ -162,6 +161,8 @@ export default {
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
         }
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     openPopup (message, icon, color) {
@@ -184,6 +185,7 @@ export default {
         this.content = this.teamwork.content
         this.state = this.teamwork.state
       }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
       this.$http.get(
         API.GetReadTeamwork,
@@ -196,6 +198,7 @@ export default {
           this.students = []
         }
       }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
       this.$http.get(
         API.GetUnreadTeamwork,
@@ -208,6 +211,7 @@ export default {
           this.studentz = []
         }
       }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     goSend () {

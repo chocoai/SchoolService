@@ -126,6 +126,18 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
+      title: '公告管理',
+      filename: '../dist/static/NoticeForManager.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'noticeForManager'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),new HtmlWebpackPlugin({
       title: '家长管理',
       filename: '../dist/static/ParentForManager.html',
       template: 'html/template.html',

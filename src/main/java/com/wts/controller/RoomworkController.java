@@ -15,6 +15,7 @@ import com.jfinal.template.ext.directive.Str;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxManager;
+import com.wts.interceptor.AjaxParent;
 import com.wts.interceptor.AjaxTeacher;
 import com.wts.util.ParamesAPI;
 
@@ -62,7 +63,7 @@ public class RoomworkController extends Controller {
         Roomwork roomwork = Roomwork.dao.findById(getPara("id"));
         renderJson(roomwork);
     }
-    @Before({Tx.class,AjaxManager.class})
+    @Before({Tx.class,AjaxTeacher.class})
     public void inactiveById() {
         Roomwork roomwork = Roomwork.dao.findById(getPara("id"));
         if (roomwork == null) {
@@ -71,12 +72,31 @@ public class RoomworkController extends Controller {
             renderText("该消息已注销!");
         } else {
             roomwork.set("state",2).update();
+            List<Roomworkread> roomworkreads = Roomworkread.dao.find("select distinct parent_id from roomworkread where roomwork_id=?",getPara("id"));
+            IdParameter idParameter = new IdParameter();
+            for (Roomworkread roomworkread :roomworkreads){
+                if (Enterprise.dao.findById(roomworkread.get("parent_id")).getState()==1) {
+                    idParameter.putUserIds(Enterprise.dao.findById(roomworkread.get("parent_id")).getUserId());
+                }
+            }
+            SimpleDateFormat dateFm = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); //格式化当前系统日期
+            StringBuffer buffer = new StringBuffer();
+            buffer.append("消息失效：").append("\n");
+            buffer.append(Enterprise.dao.findById(roomwork.getTeacherId()).getName());
+            buffer.append("老师"+dateFm.format(roomwork.get("time"))).append("发布的");
+            buffer.append(Room.dao.findById(roomwork.getRoomId()).getName()).append("-");
+            buffer.append(Course.dao.findById(roomwork.getCourseId()).getName()).append("消息已失效");
+            try {
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text(buffer.toString()), idParameter, false));
+            } catch (Exception e) {
+                renderText(e.getMessage());
+            }
             renderText("OK");
         }
     }
     @Before(AjaxTeacher.class)
     public void queryByRoomId() {
-        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name", "FROM roomwork left join course on roomwork.course_id=course.id WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY course.id DESC");
+        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name", "FROM roomwork left join course on roomwork.course_id=course.id WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY roomwork.id DESC");
         renderJson(roomworks.getList());
     }
     @Before(AjaxTeacher.class)

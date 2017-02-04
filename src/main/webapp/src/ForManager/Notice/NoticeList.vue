@@ -1,16 +1,15 @@
 <template>
-  <div class="ParentList">
+  <div class="NoticeList">
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='person_add' slot="right" @click="goAdd"/>
+      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="parent in parents" :value="parent.id" :title="parent.name" :describeText="parent.userId" :afterText="parent.mobile" @click="look(parent.id)">
-        <mu-avatar v-if="parent.state.toString() === '1'" :src="parent.picUrl" slot="leftAvatar" :size="40"/>
-        <mu-icon v-if="parent.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
-        <mu-icon v-if="parent.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-        <mu-icon v-if="parent.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
+      <mu-list-item v-for="notice in notices" :value="notice.id" :title="notice.title" @click="look(notice.id)">
+        <mu-avatar v-if="notice.type.toString() === '1'" slot="leftAvatar" color="cyan50" backgroundColor="teal500">全</mu-avatar>
+        <mu-avatar v-if="notice.type.toString() === '2'" slot="leftAvatar" color="cyan50" backgroundColor="teal500">教</mu-avatar>
+        <mu-avatar v-if="notice.type.toString() === '3'" slot="leftAvatar" color="cyan50" backgroundColor="teal500">家</mu-avatar>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -35,10 +34,10 @@
 </template>
 
 <script>
-  import * as API from './ParentAPI.js'
+  import * as API from './NoticeAPI.js'
   import MenuList from '../Menu/MenuList'
   export default {
-    name: 'ParentList',
+    name: 'NoticeList',
     components: {
       'menuList': MenuList
     },
@@ -53,7 +52,7 @@
         color: '',
         message: '',
         queryString: '',
-        parents: [],
+        notices: [],
         pageTotal: '',
         pageSize: '7',
         pageCurrent: ''
@@ -62,8 +61,8 @@
     created: function () {
       this.queryString = this.$store.state.queryString
       this.pageCurrent = this.$store.state.pageCurrent
-      this.parentQuery(this.queryString, this.pageCurrent, this.pageSize)
-      this.parentTotal(this.queryString, this.pageSize)
+      this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
+      this.noticeTotal(this.queryString, this.pageSize)
     },
     methods: {
       openMenu () {
@@ -79,7 +78,7 @@
         this.bottomPopup = true
         setTimeout(() => { this.bottomPopup = false }, 1500)
       },
-      parentQuery (queryString, pageCurrent, pageSize) {
+      noticeQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
           API.Query,
           { params: {
@@ -89,16 +88,16 @@
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
-          this.parents = response.body
+          this.notices = response.body
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
       },
-      parentTotal (queryString, pageSize) {
+      noticeTotal (queryString, pageSize) {
         this.$http.get(
-          API.TotalByName,
+          API.Total,
           { params: {
             queryString: queryString,
             pageSize: pageSize
@@ -119,12 +118,12 @@
           queryString: this.queryString,
           pageCurrent: this.pageCurrent
         })
-        this.parentQuery(this.queryString, this.pageCurrent, this.pageSize)
-        this.parentTotal(this.queryString, this.pageSize)
+        this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.noticeTotal(this.queryString, this.pageSize)
         this.before = false
       },
-      look (parentId) {
-        this.$router.push({ path: '/parentEdit/' + parentId })
+      look (noticeId) {
+        this.$router.push({ path: '/noticeLook/' + noticeId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent
@@ -134,16 +133,16 @@
         this.pageCurrent--
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.parentQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       pageNext () {
         this.pageCurrent++
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.parentQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       goAdd () {
-        this.$router.push({ path: '/parentAdd' })
+        this.$router.push({ path: '/noticeAdd' })
       }
     }
   }

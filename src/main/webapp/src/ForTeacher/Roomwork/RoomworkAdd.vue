@@ -25,7 +25,7 @@
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="forSaved=true" :disabled="saveAble" backgroundColor="green"/>
+        <mu-float-button icon="send" @click="forSaved=true" :disabled="saveAble" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="forSaved" title="确定保存并发送消息?" @close="goClose">

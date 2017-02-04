@@ -23,6 +23,9 @@
         <mu-list-item title="家长管理" @click.native="goParent">
           <mu-icon slot="left" value="accessibility" color="#ffc107"/>
         </mu-list-item>
+        <mu-list-item title="公告管理" @click.native="goNotice">
+          <mu-icon slot="left" value="note" color="#2196f3"/>
+        </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="#212121"/>
         </mu-list-item>
@@ -64,6 +67,9 @@
       },
       goParent () {
         window.location.href = '/parent/forManager'
+      },
+      goNotice () {
+        window.location.href = '/notice/forManager'
       },
       goExit () {
         window.location.href = '/exit'

@@ -24,7 +24,7 @@ public class CreatMenu {
   private static String TEAM = BASIC.replaceAll("XXXXX","team%2fforManager%2f");
   private static String STUDENT = BASIC.replaceAll("XXXXX","student%2fforManager%2f");
   private static String PARENT = BASIC.replaceAll("XXXXX","parent%2fforManager%2f");
-
+  private static String NOTICE = BASIC.replaceAll("XXXXX","notice%2fforManager%2f");
 
   public static void CreateManager (){
     Button manager_1 = new Button("教师管理", TEACHER, ButtonType.view);
@@ -33,10 +33,14 @@ public class CreatMenu {
     Button manager_4 = new Button("学生管理", STUDENT, ButtonType.view);
     Button manager_5 = new Button("家长管理", PARENT, ButtonType.view);
 
-    Button managerButton = new Button("综合管理", manager_1, manager_2, manager_3, manager_4, manager_5);
+    Button managerButtonA = new Button("综合管理A", manager_1, manager_2, manager_3, manager_4, manager_5);
+
+    Button manager_6 = new Button("公告管理", NOTICE, ButtonType.view);
+    Button managerButtonB = new Button("综合管理B", manager_6);
 
     List<Button> managers = new ArrayList<Button>();
-    managers.add(managerButton);
+    managers.add(managerButtonA);
+    managers.add(managerButtonB);
     try {
       ApiResult ret = new WeixinProxy().createMenu(ParamesAPI.managerId, managers);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
@@ -48,15 +52,15 @@ public class CreatMenu {
   private static String CLASSROOM = BASIC.replaceAll("XXXXX","student%2fforRoomTeacher%2f");
   private static String TEAMROOM = BASIC.replaceAll("XXXXX","student%2fforTeamTeacher%2f");
   private static String ROOMWORK = BASIC.replaceAll("XXXXX","roomwork%2fforTeacher%2f");
+  private static String TEAMWORK = BASIC.replaceAll("XXXXX","teamwork%2fforTeacher%2f");
 
   public static void CreateTeacher (){
     Button teacher_1 = new Button("班级学生", CLASSROOM, ButtonType.view);
     Button teacher_2 = new Button("社团学生", TEAMROOM, ButtonType.view);
     Button teacher_3 = new Button("班级消息", ROOMWORK, ButtonType.view);
-    Button teacher_4 = new Button("社团消息", TEAMROOM, ButtonType.view);
-    Button teacher_5 = new Button("社团学生", TEAMROOM, ButtonType.view);
+    Button teacher_4 = new Button("社团消息", TEAMWORK, ButtonType.view);
 
-    Button managerButton = new Button("综合管理", teacher_1, teacher_2, teacher_3, teacher_4, teacher_5);
+    Button managerButton = new Button("综合管理", teacher_1, teacher_2, teacher_3, teacher_4);
 
     List<Button> managers = new ArrayList<Button>();
     managers.add(managerButton);

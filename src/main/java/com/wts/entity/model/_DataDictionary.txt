@@ -80,9 +80,11 @@ Table: notice
  Field      | Type         | Null | Key | Default | Remarks 
 ------------+--------------+------+-----+---------+---------
  id         | INT(10)      | NO   | PRI |         | 消息序号    
+ title      | VARCHAR(255) | YES  |     |         | 消息标题    
  content    | VARCHAR(999) | YES  |     |         | 消息内容    
  time       | DATETIME(19) | YES  |     |         | 发布时间    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
+ type       | INT(10)      | YES  |     |         | 1全体2教师3家长
 ------------+--------------+------+-----+---------+---------
 
 Table: praise
@@ -137,7 +139,7 @@ Table: roomwork
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  room_id    | INT(10)      | YES  |     |         | 班级序号    
  course_id  | INT(10)      | YES  |     |         | 课程序号    
- state      | INT(10)      | YES  |     |         |         
+ state      | INT(10)      | YES  |     |         | 消息状态1可用2注销
 ------------+--------------+------+-----+---------+---------
 
 Table: roomworkread
@@ -147,6 +149,8 @@ Table: roomworkread
  id          | INT(10)      | NO   | PRI |         |         
  roomwork_id | INT(10)      | YES  |     |         | 作业序号    
  parent_id   | INT(10)      | YES  |     |         | 家长序号    
+ student_id  | INT(10)      | YES  |     |         | 学生序号    
+ identity_id | INT(10)      | YES  |     |         | 身份序号    
  state       | INT(10)      | YES  |     |         | 是否阅读0否1是
  time        | DATETIME(19) | YES  |     |         | 阅读时间    
 -------------+--------------+------+-----+---------+---------
@@ -194,7 +198,7 @@ Table: teamwork
  time       | DATETIME(19) | YES  |     |         | 发布时间    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  team_id    | INT(10)      | YES  |     |         | 班级序号    
- state      | INT(10)      | YES  |     |         |         
+ state      | INT(10)      | YES  |     |         | 消息状态1可用2注销
 ------------+--------------+------+-----+---------+---------
 
 Table: teamworkread
@@ -204,6 +208,8 @@ Table: teamworkread
  id          | INT(10)      | NO   | PRI |         |         
  teamwork_id | INT(10)      | YES  |     |         | 作业序号    
  parent_id   | INT(10)      | YES  |     |         | 家长序号    
+ student_id  | INT(10)      | YES  |     |         | 学生序号    
+ identity_id | INT(10)      | YES  |     |         | 身份序号    
  state       | INT(10)      | YES  |     |         | 是否阅读0否1是
  time        | DATETIME(19) | YES  |     |         | 阅读时间    
 -------------+--------------+------+-----+---------+---------

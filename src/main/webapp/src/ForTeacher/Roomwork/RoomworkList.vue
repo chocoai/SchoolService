@@ -8,6 +8,7 @@
     <mu-raised-button :label="roomName" icon="cached" fullWidth labelPosition="after" @click="openRoom=true"/>
     <mu-list>
       <mu-list-item v-for="roomwork in roomworks" :value="roomwork.id" :title="roomwork.name" :describeText="roomwork.time" :afterText="roomwork.code" @click="look(roomwork.id)">
+        <mu-icon v-if="roomwork.state.toString() === '2'" slot="right" value="delete"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>

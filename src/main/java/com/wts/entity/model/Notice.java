@@ -1,5 +1,6 @@
 package com.wts.entity.model;
 
+import com.jfinal.plugin.activerecord.Page;
 import com.wts.entity.base.BaseNotice;
 
 /**
@@ -8,4 +9,8 @@ import com.wts.entity.base.BaseNotice;
 @SuppressWarnings("serial")
 public class Notice extends BaseNotice<Notice> {
 	public static final Notice dao = new Notice();
+	public Page<Notice> query(int pageNumber, int pageSize, String queryString) {
+		return paginate(pageNumber, pageSize, "SELECT *",
+						"FROM notice WHERE title LIKE '%"+queryString+"%' or content LIKE '%"+queryString+"%' ORDER BY id ASC");
+	}
 }

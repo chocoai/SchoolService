@@ -17,6 +17,7 @@ module.exports = {
     teacherForManager: './src/ForManager/Teacher/Index.js',
     roomForManager: './src/ForManager/Room/Index.js',
     teamForManager: './src/ForManager/Team/Index.js',
+    noticeForManager: './src/ForManager/Notice/Index.js',
     parentForManager: './src/ForManager/Parent/Index.js',
     studentForManager: './src/ForManager/Student/Index.js',
     homeForTeacher: './src/ForTeacher/Home/Index.js',

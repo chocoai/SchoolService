@@ -3,9 +3,9 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
-    <mu-text-field label="姓名" :disabled="saved" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="姓名" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
     <mu-text-field label="账号" disabled underlineShow="false" v-model="userId" :errorColor="userIdErrorColor" :errorText="userIdErrorText" @input="checkUserId" fullWidth labelFloat icon="assignment"/><br/>
-    <mu-text-field label="手机" :disabled="saved" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-text-field label="手机" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-switch label="管理人员" v-model="isManager" :disabled="saved"/>
@@ -38,7 +38,6 @@ export default {
   data () {
     return {
       bottomPopup: false,
-      saved: false,
       forSave: false,
       icon: '',
       color: '',
@@ -211,7 +210,6 @@ export default {
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
         }
-        this.saved = false
         this.forSave = false
       }, (response) => {
         this.forSave = false

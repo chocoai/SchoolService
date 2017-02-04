@@ -33,6 +33,22 @@ public abstract class BaseRoomworkread<M extends BaseRoomworkread<M>> extends Mo
 		return get("parent_id");
 	}
 
+	public void setStudentId(java.lang.Integer studentId) {
+		set("student_id", studentId);
+	}
+
+	public java.lang.Integer getStudentId() {
+		return get("student_id");
+	}
+
+	public void setIdentityId(java.lang.Integer identityId) {
+		set("identity_id", identityId);
+	}
+
+	public java.lang.Integer getIdentityId() {
+		return get("identity_id");
+	}
+
 	public void setState(java.lang.Integer state) {
 		set("state", state);
 	}

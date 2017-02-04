@@ -130,7 +130,7 @@ export default {
       ).then((response) => {
         this.teacherName = response.body
       }, (response) => {
-        this.openPopup('服务器内部错误！', 'error', 'red')
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     state: function (val) {
@@ -143,7 +143,7 @@ export default {
   },
   computed: {
     titleAll: function () {
-      return this.roomName + '_' + this.courseName + '_' + this.teacherName + '老师'
+      return this.roomName + '->' + this.courseName + '->' + this.teacherName + '老师'
     }
   },
   methods: {
@@ -164,7 +164,6 @@ export default {
         { params: { id: this.$route.params.roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
-      }, (response) => {
         if (response.body === 'error') {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
@@ -175,6 +174,8 @@ export default {
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
         }
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     openPopup (message, icon, color) {
@@ -198,6 +199,7 @@ export default {
         this.content = this.roomwork.content
         this.state = this.roomwork.state
       }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
       this.$http.get(
         API.GetReadRoomwork,
@@ -210,6 +212,7 @@ export default {
           this.students = []
         }
       }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
       this.$http.get(
         API.GetUnreadRoomwork,
@@ -222,6 +225,7 @@ export default {
           this.studentz = []
         }
       }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     goSend () {
