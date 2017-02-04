@@ -3,10 +3,10 @@
     <mu-appbar title="请核实后输入以下信息">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
-    <mu-text-field label="班级" disabled underlineShow="false" v-model="roomName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="课程" disabled underlineShow="false" v-model="courseName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="教师" disabled underlineShow="false" v-model="teacherName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="时间" disabled underlineShow="false" v-model="time" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="班级" disabled underlineShow="false" v-model="roomName" fullWidth labelFloat icon="store"/><br/>
+    <mu-text-field label="课程" disabled underlineShow="false" v-model="courseName" fullWidth labelFloat icon="book"/><br/>
+    <mu-text-field label="教师" disabled underlineShow="false" v-model="teacherName" fullWidth labelFloat icon="group"/><br/>
+    <mu-text-field label="时间" disabled underlineShow="false" v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="内容" disabled underlineShow="false" v-model="content" fullWidth labelFloat icon="note" multiLine :rows="9" :rowsMax="12" :maxLength="500"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
@@ -21,7 +21,7 @@
         <mu-float-button v-if="states" icon="delete" @click="forInactive=true" backgroundColor="red"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="done" @click="forSend=true" backgroundColor="green"/>
+        <mu-float-button v-if="states" icon="send" @click="forSend=true" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="forSends" title="正在再次发送" >
@@ -161,19 +161,17 @@ export default {
         { params: { id: this.$route.params.roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
+      }, (response) => {
         if (response.body === 'error') {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
         } else if (response.body === 'OK') {
-          this.
+          this.forInactives = false
           this.openPopup('注销成功!', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
-        }else{
+        } else {
           this.openPopup(response.body, 'report_problem', 'orange')
-          setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
         }
-      }, (response) => {
-        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     openPopup (message, icon, color) {
@@ -200,7 +198,7 @@ export default {
       })
       this.$http.get(
         API.GetReadRoomwork,
-        { params: { id: roomworkId, state: 1 } },
+        { params: { id: roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         if (response.body.toString() !== 'null') {
@@ -211,8 +209,8 @@ export default {
       }, (response) => {
       })
       this.$http.get(
-        API.GetReadRoomwork,
-        { params: { id: roomworkId, state: 0 } },
+        API.GetUnreadRoomwork,
+        { params: { id: roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         if (response.body.toString() !== 'null') {
@@ -226,13 +224,8 @@ export default {
     goSend () {
       this.forSends = true
       this.$http.get(
-        API.Save,
-        { params: {
-          content: this.content,
-          room_id: this.room_id,
-          course_id: this.course_id,
-          student_id: this.student_id
-        } },
+        API.Send,
+        { params: { roomwork_id: this.$route.params.roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.forSends = false
@@ -240,7 +233,7 @@ export default {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
         } else if (response.body === 'OK') {
-          this.openPopup('保存成功！', 'check_circle', 'green')
+          this.openPopup('发送成功！', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')

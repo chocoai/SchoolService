@@ -102,10 +102,10 @@ public class RoomworkController extends Controller {
                     .set("teacher_id",((Enterprise) getSessionAttr("teacher")).getId())
                     .save();
             String[] studentId = getParaValues("student_id[]");
-            List<Relation> relations = Relation.dao.find("select parent_id from relation where identity_id=999");
+            List<Relation> relations = Relation.dao.find("select * from relation where identity_id=999");
             for (String i : studentId) {
-                if (Relation.dao.find("select parent_id from relation where student_id=?", i).size() != 0) {
-                    relations.addAll(Relation.dao.find("select parent_id from relation where student_id=?", i));
+                if (Relation.dao.find("select * from relation where student_id=?", i).size() != 0) {
+                    relations.addAll(Relation.dao.find("select * from relation where student_id=?", i));
                 }
             }
             List<Relation> relationNew = new LinkedList<Relation>();
@@ -119,6 +119,8 @@ public class RoomworkController extends Controller {
                     Roomworkread roomworkread = new Roomworkread();
                     roomworkread.set("roomwork_id",roomwork.getId())
                             .set("parent_id",relation.getParentId())
+                            .set("student_id",relation.getStudentId())
+                            .set("identity_id",relation.getIdentityId())
                             .set("state",0)
                             .save();
                 }

@@ -19,4 +19,3 @@ export const Save = `${h}/parent/save`
 export const Edit = `${h}/parent/edit`
 export const Query = `${h}/parent/queryParent`
 export const TotalByName = `${h}/parent/totalByName`
-

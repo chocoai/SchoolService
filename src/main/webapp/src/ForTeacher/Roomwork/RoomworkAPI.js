@@ -12,5 +12,7 @@ export const Query = `${h}/roomwork/queryByRoomId`
 export const Total = `${h}/roomwork/totalByRoomId`
 export const GetById = `${h}/roomwork/getById`
 export const Save = `${h}/roomwork/save`
+export const Send = `${h}/roomworkread/send`
 export const Inactive = `${h}/roomwork/inactiveById`
 export const GetReadRoomwork = `${h}/roomworkread/getReadRoomwork`
+export const GetUnreadRoomwork = `${h}/roomworkread/getUnreadRoomwork`

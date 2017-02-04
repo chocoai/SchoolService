@@ -95,7 +95,7 @@ public class ParentController extends Controller {
             identityAble[0] = "true";
             for (int k = 1; k < 4; k++) {
                 student_id[k] = "";
-                studentName[k] = "姓名";
+                studentName[k] = "学生";
                 identity_id[k] = "";
                 identityName[k] = "身份";
                 room_id[k] = "";
@@ -123,7 +123,7 @@ public class ParentController extends Controller {
             }
             for (int k = 2; k < 4; k++) {
                 student_id[k] = "";
-                studentName[k] = "姓名";
+                studentName[k] = "学生";
                 identity_id[k] = "";
                 identityName[k] = "身份";
                 room_id[k] = "";
@@ -151,7 +151,7 @@ public class ParentController extends Controller {
             }
             for (int k = 3; k < 4; k++) {
                 student_id[k] = "";
-                studentName[k] = "姓名";
+                studentName[k] = "学生";
                 identity_id[k] = "";
                 identityName[k] = "身份";
                 room_id[k] = "";
@@ -180,7 +180,7 @@ public class ParentController extends Controller {
         } else {
             for (int k = 0; k < 4; k++) {
                 student_id[k] = "";
-                studentName[k] = "姓名";
+                studentName[k] = "学生";
                 identity_id[k] = "";
                 identityName[k] = "身份";
                 room_id[k] = "";

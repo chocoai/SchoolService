@@ -72,8 +72,8 @@
           <mu-icon slot="left" value="delete_forever" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="team in teams" :title="team.name">
-          <mu-icon v-if="team.state.toString() === '1'" slot="left" :size="40" value="store" color="#673ab7"/>
-          <mu-icon v-if="team.state.toString() === '2'" slot="left" :size="40" value="store" color="#d1c4e9"/>
+          <mu-icon v-if="team.state.toString() === '1'" slot="left" :size="40" value="account_balance" color="#673ab7"/>
+          <mu-icon v-if="team.state.toString() === '2'" slot="left" :size="40" value="account_balance" color="#d1c4e9"/>
           <mu-radio v-model="team_id" label="" labelLeft :nativeValue="team.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
         </mu-list-item>
       </mu-list>

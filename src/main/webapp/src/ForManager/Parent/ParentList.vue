@@ -11,7 +11,6 @@
         <mu-icon v-if="parent.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
         <mu-icon v-if="parent.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
         <mu-icon v-if="parent.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
-        <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>

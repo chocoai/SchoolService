@@ -49,4 +49,12 @@ public abstract class BaseTeamwork<M extends BaseTeamwork<M>> extends Model<M> i
 		return get("team_id");
 	}
 
+	public void setState(java.lang.Integer state) {
+		set("state", state);
+	}
+
+	public java.lang.Integer getState() {
+		return get("state");
+	}
+
 }

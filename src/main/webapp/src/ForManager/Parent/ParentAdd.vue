@@ -103,206 +103,170 @@
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
     <mu-drawer right :open="openRoom1" docked="false">
-      <mu-appbar title="请选择所属班级" @click.native="closeRoom1">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="room_id1=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择所属班级" />
+      <mu-list :value="room_id1" @itemClick="roomChange1">
+        <mu-list-item title="班级" value="0">
+          <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="room in rooms" :title="room.name">
+        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
           <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
           <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
-          <mu-radio v-model="room_id1" label="" labelLeft :nativeValue="room.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" iconClass="color: #215E21"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openRoom2" docked="false">
-      <mu-appbar title="请选择所属班级" @click.native="closeRoom2">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="room_id2=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择所属班级" />
+      <mu-list :value="room_id2" @itemClick="roomChange2">
+        <mu-list-item title="班级" value="0">
+          <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="room in rooms" :title="room.name">
+        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
           <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
           <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
-          <mu-radio v-model="room_id2" label="" labelLeft :nativeValue="room.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" iconClass="color: #215E21"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openRoom3" docked="false">
-      <mu-appbar title="请选择所属班级" @click.native="closeRoom3">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="room_id3=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择所属班级" />
+      <mu-list :value="room_id3" @itemClick="roomChange3">
+        <mu-list-item title="班级" value="0">
+          <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="room in rooms" :title="room.name">
+        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
           <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
           <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
-          <mu-radio v-model="room_id3" label="" labelLeft :nativeValue="room.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" iconClass="color: #215E21"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openRoom4" docked="false">
-      <mu-appbar title="请选择所属班级" @click.native="closeRoom4">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="room_id4=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择所属班级" />
+      <mu-list :value="room_id4" @itemClick="roomChange4">
+        <mu-list-item title="班级" value="0">
+          <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="room in rooms" :title="room.name">
+        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
           <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
           <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
-          <mu-radio v-model="room_id4" label="" labelLeft :nativeValue="room.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" iconClass="color: #215E21"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openStudent1" docked="false">
-      <mu-appbar title="请选择学生" @click.native="closeStudent1">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="student_id1=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择学生"/>
+      <mu-list :value="student_id1" @itemClick="studentChange1">
+        <mu-list-item title="学生" value="0">
+          <mu-icon slot="left" value="accessibility" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number">
+        <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number" :value="student.id">
           <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
           <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
           <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
           <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
-          <mu-radio v-model="student_id1" label="" labelLeft :nativeValue="student.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openStudent2" docked="false">
-      <mu-appbar title="请选择学生" @click.native="closeStudent2">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="student_id2=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择学生"/>
+      <mu-list :value="student_id2" @itemClick="studentChange2">
+        <mu-list-item title="学生" value="0">
+          <mu-icon slot="left" value="accessibility" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="student in students2" :title="student.name" :describeText="student.number">
+        <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number" :value="student.id">
           <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
           <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
           <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
           <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
-          <mu-radio v-model="student_id2" label="" labelLeft :nativeValue="student.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openStudent3" docked="false">
-      <mu-appbar title="请选择学生" @click.native="closeStudent3">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="student_id3=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择学生"/>
+      <mu-list :value="student_id3" @itemClick="studentChange3">
+        <mu-list-item title="学生" value="0">
+          <mu-icon slot="left" value="accessibility" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="student in students3" :title="student.name" :describeText="student.number">
+        <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number" :value="student.id">
           <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
           <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
           <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
           <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
-          <mu-radio v-model="student_id3" label="" labelLeft :nativeValue="student.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openStudent4" docked="false">
-      <mu-appbar title="请选择学生" @click.native="closeStudent4">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="student_id4=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择学生"/>
+      <mu-list :value="student_id4" @itemClick="studentChange4">
+        <mu-list-item title="学生" value="0">
+          <mu-icon slot="left" value="accessibility" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="student in students4" :title="student.name" :describeText="student.number">
+        <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number" :value="student.id">
           <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
           <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
           <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
           <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
-          <mu-radio v-model="student_id4" label="" labelLeft :nativeValue="student.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openIdentity1" docked="false">
-      <mu-appbar title="请选择身份" @click.native="closeIdentity1">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="identity_id1=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择身份"/>
+      <mu-list :value="identity_id1" @itemClick="identityChange1">
+        <mu-list-item title="无" value="0">
+          <mu-icon slot="left" value="supervisor_account" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="identity in identities" :title="identity.name">
+        <mu-list-item v-for="identity in identities" :title="identity.name" :value="identity.id">
           <mu-icon v-if="identity.id.toString() === '1'"  slot="left" :size="40" color="#009688" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '2'"  slot="left" :size="40" color="#ff5722" value="account_circle"/>
           <mu-icon v-if="identity.id.toString() === '3'"  slot="left" :size="40" color="#4caf50" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '4'"  slot="left" :size="40" color="#ff9800" value="account_circle"/>
           <mu-icon v-if="identity.id.toString() === '5'"  slot="left" :size="40" color="#8bc34a" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '6'"  slot="left" :size="40" color="#ffc107" value="account_circle"/>
-          <mu-radio v-model="identity_id1" label="" labelLeft :nativeValue="identity.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openIdentity2" docked="false">
-      <mu-appbar title="请选择身份" @click.native="closeIdentity2">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="identity_id2=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择身份"/>
+      <mu-list :value="identity_id2" @itemClick="identityChange2">
+        <mu-list-item title="身份" value="0">
+          <mu-icon slot="left" value="supervisor_account" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="identity in identities" :title="identity.name">
+        <mu-list-item v-for="identity in identities" :title="identity.name" :value="identity.id">
           <mu-icon v-if="identity.id.toString() === '1'"  slot="left" :size="40" color="#009688" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '2'"  slot="left" :size="40" color="#ff5722" value="account_circle"/>
           <mu-icon v-if="identity.id.toString() === '3'"  slot="left" :size="40" color="#4caf50" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '4'"  slot="left" :size="40" color="#ff9800" value="account_circle"/>
           <mu-icon v-if="identity.id.toString() === '5'"  slot="left" :size="40" color="#8bc34a" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '6'"  slot="left" :size="40" color="#ffc107" value="account_circle"/>
-          <mu-radio v-model="identity_id2" label="" labelLeft :nativeValue="identity.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openIdentity3" docked="false">
-      <mu-appbar title="请选择身份" @click.native="closeIdentity3">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="identity_id3=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择身份"/>
+      <mu-list :value="identity_id3" @itemClick="identityChange3">
+        <mu-list-item title="身份" value="0">
+          <mu-icon slot="left" value="supervisor_account" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="identity in identities" :title="identity.name">
+        <mu-list-item v-for="identity in identities" :title="identity.name" :value="identity.id">
           <mu-icon v-if="identity.id.toString() === '1'"  slot="left" :size="40" color="#009688" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '2'"  slot="left" :size="40" color="#ff5722" value="account_circle"/>
           <mu-icon v-if="identity.id.toString() === '3'"  slot="left" :size="40" color="#4caf50" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '4'"  slot="left" :size="40" color="#ff9800" value="account_circle"/>
           <mu-icon v-if="identity.id.toString() === '5'"  slot="left" :size="40" color="#8bc34a" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '6'"  slot="left" :size="40" color="#ffc107" value="account_circle"/>
-          <mu-radio v-model="identity_id3" label="" labelLeft :nativeValue="identity.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openIdentity4" docked="false">
-      <mu-appbar title="请选择身份" @click.native="closeIdentity4">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="identity_id4=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择身份"/>
+      <mu-list :value="identity_id4" @itemClick="identityChange4">
+        <mu-list-item title="身份" value="0">
+          <mu-icon slot="left" value="supervisor_account" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="identity in identities" :title="identity.name">
+        <mu-list-item v-for="identity in identities" :title="identity.name" :value="identity.id">
           <mu-icon v-if="identity.id.toString() === '1'"  slot="left" :size="40" color="#009688" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '2'"  slot="left" :size="40" color="#ff5722" value="account_circle"/>
           <mu-icon v-if="identity.id.toString() === '3'"  slot="left" :size="40" color="#4caf50" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '4'"  slot="left" :size="40" color="#ff9800" value="account_circle"/>
           <mu-icon v-if="identity.id.toString() === '5'"  slot="left" :size="40" color="#8bc34a" value="account_box"/>
           <mu-icon v-if="identity.id.toString() === '6'"  slot="left" :size="40" color="#ffc107" value="account_circle"/>
-          <mu-radio v-model="identity_id4" label="" labelLeft :nativeValue="identity.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -353,10 +317,10 @@ export default {
       roomName2: '班级',
       roomName3: '班级',
       roomName4: '班级',
-      studentName1: '姓名',
-      studentName2: '姓名',
-      studentName3: '姓名',
-      studentName4: '姓名',
+      studentName1: '学生',
+      studentName2: '学生',
+      studentName3: '学生',
+      studentName4: '学生',
       identityName1: '身份',
       identityName2: '身份',
       identityName3: '身份',
@@ -403,18 +367,18 @@ export default {
       students2: [],
       students3: [],
       students4: [],
-      room_id1: '',
-      room_id2: '',
-      room_id3: '',
-      room_id4: '',
-      student_id1: '',
-      student_id2: '',
-      student_id3: '',
-      student_id4: '',
-      identity_id1: '',
-      identity_id2: '',
-      identity_id3: '',
-      identity_id4: '',
+      room_id1: '0',
+      room_id2: '0',
+      room_id3: '0',
+      room_id4: '0',
+      student_id1: '0',
+      student_id2: '0',
+      student_id3: '0',
+      student_id4: '0',
+      identity_id1: '0',
+      identity_id2: '0',
+      identity_id3: '0',
+      identity_id4: '0',
       saveAble: true
     }
   },
@@ -438,7 +402,7 @@ export default {
   },
   watch: {
     room_id1: function (val) {
-      if (val.toString() !== '') {
+      if (val.toString() !== '' || val.toString() !== '0') {
         this.$http.get(
           API.StudentList,
           { params: { id: val } },
@@ -453,7 +417,7 @@ export default {
       }
     },
     room_id2: function (val) {
-      if (val.toString() !== '') {
+      if (val.toString() !== '' || val.toString() !== '0') {
         this.$http.get(
           API.StudentList,
           { params: { id: val } },
@@ -468,7 +432,7 @@ export default {
       }
     },
     room_id3: function (val) {
-      if (val.toString() !== '') {
+      if (val.toString() !== '' || val.toString() !== '0') {
         this.$http.get(
           API.StudentList,
           { params: { id: val } },
@@ -483,7 +447,7 @@ export default {
       }
     },
     room_id4: function (val) {
-      if (val.toString() !== '') {
+      if (val.toString() !== '' || val.toString() !== '0') {
         this.$http.get(
           API.StudentList,
           { params: { id: val } },
@@ -510,245 +474,245 @@ export default {
       return '学生' + this.studentNumber
     },
     roomBack1: function () {
-      if (this.room_id1.toString() !== '') {
+      if (this.room_id1.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     roomBack2: function () {
-      if (this.room_id2.toString() !== '') {
+      if (this.room_id2.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     roomBack3: function () {
-      if (this.room_id3.toString() !== '') {
+      if (this.room_id3.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     roomBack4: function () {
-      if (this.room_id4.toString() !== '') {
+      if (this.room_id4.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     studentBack1: function () {
-      if (this.student_id1.toString() !== '') {
+      if (this.student_id1.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     studentBack2: function () {
-      if (this.student_id2.toString() !== '') {
+      if (this.student_id2.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     studentBack3: function () {
-      if (this.student_id3.toString() !== '') {
+      if (this.student_id3.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     studentBack4: function () {
-      if (this.student_id4.toString() !== '') {
+      if (this.student_id4.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     identityBack1: function () {
-      if (this.identity_id1.toString() !== '') {
+      if (this.identity_id1.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     identityBack2: function () {
-      if (this.identity_id2.toString() !== '') {
+      if (this.identity_id2.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     identityBack3: function () {
-      if (this.identity_id3.toString() !== '') {
+      if (this.identity_id3.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     identityBack4: function () {
-      if (this.identity_id4.toString() !== '') {
+      if (this.identity_id4.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     roomIcon1: function () {
-      if (this.room_id1.toString() !== '') {
+      if (this.room_id1.toString() !== '0') {
         return 'filter_1'
       } else {
         return 'looks_one'
       }
     },
     roomIcon2: function () {
-      if (this.room_id2.toString() !== '') {
+      if (this.room_id2.toString() !== '0') {
         return 'filter_1'
       } else {
         return 'looks_one'
       }
     },
     roomIcon3: function () {
-      if (this.room_id3.toString() !== '') {
+      if (this.room_id3.toString() !== '0') {
         return 'filter_1'
       } else {
         return 'looks_one'
       }
     },
     roomIcon4: function () {
-      if (this.room_id4.toString() !== '') {
+      if (this.room_id4.toString() !== '0') {
         return 'filter_1'
       } else {
         return 'looks_one'
       }
     },
     studentIcon1: function () {
-      if (this.student_id1.toString() !== '') {
+      if (this.student_id1.toString() !== '0') {
         return 'filter_2'
       } else {
         return 'looks_two'
       }
     },
     studentIcon2: function () {
-      if (this.student_id2.toString() !== '') {
+      if (this.student_id2.toString() !== '0') {
         return 'filter_2'
       } else {
         return 'looks_two'
       }
     },
     studentIcon3: function () {
-      if (this.student_id3.toString() !== '') {
+      if (this.student_id3.toString() !== '0') {
         return 'filter_2'
       } else {
         return 'looks_two'
       }
     },
     studentIcon4: function () {
-      if (this.student_id4.toString() !== '') {
+      if (this.student_id4.toString() !== '0') {
         return 'filter_2'
       } else {
         return 'looks_two'
       }
     },
     identityIcon1: function () {
-      if (this.identity_id1.toString() !== '') {
+      if (this.identity_id1.toString() !== '0') {
         return 'filter_3'
       } else {
         return 'looks_3'
       }
     },
     identityIcon2: function () {
-      if (this.identity_id2.toString() !== '') {
+      if (this.identity_id2.toString() !== '0') {
         return 'filter_3'
       } else {
         return 'looks_3'
       }
     },
     identityIcon3: function () {
-      if (this.identity_id3.toString() !== '') {
+      if (this.identity_id3.toString() !== '0') {
         return 'filter_3'
       } else {
         return 'looks_3'
       }
     },
     identityIcon4: function () {
-      if (this.identity_id4.toString() !== '') {
+      if (this.identity_id4.toString() !== '0') {
         return 'filter_3'
       } else {
         return 'looks_3'
       }
     },
     identityAble4: function () {
-      if (this.student_id4.toString() !== '') {
+      if (this.student_id4.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     studentAble4: function () {
-      if (this.room_id4.toString() !== '') {
+      if (this.room_id4.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     roomAble4: function () {
-      if (this.identity_id3.toString() !== '') {
+      if (this.identity_id3.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     identityAble3: function () {
-      if (this.student_id3.toString() !== '') {
+      if (this.student_id3.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     studentAble3: function () {
-      if (this.room_id3.toString() !== '') {
+      if (this.room_id3.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     roomAble3: function () {
-      if (this.identity_id2.toString() !== '') {
+      if (this.identity_id2.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     identityAble2: function () {
-      if (this.student_id2.toString() !== '') {
+      if (this.student_id2.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     studentAble2: function () {
-      if (this.room_id2.toString() !== '') {
+      if (this.room_id2.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     roomAble2: function () {
-      if (this.identity_id1.toString() !== '') {
+      if (this.identity_id1.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     identityAble1: function () {
-      if (this.student_id1.toString() !== '') {
+      if (this.student_id1.toString() !== '0') {
         return false
       } else {
         return true
       }
     },
     studentAble1: function () {
-      if (this.room_id1.toString() !== '') {
+      if (this.room_id1.toString() !== '0') {
         return false
       } else {
         return true
@@ -756,6 +720,82 @@ export default {
     }
   },
   methods: {
+    roomChange1 (val) {
+      this.room_id1 = val.value
+      this.roomName1 = val.title
+      this.openRoom1 = false
+    },
+    roomChange2 (val) {
+      this.room_id2 = val.value
+      this.roomName2 = val.title
+      this.openRoom2 = false
+    },
+    roomChange3 (val) {
+      this.room_id3 = val.value
+      this.roomName3 = val.title
+      this.openRoom3 = false
+    },
+    roomChange4 (val) {
+      this.room_id4 = val.value
+      this.roomName4 = val.title
+      this.openRoom4 = false
+    },
+    studentChange1 (val) {
+      this.student_id1 = val.value
+      this.studentName1 = val.title
+      if ((this.student_id1.toString() === this.student_id2.toString() && this.student_id2.toString() !== '0') || (this.student_id1.toString() === this.student_id3.toString() && this.student_id3.toString() !== '0') || (this.student_id1.toString() === this.student_id4.toString() && this.student_id4.toString() !== '0')) {
+        this.openPopup('该学生已选择!', 'report_problem', 'orange')
+      } else {
+        this.openStudent1 = false
+      }
+    },
+    studentChange2 (val) {
+      this.student_id2 = val.value
+      this.studentName2 = val.title
+      if ((this.student_id2.toString() === this.student_id1.toString() && this.student_id1.toString() !== '0') || (this.student_id2.toString() === this.student_id3.toString() && this.student_id3.toString() !== '0') || (this.student_id2.toString() === this.student_id4.toString() && this.student_id4.toString() !== '0')) {
+        this.openPopup('该学生已选择!', 'report_problem', 'orange')
+      } else {
+        this.openStudent2 = false
+      }
+    },
+    studentChange3 (val) {
+      this.student_id3 = val.value
+      this.studentName3 = val.title
+      if ((this.student_id3.toString() === this.student_id1.toString() && this.student_id1.toString() !== '0') || (this.student_id3.toString() === this.student_id2.toString() && this.student_id2.toString() !== '0') || (this.student_id3.toString() === this.student_id4.toString() && this.student_id4.toString() !== '0')) {
+        this.openPopup('该学生已选择!', 'report_problem', 'orange')
+      } else {
+        this.openStudent3 = false
+      }
+    },
+    studentChange4 (val) {
+      this.student_id4 = val.value
+      this.studentName4 = val.title
+      if ((this.student_id4.toString() === this.student_id1.toString() && this.student_id1.toString() !== '0') || (this.student_id4.toString() === this.student_id2.toString() && this.student_id2.toString() !== '0') || (this.student_id4.toString() === this.student_id4.toString() && this.student_id4.toString() !== '0')) {
+        this.openPopup('该学生已选择!', 'report_problem', 'orange')
+      } else {
+        this.openStudent4 = false
+      }
+    },
+    identityChange1 (val) {
+      this.identity_id1 = val.value
+      this.identityName1 = val.title
+      this.openIdentity1 = false
+    },
+    identityChange2 (val) {
+      this.identity_id2 = val.value
+      this.identityName2 = val.title
+      this.openIdentity2 = false
+    },
+    identityChange3 (val) {
+      this.identity_id3 = val.value
+      this.identityName3 = val.title
+      this.openIdentity3 = false
+    },
+    identityChange4 (val) {
+      this.identity_id4 = val.value
+      this.identityName4 = val.title
+      this.openIdentity4 = false
+    },
     goReply () {
       this.$router.push({ path: '/parentList' })
     },
@@ -871,10 +911,10 @@ export default {
       this.roomName2 = '班级'
       this.roomName3 = '班级'
       this.roomName4 = '班级'
-      this.studentName1 = '姓名'
-      this.studentName2 = '姓名'
-      this.studentName3 = '姓名'
-      this.studentName4 = '姓名'
+      this.studentName1 = '学生'
+      this.studentName2 = '学生'
+      this.studentName3 = '学生'
+      this.studentName4 = '学生'
       this.identityName1 = '身份'
       this.identityName2 = '身份'
       this.identityName3 = '身份'
@@ -919,262 +959,18 @@ export default {
       this.students2 = []
       this.students3 = []
       this.students4 = []
-      this.room_id1 = ''
-      this.room_id2 = ''
-      this.room_id3 = ''
-      this.room_id4 = ''
-      this.student_id1 = ''
-      this.student_id2 = ''
-      this.student_id3 = ''
-      this.student_id4 = ''
-      this.identity_id1 = ''
-      this.identity_id2 = ''
-      this.identity_id3 = ''
-      this.identity_id4 = ''
-    },
-    closeRoom1 () {
-      this.openRoom1 = false
-      if (this.room_id1.toString() !== '') {
-        this.$http.get(
-          API.GetRoomName,
-          { params: { id: this.room_id1 } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.roomName1 = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
-      } else {
-        this.roomName1 = '班级'
-        this.studentName1 = '姓名'
-        this.identityName1 = '身份'
-        this.students1 = []
-        this.student_id1 = ''
-        this.identity_id1 = ''
-      }
-    },
-    closeRoom2 () {
-      this.openRoom2 = false
-      if (this.room_id2.toString() !== '') {
-        this.$http.get(
-          API.GetRoomName,
-          { params: { id: this.room_id2 } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.roomName2 = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
-      } else {
-        this.roomName2 = '班级'
-        this.studentName2 = '姓名'
-        this.identityName2 = '身份'
-        this.students2 = []
-        this.student_id2 = ''
-        this.identity_id2 = ''
-      }
-    },
-    closeRoom3 () {
-      this.openRoom3 = false
-      if (this.room_id3.toString() !== '') {
-        this.$http.get(
-          API.GetRoomName,
-          { params: { id: this.room_id3 } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.roomName3 = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
-      } else {
-        this.roomName3 = '班级'
-        this.studentName3 = '姓名'
-        this.identityName3 = '身份'
-        this.students3 = []
-        this.student_id3 = ''
-        this.identity_id3 = ''
-      }
-    },
-    closeRoom4 () {
-      this.openRoom4 = false
-      if (this.room_id4.toString() !== '') {
-        this.$http.get(
-          API.GetRoomName,
-          { params: { id: this.room_id4 } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.roomName4 = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
-      } else {
-        this.roomName4 = '班级'
-        this.studentName4 = '姓名'
-        this.identityName4 = '身份'
-        this.students4 = []
-        this.student_id4 = ''
-        this.identity_id4 = ''
-      }
-    },
-    closeStudent1 () {
-      if ((this.student_id1.toString() === this.student_id2.toString() && this.student_id2.toString() !== '') || (this.student_id1.toString() === this.student_id3.toString() && this.student_id3.toString() !== '') || (this.student_id1.toString() === this.student_id4.toString() && this.student_id4.toString() !== '')) {
-        this.openPopup('该学生重复选择!', 'report_problem', 'orange')
-      } else {
-        this.openStudent1 = false
-        if (this.student_id1.toString() !== '') {
-          this.$http.get(
-            API.GetStudentName,
-            { params: { id: this.student_id1 } },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-          ).then((response) => {
-            this.studentName1 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
-        } else {
-          this.studentName1 = '姓名'
-          this.identityName1 = '身份'
-          this.student_id1 = ''
-          this.identity_id1 = ''
-        }
-      }
-    },
-    closeStudent2 () {
-      if ((this.student_id2.toString() === this.student_id1.toString() && this.student_id1.toString() !== '') || (this.student_id2.toString() === this.student_id3.toString() && this.student_id3.toString() !== '') || (this.student_id2.toString() === this.student_id4.toString() && this.student_id4.toString() !== '')) {
-        this.openPopup('该学生重复选择!', 'report_problem', 'orange')
-      } else {
-        this.openStudent2 = false
-        if (this.student_id2.toString() !== '') {
-          this.$http.get(
-            API.GetStudentName,
-            { params: { id: this.student_id2 } },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-          ).then((response) => {
-            this.studentName2 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误!', 'error', 'red')
-          })
-        } else {
-          this.studentName2 = '姓名'
-          this.identityName2 = '身份'
-          this.student_id2 = ''
-          this.identity_id2 = ''
-        }
-      }
-    },
-    closeStudent3 () {
-      if ((this.student_id3.toString() === this.student_id1.toString() && this.student_id1.toString() !== '') || (this.student_id3.toString() === this.student_id2.toString() && this.student_id2.toString() !== '') || (this.student_id3.toString() === this.student_id4.toString() && this.student_id4.toString() !== '')) {
-        this.openPopup('该学生重复选择!', 'report_problem', 'orange')
-      } else {
-        this.openStudent3 = false
-        if (this.student_id3.toString() !== '') {
-          this.$http.get(
-            API.GetStudentName,
-            { params: { id: this.student_id3 } },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-          ).then((response) => {
-            this.studentName3 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误!', 'error', 'red')
-          })
-        } else {
-          this.studentName3 = '姓名'
-          this.identityName3 = '身份'
-          this.student_id3 = ''
-          this.identity_id3 = ''
-        }
-      }
-    },
-    closeStudent4 () {
-      if ((this.student_id4.toString() === this.student_id1.toString() && this.student_id1.toString() !== '') || (this.student_id4.toString() === this.student_id2.toString() && this.student_id2.toString() !== '') || (this.student_id4.toString() === this.student_id4.toString() && this.student_id4.toString() !== '')) {
-        this.openPopup('该学生重复选择!', 'report_problem', 'orange')
-      } else {
-        this.openStudent4 = false
-        if (this.student_id4.toString() !== '') {
-          this.$http.get(
-            API.GetStudentName,
-            { params: { id: this.student_id4 } },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-          ).then((response) => {
-            this.studentName4 = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误!', 'error', 'red')
-          })
-        } else {
-          this.studentName4 = '姓名'
-          this.identityName4 = '身份'
-          this.student_id4 = ''
-          this.identity_id4 = ''
-        }
-      }
-    },
-    closeIdentity1 () {
-      this.openIdentity1 = false
-      if (this.identity_id1.toString() !== '') {
-        this.$http.get(
-          API.GetIdentityName,
-          { params: { id: this.identity_id1 } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.identityName1 = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
-      } else {
-        this.identityName1 = '身份'
-        this.identity_id1 = ''
-      }
-    },
-    closeIdentity2 () {
-      this.openIdentity2 = false
-      if (this.identity_id2.toString() !== '') {
-        this.$http.get(
-          API.GetIdentityName,
-          { params: { id: this.identity_id2 } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.identityName2 = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
-      } else {
-        this.identityName2 = '身份'
-        this.identity_id2 = ''
-      }
-    },
-    closeIdentity3 () {
-      this.openIdentity3 = false
-      if (this.identity_id3.toString() !== '') {
-        this.$http.get(
-          API.GetIdentityName,
-          { params: { id: this.identity_id3 } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.identityName3 = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
-      } else {
-        this.identityName3 = '身份'
-        this.identity_id3 = ''
-      }
-    },
-    closeIdentity4 () {
-      this.openIdentity4 = false
-      if (this.identity_id4.toString() !== '') {
-        this.$http.get(
-          API.GetIdentityName,
-          { params: { id: this.identity_id4 } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.identityName4 = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
-      } else {
-        this.identityName4 = '身份'
-        this.identity_id4 = ''
-      }
+      this.room_id1 = '0'
+      this.room_id2 = '0'
+      this.room_id3 = '0'
+      this.room_id4 = '0'
+      this.student_id1 = '0'
+      this.student_id2 = '0'
+      this.student_id3 = '0'
+      this.student_id4 = '0'
+      this.identity_id1 = '0'
+      this.identity_id2 = '0'
+      this.identity_id3 = '0'
+      this.identity_id4 = '0'
     },
     checkName (value) {
       if (value === null || value === undefined || value === '') {
