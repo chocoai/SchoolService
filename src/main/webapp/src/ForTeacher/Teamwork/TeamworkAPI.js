@@ -5,6 +5,7 @@ export const TeacherTeamFirst = `${h}/team/teacherTeamFirst`
 export const GetTeamName = `${h}/team/getNameById`
 export const GetTeacherName = `${h}/enterprise/getNameById`
 export const StudentList = `${h}/student/studentListByTeam`
+export const StudentCode = `${h}/student/studentCodeByTeam`
 export const Query = `${h}/teamwork/queryByTeamId`
 export const Total = `${h}/teamwork/totalByTeamId`
 export const GetById = `${h}/teamwork/getById`

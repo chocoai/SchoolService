@@ -8,6 +8,7 @@ export const GetRoomName = `${h}/room/getNameById`
 export const GetCourseName = `${h}/course/getNameById`
 export const GetTeacherName = `${h}/enterprise/getNameById`
 export const StudentList = `${h}/student/studentListByRoom`
+export const StudentCode = `${h}/student/studentCodeByRoom`
 export const Query = `${h}/roomwork/queryByRoomId`
 export const Total = `${h}/roomwork/totalByRoomId`
 export const GetById = `${h}/roomwork/getById`

@@ -40,7 +40,7 @@
         <mu-icon-button icon='done' slot="right"/>
       </mu-appbar>
       <mu-list>
-        <mu-list-item title="全选" @click.native="student_id=true">
+        <mu-list-item title="全选" @click.native="student_id=studentAll">
           <mu-icon slot="left" value="supervisor_account" :size="40"/>
         </mu-list-item>
         <mu-list-item title="清空" @click.native="student_id=[]">
@@ -74,6 +74,7 @@ export default {
       student_id: [],
       teams: [],
       students: [],
+      studentAll: '',
       teamName: '社团',
       studentName: '发送范围',
       teamAble: false,
@@ -167,6 +168,17 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
+        this.$http.get(
+          API.StudentCode,
+          { params: { id: val } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((response) => {
+          this.studentAll = response.body
+        }, (response) => {
+          this.openPopup('服务器内部错误！', 'error', 'red')
+        })
+        this.student_id = ''
+        this.studentName = '发送范围'
       }
     }
   },
