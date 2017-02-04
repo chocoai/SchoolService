@@ -16,12 +16,9 @@ import iconButton from 'muse-components/iconButton'
 import floatButton from 'muse-components/floatButton'
 import raisedButton from 'muse-components/raisedButton'
 import textField from 'muse-components/textField'
-// import selectField from 'muse-components/selectField'
 import avatar from 'muse-components/avatar'
-import iconMenu from 'muse-components/iconMenu'
 import checkbox from 'muse-components/checkbox'
 import dialog from 'muse-components/dialog'
-import chip from 'muse-components/chip'
 import popup from 'muse-components/popup'
 import drawer from 'muse-components/drawer'
 import subHeader from 'muse-components/subHeader'
@@ -37,11 +34,8 @@ Vue.component(floatButton.name, floatButton)
 Vue.component(iconButton.name, iconButton)
 Vue.component(raisedButton.name, raisedButton)
 Vue.component(textField.name, textField)
-// Vue.component(selectField.name, selectField)
 Vue.component(avatar.name, avatar)
-Vue.component(iconMenu.name, iconMenu)
 Vue.component(dialog.name, dialog)
-Vue.component(chip.name, chip)
 Vue.component(popup.name, popup)
 Vue.component(drawer.name, drawer)
 Vue.component(subHeader.name, subHeader)

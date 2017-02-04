@@ -15,10 +15,10 @@ public class Student extends BaseStudent<Student> {
 	}
 	public Page<Student> studentQueryByRoomId(int pageNumber, int pageSize, String queryString, String roomId) {
 		return paginate(pageNumber, pageSize, "SELECT *",
-				"FROM student WHERE room_id = "+ roomId +" and (name LIKE '%"+queryString+"%' or number LIKE '%"+queryString+"%' or code LIKE '%"+queryString+"%') ORDER BY name ASC");
+				"FROM student WHERE state=1 AND  room_id = "+ roomId +" and (name LIKE '%"+queryString+"%' or number LIKE '%"+queryString+"%' or code LIKE '%"+queryString+"%') ORDER BY name ASC");
 	}
 	public Page<Student> studentQueryByTeamId(int pageNumber, int pageSize, String queryString, String teamId) {
 		return paginate(pageNumber, pageSize, "SELECT *",
-				"FROM student WHERE team_id = "+ teamId +" and (name LIKE '%"+queryString+"%' or number LIKE '%"+queryString+"%' or code LIKE '%"+queryString+"%') ORDER BY name ASC");
+				"FROM student WHERE state=1 AND  team_id = "+ teamId +" and (name LIKE '%"+queryString+"%' or number LIKE '%"+queryString+"%' or code LIKE '%"+queryString+"%') ORDER BY name ASC");
 	}
 }

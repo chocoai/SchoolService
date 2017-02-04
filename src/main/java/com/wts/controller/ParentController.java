@@ -84,7 +84,7 @@ public class ParentController extends Controller {
             identity_id[0] = relations.get(0).get("identity_id").toString();
             identityName[0] = Identity.dao.findById(identity_id[0]).get("name").toString();
             if (Student.dao.findById(student_id[0]).get("room_id") == null) {
-                room_id[0] = "";
+                room_id[0] = "0";
                 roomName[0] = "班级";
             } else {
                 room_id[0] = Student.dao.findById(student_id[0]).get("room_id").toString();
@@ -94,11 +94,11 @@ public class ParentController extends Controller {
             studentAble[0] = "true";
             identityAble[0] = "true";
             for (int k = 1; k < 4; k++) {
-                student_id[k] = "";
+                student_id[k] = "0";
                 studentName[k] = "学生";
-                identity_id[k] = "";
+                identity_id[k] = "0";
                 identityName[k] = "身份";
-                room_id[k] = "";
+                room_id[k] = "0";
                 roomName[k] = "班级";
                 roomAble[k] = "false";
                 studentAble[k] = "false";
@@ -111,7 +111,7 @@ public class ParentController extends Controller {
                 identity_id[i] = relations.get(i).get("identity_id").toString();
                 identityName[i] = Identity.dao.findById(identity_id[i]).get("name").toString();
                 if (Student.dao.findById(student_id[i]).get("room_id") == null) {
-                    room_id[i] = "";
+                    room_id[i] = "0";
                     roomName[i] = "班级";
                 } else {
                     room_id[i] = Student.dao.findById(student_id[i]).get("room_id").toString();
@@ -122,11 +122,11 @@ public class ParentController extends Controller {
                 identityAble[i] = "true";
             }
             for (int k = 2; k < 4; k++) {
-                student_id[k] = "";
+                student_id[k] = "0";
                 studentName[k] = "学生";
-                identity_id[k] = "";
+                identity_id[k] = "0";
                 identityName[k] = "身份";
-                room_id[k] = "";
+                room_id[k] = "0";
                 roomName[k] = "班级";
                 roomAble[k] = "false";
                 studentAble[k] = "false";
@@ -139,7 +139,7 @@ public class ParentController extends Controller {
                 identity_id[i] = relations.get(i).get("identity_id").toString();
                 identityName[i] = Identity.dao.findById(identity_id[i]).get("name").toString();
                 if (Student.dao.findById(student_id[i]).get("room_id") == null) {
-                    room_id[i] = "";
+                    room_id[i] = "0";
                     roomName[i] = "班级";
                 } else {
                     room_id[i] = Student.dao.findById(student_id[i]).get("room_id").toString();
@@ -150,11 +150,11 @@ public class ParentController extends Controller {
                 identityAble[i] = "true";
             }
             for (int k = 3; k < 4; k++) {
-                student_id[k] = "";
+                student_id[k] = "0";
                 studentName[k] = "学生";
-                identity_id[k] = "";
+                identity_id[k] = "0";
                 identityName[k] = "身份";
-                room_id[k] = "";
+                room_id[k] = "0";
                 roomName[k] = "班级";
                 roomAble[k] = "false";
                 studentAble[k] = "false";
@@ -167,7 +167,7 @@ public class ParentController extends Controller {
                 identity_id[i] = relations.get(i).get("identity_id").toString();
                 identityName[i] = Identity.dao.findById(identity_id[i]).get("name").toString();
                 if (Student.dao.findById(student_id[i]).get("room_id") == null) {
-                    room_id[i] = "";
+                    room_id[i] = "0";
                     roomName[i] = "班级";
                 } else {
                     room_id[i] = Student.dao.findById(student_id[i]).get("room_id").toString();
@@ -179,11 +179,11 @@ public class ParentController extends Controller {
             }
         } else {
             for (int k = 0; k < 4; k++) {
-                student_id[k] = "";
+                student_id[k] = "0";
                 studentName[k] = "学生";
-                identity_id[k] = "";
+                identity_id[k] = "0";
                 identityName[k] = "身份";
-                room_id[k] = "";
+                room_id[k] = "0";
                 roomName[k] = "班级";
                 roomAble[k] = "false";
                 studentAble[k] = "false";
@@ -254,7 +254,7 @@ public class ParentController extends Controller {
                         .set("isManager",0)
                         .set("isParent",1)
                         .save();
-                if (!getPara("student_id1").equals("") && !getPara("identity_id1").equals("")
+                if (!getPara("student_id1").equals("0") && !getPara("identity_id1").equals("0")
                         && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
                         ,getPara("student_id1"),getPara("identity_id1")).size()==0) {
                     Relation relation = new Relation();
@@ -269,7 +269,7 @@ public class ParentController extends Controller {
                         }
                     }
                 }
-                if (!getPara("student_id2").equals("") && !getPara("identity_id2").equals("")
+                if (!getPara("student_id2").equals("0") && !getPara("identity_id2").equals("0")
                         && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
                         ,getPara("student_id2"),getPara("identity_id2")).size()==0) {
                     Relation relation = new Relation();
@@ -284,7 +284,7 @@ public class ParentController extends Controller {
                         }
                     }
                 }
-                if (!getPara("student_id3").equals("") && !getPara("identity_id3").equals("")
+                if (!getPara("student_id3").equals("0") && !getPara("identity_id3").equals("0")
                         && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
                         ,getPara("student_id3"),getPara("identity_id3")).size()==0) {
                     Relation relation = new Relation();
@@ -299,7 +299,7 @@ public class ParentController extends Controller {
                         }
                     }
                 }
-                if (!getPara("student_id4").equals("") && !getPara("identity_id4").equals("")
+                if (!getPara("student_id4").equals("0") && !getPara("identity_id4").equals("0")
                         && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
                         ,getPara("student_id4"),getPara("identity_id4")).size()==0) {
                     Relation relation = new Relation();
@@ -336,7 +336,7 @@ public class ParentController extends Controller {
             } else {
                 try {
                     Db.update("delete from relation where parent_id = ?", getPara("id"));
-                    if (!getPara("student_id1").equals("") && !getPara("identity_id1").equals("")
+                    if (!getPara("student_id1").equals("0") && !getPara("identity_id1").equals("0")
                             && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
                             ,getPara("student_id1"),getPara("identity_id1")).size()==0) {
                         Relation relation = new Relation();
@@ -351,7 +351,7 @@ public class ParentController extends Controller {
                             }
                         }
                     }
-                    if (!getPara("student_id2").equals("") && !getPara("identity_id2").equals("")
+                    if (!getPara("student_id2").equals("0") && !getPara("identity_id2").equals("0")
                             && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
                             ,getPara("student_id2"),getPara("identity_id2")).size()==0) {
                         Relation relation = new Relation();
@@ -366,7 +366,7 @@ public class ParentController extends Controller {
                             }
                         }
                     }
-                    if (!getPara("student_id3").equals("") && !getPara("identity_id3").equals("")
+                    if (!getPara("student_id3").equals("0") && !getPara("identity_id3").equals("0")
                             && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
                             ,getPara("student_id3"),getPara("identity_id3")).size()==0) {
                         Relation relation = new Relation();
@@ -381,7 +381,7 @@ public class ParentController extends Controller {
                             }
                         }
                     }
-                    if (!getPara("student_id4").equals("") && !getPara("identity_id4").equals("")
+                    if (!getPara("student_id4").equals("0") && !getPara("identity_id4").equals("0")
                             && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
                             ,getPara("student_id4"),getPara("identity_id4")).size()==0) {
                         Relation relation = new Relation();

@@ -6,7 +6,7 @@
       <mu-icon-button icon='person_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="parent in parents" :value="parent.id" :title="parent.name" :describeText="parent.userId" @click="look(parent.id)">
+      <mu-list-item v-for="parent in parents" :value="parent.id" :title="parent.name" :describeText="parent.userId" :afterText="parent.mobile" @click="look(parent.id)">
         <mu-avatar v-if="parent.state.toString() === '1'" :src="parent.picUrl" slot="leftAvatar" :size="40"/>
         <mu-icon v-if="parent.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
         <mu-icon v-if="parent.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />

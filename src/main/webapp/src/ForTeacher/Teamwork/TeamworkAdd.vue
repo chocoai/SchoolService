@@ -1,18 +1,13 @@
 <template>
-  <div class="RoomworkAdd">
+  <div class="TeamworkAdd">
     <mu-appbar title="输入/选择后发送消息">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
     <mu-text-field label="内容" underlineShow="false" v-model="content" :errorColor="contentErrorColor" :errorText="contentErrorText" @input="checkContent" fullWidth labelFloat icon="note" multiLine :rows="9" :rowsMax="12" :maxLength="300"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="roomName" @click="openRoom=true" :icon="roomIcon" :backgroundColor="roomBack" color="#FFFFFF"/>
+        <mu-flat-button :label="teamName" @click="openTeam=true" :icon="teamIcon" :backgroundColor="teamBack" color="#FFFFFF"/>
       </mu-flexbox-item>
-      <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="courseName" @click="openCourse=true" :icon="courseIcon" :backgroundColor="courseBack" color="#FFFFFF"/>
-      </mu-flexbox-item>
-    </mu-flexbox>
-    <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-flat-button :label="studentName" @click="openStudent=true" :icon="studentIcon" :backgroundColor="studentBack" color="#FFFFFF"/>
       </mu-flexbox-item>
@@ -32,18 +27,11 @@
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goSave" secondary/>
     </mu-dialog>
-    <mu-drawer right :open="openRoom" docked="false">
-      <mu-appbar title="请选择所属班级"/>
-      <mu-list :value="room_id" @itemClick="roomChange">
-        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
-          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
-        </mu-list-item>
-      </mu-list>
-    </mu-drawer>
-    <mu-drawer right :open="openCourse" docked="false">
-      <mu-appbar title="请选择所授课程" />
-      <mu-list :value="course_id" @itemClick="courseChange">
-        <mu-list-item v-for="course in courses" :title="course.name" :value="course.id">
+    <mu-drawer right :open="openTeam" docked="false">
+      <mu-appbar title="请选择所属社团"/>
+      <mu-list :value="team_id" @itemClick="teamChange">
+        <mu-list-item v-for="team in teams" :title="team.name" :value="team.id">
+          <mu-icon slot="left" :size="40" value="account_balance" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -72,9 +60,9 @@
 </template>
 
 <script>
-import * as API from './RoomworkAPI.js'
+import * as API from './TeamworkAPI.js'
 export default {
-  name: 'RoomworkAdd',
+  name: 'TeamworkAdd',
   data () {
     return {
       bottomPopup: false,
@@ -82,26 +70,19 @@ export default {
       forSaved: false,
       icon: '',
       color: '',
-      room_id: '',
-      course_id: '',
+      team_id: '',
       student_id: [],
-      rooms: [],
-      courses: [],
+      teams: [],
       students: [],
-      roomName: '班级',
-      courseName: '课程',
+      teamName: '社团',
       studentName: '发送范围',
-      roomAble: false,
-      courseAble: true,
+      teamAble: false,
       studentAble: true,
-      openRoom: false,
-      openCourse: false,
+      openTeam: false,
       openStudent: false,
-      roomIcon: 'looks_one',
-      courseIcon: 'looks_two',
-      studentIcon: 'looks_3',
-      roomBack: '#66CCCC',
-      courseBack: '#66CCCC',
+      teamIcon: 'looks_one',
+      studentIcon: 'looks_two',
+      teamBack: '#66CCCC',
       studentBack: '#66CCCC',
       content: '',
       message: '',
@@ -154,15 +135,8 @@ export default {
         return true
       }
     },
-    roomBack: function () {
-      if (this.room_id.toString() !== '') {
-        return '#9999CC'
-      } else {
-        return '#66CCCC'
-      }
-    },
-    courseBack: function () {
-      if (this.course_id.toString() !== '') {
+    teamBack: function () {
+      if (this.team_id.toString() !== '') {
         return '#9999CC'
       } else {
         return '#66CCCC'
@@ -175,37 +149,30 @@ export default {
         return '#66CCCC'
       }
     },
-    roomIcon: function () {
-      if (this.room_id.toString() !== '') {
+    teamIcon: function () {
+      if (this.team_id.toString() !== '') {
         return 'filter_1'
       } else {
         return 'looks_one'
       }
     },
-    courseIcon: function () {
-      if (this.course_id.toString() !== '') {
+    studentIcon: function () {
+      if (this.student_id.toString() !== '') {
         return 'filter_2'
       } else {
         return 'looks_two'
       }
-    },
-    studentIcon: function () {
-      if (this.student_id.toString() !== '') {
-        return 'filter_3'
-      } else {
-        return 'looks_3'
-      }
     }
   },
   watch: {
-    room_id: function (val) {
+    team_id: function (val) {
       if (val.toString() !== '') {
         this.$http.get(
-          API.GetRoomName,
+          API.GetTeamName,
           { params: { id: val } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
-          this.roomName = response.body
+          this.teamName = response.body
         }, (response) => {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
@@ -218,40 +185,6 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
-        this.$http.get(
-          API.RoomCourseList,
-          { params: { id: val } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.courses = response.body
-          this.$http.get(
-            API.RoomCourseFirst,
-            { params: { id: val } },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-          ).then((response) => {
-            this.course_id = response.body
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
-      } else {
-        this.courses = []
-        this.course_id = ''
-      }
-    },
-    course_id: function (val) {
-      if (val.toString() !== '') {
-        this.$http.get(
-          API.GetCourseName,
-          { params: { id: val } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.courseName = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
       }
     }
   },
@@ -260,7 +193,7 @@ export default {
       this.forSaved = false
     },
     gorReply () {
-      this.$router.push({ path: '/roomworkList' })
+      this.$router.push({ path: '/teamworkList' })
     },
     openPopup (message, icon, color) {
       this.message = message
@@ -275,15 +208,10 @@ export default {
       this.contentErrorText = ''
       this.contentErrorColor = ''
     },
-    roomChange (val) {
-      this.room_id = val.value
-      this.roomName = val.title
-      this.openRoom = false
-    },
-    courseChange (val) {
-      this.course_id = val.value
-      this.courseName = val.title
-      this.openCourse = false
+    teamChange (val) {
+      this.team_id = val.value
+      this.teamName = val.title
+      this.openTeam = false
     },
     closeStudent () {
       this.openStudent = false
@@ -312,8 +240,7 @@ export default {
         API.Save,
         { params: {
           content: this.content,
-          room_id: this.room_id,
-          course_id: this.course_id,
+          team_id: this.team_id,
           student_id: this.student_id
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
@@ -324,7 +251,7 @@ export default {
           window.location.href = '/'
         } else if (response.body === 'OK') {
           this.openPopup('保存成功！', 'check_circle', 'green')
-          setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
+          setTimeout(() => { this.$router.push({ path: '/teamworkList' }) }, 1000)
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
         }

@@ -55,6 +55,9 @@
     <mu-dialog :open="forSave" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
+    <mu-dialog :open="forRead" title="正在读取" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
     <mu-drawer right :open="openCourse1" docked="false">
       <mu-appbar title="请选择班主任" @click.native="openCourse1=false">
         <mu-icon-button icon='done' slot="right"/>
@@ -278,6 +281,7 @@ export default {
     return {
       bottomPopup: false,
       forSave: false,
+      forRead: true,
       icon: '',
       color: '',
       name: '',
@@ -354,6 +358,7 @@ export default {
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.teachers = response.body
+      this.forRead = false
     }, (response) => {
       this.openPopup('服务器内部错误！', 'report_problem', 'orange')
     })

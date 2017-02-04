@@ -1,6 +1,6 @@
 <template>
   <div class="TeacherEdit">
-    <mu-appbar title="请核实后输入以下信息">
+    <mu-appbar title="信息详情">
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field label="姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>

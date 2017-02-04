@@ -109,8 +109,13 @@ public class StudentController extends Controller {
         }
     }
     @Before({Ajax.class,Login.class})
-    public  void studentList() {
+    public  void studentListByRoom() {
         List<Student> students = Student.dao.find("select * from student where state=1 and room_id=?",getPara("id"));
+        renderJson(students);
+    }
+    @Before({Ajax.class,Login.class})
+    public  void studentListByTeam() {
+        List<Student> students = Student.dao.find("select * from student where state=1 and team_id=?",getPara("id"));
         renderJson(students);
     }
     @Before({Login.class, Ajax.class})
@@ -168,7 +173,7 @@ public class StudentController extends Controller {
     }
     @Before(AjaxTeacher.class)
     public void totalByNameRoomId() {
-        Long count = Db.queryLong("select count(*) from student where room_id = "+getPara("roomId")+" and (name like '%"+ getPara("queryString") +"%' or number LIKE '%"+getPara("queryString")+"%' or code LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
+        Long count = Db.queryLong("select count(*) from student where state=1 and  room_id = "+getPara("roomId")+" and (name like '%"+ getPara("queryString") +"%' or number LIKE '%"+getPara("queryString")+"%' or code LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
         if (count%getParaToInt("pageSize")==0) {
             renderText((count/getParaToInt("pageSize"))+"");
         } else {
@@ -182,7 +187,7 @@ public class StudentController extends Controller {
     }
     @Before(AjaxTeacher.class)
     public void totalByNameTeamId() {
-        Long count = Db.queryLong("select count(*) from student where team_id = "+getPara("teamId")+" and (name like '%"+ getPara("queryString") +"%' or number LIKE '%"+getPara("queryString")+"%' or code LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
+        Long count = Db.queryLong("select count(*) from student where state=1 and team_id = "+getPara("teamId")+" and (name like '%"+ getPara("queryString") +"%' or number LIKE '%"+getPara("queryString")+"%' or code LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
         if (count%getParaToInt("pageSize")==0) {
             renderText((count/getParaToInt("pageSize"))+"");
         } else {
@@ -294,10 +299,10 @@ public class StudentController extends Controller {
             renderText("该证件号码已存在!");
         } else {
             Student student = new Student();
-            if (!getString(getPara("room_id")).equals("")) {
+            if (!getString(getPara("room_id")).equals("0")) {
                 student.set("room_id",getPara("room_id"));
             }
-            if (!getString(getPara("team_id")).equals("")) {
+            if (!getString(getPara("team_id")).equals("0")) {
                 student.set("team_id",getPara("team_id"));
             }
             student.set("name",getPara("name"))

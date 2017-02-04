@@ -90,8 +90,8 @@ public class RoomworkController extends Controller {
     }
     @Before({Tx.class,AjaxTeacher.class})
     public void save(){
-        if (getPara("content").length()>500){
-            renderText("输入内容超过500字符!");
+        if (getPara("content").length()>300){
+            renderText("输入内容超过300字符!");
         }else{
             Roomwork roomwork = new Roomwork();
             roomwork.set("content",getPara("content"))

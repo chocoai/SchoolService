@@ -9,7 +9,6 @@
       <mu-list-item v-for="team in teams" :value="team.id" :title="team.name" @click="look(team.id)">
         <mu-icon v-if="team.state.toString() === '1'" slot="left" :size="40" value="account_balance" color="#673ab7"/>
         <mu-icon v-if="team.state.toString() === '2'" slot="left" :size="40" value="account_balance" color="#d1c4e9"/>
-        <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>

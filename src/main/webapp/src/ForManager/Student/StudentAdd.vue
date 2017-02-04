@@ -21,33 +21,28 @@
     <mu-dialog :open="forSave" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
+    <mu-dialog :open="forRead" title="正在读取" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
     <mu-drawer right :open="openRoom" docked="false">
-      <mu-appbar title="请选择所属班级" @click.native="closeRoom">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="room_id=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择所属班级"/>
+      <mu-list :value="room_id" @itemClick="roomChange">
+        <mu-list-item title="班级" value="0">
+          <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="room in rooms" :title="room.name">
-          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
-          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#e1bee7"/>
-          <mu-radio v-model="room_id" label="" labelLeft :nativeValue="room.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" iconClass="color: #215E21"/>
+        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
+          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openTeam" docked="false">
-      <mu-appbar title="请选择所属社团" @click.native="closeTeam">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="清空" @click.native="team_id=''">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
+      <mu-appbar title="请选择所属社团" />
+      <mu-list :value="team_id" @itemClick="teamChange">
+        <mu-list-item title="社团" value="0">
+          <mu-icon slot="left" value="account_balance" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="team in teams" :title="team.name">
-          <mu-icon v-if="team.state.toString() === '1'" slot="left" :size="40" value="account_balance" color="#673ab7"/>
-          <mu-icon v-if="team.state.toString() === '2'" slot="left" :size="40" value="account_balance" color="#d1c4e9"/>
-          <mu-radio v-model="team_id" label="" labelLeft :nativeValue="team.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
+        <mu-list-item v-for="team in teams" :title="team.name" :value="team.id">
+          <mu-icon slot="left" :size="40" value="account_balance" color="#673ab7"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -70,16 +65,17 @@ export default {
     return {
       bottomPopup: false,
       forSave: false,
+      forRead: true,
       icon: '',
       color: '',
       name: '',
       number: '',
       code: '',
       address: '',
-      room_id: '',
-      team_id: '',
-      roomName: '所属班级',
-      teamName: '所属社团',
+      room_id: '0',
+      team_id: '0',
+      roomName: '班级',
+      teamName: '社团',
       message: '',
       openRoom: false,
       openTeam: false,
@@ -114,6 +110,7 @@ export default {
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.teams = response.body
+      this.forRead = false
     }, (response) => {
       this.openPopup('服务器内部错误！', 'error', 'red')
     })
@@ -127,28 +124,28 @@ export default {
       }
     },
     roomBack: function () {
-      if (this.room_id.toString() !== '') {
+      if (this.room_id.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     teamBack: function () {
-      if (this.team_id.toString() !== '') {
+      if (this.team_id.toString() !== '0') {
         return '#9999CC'
       } else {
         return '#66CCCC'
       }
     },
     roomIcon: function () {
-      if (this.room_id.toString() !== '') {
+      if (this.room_id.toString() !== '0') {
         return 'bookmark'
       } else {
         return 'bookmark_border'
       }
     },
     teamIcon: function () {
-      if (this.team_id.toString() !== '') {
+      if (this.team_id.toString() !== '0') {
         return 'bookmark'
       } else {
         return 'bookmark_border'
@@ -175,42 +172,20 @@ export default {
       this.codeErrorColor = ''
       this.address = ''
       this.addressErrorColor = ''
-      this.room_id = ''
-      this.team_id = ''
-      this.roomName = '所属班级'
-      this.teamName = '所属社团'
+      this.room_id = '0'
+      this.team_id = '0'
+      this.roomName = '班级'
+      this.teamName = '社团'
     },
-    closeRoom () {
+    roomChange (val) {
+      this.room_id = val.value
+      this.roomName = val.title
       this.openRoom = false
-      if (this.room_id.toString() !== '') {
-        this.$http.get(
-          API.GetRoomName,
-          { params: { id: this.room_id } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          this.roomName = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
-      } else {
-        this.roomName = '所属班级'
-      }
     },
-    closeTeam () {
+    teamChange (val) {
+      this.team_id = val.value
+      this.teamName = val.title
       this.openTeam = false
-      if (this.team_id.toString() !== '') {
-        this.$http.get(
-          API.GetTeamName,
-          { params: { id: this.team_id } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          this.teamName = response.body
-        }, (response) => {
-          this.openPopup('服务器内部错误！', 'error', 'red')
-        })
-      } else {
-        this.teamName = '所属社团'
-      }
     },
     checkName (value) {
       if (value === null || value === undefined || value === '') {

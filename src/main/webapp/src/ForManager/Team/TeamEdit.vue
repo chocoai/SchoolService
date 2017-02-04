@@ -1,6 +1,6 @@
 <template>
-  <div class="RoomEdit">
-    <mu-appbar title="请核实后输入以下信息">
+  <div class="TeamEdit">
+    <mu-appbar title="信息详情">
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field v-model="name" label="社团名称" :disabled="edit" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>

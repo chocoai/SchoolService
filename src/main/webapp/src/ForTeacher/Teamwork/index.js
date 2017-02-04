@@ -3,9 +3,9 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import Vuex from 'vuex'
 
-import ParentList from './ParentList.vue'
-import ParentAdd from './ParentAdd.vue'
-import ParentEdit from './ParentEdit.vue'
+import TeamworkList from './TeamworkList.vue'
+import TeamworkEdit from './TeamworkEdit.vue'
+import TeamworkAdd from './TeamworkAdd.vue'
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'muse-components/styles/base.less' // 加载基础的样式
@@ -16,8 +16,10 @@ import iconButton from 'muse-components/iconButton'
 import floatButton from 'muse-components/floatButton'
 import raisedButton from 'muse-components/raisedButton'
 import textField from 'muse-components/textField'
+import subHeader from 'muse-components/subHeader'
 import avatar from 'muse-components/avatar'
 import iconMenu from 'muse-components/iconMenu'
+import checkbox from 'muse-components/checkbox'
 import dialog from 'muse-components/dialog'
 import popup from 'muse-components/popup'
 import drawer from 'muse-components/drawer'
@@ -33,11 +35,13 @@ Vue.component(floatButton.name, floatButton)
 Vue.component(iconButton.name, iconButton)
 Vue.component(raisedButton.name, raisedButton)
 Vue.component(textField.name, textField)
+Vue.component(subHeader.name, subHeader)
 Vue.component(avatar.name, avatar)
 Vue.component(iconMenu.name, iconMenu)
 Vue.component(dialog.name, dialog)
 Vue.component(popup.name, popup)
 Vue.component(drawer.name, drawer)
+Vue.component(checkbox.name, checkbox)
 Vue.component(circularProgress.name, circularProgress)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)
@@ -49,12 +53,11 @@ Vue.component(flexbox.name, flexbox)
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(Vuex)
-
 const routes = [
-  { path: '/parentList', component: ParentList },
-  { path: '/parentAdd', component: ParentAdd },
-  { path: '/parentEdit/:parentId', component: ParentEdit },
-  { path: '/', redirect: '/parentList' }
+  { path: '/teamworkList', component: TeamworkList },
+  { path: '/teamworkAdd', component: TeamworkAdd },
+  { path: '/teamworkEdit/:teamworkId', component: TeamworkEdit },
+  { path: '/', redirect: '/teamworkList' }
 ]
 
 const router = new VueRouter({
@@ -63,6 +66,7 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
   state: {
+    team_id: '',
     queryString: '',
     pageCurrent: '1'
   },
@@ -70,6 +74,7 @@ const store = new Vuex.Store({
     save (state, page) {
       state.queryString = page.queryString
       state.pageCurrent = page.pageCurrent
+      state.team_id = page.team_id
     }
   }
 })

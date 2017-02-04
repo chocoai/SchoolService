@@ -168,12 +168,12 @@ export default {
       number: '',
       code: '',
       address: '',
-      room_id: '',
-      team_id: '',
+      room_id: '0',
+      team_id: '0',
       room: '',
       team: '',
-      roomName: '所属班级',
-      teamName: '所属社团',
+      roomName: '班级',
+      teamName: '社团',
       message: '',
       parents: '',
       parentAble1: false,
@@ -358,7 +358,8 @@ export default {
             this.openPopup('服务器内部错误！', 'error', 'red')
           })
         } else {
-          this.roomName = '所属班级'
+          this.room_id = '0'
+          this.roomName = '班级'
         }
         if (this.student.team_id !== null) {
           this.team_id = this.student.team_id
@@ -372,7 +373,8 @@ export default {
             this.openPopup('服务器内部错误！', 'error', 'red')
           })
         } else {
-          this.teamName = '所属社团'
+          this.team_id = '0'
+          this.teamName = '社团'
         }
       }, (response) => {
         this.openPopup('服务器内部错误！', 'error', 'red')

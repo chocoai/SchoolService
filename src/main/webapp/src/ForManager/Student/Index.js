@@ -17,13 +17,9 @@ import floatButton from 'muse-components/floatButton'
 import raisedButton from 'muse-components/raisedButton'
 import textField from 'muse-components/textField'
 import avatar from 'muse-components/avatar'
-import iconMenu from 'muse-components/iconMenu'
-import radio from 'muse-components/radio'
 import dialog from 'muse-components/dialog'
-import chip from 'muse-components/chip'
 import popup from 'muse-components/popup'
 import drawer from 'muse-components/drawer'
-import subHeader from 'muse-components/subHeader'
 import circularProgress from 'muse-components/circularProgress'
 import { listItem, list } from 'muse-components/list'
 import { menuItem, menu } from 'muse-components/menu'
@@ -37,13 +33,9 @@ Vue.component(iconButton.name, iconButton)
 Vue.component(raisedButton.name, raisedButton)
 Vue.component(textField.name, textField)
 Vue.component(avatar.name, avatar)
-Vue.component(iconMenu.name, iconMenu)
 Vue.component(dialog.name, dialog)
-Vue.component(chip.name, chip)
 Vue.component(popup.name, popup)
 Vue.component(drawer.name, drawer)
-Vue.component(subHeader.name, subHeader)
-Vue.component(radio.name, radio)
 Vue.component(circularProgress.name, circularProgress)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)

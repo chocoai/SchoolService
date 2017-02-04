@@ -9,6 +9,9 @@
     <mu-dialog :open="forSave" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
+    <mu-dialog :open="forRead" title="正在读取" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo1">
         <mu-flat-button v-if="before" icon="navigate_before" @click="goBefore" />
@@ -109,8 +112,7 @@
           <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
-          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
-          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
+          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -121,8 +123,7 @@
           <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
-          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
-          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
+          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -133,8 +134,7 @@
           <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
-          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
-          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
+          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -145,8 +145,7 @@
           <mu-icon slot="left" value="store" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
-          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
-          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
+          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -157,10 +156,8 @@
           <mu-icon slot="left" value="accessibility" :size="40"/>
         </mu-list-item>
         <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number" :value="student.id">
-          <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
-          <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
-          <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
-          <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
+          <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
+          <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -170,11 +167,9 @@
         <mu-list-item title="学生" value="0">
           <mu-icon slot="left" value="accessibility" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number" :value="student.id">
-          <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
-          <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
-          <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
-          <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
+        <mu-list-item v-for="student in students2" :title="student.name" :describeText="student.number" :value="student.id">
+          <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
+          <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -184,11 +179,9 @@
         <mu-list-item title="学生" value="0">
           <mu-icon slot="left" value="accessibility" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number" :value="student.id">
-          <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
-          <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
-          <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
-          <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
+        <mu-list-item v-for="student in students3" :title="student.name" :describeText="student.number" :value="student.id">
+          <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
+          <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -198,11 +191,9 @@
         <mu-list-item title="学生" value="0">
           <mu-icon slot="left" value="accessibility" :size="40"/>
         </mu-list-item>
-        <mu-list-item v-for="student in students1" :title="student.name" :describeText="student.number" :value="student.id">
-          <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
-          <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
-          <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
-          <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
+        <mu-list-item v-for="student in students4" :title="student.name" :describeText="student.number" :value="student.id">
+          <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#00bcd4"/>
+          <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#e91e63"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -281,6 +272,7 @@ export default {
     return {
       bottomPopup: false,
       forSave: false,
+      forRead: true,
       icon: '',
       color: '',
       name: '',
@@ -396,6 +388,7 @@ export default {
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.identities = response.body
+      this.forRead = false
     }, (response) => {
       this.openPopup('服务器内部错误！', 'error', 'red')
     })
@@ -414,6 +407,10 @@ export default {
         })
       } else {
         this.students1 = []
+        this.studentName1 = '学生'
+        this.identityName1 = '身份'
+        this.student_id1 = '0'
+        this.identity_id1 = '0'
       }
     },
     room_id2: function (val) {
@@ -429,6 +426,10 @@ export default {
         })
       } else {
         this.students2 = []
+        this.studentName2 = '学生'
+        this.identityName2 = '身份'
+        this.student_id2 = '0'
+        this.identity_id2 = '0'
       }
     },
     room_id3: function (val) {
@@ -444,6 +445,10 @@ export default {
         })
       } else {
         this.students3 = []
+        this.studentName3 = '学生'
+        this.identityName3 = '身份'
+        this.student_id3 = '0'
+        this.identity_id3 = '0'
       }
     },
     room_id4: function (val) {
@@ -459,6 +464,10 @@ export default {
         })
       } else {
         this.students4 = []
+        this.studentName4 = '学生'
+        this.identityName4 = '身份'
+        this.student_id4 = '0'
+        this.identity_id4 = '0'
       }
     }
   },

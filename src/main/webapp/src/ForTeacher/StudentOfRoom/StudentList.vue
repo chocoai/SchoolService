@@ -6,12 +6,9 @@
     </mu-appbar>
     <mu-raised-button :label="roomName" icon="cached" fullWidth labelPosition="after" @click="openRoom=true"/>
     <mu-list>
-      <mu-list-item v-for="student in students" :value="student.id" :title="student.name" :describeText="student.number" @click="look(student.id)">
-        <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="Cyan"/>
-        <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="pink"/>
-        <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
-        <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
-        <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
+      <mu-list-item v-for="student in students" :value="student.id" :title="student.name" :describeText="student.number" :afterText="student.code" @click="look(student.id)">
+        <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="Cyan"/>
+        <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="pink"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -28,14 +25,12 @@
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-drawer right :open="openRoom" docked="false">
-      <mu-appbar title="请选择班级" @click.native="closeRoom">
-        <mu-icon-button icon='done' slot="right"/>
+      <mu-appbar title="请选择班级" @click.native="openRoom=false">
+        <mu-icon-button icon='close' slot="right"/>
       </mu-appbar>
-      <mu-list>
-        <mu-list-item v-for="room in rooms" :title="room.name">
-          <mu-icon v-if="room.state.toString() === '1'" slot="left" :size="40" value="store" color="#9c27b0"/>
-          <mu-icon v-if="room.state.toString() === '2'" slot="left" :size="40" value="store" color="#ce93d8"/>
-          <mu-radio v-model="room_id" label="" labelLeft :nativeValue="room.id" slot="right" iconClass="color: #215E21"/>
+      <mu-list :value="room_id" @itemClick="roomChange">
+        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
+          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -67,7 +62,7 @@
         bottomPopup: false,
         openRoom: false,
         roomName: '',
-        room_id: '',
+        room_id: '0',
         rooms: [],
         icon: '',
         color: '',
@@ -101,11 +96,11 @@
               this.openPopup('服务器内部错误！', 'error', 'red')
             })
           } else {
-            this.roomName = '班级未选择'
+            this.roomName = '无可选班级'
           }
           this.queryString = this.$store.state.queryString
           this.pageCurrent = this.$store.state.pageCurrent
-          if (this.room_id.toString() !== '') {
+          if (this.room_id.toString() !== '0') {
             this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
             this.studentTotal(this.queryString, this.pageSize, this.room_id)
           } else {
@@ -132,25 +127,13 @@
         this.bottomPopup = true
         setTimeout(() => { this.bottomPopup = false }, 1500)
       },
-      closeRoom () {
+      roomChange (val) {
+        this.room_id = val.value
+        this.roomName = val.title
         this.openRoom = false
         this.forRead = true
-        if (this.room_id.toString() !== '') {
-          this.$http.get(
-            API.GetRoomName,
-            { params: { id: this.room_id } },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-          ).then((response) => {
-            this.roomName = response.body
-            this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
-            this.studentTotal(this.queryString, this.pageSize, this.room_id)
-          }, (response) => {
-            this.openPopup('服务器内部错误！', 'error', 'red')
-          })
-        } else {
-          this.roomName = '班级未选择'
-          this.forRead = false
-        }
+        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
+        this.studentTotal(this.queryString, this.pageSize, this.room_id)
       },
       studentQuery (queryString, pageCurrent, pageSize, roomId) {
         this.$http.get(
@@ -213,13 +196,13 @@
         this.pageCurrent--
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
       },
       pageNext () {
         this.pageCurrent++
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
       }
     }
   }

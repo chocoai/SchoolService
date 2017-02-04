@@ -1,14 +1,13 @@
 <template>
-  <div class="StudentList">
+  <div class="TeamworkList">
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
+      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-raised-button :label="teamName" icon="cached" fullWidth labelPosition="after" @click="openTeam=true"/>
     <mu-list>
-      <mu-list-item v-for="student in students" :value="student.id" :title="student.name" :describeText="student.number" :afterText="student.code" @click="look(student.id)">
-        <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="Cyan"/>
-        <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="pink"/>
+      <mu-list-item v-for="teamwork in teamworks" :value="teamwork.id" :title="teamwork.name" :describeText="teamwork.time" :afterText="teamwork.code" @click="look(teamwork.id)">
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -28,8 +27,8 @@
       <mu-appbar title="请选择社团" @click.native="openTeam=false">
         <mu-icon-button icon='close' slot="right"/>
       </mu-appbar>
-      <mu-list :value="room_id" @itemClick="teamChange">
-        <mu-list-item v-for="team in team" :title="team.name">
+      <mu-list :value="team_id" @itemClick="teamChange">
+        <mu-list-item v-for="team in teams" :title="team.name" :value="team.id">
           <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
@@ -45,10 +44,10 @@
 </template>
 
 <script>
-  import * as API from './StudentAPI.js'
+  import * as API from './TeamworkAPI.js'
   import MenuList from '../Menu/MenuList'
   export default {
-    name: 'StudentList',
+    name: 'TeamworkList',
     components: {
       'menuList': MenuList
     },
@@ -101,8 +100,8 @@
           this.queryString = this.$store.state.queryString
           this.pageCurrent = this.$store.state.pageCurrent
           if (this.team_id.toString() !== '0') {
-            this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
-            this.studentTotal(this.queryString, this.pageSize, this.team_id)
+            this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
+            this.teamworkTotal(this.queryString, this.pageSize, this.team_id)
           } else {
             this.forRead = false
           }
@@ -132,12 +131,12 @@
         this.teamName = val.title
         this.openTeam = false
         this.forRead = true
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
-        this.studentTotal(this.queryString, this.pageSize, this.team_id)
+        this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
+        this.teamworkTotal(this.queryString, this.pageSize, this.team_id)
       },
-      studentQuery (queryString, pageCurrent, pageSize, teamId) {
+      teamworkQuery (queryString, pageCurrent, pageSize, teamId) {
         this.$http.get(
-          API.QueryByName,
+          API.Query,
           { params:
           {
             queryString: queryString,
@@ -147,7 +146,7 @@
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
-          this.students = response.body
+          this.teamworks = response.body
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
           this.forRead = false
@@ -155,9 +154,9 @@
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
       },
-      studentTotal (queryString, pageSize, teamId) {
+      teamworkTotal (queryString, pageSize, teamId) {
         this.$http.get(
-          API.TotalByName,
+          API.Total,
           { params: {
             queryString: queryString,
             pageSize: pageSize,
@@ -180,12 +179,12 @@
           pageCurrent: this.pageCurrent,
           team_id: this.team_id
         })
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
-        this.studentTotal(this.queryString, this.pageSize, this.team_id)
+        this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
+        this.teamworkTotal(this.queryString, this.pageSize, this.team_id)
         this.before = false
       },
-      look (studentId) {
-        this.$router.push({ path: '/studentLook/' + studentId })
+      look (teamworkId) {
+        this.$router.push({ path: '/teamworkEdit/' + teamworkId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent,
@@ -196,13 +195,20 @@
         this.pageCurrent--
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
+        this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
       },
       pageNext () {
         this.pageCurrent++
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
+        this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
+      },
+      goAdd () {
+        if (this.team_id.toString() !== '0') {
+          this.$router.push({ path: '/teamworkAdd' })
+        } else {
+          this.openPopup('无权发布社团信息！', 'report_problem', 'orange')
+        }
       }
     }
   }

@@ -22,7 +22,8 @@ module.exports = {
     homeForTeacher: './src/ForTeacher/Home/Index.js',
     studentOfRoomForTeacher: './src/ForTeacher/StudentOfRoom/Index.js',
     studentOfTeamForTeacher: './src/ForTeacher/StudentOfTeam/Index.js',
-    roomworkForTeacher: './src/ForTeacher/Roomwork/Index.js'
+    roomworkForTeacher: './src/ForTeacher/Roomwork/Index.js',
+    teamworkForTeacher: './src/ForTeacher/Teamwork/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

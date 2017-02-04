@@ -46,7 +46,8 @@ public class Config extends JFinalConfig {
         me.add("/identity", IdentityController.class);
         me.add("/roomwork", RoomworkController.class);
         me.add("/roomworkread", RoomworkReadController.class);
-
+        me.add("/teamwork", TeamworkController.class);
+        me.add("/teamworkread", TeamworkReadController.class);
     }
 
     /**

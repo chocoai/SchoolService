@@ -1,5 +1,5 @@
 <template>
-  <div class="RoomworkEdit">
+  <div class="TeamworkEdit">
     <mu-appbar :title="titleAll">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
@@ -64,9 +64,9 @@
 </template>
 
 <script>
-import * as API from './RoomworkAPI.js'
+import * as API from './TeamworkAPI.js'
 export default {
-  name: 'RoomworkEdit',
+  name: 'TeamworkEdit',
   data () {
     return {
       bottomPopup: false,
@@ -79,13 +79,11 @@ export default {
       states: true,
       icon: '',
       color: '',
-      roomwork: '',
+      teamwork: '',
       titleAll: '',
-      room_id: '',
-      course_id: '',
+      team_id: '',
       teacher_id: '',
-      roomName: '',
-      courseName: '',
+      teamName: '',
       teacherName: '',
       students: '',
       studentz: '',
@@ -96,28 +94,17 @@ export default {
     }
   },
   created: function () {
-    this.fetchData(this.$route.params.roomworkId)
+    this.fetchData(this.$route.params.teamworkId)
   },
   watch: {
     '$route': 'fetchData',
-    room_id: function (val) {
+    team_id: function (val) {
       this.$http.get(
-        API.GetRoomName,
+        API.GetTeamName,
         { params: { id: val } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
-        this.roomName = response.body
-      }, (response) => {
-        this.openPopup('服务器内部错误！', 'error', 'red')
-      })
-    },
-    course_id: function (val) {
-      this.$http.get(
-        API.GetCourseName,
-        { params: { id: val } },
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-      ).then((response) => {
-        this.courseName = response.body
+        this.reamName = response.body
       }, (response) => {
         this.openPopup('服务器内部错误！', 'error', 'red')
       })
@@ -143,7 +130,7 @@ export default {
   },
   computed: {
     titleAll: function () {
-      return this.roomName + '_' + this.courseName + '_' + this.teacherName + '老师'
+      return this.teamName + '_' + this.teacherName + '老师'
     }
   },
   methods: {
@@ -154,14 +141,14 @@ export default {
       this.openUnread = false
     },
     gorReply () {
-      this.$router.push({ path: '/roomworkList' })
+      this.$router.push({ path: '/teamworkList' })
     },
     goInactive () {
       this.forInactive = false
       this.forInactives = true
       this.$http.get(
         API.Inactive,
-        { params: { id: this.$route.params.roomworkId } },
+        { params: { id: this.$route.params.teamworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
       }, (response) => {
@@ -171,7 +158,7 @@ export default {
         } else if (response.body === 'OK') {
           this.forInactives = false
           this.openPopup('注销成功!', 'check_circle', 'green')
-          setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
+          setTimeout(() => { this.$router.push({ path: '/teamworkList' }) }, 1000)
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
         }
@@ -184,24 +171,23 @@ export default {
       this.bottomPopup = true
       setTimeout(() => { this.bottomPopup = false }, 1500)
     },
-    fetchData (roomworkId) {
+    fetchData (teamworkId) {
       this.$http.get(
         API.GetById,
-        { params: { id: roomworkId } },
+        { params: { id: teamworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.roomwork = response.body
-        this.teacher_id = this.roomwork.teacher_id
-        this.room_id = this.roomwork.room_id
-        this.course_id = this.roomwork.course_id
-        this.time = this.roomwork.time
-        this.content = this.roomwork.content
-        this.state = this.roomwork.state
+        this.teamwork = response.body
+        this.teacher_id = this.teamwork.teacher_id
+        this.team_id = this.teamwork.team_id
+        this.time = this.teamwork.time
+        this.content = this.teamwork.content
+        this.state = this.teamwork.state
       }, (response) => {
       })
       this.$http.get(
-        API.GetReadRoomwork,
-        { params: { id: roomworkId } },
+        API.GetReadTeamwork,
+        { params: { id: teamworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         if (response.body.toString() !== 'null') {
@@ -212,8 +198,8 @@ export default {
       }, (response) => {
       })
       this.$http.get(
-        API.GetUnreadRoomwork,
-        { params: { id: roomworkId } },
+        API.GetUnreadTeamwork,
+        { params: { id: teamworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         if (response.body.toString() !== 'null') {
@@ -228,7 +214,7 @@ export default {
       this.forSends = true
       this.$http.get(
         API.Send,
-        { params: { roomwork_id: this.$route.params.roomworkId } },
+        { params: { teamwork_id: this.$route.params.teamworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.forSends = false
@@ -237,7 +223,7 @@ export default {
           window.location.href = '/'
         } else if (response.body === 'OK') {
           this.openPopup('发送成功！', 'check_circle', 'green')
-          setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
+          setTimeout(() => { this.$router.push({ path: '/teamworkList' }) }, 1000)
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
         }
