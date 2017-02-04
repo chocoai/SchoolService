@@ -29,7 +29,7 @@
         <mu-icon-button icon='close' slot="right"/>
       </mu-appbar>
       <mu-list :value="room_id" @itemClick="teamChange">
-        <mu-list-item v-for="team in team" :title="team.name">
+        <mu-list-item v-for="team in teams" :title="team.name">
           <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>

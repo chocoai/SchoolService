@@ -91,7 +91,7 @@ public class TeamworkController extends Controller {
   }
   @Before(AjaxTeacher.class)
   public void queryByTeamId() {
-    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*", "FROM teamwork WHERE teamwork.team_id = "+ getPara("teamId") +" and teatmwork.content LIKE '%"+getPara("queryString")+"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY teamwork.id DESC");
+    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*", "FROM teamwork WHERE teamwork.team_id = "+ getPara("teamId") +" and teamwork.content LIKE '%"+getPara("queryString")+"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY teamwork.id DESC");
     renderJson(teamworks.getList());
   }
   @Before(AjaxTeacher.class)
