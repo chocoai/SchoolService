@@ -14,7 +14,6 @@ public class CallBack extends Controller {
 
   public void callBack() throws IOException {
     if (getRequest().getMethod() == "GET") {
-
       // 微信加密签名
       String msg_signature = getPara("msg_signature");
       // 时间戳
