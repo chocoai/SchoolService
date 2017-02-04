@@ -174,6 +174,7 @@ export default {
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           this.studentAll = response.body
+          this.student_id = this.studentAll
         }, (response) => {
           this.openPopup('服务器内部错误！', 'error', 'red')
         })

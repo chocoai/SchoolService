@@ -110,7 +110,7 @@ public class TeamworkController extends Controller {
     }else{
       Teamwork teamwork = new Teamwork();
       teamwork.set("content",getPara("content"))
-              .set("room_id",getPara("room_id"))
+              .set("team_id",getPara("team_id"))
               .set("state",1)
               .set("time",new Date())
               .set("teacher_id",((Enterprise) getSessionAttr("teacher")).getId())
