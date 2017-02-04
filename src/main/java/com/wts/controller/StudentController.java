@@ -144,6 +144,7 @@ public class StudentController extends Controller {
             renderJson("[]");
         }
     }
+
     @Before({Login.class, Ajax.class})
     public void getById() {
         Student student = Student.dao.findById(getPara("id"));
