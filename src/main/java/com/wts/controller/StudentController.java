@@ -117,10 +117,14 @@ public class StudentController extends Controller {
     public  void studentCodeByRoom() {
         List<Student> students = Student.dao.find("select id from student where state=1 and room_id=?",getPara("id"));
         String st = "";
-        for (Student s : students){
-            st=st+s.getId()+",";
+        if (students.size() > 0) {
+            for (Student s : students) {
+                st = st + s.getId() + ",";
+            }
+            renderJson("[" + st.substring(0, st.length() - 1) + "]");
+        } else {
+            renderJson("[]");
         }
-        renderJson("["+st.substring(0,st.length()-1)+"]");
     }
     @Before({Ajax.class,Login.class})
     public  void studentListByTeam() {
@@ -131,10 +135,14 @@ public class StudentController extends Controller {
     public  void studentCodeByTeam() {
         List<Student> students = Student.dao.find("select id from student where state=1 and team_id=?",getPara("id"));
         String st = "";
-        for (Student s : students){
-            st=st+s.getId()+",";
+        if (students.size() > 0) {
+            for (Student s : students) {
+                st = st + s.getId() + ",";
+            }
+            renderJson("[" + st.substring(0, st.length() - 1) + "]");
+        } else {
+            renderJson("[]");
         }
-        renderJson("["+st.substring(0,st.length()-1)+"]");
     }
     @Before({Login.class, Ajax.class})
     public void getById() {
