@@ -125,12 +125,12 @@ public class NoticeController extends Controller {
   @Before(AjaxParent.class)
   public void queryParent() {
     Page<Record> notices= Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "select notice.*,enterprise.name",
-            "FROM notice left join enterprise on notice.teacher_id=enterprise.id WHERE notice.type=3 and notice.type=1 and notice.title LIKE '%"+getPara("queryString")+"%' or notice.content LIKE '%"+getPara("queryString")+"%' ORDER BY notice.id DESC");
+            "FROM notice left join enterprise on notice.teacher_id=enterprise.id WHERE (notice.type=3 or notice.type=1) and notice.title LIKE '%"+getPara("queryString")+"%' or notice.content LIKE '%"+getPara("queryString")+"%' ORDER BY notice.id DESC");
     renderJson(notices.getList());
   }
   @Before(AjaxParent.class)
   public void totalParent() {
-    Long count = Db.queryLong("select count(*) from notice where type=3 and (title like '%"+ getPara("queryString") +"%' or content LIKE '%"+getPara("queryString")+"%')");
+    Long count = Db.queryLong("select count(*) from notice where (type=3 or type=1) and (title like '%"+ getPara("queryString") +"%' or content LIKE '%"+getPara("queryString")+"%')");
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {
@@ -140,12 +140,12 @@ public class NoticeController extends Controller {
   @Before(AjaxTeacher.class)
   public void queryTeacher() {
     Page<Record> notices= Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "select notice.*,enterprise.name",
-            "FROM notice left join enterprise on notice.teacher_id=enterprise.id WHERE notice.type=2 and notice.type=1 and  notice.title LIKE '%"+getPara("queryString")+"%' or notice.content LIKE '%"+getPara("queryString")+"%' ORDER BY notice.id DESC");
+            "FROM notice left join enterprise on notice.teacher_id=enterprise.id WHERE (notice.type=2 or notice.type=1) and  notice.title LIKE '%"+getPara("queryString")+"%' or notice.content LIKE '%"+getPara("queryString")+"%' ORDER BY notice.id DESC");
     renderJson(notices.getList());
   }
   @Before(AjaxTeacher.class)
   public void totalTeacher() {
-    Long count = Db.queryLong("select count(*) from notice where type=2 and title like '%"+ getPara("queryString") +"%' or content LIKE '%"+getPara("queryString")+"%'");
+    Long count = Db.queryLong("select count(*) from notice where (type=2 or type=1) and title like '%"+ getPara("queryString") +"%' or content LIKE '%"+getPara("queryString")+"%'");
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {
