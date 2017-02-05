@@ -130,7 +130,7 @@ export default {
       }
     },
     studentBack: function () {
-      if (this.student_id.toString() !== '') {
+      if (this.student_id.toString() !== '' || this.student_id.toString() !== this.studentAll) {
         return '#9999CC'
       } else {
         return '#66CCCC'
@@ -214,8 +214,10 @@ export default {
     },
     closeStudent () {
       this.openStudent = false
-      if (this.student_id.toString() !== '') {
-        this.studentName = '发送范围已设置'
+      if (this.student_id.toString() === this.studentAll.toString()) {
+        this.studentName = '已全选'
+      } else if (this.student_id.toString() !== '') {
+        this.studentName = '部分选择'
       } else {
         this.studentName = '发送范围未设置'
       }
@@ -250,6 +252,7 @@ export default {
       this.$http.get(
         API.Save,
         { params: {
+          title: this.title,
           content: this.content,
           team_id: this.team_id,
           student_id: this.student_id

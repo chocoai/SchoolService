@@ -7,7 +7,7 @@
     </mu-appbar>
     <mu-raised-button :label="teamName" icon="cached" fullWidth labelPosition="after" @click="openTeam=true"/>
     <mu-list>
-      <mu-list-item v-for="teamwork in teamworks" :value="teamwork.id" :title="teamwork.title" :describeText="teamwork.time" :afterText="teamwork.code" @click="look(teamwork.id)">
+      <mu-list-item v-for="teamwork in teamworks" :value="teamwork.id" :title="teamwork.title" :describeText="teamwork.time" :afterText="teamwork.ename" @click="look(teamwork.id)">
         <mu-icon v-if="teamwork.state.toString() === '2'" slot="right" value="delete"/>
       </mu-list-item>
     </mu-list>

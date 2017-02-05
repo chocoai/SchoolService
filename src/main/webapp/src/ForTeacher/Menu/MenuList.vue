@@ -8,6 +8,9 @@
         <mu-list-item title="主页" @click.native="goHome">
           <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
+        <mu-list-item title="公告管理" @click.native="goNotice">
+          <mu-icon slot="left" value="note" color="#2196f3"/>
+        </mu-list-item>
         <mu-list-item title="班级学生" @click.native="goStudentOfRoom">
           <mu-icon slot="left" value="face" color="#9c27b0"/>
         </mu-list-item>
@@ -58,6 +61,9 @@
       },
       goTeamwork () {
         window.location.href = '/teamwork/forTeacher'
+      },
+      goNotice () {
+        window.location.href = '/notice/forTeacher'
       },
       goExit () {
         window.location.href = '/exit'

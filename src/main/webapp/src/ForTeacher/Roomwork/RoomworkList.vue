@@ -7,7 +7,7 @@
     </mu-appbar>
     <mu-raised-button :label="roomName" icon="cached" fullWidth labelPosition="after" @click="openRoom=true"/>
     <mu-list>
-      <mu-list-item v-for="roomwork in roomworks" :value="roomwork.id" :title="roomwork.title" :describeText="roomwork.time" :afterText="roomwork.code" @click="look(roomwork.id)">
+      <mu-list-item v-for="roomwork in roomworks" :value="roomwork.id" :title="roomwork.title" :describeText="roomwork.time" :afterText="roomwork.ename" @click="look(roomwork.id)">
         <mu-icon v-if="roomwork.state.toString() === '2'" slot="right" value="delete"/>
       </mu-list-item>
     </mu-list>

@@ -3,8 +3,8 @@
     <mu-appbar :title="titleAll">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
-    <mu-text-field label="发布时间" disabled underlineShow="false" v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="标题" disabled underlineShow="false" v-model="title" fullWidth labelFloat icon="title" maxLength="20"/><br/>
+    <mu-text-field label="发布时间" disabled underlineShow="false" v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="发布内容" disabled underlineShow="false" v-model="content" fullWidth labelFloat icon="note" multiLine :rows="9" :rowsMax="12" :maxLength="300"/><br/>
     <mu-raised-button :label="labels" :disabled="states" fullWidth @click="goRead" primary/>
     <mu-dialog :open="forRead" title="正在确认阅读" >
@@ -153,8 +153,13 @@ export default {
         { params: { id: roomworkId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.state = response.body
-        this.init = false
+        if (response.body.toString() === 'null') {
+          this.openPopup('无权阅读！', 'report_problem', 'orange')
+          setTimeout(() => { this.$router.push({ path: '/roomworkList' }) }, 1000)
+        } else {
+          this.state = response.body
+          this.init = false
+        }
       }, (response) => {
         this.openPopup('服务器内部错误!', 'error', 'red')
       })

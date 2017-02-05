@@ -1,15 +1,14 @@
 <template>
-  <div class="NoticeList">
+  <div class="StudentList">
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
+      <mu-icon-button icon='person_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="notice in notices" :value="notice.id" :title="notice.title" :afterText="notice.name" :describeText="notice.time" @click="look(notice.id)">
-        <mu-avatar v-if="notice.type.toString() === '1'" slot="leftAvatar" color="cyan50" backgroundColor="teal500">全</mu-avatar>
-        <mu-avatar v-if="notice.type.toString() === '2'" slot="leftAvatar" color="cyan50" backgroundColor="teal500">教</mu-avatar>
-        <mu-avatar v-if="notice.type.toString() === '3'" slot="leftAvatar" color="cyan50" backgroundColor="teal500">家</mu-avatar>
+      <mu-list-item v-for="student in students" :value="student.id" :title="student.name" :describeText="student.number" :afterText="student.iname" @click="look(student.id)">
+        <mu-icon v-if="student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="Cyan"/>
+        <mu-icon v-if="student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="pink"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -34,10 +33,10 @@
 </template>
 
 <script>
-  import * as API from './NoticeAPI.js'
+  import * as API from './StudentAPI.js'
   import MenuList from '../Menu/MenuList'
   export default {
-    name: 'NoticeList',
+    name: 'StudentList',
     components: {
       'menuList': MenuList
     },
@@ -52,7 +51,7 @@
         color: '',
         message: '',
         queryString: '',
-        notices: [],
+        students: [],
         pageTotal: '',
         pageSize: '7',
         pageCurrent: ''
@@ -61,8 +60,8 @@
     created: function () {
       this.queryString = this.$store.state.queryString
       this.pageCurrent = this.$store.state.pageCurrent
-      this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
-      this.noticeTotal(this.queryString, this.pageSize)
+      this.studentQuery(this.queryString, this.pageCurrent, this.pageSize)
+      this.studentTotal(this.queryString, this.pageSize)
     },
     methods: {
       openMenu () {
@@ -78,24 +77,25 @@
         this.bottomPopup = true
         setTimeout(() => { this.bottomPopup = false }, 1500)
       },
-      noticeQuery (queryString, pageCurrent, pageSize) {
+      studentQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
           API.Query,
-          { params: {
+          { params:
+          {
             queryString: queryString,
             pageCurrent: pageCurrent,
             pageSize: pageSize
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
-          this.notices = response.body
+          this.students = response.body
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
       },
-      noticeTotal (queryString, pageSize) {
+      studentTotal (queryString, pageSize) {
         this.$http.get(
           API.Total,
           { params: {
@@ -108,7 +108,7 @@
           this.pageTotal === '0' ? this.chip = false : this.chip = true
           this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
         }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
+          this.openPopup('服务器内部错误！', 'error', 'red')
         })
       },
       query (value) {
@@ -118,12 +118,12 @@
           queryString: this.queryString,
           pageCurrent: this.pageCurrent
         })
-        this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
-        this.noticeTotal(this.queryString, this.pageSize)
+        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.studentTotal(this.queryString, this.pageSize)
         this.before = false
       },
-      look (noticeId) {
-        this.$router.push({ path: '/noticeLook/' + noticeId })
+      look (studentId) {
+        this.$router.push({ path: '/studentEdit/' + studentId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent
@@ -133,16 +133,16 @@
         this.pageCurrent--
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       pageNext () {
         this.pageCurrent++
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
+        this.studentQuery(this.queryString, this.pageCurrent, this.pageSize)
       },
       goAdd () {
-        this.$router.push({ path: '/noticeAdd' })
+        this.$router.push({ path: '/studentAdd' })
       }
     }
   }

@@ -3,8 +3,8 @@
     <mu-appbar :title="titleAll">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
-    <mu-text-field label="发布时间" disabled underlineShow="false" v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="标题" disabled underlineShow="false" v-model="title" fullWidth labelFloat icon="title" maxLength="20"/><br/>
+    <mu-text-field label="发布时间" disabled underlineShow="false" v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="发布内容" disabled underlineShow="false" v-model="content" fullWidth labelFloat icon="note" multiLine :rows="9" :rowsMax="12" :maxLength="300"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">

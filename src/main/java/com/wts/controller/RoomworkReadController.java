@@ -51,23 +51,31 @@ public class RoomworkReadController extends Controller {
   @Before({Tx.class,AjaxParent.class})
   public void readRoomworkById (){
     Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("id"),((Enterprise) getSessionAttr("parent")).getId());
-    if (Roomwork.dao.findById(roomworkread.getRoomworkId()).getState() == 1) {
-      if (roomworkread.getState() == 0) {
-        roomworkread.set("state", 1)
-                .set("time", new Date())
-                .update();
-        renderText("OK");
+    if (roomworkread != null) {
+      if (Roomwork.dao.findById(roomworkread.getRoomworkId()).getState() == 1) {
+        if (roomworkread.getState() == 0) {
+          roomworkread.set("state", 1)
+                  .set("time", new Date())
+                  .update();
+          renderText("OK");
+        } else {
+          renderText("该消息已确认读取!");
+        }
       } else {
-        renderText("该消息已确认读取!");
+        renderText("该消息已经失效，无需确认读取!");
       }
     } else {
-      renderText("该消息已经失效，无需确认读取!");
+      renderText("您无权阅读此消息!");
     }
   }
   @Before({Tx.class,AjaxParent.class})
   public void readRoomworkStateById (){
     Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("id"),((Enterprise) getSessionAttr("parent")).getId());
-    renderText(Roomwork.dao.findById(roomworkread.getRoomworkId()).getState().toString());
+    if (roomworkread!=null) {
+      renderText(Roomwork.dao.findById(roomworkread.getRoomworkId()).getState().toString());
+    }else{
+      renderText("null");
+    }
   }
   @Before(AjaxTeacher.class)
   public void getReadRoomwork(){

@@ -6,7 +6,7 @@
     </mu-appbar>
     <mu-raised-button :label="teamName" icon="cached" fullWidth labelPosition="after" @click="openTeam=true"/>
     <mu-list>
-      <mu-list-item v-for="teamwork in teamworks" :value="teamwork.id" :title="teamwork.title" :describeText="teamwork.time" :afterText="teamwork.cname" @click="look(teamwork.id)">
+      <mu-list-item v-for="teamwork in teamworks" :value="teamwork.id" :title="teamwork.title" :describeText="teamwork.time" :afterText="teamwork.ename" @click="look(teamwork.id)">
         <mu-icon v-if="teamwork.state.toString() === '2'" slot="right" value="delete"/>
       </mu-list-item>
     </mu-list>
@@ -99,7 +99,7 @@
           }
           this.queryString = this.$store.state.queryString
           this.pageCurrent = this.$store.state.pageCurrent
-          if (this.room_id.toString() !== '0') {
+          if (this.team_id.toString() !== '0') {
             this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
             this.teamworkTotal(this.queryString, this.pageSize, this.team_id)
           } else {

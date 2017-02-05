@@ -174,7 +174,7 @@ export default {
       }
     },
     studentBack: function () {
-      if (this.student_id.toString() !== '') {
+      if (this.student_id.toString() !== '' || this.student_id.toString() !== this.studentAll) {
         return '#9999CC'
       } else {
         return '#66CCCC'
@@ -195,7 +195,7 @@ export default {
       }
     },
     studentIcon: function () {
-      if (this.student_id.toString() !== '') {
+      if (this.student_id.toString() !== '' || this.student_id.toString() !== this.studentAll) {
         return 'filter_3'
       } else {
         return 'looks_3'
@@ -302,8 +302,10 @@ export default {
     },
     closeStudent () {
       this.openStudent = false
-      if (this.student_id.toString() !== '') {
-        this.studentName = '发送范围已设置'
+      if (this.student_id.toString() === this.studentAll.toString()) {
+        this.studentName = '已全选'
+      } else if (this.student_id.toString() !== '') {
+        this.studentName = '部分选择'
       } else {
         this.studentName = '发送范围未设置'
       }
@@ -338,6 +340,7 @@ export default {
       this.$http.get(
         API.Save,
         { params: {
+          title: this.title,
           content: this.content,
           room_id: this.room_id,
           course_id: this.course_id,

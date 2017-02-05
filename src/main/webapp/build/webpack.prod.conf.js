@@ -137,7 +137,8 @@ var webpackConfig = merge(baseWebpackConfig, {
         removeAttributeQuotes: true
       },
       chunksSortMode: 'dependency'
-    }),new HtmlWebpackPlugin({
+    }),
+    new HtmlWebpackPlugin({
       title: '家长管理',
       filename: '../dist/static/ParentForManager.html',
       template: 'html/template.html',
@@ -169,6 +170,19 @@ var webpackConfig = merge(baseWebpackConfig, {
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'homeForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '公告管理',
+      filename: '../dist/static/NoticeForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'noticeForTeacher'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -242,11 +256,50 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
+      title: '公告管理',
+      filename: '../dist/static/NoticeForParent.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'noticeForParent'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
       title: '班级消息',
       filename: '../dist/static/RoomworkForParent.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'roomworkForParent'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '社团消息',
+      filename: '../dist/static/TeamworkForParent.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'teamworkForParent'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '学生管理',
+      filename: '../dist/static/StudentForParent.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'studentForParent'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

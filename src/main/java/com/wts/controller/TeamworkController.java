@@ -13,6 +13,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
+import com.wts.interceptor.AjaxParent;
 import com.wts.interceptor.AjaxTeacher;
 import com.wts.util.ParamesAPI;
 
@@ -54,6 +55,35 @@ public class TeamworkController extends Controller {
       render("/static/TeamworkForTeacher.html");
     }
   }
+  public void forParent() throws WeixinException {
+    // 检测session中是否存在teacher
+    if (getSessionAttr("parent") == null || ((Enterprise) getSessionAttr("parent")).getIsParent() != 1) {
+      // 检测cookie中是否存在EnterpriseId
+      if (getCookie("die") == null || getCookie("die").equals("")) {
+        // 检测是否来自微信请求
+        if (!(getPara("code") == null || getPara("code").equals(""))) {
+          User user = WP.me.getUserByCode(getPara("code"));
+          Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isParent=1 and userId=?", user.getUserId());
+          // 检测是否有权限
+          if (enterprise != null) {
+            setSessionAttr("parent", enterprise);
+            setCookie("die", enterprise.getId().toString(), 60 * 30);
+            render("/static/TeamworkForParent.html");
+          } else {
+            redirect("/");
+          }
+        } else {
+          redirect("/");
+        }
+      } else {
+        Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+        setSessionAttr("parent", enterprise);
+        render("/static/TeamworkForParent.html");
+      }
+    } else {
+      render("/static/TeamworkForParent.html");
+    }
+  }
   @Before(AjaxTeacher.class)
   public void getById() {
     Teamwork teamwork = Teamwork.dao.findById(getPara("id"));
@@ -90,13 +120,27 @@ public class TeamworkController extends Controller {
     }
   }
   @Before(AjaxTeacher.class)
-  public void queryByTeamId() {
-    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*,team.name", "FROM teamwork left join team on teamwork.team_id=team.id WHERE teamwork.team_id = "+ getPara("teamId") +" and teamwork.content LIKE '%"+getPara("queryString")+"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY teamwork.id DESC");
+  public void queryForTeacher() {
+    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*,team.name as tname,enterprise.name as ename", "FROM ((teamwork left join team on teamwork.team_id=team.id ) left join enterprise on teamwork.teacher_id = enterprise.id) WHERE teamwork.team_id = "+ getPara("teamId") +" and teamwork.content LIKE '%"+getPara("queryString")+"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY teamwork.id DESC");
     renderJson(teamworks.getList());
   }
   @Before(AjaxTeacher.class)
-  public void totalByTeamId() {
+  public void totalForTeacher() {
     Long count = Db.queryLong("select count(*) from teamwork where team_id = "+ getPara("teamId") + " and content like '%"+ getPara("queryString") +"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId());
+    if (count%getParaToInt("pageSize")==0) {
+      renderText((count/getParaToInt("pageSize"))+"");
+    } else {
+      renderText((count/getParaToInt("pageSize")+1)+"");
+    }
+  }
+  @Before(AjaxParent.class)
+  public void queryForParent() {
+    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*,team.name as tname,enterprise.name as ename", "FROM ((teamwork left join team on teamwork.team_id=team.id ) left join enterprise on teamwork.teacher_id = enterprise.id) WHERE teamwork.state=1 and teamwork.team_id = "+ getPara("teamId") +" and (teamwork.content LIKE '%"+getPara("queryString")+"%' or teamwork.title LIKE '%"+getPara("queryString")+"%') ORDER BY teamwork.id DESC");
+    renderJson(teamworks.getList());
+  }
+  @Before(AjaxParent.class)
+  public void totalForParent() {
+    Long count = Db.queryLong("select count(*) from teamwork where state=1 and team_id = "+ getPara("teamId") + " and (content like '%"+ getPara("queryString") +"%' or title like '%"+ getPara("queryString") +"%')");
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {

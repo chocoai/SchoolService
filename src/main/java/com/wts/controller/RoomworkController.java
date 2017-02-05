@@ -122,12 +122,12 @@ public class RoomworkController extends Controller {
         }
     }
     @Before(AjaxTeacher.class)
-    public void queryByRoomId() {
-        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name", "FROM roomwork left join course on roomwork.course_id=course.id WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY roomwork.id DESC");
+    public void queryForTeacher() {
+        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name as cname,enterprise.name as ename", "FROM ((roomwork left join course on roomwork.course_id=course.id ) left join enterprise on roomwork.teacher_id = enterprise.id) WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY roomwork.id DESC");
         renderJson(roomworks.getList());
     }
     @Before(AjaxTeacher.class)
-    public void totalByRoomId() {
+    public void totalForTeacher() {
         Long count = Db.queryLong("select count(*) from roomwork where room_id = "+ getPara("roomId") + " and content like '%"+ getPara("queryString") +"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId());
         if (count%getParaToInt("pageSize")==0) {
             renderText((count/getParaToInt("pageSize"))+"");
@@ -137,7 +137,7 @@ public class RoomworkController extends Controller {
     }
     @Before(AjaxParent.class)
     public void queryForParent() {
-        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name as cname", "FROM roomwork left join course on roomwork.course_id=course.id WHERE roomwork.state=1 and roomwork.room_id = "+ getPara("roomId") +" and (roomwork.content LIKE '%"+getPara("queryString")+"%' or roomwork.title LIKE '%"+getPara("queryString")+"%') ORDER BY roomwork.id DESC");
+        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name as cname,enterprise.name as ename", "FROM ((roomwork left join course on roomwork.course_id=course.id ) left join enterprise on roomwork.teacher_id = enterprise.id) WHERE roomwork.state=1 and roomwork.room_id = "+ getPara("roomId") +" and (roomwork.content LIKE '%"+getPara("queryString")+"%' or roomwork.title LIKE '%"+getPara("queryString")+"%') ORDER BY roomwork.id DESC");
         renderJson(roomworks.getList());
     }
     @Before(AjaxParent.class)
