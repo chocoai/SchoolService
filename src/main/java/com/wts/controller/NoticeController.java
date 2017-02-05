@@ -69,9 +69,11 @@ public class NoticeController extends Controller {
   }
   @Before({Tx.class,AjaxManager.class})
   public void save(){
-    if (getPara("content").length()>300){
+    if (getPara("title").length()>20){
+      renderText("输入标题超过20字符!");
+    } else if(getPara("content").length()>300){
       renderText("输入内容超过300字符!");
-    }else{
+    } else{
       Notice notice = new Notice();
       notice.set("title",getPara("title"))
               .set("content",getPara("content"))

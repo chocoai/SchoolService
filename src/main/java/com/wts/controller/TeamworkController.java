@@ -105,11 +105,14 @@ public class TeamworkController extends Controller {
   }
   @Before({Tx.class,AjaxTeacher.class})
   public void save(){
-    if (getPara("content").length()>300){
+    if (getPara("title").length()>20){
+      renderText("输入标题超过20字符!");
+    } else if (getPara("content").length()>300){
       renderText("输入内容超过300字符!");
     }else{
       Teamwork teamwork = new Teamwork();
-      teamwork.set("content",getPara("content"))
+      teamwork.set("title",getPara("title"))
+              .set("content",getPara("content"))
               .set("team_id",getPara("team_id"))
               .set("state",1)
               .set("time",new Date())

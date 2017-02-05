@@ -26,6 +26,11 @@ public class MainController extends Controller {
       enterprises.setId(1);
       setSessionAttr("teacher", enterprises);
       renderText("forTeacher");
+    } else if (getPara("userId").equals("3") && getPara("pass").equals("3")) {
+      enterprises.setIsParent(1);
+      enterprises.setId(1);
+      setSessionAttr("parent", enterprises);
+      renderText("forParent");
     } else {
       Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
       if (enterprise != null) {

@@ -14,9 +14,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import com.jfinal.template.ext.directive.Str;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
-import com.wts.interceptor.AjaxManager;
-import com.wts.interceptor.AjaxParent;
-import com.wts.interceptor.AjaxTeacher;
+import com.wts.interceptor.*;
 import com.wts.util.ParamesAPI;
 
 import java.text.SimpleDateFormat;
@@ -58,7 +56,36 @@ public class RoomworkController extends Controller {
             render("/static/RoomworkForTeacher.html");
         }
     }
-    @Before(AjaxTeacher.class)
+    public void forParent() throws WeixinException {
+        // 检测session中是否存在teacher
+        if (getSessionAttr("parent") == null || ((Enterprise) getSessionAttr("parent")).getIsParent() != 1) {
+            // 检测cookie中是否存在EnterpriseId
+            if (getCookie("die") == null || getCookie("die").equals("")) {
+                // 检测是否来自微信请求
+                if (!(getPara("code") == null || getPara("code").equals(""))) {
+                    User user = WP.me.getUserByCode(getPara("code"));
+                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isParent=1 and userId=?", user.getUserId());
+                    // 检测是否有权限
+                    if (enterprise != null) {
+                        setSessionAttr("parent", enterprise);
+                        setCookie("die", enterprise.getId().toString(), 60 * 30);
+                        render("/static/RoomworkForParent.html");
+                    } else {
+                        redirect("/");
+                    }
+                } else {
+                    redirect("/");
+                }
+            } else {
+                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+                setSessionAttr("parent", enterprise);
+                render("/static/RoomworkForParent.html");
+            }
+        } else {
+            render("/static/RoomworkForParent.html");
+        }
+    }
+    @Before({Login.class, Ajax.class})
     public void getById() {
         Roomwork roomwork = Roomwork.dao.findById(getPara("id"));
         renderJson(roomwork);
@@ -108,13 +135,30 @@ public class RoomworkController extends Controller {
             renderText((count/getParaToInt("pageSize")+1)+"");
         }
     }
+    @Before(AjaxParent.class)
+    public void queryForParent() {
+        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name as cname", "FROM roomwork left join course on roomwork.course_id=course.id WHERE roomwork.state=1 and roomwork.room_id = "+ getPara("roomId") +" and (roomwork.content LIKE '%"+getPara("queryString")+"%' or roomwork.title LIKE '%"+getPara("queryString")+"%') ORDER BY roomwork.id DESC");
+        renderJson(roomworks.getList());
+    }
+    @Before(AjaxParent.class)
+    public void totalForParent() {
+        Long count = Db.queryLong("select count(*) from roomwork where state=1 and room_id = "+ getPara("roomId") + " and (content like '%"+ getPara("queryString") +"%' or title like '%"+ getPara("queryString") +"%')");
+        if (count%getParaToInt("pageSize")==0) {
+            renderText((count/getParaToInt("pageSize"))+"");
+        } else {
+            renderText((count/getParaToInt("pageSize")+1)+"");
+        }
+    }
     @Before({Tx.class,AjaxTeacher.class})
     public void save(){
-        if (getPara("content").length()>300){
+        if (getPara("title").length()>20){
+            renderText("输入标题超过20字符!");
+        } else if (getPara("content").length()>300){
             renderText("输入内容超过300字符!");
         }else{
             Roomwork roomwork = new Roomwork();
-            roomwork.set("content",getPara("content"))
+            roomwork.set("title",getPara("title"))
+                    .set("content",getPara("content"))
                     .set("room_id",getPara("room_id"))
                     .set("course_id",getPara("course_id"))
                     .set("state",1)

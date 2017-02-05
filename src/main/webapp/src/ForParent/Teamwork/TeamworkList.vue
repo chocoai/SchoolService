@@ -3,11 +3,10 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-raised-button :label="teamName" icon="cached" fullWidth labelPosition="after" @click="openTeam=true"/>
     <mu-list>
-      <mu-list-item v-for="teamwork in teamworks" :value="teamwork.id" :title="teamwork.title" :describeText="teamwork.time" :afterText="teamwork.code" @click="look(teamwork.id)">
+      <mu-list-item v-for="teamwork in teamworks" :value="teamwork.id" :title="teamwork.title" :describeText="teamwork.time" :afterText="teamwork.cname" @click="look(teamwork.id)">
         <mu-icon v-if="teamwork.state.toString() === '2'" slot="right" value="delete"/>
       </mu-list-item>
     </mu-list>
@@ -30,7 +29,7 @@
       </mu-appbar>
       <mu-list :value="team_id" @itemClick="teamChange">
         <mu-list-item v-for="team in teams" :title="team.name" :value="team.id">
-          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
+          <mu-icon slot="left" :size="40" value="account_balance" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -76,12 +75,12 @@
     },
     created: function () {
       this.$http.get(
-        API.TeacherTeamList,
+        API.ParentTeamList,
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
         this.teams = response.body
         this.$http.get(
-          API.TeacherTeamFirst,
+          API.ParentTeamFirst,
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           if (response.body.toString() !== '0') {
@@ -100,7 +99,7 @@
           }
           this.queryString = this.$store.state.queryString
           this.pageCurrent = this.$store.state.pageCurrent
-          if (this.team_id.toString() !== '0') {
+          if (this.room_id.toString() !== '0') {
             this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
             this.teamworkTotal(this.queryString, this.pageSize, this.team_id)
           } else {
@@ -185,7 +184,7 @@
         this.before = false
       },
       look (teamworkId) {
-        this.$router.push({ path: '/teamworkEdit/' + teamworkId })
+        this.$router.push({ path: '/teamworkLook/' + teamworkId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent,
@@ -203,13 +202,6 @@
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
         this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
-      },
-      goAdd () {
-        if (this.team_id.toString() !== '0') {
-          this.$router.push({ path: '/teamworkAdd' })
-        } else {
-          this.openPopup('无权发布社团信息！', 'report_problem', 'orange')
-        }
       }
     }
   }

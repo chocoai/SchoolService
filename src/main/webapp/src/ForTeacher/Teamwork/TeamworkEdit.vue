@@ -4,6 +4,7 @@
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
     <mu-text-field label="发布时间" disabled underlineShow="false" v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
+    <mu-text-field label="标题" disabled underlineShow="false" v-model="title" fullWidth labelFloat icon="title" maxLength="20"/><br/>
     <mu-text-field label="发布内容" disabled underlineShow="false" v-model="content" fullWidth labelFloat icon="note" multiLine :rows="9" :rowsMax="12" :maxLength="300"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
@@ -87,6 +88,7 @@ export default {
       teacherName: '',
       students: '',
       studentz: '',
+      title: '',
       content: '',
       time: '',
       state: '',
@@ -182,6 +184,7 @@ export default {
         this.teacher_id = this.teamwork.teacher_id
         this.team_id = this.teamwork.team_id
         this.time = this.teamwork.time
+        this.title = this.teamwork.title
         this.content = this.teamwork.content
         this.state = this.teamwork.state
       }, (response) => {

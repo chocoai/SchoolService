@@ -1,14 +1,13 @@
 <template>
-  <div class="TeamworkList">
+  <div class="RoomworkList">
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
     </mu-appbar>
-    <mu-raised-button :label="teamName" icon="cached" fullWidth labelPosition="after" @click="openTeam=true"/>
+    <mu-raised-button :label="roomName" icon="cached" fullWidth labelPosition="after" @click="openRoom=true"/>
     <mu-list>
-      <mu-list-item v-for="teamwork in teamworks" :value="teamwork.id" :title="teamwork.title" :describeText="teamwork.time" :afterText="teamwork.code" @click="look(teamwork.id)">
-        <mu-icon v-if="teamwork.state.toString() === '2'" slot="right" value="delete"/>
+      <mu-list-item v-for="roomwork in roomworks" :value="roomwork.id" :title="roomwork.title" :describeText="roomwork.time" :afterText="roomwork.cname" @click="look(roomwork.id)">
+        <mu-icon v-if="roomwork.state.toString() === '2'" slot="right" value="delete"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -24,12 +23,12 @@
         <mu-flat-button v-if="next" label="下一页" labelPosition="before" icon="navigate_next" @click="pageNext" />
       </mu-flexbox-item>
     </mu-flexbox>
-    <mu-drawer right :open="openTeam" docked="false">
-      <mu-appbar title="请选择社团" @click.native="openTeam=false">
+    <mu-drawer right :open="openRoom" docked="false">
+      <mu-appbar title="请选择班级" @click.native="openRoom=false">
         <mu-icon-button icon='close' slot="right"/>
       </mu-appbar>
-      <mu-list :value="team_id" @itemClick="teamChange">
-        <mu-list-item v-for="team in teams" :title="team.name" :value="team.id">
+      <mu-list :value="room_id" @itemClick="roomChange">
+        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id">
           <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
         </mu-list-item>
       </mu-list>
@@ -45,10 +44,10 @@
 </template>
 
 <script>
-  import * as API from './TeamworkAPI.js'
+  import * as API from './RoomworkAPI.js'
   import MenuList from '../Menu/MenuList'
   export default {
-    name: 'TeamworkList',
+    name: 'RoomworkList',
     components: {
       'menuList': MenuList
     },
@@ -60,10 +59,10 @@
         open: false,
         forRead: true,
         bottomPopup: false,
-        openTeam: false,
-        teamName: '',
-        team_id: '0',
-        teams: [],
+        openRoom: false,
+        roomName: '',
+        room_id: '0',
+        rooms: [],
         icon: '',
         color: '',
         message: '',
@@ -76,33 +75,33 @@
     },
     created: function () {
       this.$http.get(
-        API.TeacherTeamList,
+        API.ParentRoomList,
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
-        this.teams = response.body
+        this.rooms = response.body
         this.$http.get(
-          API.TeacherTeamFirst,
+          API.ParentRoomFirst,
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           if (response.body.toString() !== '0') {
-            this.team_id = response.body
+            this.room_id = response.body
             this.$http.get(
-              API.GetTeamName,
-              { params: { id: this.team_id } },
+              API.GetRoomName,
+              { params: { id: this.room_id } },
               { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
             ).then((response) => {
-              this.teamName = response.body
+              this.roomName = response.body
             }, (response) => {
               this.openPopup('服务器内部错误！', 'error', 'red')
             })
           } else {
-            this.teamName = '无可选社团'
+            this.roomName = '无可选班级'
           }
           this.queryString = this.$store.state.queryString
           this.pageCurrent = this.$store.state.pageCurrent
-          if (this.team_id.toString() !== '0') {
-            this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
-            this.teamworkTotal(this.queryString, this.pageSize, this.team_id)
+          if (this.room_id.toString() !== '0') {
+            this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
+            this.roomworkTotal(this.queryString, this.pageSize, this.room_id)
           } else {
             this.forRead = false
           }
@@ -127,15 +126,15 @@
         this.bottomPopup = true
         setTimeout(() => { this.bottomPopup = false }, 1500)
       },
-      teamChange (val) {
-        this.team_id = val.value
-        this.teamName = val.title
-        this.openTeam = false
+      roomChange (val) {
+        this.room_id = val.value
+        this.roomName = val.title
+        this.openRoom = false
         this.forRead = true
-        this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
-        this.teamworkTotal(this.queryString, this.pageSize, this.team_id)
+        this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
+        this.roomworkTotal(this.queryString, this.pageSize, this.room_id)
       },
-      teamworkQuery (queryString, pageCurrent, pageSize, teamId) {
+      roomworkQuery (queryString, pageCurrent, pageSize, roomId) {
         this.$http.get(
           API.Query,
           { params:
@@ -143,11 +142,11 @@
             queryString: queryString,
             pageCurrent: pageCurrent,
             pageSize: pageSize,
-            teamId: teamId
+            roomId: roomId
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
-          this.teamworks = response.body
+          this.roomworks = response.body
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
           this.forRead = false
@@ -155,13 +154,13 @@
           this.openPopup('服务器内部错误！', 'error', 'red')
         })
       },
-      teamworkTotal (queryString, pageSize, teamId) {
+      roomworkTotal (queryString, pageSize, roomId) {
         this.$http.get(
           API.Total,
           { params: {
             queryString: queryString,
             pageSize: pageSize,
-            teamId: teamId
+            roomId: roomId
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -178,38 +177,31 @@
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent,
-          team_id: this.team_id
+          room_id: this.room_id
         })
-        this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
-        this.teamworkTotal(this.queryString, this.pageSize, this.team_id)
+        this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
+        this.roomworkTotal(this.queryString, this.pageSize, this.room_id)
         this.before = false
       },
-      look (teamworkId) {
-        this.$router.push({ path: '/teamworkEdit/' + teamworkId })
+      look (roomworkId) {
+        this.$router.push({ path: '/roomworkLook/' + roomworkId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent,
-          team_id: this.team_id
+          room_id: this.room_id
         })
       },
       pageBefore () {
         this.pageCurrent--
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
+        this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
       },
       pageNext () {
         this.pageCurrent++
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.teamworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.team_id)
-      },
-      goAdd () {
-        if (this.team_id.toString() !== '0') {
-          this.$router.push({ path: '/teamworkAdd' })
-        } else {
-          this.openPopup('无权发布社团信息！', 'report_problem', 'orange')
-        }
+        this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
       }
     }
   }

@@ -13,6 +13,9 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
+import com.wts.interceptor.AjaxManager;
+import com.wts.interceptor.AjaxParent;
+import com.wts.interceptor.AjaxTeacher;
 import com.wts.util.ParamesAPI;
 
 import java.text.SimpleDateFormat;
@@ -45,6 +48,28 @@ public class RoomworkReadController extends Controller {
       render("/html/read.html");
     }
   }
+  @Before({Tx.class,AjaxParent.class})
+  public void readRoomworkById (){
+    Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("id"),((Enterprise) getSessionAttr("parent")).getId());
+    if (Roomwork.dao.findById(roomworkread.getRoomworkId()).getState() == 1) {
+      if (roomworkread.getState() == 0) {
+        roomworkread.set("state", 1)
+                .set("time", new Date())
+                .update();
+        renderText("OK");
+      } else {
+        renderText("该消息已确认读取!");
+      }
+    } else {
+      renderText("该消息已经失效，无需确认读取!");
+    }
+  }
+  @Before({Tx.class,AjaxParent.class})
+  public void readRoomworkStateById (){
+    Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("id"),((Enterprise) getSessionAttr("parent")).getId());
+    renderText(Roomwork.dao.findById(roomworkread.getRoomworkId()).getState().toString());
+  }
+  @Before(AjaxTeacher.class)
   public void getReadRoomwork(){
     List<Record> students = Db.find("select student.`name` as sname,student.sex,student.number,identity.`name` as dname,roomworkread.time" +
             " from (((roomworkread " +
@@ -58,6 +83,7 @@ public class RoomworkReadController extends Controller {
       renderText("null");
     }
   }
+  @Before(AjaxTeacher.class)
   public void getUnreadRoomwork(){
     List<Record> students = Db.find("select DISTINCT student.`name` as sname,student.sex,student.number,student.id as id" +
             " from (((roomworkread " +
