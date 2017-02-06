@@ -2,6 +2,7 @@ const h = ''
 // const h = '/ds'
 export const GetRoomName = `${h}/room/getNameById`
 export const GetTeamName = `${h}/team/getNameById`
+export const GetParent = `${h}/student/getParentById`
 export const Delete = `${h}/parent/deleteForParent`
 export const Add = `${h}/parent/addForParent`
 export const IdentityList = `${h}/identity/identityList`

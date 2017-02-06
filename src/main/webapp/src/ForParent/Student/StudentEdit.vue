@@ -3,9 +3,9 @@
     <mu-appbar title="信息详情">
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
-    <mu-text-field disabled v-model="name" label="姓名" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
-    <mu-text-field disabled v-model="number" label="证件号码" icon="comment" :errorColor="numberErrorColor" :errorText="numberErrorText" @input="checkNumber" fullWidth labelFloat maxLength="18"/><br/>
-    <mu-text-field disabled v-model="code" label="学籍号码" icon="comment" :errorColor="codeErrorColor" :errorText="codeErrorText" @input="checkCode" fullWidth labelFloat maxLength="15"/><br/>
+    <mu-text-field disabled v-model="name" label="姓名" icon="comment" fullWidth labelFloat/><br/>
+    <mu-text-field disabled v-model="number" label="证件号码" icon="comment" fullWidth labelFloat maxLength="18"/><br/>
+    <mu-text-field disabled v-model="code" label="学籍号码" icon="comment" fullWidth labelFloat maxLength="15"/><br/>
     <mu-text-field :disabled="edit" v-model="address" label="住址" icon="store_mall_directory" :errorColor="addressErrorColor" :errorText="addressErrorText" @input="checkAddress" fullWidth labelFloat/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-parent">
@@ -44,7 +44,7 @@
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button v-if="edit" icon="delete" @click="forDelete=true" backgroundColor="red"/>
-        <mu-float-button v-if="save" icon="delete" @click="goSave" backgroundColor="red"/>
+        <mu-float-button v-if="save" icon="done" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-drawer right :open="openParent1" docked="false">
@@ -171,6 +171,7 @@ export default {
       forSave: false,
       forRead: true,
       forDelete: false,
+      activeDelete: '',
       icon: '',
       color: '',
       name: '',
@@ -178,6 +179,8 @@ export default {
       code: '',
       address: '',
       identity_id: '1',
+      room_id: '0',
+      team_id: '0',
       message: '',
       parents: '',
       parentAble1: false,
@@ -186,8 +189,6 @@ export default {
       parentAble4: false,
       parentAble5: false,
       parentAble6: false,
-      openRoom: false,
-      openTeam: false,
       openParent1: false,
       openParent2: false,
       openParent3: false,
@@ -315,19 +316,19 @@ export default {
       this.parentMobile1.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile1
     },
     callParent2 () {
-      this.parentMobile2.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile3
+      this.parentMobile2.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile2
     },
     callParent3 () {
-      this.parentMobile3.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile4
+      this.parentMobile3.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile3
     },
     callParent4 () {
-      this.parentMobile4.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile5
+      this.parentMobile4.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile4
     },
     callParent5 () {
-      this.parentMobile5.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile6
+      this.parentMobile5.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile5
     },
     callParent6 () {
-      this.parentMobile6.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile7
+      this.parentMobile6.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.parentMobile6
     },
     goReply () {
       this.$router.push({ path: '/studentList' })

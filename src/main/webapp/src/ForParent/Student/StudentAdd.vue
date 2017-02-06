@@ -7,7 +7,7 @@
     <mu-text-field v-model="number" label="证件号码" icon="comment" :errorColor="numberErrorColor" :errorText="numberErrorText" @input="checkNumber" fullWidth labelFloat maxLength="18"/><br/>
     <mu-text-field v-model="code" label="学籍号码" icon="comment" :errorColor="codeErrorColor" :errorText="codeErrorText" @input="checkCode" fullWidth labelFloat maxLength="15"/><br/>
     <mu-select-field hintText="身份" icon="settings" v-model="identity_id" fullWidth>
-      <mu-menu-item v-for="indentity in identities" :value="indentity.id" :title="indentity.name"/>
+      <mu-menu-item v-for="indentity in identities" :value="String(indentity.id)" :title="indentity.name"/>
     </mu-select-field>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
@@ -43,7 +43,7 @@ export default {
       name: '',
       number: '',
       code: '',
-      identity_id: '1',
+      identity_id: '',
       identities: [],
       message: '',
       nameErrorText: '',
@@ -61,6 +61,7 @@ export default {
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
       this.identities = response.body
+      this.identity_id = '1'
       this.forRead = false
     }, (response) => {
       this.openPopup('服务器内部错误！', 'error', 'red')

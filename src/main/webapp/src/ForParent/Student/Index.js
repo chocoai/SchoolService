@@ -20,6 +20,7 @@ import avatar from 'muse-components/avatar'
 import dialog from 'muse-components/dialog'
 import popup from 'muse-components/popup'
 import drawer from 'muse-components/drawer'
+import selectField from 'muse-components/selectField'
 import circularProgress from 'muse-components/circularProgress'
 import { listItem, list } from 'muse-components/list'
 import { menuItem, menu } from 'muse-components/menu'
@@ -36,6 +37,7 @@ Vue.component(avatar.name, avatar)
 Vue.component(dialog.name, dialog)
 Vue.component(popup.name, popup)
 Vue.component(drawer.name, drawer)
+Vue.component(selectField.name, selectField)
 Vue.component(circularProgress.name, circularProgress)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)
