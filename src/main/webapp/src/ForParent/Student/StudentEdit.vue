@@ -43,7 +43,8 @@
         <mu-float-button icon="cancel" v-if="save" @click="goCancel" secondary/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="delete" @click="forDelete=true" backgroundColor="red"/>
+        <mu-float-button v-if="edit" icon="delete" @click="forDelete=true" backgroundColor="red"/>
+        <mu-float-button v-if="save" icon="delete" @click="goSave" backgroundColor="red"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-drawer right :open="openParent1" docked="false">
@@ -176,12 +177,7 @@ export default {
       number: '',
       code: '',
       address: '',
-      room_id: '0',
-      team_id: '0',
-      room: '',
-      team: '',
-      roomName: '班级',
-      teamName: '社团',
+      identity_id: '1',
       message: '',
       parents: '',
       parentAble1: false,
@@ -439,7 +435,7 @@ export default {
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
-    goEdit () {
+    goSave () {
       this.forSave = true
       this.$http.get(
         API.Edit,
