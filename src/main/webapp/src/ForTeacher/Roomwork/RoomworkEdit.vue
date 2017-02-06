@@ -3,6 +3,7 @@
     <mu-appbar :title="titleAll">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
+    <mu-text-field label="标题" disabled underlineShow="false" v-model="title" fullWidth labelFloat icon="title" maxLength="20"/><br/>
     <mu-text-field label="发布时间" disabled underlineShow="false" v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="发布内容" disabled underlineShow="false" v-model="content" fullWidth labelFloat icon="note" multiLine :rows="9" :rowsMax="12" :maxLength="300"/><br/>
     <mu-flexbox>
@@ -89,6 +90,7 @@ export default {
       teacherName: '',
       students: '',
       studentz: '',
+      title: '',
       content: '',
       time: '',
       state: '',
@@ -143,7 +145,7 @@ export default {
   },
   computed: {
     titleAll: function () {
-      return this.roomName + '->' + this.courseName + '->' + this.teacherName + '老师'
+      return this.roomName + '-' + this.courseName + '-' + this.teacherName + '老师'
     }
   },
   methods: {
@@ -196,6 +198,7 @@ export default {
         this.room_id = this.roomwork.room_id
         this.course_id = this.roomwork.course_id
         this.time = this.roomwork.time
+        this.title = this.roomwork.title
         this.content = this.roomwork.content
         this.state = this.roomwork.state
       }, (response) => {

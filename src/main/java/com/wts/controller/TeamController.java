@@ -13,10 +13,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
-import com.wts.interceptor.Ajax;
-import com.wts.interceptor.AjaxManager;
-import com.wts.interceptor.AjaxTeacher;
-import com.wts.interceptor.Login;
+import com.wts.interceptor.*;
 import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
@@ -90,6 +87,28 @@ public class TeamController extends Controller {
   public void teamList() {
     List<Team> teams = Team.dao.find("select * from team where state=1 order by name desc");
     renderJson(teams);
+  }
+  @Before(AjaxParent.class)
+  public void parentTeamList() {
+    List<Record> teams = Db.find("select distinct student.team_id as id,team.name as name,team.state as state" +
+            " from student" +
+            " left join team" +
+            " on team.id=student.team_id" +
+            " where team.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("parent")).getId());
+    renderJson(teams);
+  }
+  @Before(AjaxParent.class)
+  public void parentTeamFirst() {
+    Record team = Db.findFirst("select distinct student.team_id as id,team.name as name,team.state as state" +
+            " from student" +
+            " left join team" +
+            " on team.id=student.team_id" +
+            " where team.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("parent")).getId());
+    if (team!=null){
+      renderText(team.get("id").toString());
+    }else{
+      renderText("0");
+    }
   }
   @Before(AjaxManager.class)
   public void checkNameForNew() {

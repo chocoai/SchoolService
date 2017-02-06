@@ -1,0 +1,11 @@
+const h = ''
+// const h = '/ds'
+export const RoomList = `${h}/room/roomList`
+export const GetRoomName = `${h}/room/getNameById`
+export const Save = `${h}/student/save`
+export const Edit = `${h}/student/edit`
+export const Query = `${h}/student/queryForParent`
+export const Total = `${h}/student/totalForParent`
+export const GetById = `${h}/student/getById`
+export const InactiveById = `${h}/student/inactiveById`
+export const ActiveById = `${h}/student/activeById`

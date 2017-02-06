@@ -21,10 +21,16 @@ module.exports = {
     parentForManager: './src/ForManager/Parent/Index.js',
     studentForManager: './src/ForManager/Student/Index.js',
     homeForTeacher: './src/ForTeacher/Home/Index.js',
+    noticeForTeacher: './src/ForTeacher/Notice/Index.js',
     studentOfRoomForTeacher: './src/ForTeacher/StudentOfRoom/Index.js',
     studentOfTeamForTeacher: './src/ForTeacher/StudentOfTeam/Index.js',
     roomworkForTeacher: './src/ForTeacher/Roomwork/Index.js',
-    teamworkForTeacher: './src/ForTeacher/Teamwork/Index.js'
+    teamworkForTeacher: './src/ForTeacher/Teamwork/Index.js',
+    homeForParent: './src/ForParent/Home/Index.js',
+    noticeForParent: './src/ForParent/Notice/Index.js',
+    roomworkForParent: './src/ForParent/Roomwork/Index.js',
+    teamworkForParent: './src/ForParent/Teamwork/Index.js',
+    studentForParent: './src/ForParent/Student/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

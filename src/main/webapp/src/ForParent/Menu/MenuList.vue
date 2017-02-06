@@ -8,20 +8,17 @@
         <mu-list-item title="主页" @click.native="goHome">
           <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
-        <mu-list-item title="公告管理" @click.native="goNotice">
+        <mu-list-item title="校园公告" @click.native="goNotice">
           <mu-icon slot="left" value="note" color="#2196f3"/>
-        </mu-list-item>
-        <mu-list-item title="班级学生" @click.native="goStudentOfRoom">
-          <mu-icon slot="left" value="face" color="#9c27b0"/>
-        </mu-list-item>
-        <mu-list-item title="社团学生" @click.native="goStudentOfTeam">
-          <mu-icon slot="left" value="face" color="#673ab7"/>
         </mu-list-item>
         <mu-list-item title="班级消息" @click.native="goRoomwork">
           <mu-icon slot="left" value="note" color="#9c27b0"/>
         </mu-list-item>
         <mu-list-item title="社团消息" @click.native="goTeamwork">
           <mu-icon slot="left" value="note" color="#673ab7"/>
+        </mu-list-item>
+        <mu-list-item title="学生管理" @click.native="goStudent">
+          <mu-icon slot="left" value="face" color="#4caf50"/>
         </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="#212121"/>
@@ -48,22 +45,19 @@
         this.$emit('closeMenu')
       },
       goHome () {
-        window.location.href = '/forTeacher'
-      },
-      goStudentOfRoom () {
-        window.location.href = '/student/forRoomTeacher'
-      },
-      goStudentOfTeam () {
-        window.location.href = '/student/forTeamTeacher'
-      },
-      goRoomwork () {
-        window.location.href = '/roomwork/forTeacher'
-      },
-      goTeamwork () {
-        window.location.href = '/teamwork/forTeacher'
+        window.location.href = '/forParent'
       },
       goNotice () {
-        window.location.href = '/notice/forTeacher'
+        window.location.href = '/notice/forParent'
+      },
+      goRoomwork () {
+        window.location.href = '/roomwork/forParent'
+      },
+      goTeamwork () {
+        window.location.href = '/teamwork/forParent'
+      },
+      goStudent () {
+        window.location.href = '/student/forParent'
       },
       goExit () {
         window.location.href = '/exit'

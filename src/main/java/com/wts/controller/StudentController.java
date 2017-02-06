@@ -6,13 +6,11 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
-import com.wts.interceptor.Ajax;
-import com.wts.interceptor.AjaxManager;
-import com.wts.interceptor.AjaxTeacher;
-import com.wts.interceptor.Login;
+import com.wts.interceptor.*;
 
 import java.util.List;
 
@@ -108,6 +106,35 @@ public class StudentController extends Controller {
             render("/static/StudentOfTeamForTeacher.html");
         }
     }
+    public void forParent() throws WeixinException {
+        // 检测session中是否存在manager
+        if (getSessionAttr("parent") == null || ((Enterprise) getSessionAttr("parent")).getIsParent() != 1) {
+            // 检测cookie中是否存在EnterpriseId
+            if (getCookie("die") == null || getCookie("die").equals("")) {
+                // 检测是否来自微信请求
+                if (!(getPara("code") == null || getPara("code").equals(""))) {
+                    User user = WP.me.getUserByCode(getPara("code"));
+                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isParent=1 and userId=?", user.getUserId());
+                    // 检测是否有权限
+                    if (enterprise != null) {
+                        setSessionAttr("parent", enterprise);
+                        setCookie("die", enterprise.getId().toString(), 60 * 30);
+                        render("/static/StudentForParent.html");
+                    } else {
+                        redirect("/");
+                    }
+                } else {
+                    redirect("/");
+                }
+            } else {
+                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+                setSessionAttr("parent", enterprise);
+                render("/static/StudentForParent.html");
+            }
+        } else {
+            render("/static/StudentForParent.html");
+        }
+    }
     @Before({Ajax.class,Login.class})
     public  void studentListByRoom() {
         List<Student> students = Student.dao.find("select * from student where state=1 and room_id=?",getPara("id"));
@@ -180,13 +207,43 @@ public class StudentController extends Controller {
         }
     }
     @Before(AjaxManager.class)
-    public void queryByName() {
+    public void queryForManager() {
         Page<Student> students= Student.dao.studentQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
         renderJson(students.getList());
     }
     @Before(AjaxManager.class)
-    public void totalByName() {
+    public void totalForManager() {
         Long count = Db.queryLong("select count(*) from student where (name like '%"+ getPara("queryString") +"%' or number LIKE '%"+getPara("queryString")+"%' or code LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
+        if (count%getParaToInt("pageSize")==0) {
+            renderText((count/getParaToInt("pageSize"))+"");
+        } else {
+            renderText((count/getParaToInt("pageSize")+1)+"");
+        }
+    }
+    @Before(AjaxParent.class)
+    public void queryForParent() {
+        Page<Record> students = Db.paginate(getParaToInt("pageCurrent"),
+                getParaToInt("pageSize"),
+                "select student.*,identity.name as iname",
+                " from (((student" +
+                        " left join relation on relation.student_id = student.id)" +
+                        " left join enterprise on relation.parent_id = enterprise.id)" +
+                        " left join identity on relation.identity_id = identity.id)" +
+                        " where student.state = 1 and enterprise.id = "+((Enterprise) getSessionAttr("parent")).getId().toString()+
+                        " and (student.name LIKE '%"+getPara("queryString")+"%' or student.number LIKE '%"+getPara("queryString")+"%' or student.code LIKE '%"+getPara("queryString")+"%')"+
+                        " ORDER BY student.name ASC"
+        );
+        renderJson(students.getList());
+    }
+    @Before(AjaxParent.class)
+    public void totalForParent() {
+        Long count = Db.queryLong("select count(*) from (((student" +
+                " left join relation on relation.student_id = student.id)" +
+                " left join enterprise on relation.parent_id = enterprise.id)" +
+                " left join identity on relation.identity_id = identity.id)" +
+                " where student.state = 1 and enterprise.id = "+((Enterprise) getSessionAttr("parent")).getId().toString()+
+                " and (student.name LIKE '%"+getPara("queryString")+"%' or student.number LIKE '%"+getPara("queryString")+"%' or student.code LIKE '%"+getPara("queryString")+"%')"+
+                " ORDER BY student.name ASC");
         if (count%getParaToInt("pageSize")==0) {
             renderText((count/getParaToInt("pageSize"))+"");
         } else {

@@ -11,7 +11,6 @@
         <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="pink"/>
         <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
         <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
-        <mu-avatar icon="label_outline" slot="rightAvatar" :size="30"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -82,7 +81,7 @@
       },
       studentQuery (queryString, pageCurrent, pageSize) {
         this.$http.get(
-          API.QueryByName,
+          API.Query,
           { params:
           {
             queryString: queryString,
@@ -100,7 +99,7 @@
       },
       studentTotal (queryString, pageSize) {
         this.$http.get(
-          API.TotalByName,
+          API.Total,
           { params: {
             queryString: queryString,
             pageSize: pageSize

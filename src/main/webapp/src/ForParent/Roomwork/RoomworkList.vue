@@ -3,7 +3,6 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-raised-button :label="roomName" icon="cached" fullWidth labelPosition="after" @click="openRoom=true"/>
     <mu-list>
@@ -76,12 +75,12 @@
     },
     created: function () {
       this.$http.get(
-        API.TeacherRoomList,
+        API.ParentRoomList,
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
         this.rooms = response.body
         this.$http.get(
-          API.TeacherRoomFirst,
+          API.ParentRoomFirst,
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
           if (response.body.toString() !== '0') {
@@ -185,7 +184,7 @@
         this.before = false
       },
       look (roomworkId) {
-        this.$router.push({ path: '/roomworkEdit/' + roomworkId })
+        this.$router.push({ path: '/roomworkLook/' + roomworkId })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent,
@@ -203,13 +202,6 @@
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
         this.roomworkQuery(this.queryString, this.pageCurrent, this.pageSize, this.room_id)
-      },
-      goAdd () {
-        if (this.room_id.toString() !== '0') {
-          this.$router.push({ path: '/roomworkAdd' })
-        } else {
-          this.openPopup('无权发布班级信息！', 'report_problem', 'orange')
-        }
       }
     }
   }

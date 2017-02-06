@@ -3,7 +3,6 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="query" :value="queryString"/>
-      <mu-icon-button icon='note_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="notice in notices" :value="notice.id" :title="notice.title" :afterText="notice.name" :describeText="notice.time" @click="look(notice.id)">
@@ -140,9 +139,6 @@
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
         this.noticeQuery(this.queryString, this.pageCurrent, this.pageSize)
-      },
-      goAdd () {
-        this.$router.push({ path: '/noticeAdd' })
       }
     }
   }

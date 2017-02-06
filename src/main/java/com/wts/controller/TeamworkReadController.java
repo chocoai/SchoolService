@@ -12,6 +12,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
+import com.wts.interceptor.AjaxParent;
 import com.wts.util.ParamesAPI;
 
 import java.text.SimpleDateFormat;
@@ -41,6 +42,36 @@ public class TeamworkReadController extends Controller {
     } else {
       setAttr("readMessage", "该消息已经失效，无需确认读取!");
       render("/html/read.html");
+    }
+  }
+  @Before({Tx.class,AjaxParent.class})
+  public void readTeamworkById() {
+    Teamworkread teamworkread = Teamworkread.dao.findFirst("select * from teamworkread where teamwork_id=? and parent_id=?", getPara("id"), ((Enterprise) getSessionAttr("parent")).getId());
+    if (teamworkread != null) {
+      if (Teamwork.dao.findById(teamworkread.getTeamworkId()).getState() == 1) {
+        if (teamworkread.getState() == 0) {
+          teamworkread.set("state", 1)
+                  .set("time", new Date())
+                  .update();
+          renderText("OK");
+        } else {
+          renderText("该消息已确认读取!");
+        }
+      } else {
+        renderText("该消息已经失效，无需确认读取!");
+      }
+    } else {
+      renderText("您无权阅读此消息!");
+    }
+  }
+
+  @Before({Tx.class, AjaxParent.class})
+  public void readRoomworkStateById() {
+    Teamworkread teamworkread = Teamworkread.dao.findFirst("select * from teamworkread where teamwork_id=? and parent_id=?", getPara("id"), ((Enterprise) getSessionAttr("parent")).getId());
+    if (teamworkread != null) {
+      renderText(Teamwork.dao.findById(teamworkread.getTeamworkId()).getState().toString());
+    } else {
+      renderText("null");
     }
   }
   public void getReadTeamwork(){

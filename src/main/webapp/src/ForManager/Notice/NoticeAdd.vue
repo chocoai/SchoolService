@@ -89,6 +89,9 @@ export default {
       if (value === null || value === undefined || value === '') {
         this.titleErrorText = '标题为必填项!'
         this.titleErrorColor = 'orange'
+      } else if (value.length > 20) {
+        this.contentErrorText = '标题不得超过20字符'
+        this.contentErrorColor = 'orange'
       } else {
         this.titleErrorText = 'OK'
         this.titleErrorColor = 'green'

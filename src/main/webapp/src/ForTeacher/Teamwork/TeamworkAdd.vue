@@ -3,6 +3,7 @@
     <mu-appbar title="输入/选择后发送消息">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
+    <mu-text-field label="标题" underlineShow="false" v-model="title" :errorColor="titleErrorColor" :errorText="titleErrorText" @input="checkTitle" fullWidth labelFloat icon="title" maxLength="20"/><br/>
     <mu-text-field label="内容" underlineShow="false" v-model="content" :errorColor="contentErrorColor" :errorText="contentErrorText" @input="checkContent" fullWidth labelFloat icon="note" multiLine :rows="9" :rowsMax="12" :maxLength="300"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
@@ -85,8 +86,11 @@ export default {
       studentIcon: 'looks_two',
       teamBack: '#66CCCC',
       studentBack: '#66CCCC',
+      title: '',
       content: '',
       message: '',
+      titleErrorText: '',
+      titleErrorColor: '',
       contentErrorText: '',
       contentErrorColor: '',
       saveAble: true
@@ -126,7 +130,7 @@ export default {
       }
     },
     studentBack: function () {
-      if (this.student_id.toString() !== '') {
+      if (this.student_id.toString() !== '' || this.student_id.toString() !== this.studentAll) {
         return '#9999CC'
       } else {
         return '#66CCCC'
@@ -210,10 +214,24 @@ export default {
     },
     closeStudent () {
       this.openStudent = false
-      if (this.student_id.toString() !== '') {
-        this.studentName = '发送范围已设置'
+      if (this.student_id.toString() === this.studentAll.toString()) {
+        this.studentName = '已全选'
+      } else if (this.student_id.toString() !== '') {
+        this.studentName = '部分选择'
       } else {
         this.studentName = '发送范围未设置'
+      }
+    },
+    checkTitle (value) {
+      if (value === null || value === undefined || value === '') {
+        this.titleErrorText = '标题为必填项!'
+        this.titleErrorColor = 'orange'
+      } else if (value.length > 20) {
+        this.contentErrorText = '标题不得超过20字符'
+        this.contentErrorColor = 'orange'
+      } else {
+        this.titleErrorText = 'OK'
+        this.titleErrorColor = 'green'
       }
     },
     checkContent (value) {
@@ -234,6 +252,7 @@ export default {
       this.$http.get(
         API.Save,
         { params: {
+          title: this.title,
           content: this.content,
           team_id: this.team_id,
           student_id: this.student_id

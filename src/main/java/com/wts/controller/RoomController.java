@@ -13,10 +13,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
-import com.wts.interceptor.Ajax;
-import com.wts.interceptor.AjaxManager;
-import com.wts.interceptor.AjaxTeacher;
-import com.wts.interceptor.Login;
+import com.wts.interceptor.*;
 import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
@@ -123,6 +120,28 @@ public class RoomController extends Controller {
   public void roomList() {
     List<Room> rooms = Room.dao.find("select * from room where state=1 order by name desc");
     renderJson(rooms);
+  }
+  @Before(AjaxParent.class)
+  public void parentRoomList() {
+    List<Record> rooms = Db.find("select distinct student.room_id as id,room.name as name,room.state as state" +
+            " from student" +
+            " left join room" +
+            " on room.id=student.room_id" +
+            " where room.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("parent")).getId());
+    renderJson(rooms);
+  }
+  @Before(AjaxParent.class)
+  public void parentRoomFirst() {
+    Record room = Db.findFirst("select distinct student.room_id as id,room.name as name,room.state as state" +
+            " from student" +
+            " left join room" +
+            " on room.id=student.room_id" +
+            " where room.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("parent")).getId());
+    if (room!=null){
+      renderText(room.get("id").toString());
+    }else{
+      renderText("0");
+    }
   }
   @Before(AjaxTeacher.class)
   public void teacherRoomList() {
