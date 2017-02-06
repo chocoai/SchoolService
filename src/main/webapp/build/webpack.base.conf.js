@@ -26,11 +26,13 @@ module.exports = {
     studentOfTeamForTeacher: './src/ForTeacher/StudentOfTeam/Index.js',
     roomworkForTeacher: './src/ForTeacher/Roomwork/Index.js',
     teamworkForTeacher: './src/ForTeacher/Teamwork/Index.js',
+    personalForTeacher: './src/ForTeacher/Personal/Index.js',
     homeForParent: './src/ForParent/Home/Index.js',
     noticeForParent: './src/ForParent/Notice/Index.js',
     roomworkForParent: './src/ForParent/Roomwork/Index.js',
     teamworkForParent: './src/ForParent/Teamwork/Index.js',
-    studentForParent: './src/ForParent/Student/Index.js'
+    studentForParent: './src/ForParent/Student/Index.js',
+    personalForParent: './src/ForParent/Personal/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

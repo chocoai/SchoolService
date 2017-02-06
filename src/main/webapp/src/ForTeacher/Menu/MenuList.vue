@@ -23,6 +23,9 @@
         <mu-list-item title="社团消息" @click.native="goTeamwork">
           <mu-icon slot="left" value="note" color="#673ab7"/>
         </mu-list-item>
+        <mu-list-item title="用户信息" @click.native="goPersonal">
+          <mu-icon slot="left" value="person" color="#2196f3"/>
+        </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="#212121"/>
         </mu-list-item>
@@ -64,6 +67,9 @@
       },
       goNotice () {
         window.location.href = '/notice/forTeacher'
+      },
+      goPersonal () {
+        window.location.href = '/teacher/forTeacherPersonal'
       },
       goExit () {
         window.location.href = '/exit'

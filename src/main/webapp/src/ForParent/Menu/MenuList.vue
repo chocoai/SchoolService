@@ -20,6 +20,9 @@
         <mu-list-item title="学生管理" @click.native="goStudent">
           <mu-icon slot="left" value="face" color="#4caf50"/>
         </mu-list-item>
+        <mu-list-item title="用户信息" @click.native="goPersonal">
+          <mu-icon slot="left" value="person" color="#2196f3"/>
+        </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="#212121"/>
         </mu-list-item>
@@ -58,6 +61,9 @@
       },
       goStudent () {
         window.location.href = '/student/forParent'
+      },
+      goPersonal () {
+        window.location.href = '/parent/forParentPersonal'
       },
       goExit () {
         window.location.href = '/exit'

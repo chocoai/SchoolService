@@ -15,6 +15,7 @@ import com.wts.entity.WP;
 import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.AjaxParent;
+import com.wts.interceptor.AjaxTeacher;
 import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
@@ -54,6 +55,35 @@ public class ParentController extends Controller {
             }
         } else {
             render("/static/ParentForManager.html");
+        }
+    }
+    public void forParentPersonal() throws WeixinException {
+        // 检测session中是否存在teacher
+        if (getSessionAttr("parent") == null || ((Enterprise)getSessionAttr("parent")).getIsParent()!=1) {
+            // 检测cookie中是否存在EnterpriseId
+            if (getCookie("die") == null || getCookie("die").equals("")) {
+                // 检测是否来自微信请求
+                if (!(getPara("code") == null || getPara("code").equals(""))) {
+                    User user = WP.me.getUserByCode(getPara("code"));
+                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isParent=1 and userId=?", user.getUserId());
+                    // 检测是否有权限
+                    if (enterprise != null) {
+                        setSessionAttr("parent", enterprise);
+                        setCookie("die", enterprise.getId().toString(), 60 * 30);
+                        render("/static/PersonalForParent.html");
+                    } else {
+                        redirect("/");
+                    }
+                } else {
+                    redirect("/");
+                }
+            } else {
+                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
+                setSessionAttr("parent", enterprise);
+                render("/static/PersonalForParent.html");
+            }
+        } else {
+            render("/static/PersonalForParent.html");
         }
     }
     @Before(AjaxManager.class)
@@ -417,6 +447,34 @@ public class ParentController extends Controller {
                     renderText(e.getErrorText());
                 }
             }
+        }
+    }
+    @Before({Tx.class,AjaxParent.class})
+    public void editSelf() {
+        Enterprise parent = Enterprise.dao.findById(((Enterprise) getSessionAttr("parent")).getId());
+        if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+            renderText("家长姓名应为两个以上汉字!");
+        } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+            renderText("手机号码格式错误!");
+        } else if (!Util.getString(parent.getStr("mobile")).equals(getPara("mobile"))
+                && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size() != 0) {
+            renderText("该手机号码已存在!");
+        } else {
+
+            if (!Util.getString(parent.getStr("name")).equals(getPara("name").trim())
+                    || !Util.getString(parent.getStr("mobile")).equals(getPara("mobile").trim())) {
+                User user = new User(parent.get("userId").toString(), parent.get("name").toString());
+                user.setMobile(getPara("mobile").trim());
+                try {
+                    WP.me.updateUser(user);
+                } catch (WeixinException e) {
+                    renderText(e.getErrorText());
+                }
+            }
+            parent.set("name", getPara("name").trim())
+                    .set("mobile", getPara("mobile").trim())
+                    .update();
+            renderText("OK");
         }
     }
     @Before({Tx.class,AjaxParent.class})

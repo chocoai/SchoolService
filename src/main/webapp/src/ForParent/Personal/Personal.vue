@@ -5,7 +5,7 @@
       <mu-avatar :src="picUrl" slot="right"/>
     </mu-appbar>
     <mu-text-field label="姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="账号" v-if="false" disabled underlineShow="false" v-model="userId" fullWidth labelFloat icon="assignment"/><br/>
+    <mu-text-field label="账号"  v-if="false" disabled underlineShow="false" v-model="userId" fullWidth labelFloat icon="assignment"/><br/>
     <mu-text-field label="手机" :disabled="edit" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
     <mu-flexbox v-if="edit">
       <mu-flexbox-item class="flex-demo">
@@ -44,7 +44,7 @@
         icon: '',
         color: '',
         message: '',
-        teacher: '',
+        parent: '',
         name: '',
         mobile: '',
         userId: '',

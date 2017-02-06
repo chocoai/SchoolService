@@ -7,9 +7,7 @@ import com.jfinal.core.Controller;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
 import com.wts.entity.model.Room;
-import com.wts.interceptor.Ajax;
-import com.wts.interceptor.AjaxManager;
-import com.wts.interceptor.Login;
+import com.wts.interceptor.*;
 import com.wts.util.ParamesAPI;
 import com.wts.util.PinyinTool;
 import com.wts.util.msg.Util.MessageUtil;
@@ -73,9 +71,47 @@ public class EnterpriseController extends Controller {
       renderText("OK");
     }
   }
+  /**
+   * 修改时检测手机号码
+   * */
+  @Before(AjaxTeacher.class)
+  public void checkMobileForEditForTeacher() {
+//    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+//      renderText("手机号码格式错误!");
+    if (!Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).get("mobile").equals(getPara("mobile"))
+            && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+      renderText("该手机号码已存在!");
+    } else {
+      renderText("OK");
+    }
+  }
+  /**
+   * 修改时检测手机号码
+   * */
+  @Before(AjaxParent.class)
+  public void checkMobileForEditForParent() {
+//    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+//      renderText("手机号码格式错误!");
+    if (!Enterprise.dao.findById(((Enterprise) getSessionAttr("parent")).getId()).get("mobile").equals(getPara("mobile"))
+            && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+      renderText("该手机号码已存在!");
+    } else {
+      renderText("OK");
+    }
+  }
   @Before(AjaxManager.class)
   public void getById() {
     Enterprise enterprise = Enterprise.dao.findById(getPara("id"));
+    renderJson(enterprise);
+  }
+  @Before(AjaxTeacher.class)
+  public void getTeacher() {
+    Enterprise enterprise = Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId());
+    renderJson(enterprise);
+  }
+  @Before(AjaxParent.class)
+  public void getParent() {
+    Enterprise enterprise = Enterprise.dao.findById(((Enterprise) getSessionAttr("parent")).getId());
     renderJson(enterprise);
   }
   @Before({Login.class, Ajax.class})
@@ -152,7 +188,7 @@ public class EnterpriseController extends Controller {
       renderText("");
     }
   }
-  @Before(AjaxManager.class)
+  @Before({Login.class, Ajax.class})
   public void update() {
     try {
       Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=?", getPara("userId"));

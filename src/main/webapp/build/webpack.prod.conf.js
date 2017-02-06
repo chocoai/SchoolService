@@ -243,6 +243,19 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
+      title: '用户信息',
+      filename: '../dist/static/PersonalForTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'personalForTeacher'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
       title: '主页',
       filename: '../dist/static/HomeForParent.html',
       template: 'html/template.html',
@@ -300,6 +313,19 @@ var webpackConfig = merge(baseWebpackConfig, {
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'studentForParent'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '用户信息',
+      filename: '../dist/static/PersonalForParent.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'personalForParent'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

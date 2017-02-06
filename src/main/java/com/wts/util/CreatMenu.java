@@ -54,6 +54,7 @@ public class CreatMenu {
   private static String TEAMSTUDENT = BASIC.replaceAll("XXXXX","student%2fforTeamTeacher%2f");
   private static String ROOMWORK = BASIC.replaceAll("XXXXX","roomwork%2fforTeacher%2f");
   private static String TEAMWORK = BASIC.replaceAll("XXXXX","teamwork%2fforTeacher%2f");
+  private static String PERSONALA = BASIC.replaceAll("XXXXX","teacher%2fforTeacherPersonal%2f");
 
   public static void CreateTeacher (){
     Button teacher_1 = new Button("校园公告", NOTICES, ButtonType.view);
@@ -61,11 +62,16 @@ public class CreatMenu {
     Button teacher_3 = new Button("社团学生", TEAMSTUDENT, ButtonType.view);
     Button teacher_4 = new Button("班级消息", ROOMWORK, ButtonType.view);
     Button teacher_5 = new Button("社团消息", TEAMWORK, ButtonType.view);
+    Button teacher_6 = new Button("用户信息", PERSONALA, ButtonType.view);
 
-    Button managerButton = new Button("综合管理", teacher_1, teacher_2, teacher_3, teacher_4, teacher_5);
+    Button managerButtonA = new Button("班级管理", teacher_2, teacher_4);
+    Button managerButtonB = new Button("社团管理", teacher_3, teacher_5);
+    Button managerButtonC = new Button("其他", teacher_1, teacher_6);
 
     List<Button> managers = new ArrayList<Button>();
-    managers.add(managerButton);
+    managers.add(managerButtonA);
+    managers.add(managerButtonB);
+    managers.add(managerButtonC);
     try {
       ApiResult ret = new WeixinProxy().createMenu(ParamesAPI.teacherId, managers);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
@@ -78,16 +84,22 @@ public class CreatMenu {
   private static String NOTICEZ = BASIC.replaceAll("XXXXX","notice%2fforParent%2f");
   private static String ROOMWORKS = BASIC.replaceAll("XXXXX","roomwork%2fforParent%2f");
   private static String TEAMWORKS = BASIC.replaceAll("XXXXX","teamwork%2fforParent%2f");
+  private static String PARENTSTUDENT = BASIC.replaceAll("XXXXX","student%2fforParent%2f");
+  private static String PERSONALB = BASIC.replaceAll("XXXXX","parent%2fforParentPersonal%2f");
 
   public static void CreateParent (){
     Button parent_1 = new Button("校园公告", NOTICEZ, ButtonType.view);
     Button parent_2 = new Button("班级消息", ROOMWORKS, ButtonType.view);
     Button parent_3 = new Button("社团消息", TEAMWORKS, ButtonType.view);
+    Button parent_4 = new Button("学生绑定", PARENTSTUDENT, ButtonType.view);
+    Button parent_5 = new Button("用户信息", PERSONALB, ButtonType.view);
 
-    Button managerButton = new Button("综合管理", parent_1, parent_2, parent_3);
+    Button managerButtonA = new Button("校园消息", parent_1, parent_2, parent_3);
+    Button managerButtonB = new Button("其他", parent_4, parent_5);
 
     List<Button> managers = new ArrayList<Button>();
-    managers.add(managerButton);
+    managers.add(managerButtonA);
+    managers.add(managerButtonB);
     try {
       ApiResult ret = new WeixinProxy().createMenu(ParamesAPI.parentId, managers);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
