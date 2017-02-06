@@ -17,7 +17,7 @@
         <mu-list-item title="社团消息" @click.native="goTeamwork">
           <mu-icon slot="left" value="note" color="#673ab7"/>
         </mu-list-item>
-        <mu-list-item title="学生管理" @click.native="goStudent">
+        <mu-list-item title="学生绑定" @click.native="goStudent">
           <mu-icon slot="left" value="face" color="#4caf50"/>
         </mu-list-item>
         <mu-list-item title="用户信息" @click.native="goPersonal">

@@ -308,7 +308,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      title: '学生管理',
+      title: '学生绑定',
       filename: '../dist/static/StudentForParent.html',
       template: 'html/template.html',
       inject: true,
