@@ -453,4 +453,22 @@ public class StudentController extends Controller {
             }
         }
     }
+
+    @Before({Tx.class, AjaxParent.class})
+    public void editForParent() {
+        Student student = Student.dao.findById(getPara("id"));
+        if (student == null) {
+            renderText("要修改的学生不存在!");
+        } else {
+            if ((getString(student.getStr("address")).equals(getPara("address").trim())
+                    || ((student.getStr("address")) == null && getPara("address") == null))
+                    ) {
+                renderText("未找到修改内容!");
+            } else {
+                student.set("address", getPara("address"))
+                        .update();
+                renderText("OK");
+            }
+        }
+    }
 }

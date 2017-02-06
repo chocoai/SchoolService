@@ -9,15 +9,21 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
+import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
 import com.wts.interceptor.AjaxManager;
+import com.wts.interceptor.AjaxParent;
 import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.wts.util.IDNumber.checkIDNumberDetail;
+import static com.wts.util.IDNumber.checkIDNumberDetailB;
+import static com.wts.util.Util.getString;
 
 public class ParentController extends Controller {
 
@@ -409,6 +415,41 @@ public class ParentController extends Controller {
                     renderText("OK");
                 } catch (WeixinException e) {
                     renderText(e.getErrorText());
+                }
+            }
+        }
+    }
+    @Before({Tx.class,AjaxParent.class})
+    public void deleteForParent() {
+        Student student = Student.dao.findById(getPara("id"));
+        if (student == null) {
+            renderText("要解绑的学生不存在!");
+        } else {
+            Db.update("delete from relation where parent_id = ? and student_id=?", ((Enterprise) getSessionAttr("parent")).getId(),getPara("id"));
+            renderText("OK");
+        }
+    }
+    @Before({Tx.class,AjaxParent.class})
+    public void addForParent() {
+        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+            renderText("学生姓名为两个以上汉字!");
+        } else if (!checkIDNumberDetailB(getPara("number"))){
+            renderText(checkIDNumberDetail(getPara("number")));
+        } else {
+            Student student = Student.dao.findFirst("select * from student where name=? and number=? and code=?",getPara("name"),getPara("number"),getPara("code"));
+            if (student==null) {
+                renderText("未找到指定学生!");
+            } else {
+                List<Relation> relations = Relation.dao.find("select * from relation where student_id=? and parent_id=?",student.getId(), ((Enterprise) getSessionAttr("parent")).getId());
+                if (relations.size()!=0){
+                    renderText("您已绑定该学生!");
+                }else{
+                    Relation relation = new Relation();
+                    relation.set("student_id",student.getId())
+                            .set("parent_id", ((Enterprise) getSessionAttr("parent")).getId())
+                            .set("identity_id",getPara("identity_id"))
+                            .save();
+                    renderText("OK");
                 }
             }
         }
