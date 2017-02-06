@@ -149,7 +149,7 @@
     <mu-dialog :open="forRead" title="正在读取" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
-    <mu-dialog :open="forDelete" :title="activeDelete" @close="goClose">
+    <mu-dialog :open="forDelete" :title="deleteTitle" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goDelete" secondary/>
     </mu-dialog>
@@ -171,7 +171,7 @@ export default {
       forSave: false,
       forRead: true,
       forDelete: false,
-      activeDelete: '',
+      deleteTitle: '',
       icon: '',
       color: '',
       name: '',
@@ -181,6 +181,8 @@ export default {
       identity_id: '1',
       room_id: '0',
       team_id: '0',
+      roomName: '班级未设置',
+      teamName: '社团未设置',
       message: '',
       parents: '',
       parentAble1: false,
@@ -364,10 +366,10 @@ export default {
         this.code = this.student.code
         this.address = this.student.address
         this.state = this.student.state
-        this.deleteTitle = '确认要解除您于' + this.name + '的关系吗?'
-        if (this.student.room_id === null || this.student.room_id === undefined || this.student.room_id === '') {
+        this.deleteTitle = '确认要解除您与' + this.name + '的关系吗?'
+        if (this.student.room_id === null || this.student.room_id === undefined || this.student.room_id === '' || this.student.room_id === 'undefined') {
           this.room_id = '0'
-          this.roomName = '班级'
+          this.roomName = '班级未设置'
         } else {
           this.room_id = this.student.room_id
           this.$http.get(
@@ -380,9 +382,9 @@ export default {
             this.openPopup('服务器内部错误！', 'error', 'red')
           })
         }
-        if (this.student.team_id === null || this.student.team_id === undefined || this.student.team_id === '') {
+        if (this.student.team_id === null || this.student.team_id === undefined || this.student.team_id === '' || this.student.team_id === 'undefined') {
           this.team_id = '0'
-          this.teamName = '社团'
+          this.teamName = '社团未设置'
         } else {
           this.team_id = this.student.team_id
           this.$http.get(

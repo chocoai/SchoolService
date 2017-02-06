@@ -4,7 +4,7 @@
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field label="姓名" :disabled="edit" underlineShow="false" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
-    <mu-text-field label="账号" disabled v-model="userId" fullWidth labelFloat icon="assignment"/><br/>
+    <mu-text-field label="账号" disabled underlineShow="false" v-model="userId" fullWidth labelFloat icon="assignment"/><br/>
     <mu-text-field label="手机" :disabled="edit" underlineShow="false" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile"  fullWidth labelFloat icon="phone" maxLength="11"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
