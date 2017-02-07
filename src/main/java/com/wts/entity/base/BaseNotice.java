@@ -17,6 +17,14 @@ public abstract class BaseNotice<M extends BaseNotice<M>> extends Model<M> imple
 		return get("id");
 	}
 
+	public void setTitle(java.lang.String title) {
+		set("title", title);
+	}
+
+	public java.lang.String getTitle() {
+		return get("title");
+	}
+
 	public void setContent(java.lang.String content) {
 		set("content", content);
 	}
@@ -47,14 +55,6 @@ public abstract class BaseNotice<M extends BaseNotice<M>> extends Model<M> imple
 
 	public java.lang.Integer getType() {
 		return get("type");
-	}
-
-	public void setTitle(java.lang.String title) {
-		set("title", title);
-	}
-
-	public java.lang.String getTitle() {
-		return get("title");
 	}
 
 }

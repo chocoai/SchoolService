@@ -33,6 +33,14 @@ public abstract class BasePraise<M extends BasePraise<M>> extends Model<M> imple
 		return get("time");
 	}
 
+	public void setType(java.lang.Integer type) {
+		set("type", type);
+	}
+
+	public java.lang.Integer getType() {
+		return get("type");
+	}
+
 	public void setTeacherId(java.lang.Integer teacherId) {
 		set("teacher_id", teacherId);
 	}
