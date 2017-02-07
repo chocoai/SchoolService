@@ -116,9 +116,9 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `Praise` (
 `id` int NOT NULL,
-`content` varchar(999) CHARACTER SET utf8 NULL COMMENT '表扬原因',
+`reason` varchar(255) CHARACTER SET utf8 NULL COMMENT '表扬原因',
 `time` datetime NULL COMMENT '表扬时间',
-`student_id` int NULL COMMENT '学生序号',
+`type` int NULL COMMENT '表扬类型1全部2部分',
 `teacher_id` int NULL COMMENT '教师序号',
 `course_id` int NULL COMMENT '课程序号',
 `room_id` int NULL COMMENT '班级序号',
@@ -180,6 +180,12 @@ CREATE TABLE `TeamworkRead` (
 PRIMARY KEY (`id`) 
 );
 
+CREATE TABLE `PraiseDetail` (
+`id` int NOT NULL AUTO_INCREMENT,
+`praise_id` int NULL,
+`student_id` int NULL
+);
+
 
 ALTER TABLE `RoomPlan` ADD CONSTRAINT `coursePlan_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `RoomPlan` ADD CONSTRAINT `coursePlan_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
@@ -197,7 +203,6 @@ ALTER TABLE `Roomwork` ADD CONSTRAINT `homework_course` FOREIGN KEY (`course_id`
 ALTER TABLE `Leave` ADD CONSTRAINT `leave_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `Leave` ADD CONSTRAINT `leave_parent` FOREIGN KEY (`parent_id`) REFERENCES `Enterprise` (`id`);
 ALTER TABLE `Leave` ADD CONSTRAINT `leave_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
-ALTER TABLE `Praise` ADD CONSTRAINT `praise_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `Praise` ADD CONSTRAINT `praise_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Enterprise` (`id`);
 ALTER TABLE `Praise` ADD CONSTRAINT `praise_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `Praise` ADD CONSTRAINT `praise_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
@@ -216,4 +221,6 @@ ALTER TABLE `RoomworkRead` ADD CONSTRAINT `check_roomwork_student` FOREIGN KEY (
 ALTER TABLE `RoomworkRead` ADD CONSTRAINT `check_roomwork_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
 ALTER TABLE `TeamworkRead` ADD CONSTRAINT `check_teamwork_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `TeamworkRead` ADD CONSTRAINT `check_teamwork_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
+ALTER TABLE `PraiseDetail` ADD CONSTRAINT `praiseDetail_praise` FOREIGN KEY (`praise_id`) REFERENCES `Praise` (`id`);
+ALTER TABLE `PraiseDetail` ADD CONSTRAINT `praiseDetail_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 

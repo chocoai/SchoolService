@@ -17,6 +17,14 @@ public abstract class BaseRoomwork<M extends BaseRoomwork<M>> extends Model<M> i
 		return get("id");
 	}
 
+	public void setTitle(java.lang.String title) {
+		set("title", title);
+	}
+
+	public java.lang.String getTitle() {
+		return get("title");
+	}
+
 	public void setContent(java.lang.String content) {
 		set("content", content);
 	}

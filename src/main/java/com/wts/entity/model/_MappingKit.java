@@ -24,6 +24,7 @@ public class _MappingKit {
 		arp.addMapping("leave", "id", Leave.class);
 		arp.addMapping("notice", "id", Notice.class);
 		arp.addMapping("praise", "id", Praise.class);
+		arp.addMapping("praisedetail", "id", Praisedetail.class);
 		arp.addMapping("relation", "id", Relation.class);
 		arp.addMapping("room", "id", Room.class);
 		arp.addMapping("roomplan", "id", Roomplan.class);

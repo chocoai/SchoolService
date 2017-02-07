@@ -17,12 +17,12 @@ public abstract class BasePraise<M extends BasePraise<M>> extends Model<M> imple
 		return get("id");
 	}
 
-	public void setContent(java.lang.String content) {
-		set("content", content);
+	public void setReason(java.lang.String reason) {
+		set("reason", reason);
 	}
 
-	public java.lang.String getContent() {
-		return get("content");
+	public java.lang.String getReason() {
+		return get("reason");
 	}
 
 	public void setTime(java.util.Date time) {
@@ -31,14 +31,6 @@ public abstract class BasePraise<M extends BasePraise<M>> extends Model<M> imple
 
 	public java.util.Date getTime() {
 		return get("time");
-	}
-
-	public void setStudentId(java.lang.Integer studentId) {
-		set("student_id", studentId);
-	}
-
-	public java.lang.Integer getStudentId() {
-		return get("student_id");
 	}
 
 	public void setTeacherId(java.lang.Integer teacherId) {

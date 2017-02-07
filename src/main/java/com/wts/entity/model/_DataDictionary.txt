@@ -80,11 +80,11 @@ Table: notice
  Field      | Type         | Null | Key | Default | Remarks 
 ------------+--------------+------+-----+---------+---------
  id         | INT(10)      | NO   | PRI |         | 消息序号    
- title      | VARCHAR(255) | YES  |     |         | 消息标题    
  content    | VARCHAR(999) | YES  |     |         | 消息内容    
  time       | DATETIME(19) | YES  |     |         | 发布时间    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
- type       | INT(10)      | YES  |     |         | 1全体2教师3家长
+ type       | INT(10)      | YES  |     |         | 类型      
+ title      | VARCHAR(255) | YES  |     |         |         
 ------------+--------------+------+-----+---------+---------
 
 Table: praise
@@ -92,13 +92,21 @@ Table: praise
  Field      | Type         | Null | Key | Default | Remarks 
 ------------+--------------+------+-----+---------+---------
  id         | INT(10)      | NO   | PRI |         |         
- content    | VARCHAR(999) | YES  |     |         | 表扬原因    
+ reason     | VARCHAR(999) | YES  |     |         | 表扬原因    
  time       | DATETIME(19) | YES  |     |         | 表扬时间    
- student_id | INT(10)      | YES  |     |         | 学生序号    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  course_id  | INT(10)      | YES  |     |         | 课程序号    
  room_id    | INT(10)      | YES  |     |         | 班级序号    
 ------------+--------------+------+-----+---------+---------
+
+Table: praisedetail
+------------+---------+------+-----+---------+---------
+ Field      | Type    | Null | Key | Default | Remarks 
+------------+---------+------+-----+---------+---------
+ id         | INT(10) | NO   | PRI |         |         
+ praise_id  | INT(10) | YES  |     |         |         
+ student_id | INT(10) | YES  |     |         |         
+------------+---------+------+-----+---------+---------
 
 Table: relation
 -------------+---------+------+-----+---------+---------
@@ -134,6 +142,7 @@ Table: roomwork
  Field      | Type         | Null | Key | Default | Remarks 
 ------------+--------------+------+-----+---------+---------
  id         | INT(10)      | NO   | PRI |         | 作业序号    
+ title      | VARCHAR(255) | YES  |     |         |         
  content    | VARCHAR(999) | YES  |     |         | 作业内容    
  time       | DATETIME(19) | YES  |     |         | 发布时间    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
@@ -194,6 +203,7 @@ Table: teamwork
  Field      | Type         | Null | Key | Default | Remarks 
 ------------+--------------+------+-----+---------+---------
  id         | INT(10)      | NO   | PRI |         | 作业序号    
+ title      | VARCHAR(255) | YES  |     |         |         
  content    | VARCHAR(999) | YES  |     |         | 作业内容    
  time       | DATETIME(19) | YES  |     |         | 发布时间    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
