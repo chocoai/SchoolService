@@ -56,6 +56,8 @@ public class CreatMenu {
   private static String TEAMWORK = BASIC.replaceAll("XXXXX","teamwork%2fforTeacher%2f");
   private static String PERSONALA = BASIC.replaceAll("XXXXX","teacher%2fforTeacherPersonal%2f");
 
+  private static String PICTURE = BASIC.replaceAll("XXXXX","user%2ftokenSignature%2f");
+
   public static void CreateTeacher (){
     Button teacher_1 = new Button("校园公告", NOTICES, ButtonType.view);
     Button teacher_2 = new Button("班级学生", ROOMSTUDENT, ButtonType.view);
@@ -63,10 +65,11 @@ public class CreatMenu {
     Button teacher_4 = new Button("班级消息", ROOMWORK, ButtonType.view);
     Button teacher_5 = new Button("社团消息", TEAMWORK, ButtonType.view);
     Button teacher_6 = new Button("用户信息", PERSONALA, ButtonType.view);
+    Button teacher_7 = new Button("图片上传", PICTURE, ButtonType.view);
 
     Button managerButtonA = new Button("班级管理", teacher_2, teacher_4);
     Button managerButtonB = new Button("社团管理", teacher_3, teacher_5);
-    Button managerButtonC = new Button("其他", teacher_1, teacher_6);
+    Button managerButtonC = new Button("其他", teacher_1, teacher_6, teacher_7);
 
     List<Button> managers = new ArrayList<Button>();
     managers.add(managerButtonA);

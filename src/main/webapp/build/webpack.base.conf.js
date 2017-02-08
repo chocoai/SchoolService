@@ -32,7 +32,8 @@ module.exports = {
     roomworkForParent: './src/ForParent/Roomwork/Index.js',
     teamworkForParent: './src/ForParent/Teamwork/Index.js',
     studentForParent: './src/ForParent/Student/Index.js',
-    personalForParent: './src/ForParent/Personal/Index.js'
+    personalForParent: './src/ForParent/Personal/Index.js',
+    picture: './src/ForTeacher/Picture/Index.js'
   },
   output: {
     path: config.build.assetsRoot,
