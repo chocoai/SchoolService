@@ -1,7 +1,7 @@
 <template>
   <div class="Picture">
-    <mu-float-button icon="edit" @click="choosePicture" primary/>
-    <img :src="localIds" width="360px" height="360px"/>
+    <mu-flat-button label="选择" v-on:click.native="chooseImage" />
+    <img :src="localIds"/>
   </div>
 </template>
 <script>
@@ -20,11 +20,6 @@
         API.Get,
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        console.log(response.body)
-        console.log(response.body.appId)
-        console.log(response.body.timestamp)
-        console.log(response.body.nonceStr)
-        console.log(response.body.signature)
         wx.config({
           debug: false,
           appId: response.body.appId,
@@ -32,23 +27,20 @@
           nonceStr: response.body.nonceStr,
           signature: response.body.signature,
           jsApiList: [
-            'chooseImage'
+            'chooseImage',
+            'startRecord'
           ]
-        })
-        wx.ready(function () {
         })
       }, (response) => {
       })
     },
     methods: {
-      choosePicture () {
+      chooseImage () {
         wx.chooseImage({
-          count: 1, // 默认9
-          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
           success: function (res) {
-            console.log('成功调用')
-            this.localIds = res.localIds // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            // 运行不报错，但手机调试时就是不出现相册
+            console.log(res)
+            this.localIds = res.localIds
           }
         })
       }
