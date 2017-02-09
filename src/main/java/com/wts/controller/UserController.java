@@ -28,7 +28,7 @@ public class UserController extends Controller {
   }
   public void picture()  throws WeixinException {
     JSSDKConfigurator a =new JSSDKConfigurator(WP.me.getTicketManager(TicketType.jsapi));
-    a.apis(JSSDKAPI.chooseImage,JSSDKAPI.startRecord);
+    a.apis(JSSDKAPI.chooseImage);
     renderJson(a.toJSONConfig("http://wts.s1.natapp.cc/user/tokenSignature"));
   }
 }

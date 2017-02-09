@@ -1,6 +1,6 @@
 <template>
   <div class="Picture">
-    <mu-flat-button label="选择" v-on:click.native="chooseImage" />
+    <mu-flat-button label="选择" v-on:click.native="chooseImage" primary/>
     <img :src="localIds"/>
   </div>
 </template>
@@ -27,8 +27,7 @@
           nonceStr: response.body.nonceStr,
           signature: response.body.signature,
           jsApiList: [
-            'chooseImage',
-            'startRecord'
+            'chooseImage'
           ]
         })
       }, (response) => {
@@ -37,6 +36,9 @@
     methods: {
       chooseImage () {
         wx.chooseImage({
+          count: 1, // 默认9
+          sizeType: ['original'],
+          sourceType: ['camera'],
           success: function (res) {
             // 运行不报错，但手机调试时就是不出现相册
             console.log(res)
