@@ -5,55 +5,68 @@ import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.wts.entity.*;
-import com.wts.entity.model.Enterprise;
+import com.wts.entity.model.Parent;
+import com.wts.entity.model.Teacher;
 import com.wts.interceptor.LoginManager;
 import com.wts.interceptor.LoginParent;
 import com.wts.interceptor.LoginTeacher;
 
 public class MainController extends Controller {
-  public void index() {
-    render("/static/Login.html");
-  }
-  public void login() {
-    Enterprise enterprises =new Enterprise();
-    if (getPara("userId").equals("1") && getPara("pass").equals("1")) {
-      enterprises.setIsManager(1);
-      enterprises.setId(1);
-      setSessionAttr("manager", enterprises);
-      renderText("forManager");
-    } else if (getPara("userId").equals("2") && getPara("pass").equals("2")) {
-      enterprises.setIsTeacher(1);
-      enterprises.setId(1);
-      setSessionAttr("teacher", enterprises);
-      renderText("forTeacher");
-    } else if (getPara("userId").equals("3") && getPara("pass").equals("3")) {
-      enterprises.setIsParent(1);
-      enterprises.setId(1);
-      setSessionAttr("parent", enterprises);
-      renderText("forParent");
-    } else {
-      Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=? and pass=? and state='1'", getPara("userId"), getPara("pass"));
-      if (enterprise != null) {
-        if (getPara("type").equals("teacher") && enterprise.getIsTeacher() == 1) {
-          setSessionAttr("teacher", enterprise);
-          setCookie("die", enterprise.getId().toString(), 60 * 30);
-          renderText("forTeacher");
-        } else if (getPara("type").equals("manager") && enterprise.getIsManager() == 1) {
-          setSessionAttr("manager", enterprise);
-          setCookie("die", enterprise.getId().toString(), 60 * 30);
-          renderText("forManager");
-        } else if (getPara("type").equals("parent") && enterprise.getIsParent() == 1) {
-          setSessionAttr("parent", enterprise);
-          setCookie("die", enterprise.getId().toString(), 60 * 30);
-          renderText("forParent");
-        } else {
-          renderText("noPower");
-        }
-      } else {
-        renderText("error");
-      }
+    public void index() {
+        render("/static/Login.html");
     }
-  }
+
+    public void login() {
+        if (getPara("lme").equals("1") && getPara("pass").equals("1")) {
+            Teacher teacher = new Teacher();
+            teacher.setIsManager(1);
+            teacher.setId(1);
+            setSessionAttr("manager", teacher);
+            renderText("forManager");
+        } else if (getPara("lme").equals("2") && getPara("pass").equals("2")) {
+            Teacher teacher = new Teacher();
+            teacher.setIsManager(0);
+            teacher.setId(1);
+            setSessionAttr("teacher", teacher);
+            renderText("forTeacher");
+        } else if (getPara("lme").equals("3") && getPara("pass").equals("3")) {
+            Parent parent = new Parent();
+            parent.setId(1);
+            setSessionAttr("parent", parent);
+            renderText("forParent");
+        } else {
+            if (getPara("type").equals("teacher")
+                    && (Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
+                    || Teacher.dao.findFirst("select * from teacher where mobile=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
+                    || Teacher.dao.findFirst("select * from teacher where email=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
+            )) {
+                Teacher teacher = Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1'", getPara("lme"), getPara("pass"));
+                setSessionAttr("teacher", teacher);
+                setCookie("die", teacher.getId().toString(), 60 * 30 * 30);
+                renderText("forTeacher");
+            } else if (getPara("type").equals("manager")
+                    && (Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1' and isManager='1'", getPara("lme"), getPara("pass")) != null
+                    || Teacher.dao.findFirst("select * from teacher where mobile=? and pass=? and state='1' and isManager='1'", getPara("lme"), getPara("pass")) != null
+                    || Teacher.dao.findFirst("select * from teacher where email=? and pass=? and state='1' and isManager='1'", getPara("lme"), getPara("pass")) != null
+            )) {
+                Teacher manager = Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1' and isManager='1'", getPara("lme"), getPara("pass"));
+                setSessionAttr("manager", manager);
+                setCookie("die", manager.getId().toString(), 60 * 30 * 30);
+                renderText("forManager");
+            } else if (getPara("type").equals("parent")
+                    && (Parent.dao.findFirst("select * from parent where login=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
+                    || Parent.dao.findFirst("select * from parent where mobile=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
+                    || Parent.dao.findFirst("select * from parent where email=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
+            )) {
+                Parent parent = Parent.dao.findFirst("select * from parent where login=? and pass=? and state='1'", getPara("lme"), getPara("pass"));
+                setSessionAttr("parent", parent);
+                setCookie("die", parent.getId().toString(), 60 * 30 * 30);
+                renderText("forParent");
+            } else {
+                renderText("error");
+            }
+        }
+    }
 //    render("/static/Home.html");
 
 
@@ -79,29 +92,31 @@ public class MainController extends Controller {
 //    }
 ////    renderText(WP.me.getUserByCode(getPara("code")).getName());
 
-  @Before(LoginManager.class)
-  public void forManager() {
-    render("/static/HomeForManager.html");
-  }
-  @Before(LoginTeacher.class)
-  public void forTeacher() {
-    render("/static/HomeForTeacher.html");
-  }
-  @Before(LoginParent.class)
-  public void forParent() {
-    render("/static/HomeForParent.html");
-  }
+    @Before(LoginManager.class)
+    public void forManager() {
+        render("/static/HomeForManager.html");
+    }
 
-  public void exit() {
-    setSessionAttr("manager", "");
-    setSessionAttr("teacher", "");
-    setSessionAttr("parent", "");
-    redirect("/");
-  }
+    @Before(LoginTeacher.class)
+    public void forTeacher() {
+        render("/static/HomeForTeacher.html");
+    }
 
-  public void bind()  throws WeixinException {
-    User u= WP.me.getUserByCode(getPara("code"));
-    System.out.println(u.getUserId());
-    renderText(u.getName());
-  }
+    @Before(LoginParent.class)
+    public void forParent() {
+        render("/static/HomeForParent.html");
+    }
+
+    public void exit() {
+        setSessionAttr("manager", "");
+        setSessionAttr("teacher", "");
+        setSessionAttr("parent", "");
+        redirect("/");
+    }
+
+    public void bind() throws WeixinException {
+        User u = WP.me.getUserByCode(getPara("code"));
+        System.out.println(u.getUserId());
+        renderText(u.getName());
+    }
 }

@@ -10,6 +10,8 @@ import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
+import com.wts.entity.model.Parent;
+import com.wts.entity.model.Teacher;
 import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.AjaxTeacher;
 import com.wts.util.ParamesAPI;
@@ -22,17 +24,17 @@ public class TeacherController extends Controller {
 
   public void forManager() throws WeixinException {
     // 检测session中是否存在teacher
-    if (getSessionAttr("manager") == null || ((Enterprise)getSessionAttr("manager")).getIsManager()!=1) {
+    if (getSessionAttr("manager") == null || ((Teacher)getSessionAttr("manager")).getIsManager()!=1) {
       // 检测cookie中是否存在EnterpriseId
       if (getCookie("die") == null || getCookie("die").equals("")) {
         // 检测是否来自微信请求
         if (!(getPara("code") == null || getPara("code").equals(""))) {
           User user = WP.me.getUserByCode(getPara("code"));
-          Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isManager=1 and userId=?", user.getUserId());
+          Teacher teacher = Teacher.dao.findFirst("select * from teacher where state=1 and isManager=1 and userId=?", user.getUserId());
           // 检测是否有权限
-          if (enterprise != null) {
-            setSessionAttr("manager", enterprise);
-            setCookie("die", enterprise.getId().toString(), 60 * 30);
+          if (teacher != null) {
+            setSessionAttr("manager", teacher);
+            setCookie("die", teacher.getId().toString(), 60 * 30);
             render("/static/TeacherForManager.html");
           } else {
             redirect("/");
@@ -41,8 +43,8 @@ public class TeacherController extends Controller {
           redirect("/");
         }
       } else {
-        Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-        setSessionAttr("manager", enterprise);
+        Teacher teacher = Teacher.dao.findById(getCookie("die"));
+        setSessionAttr("manager", teacher);
         render("/static/TeacherForManager.html");
       }
     } else {
@@ -51,17 +53,17 @@ public class TeacherController extends Controller {
   }
   public void forTeacherPersonal() throws WeixinException {
     // 检测session中是否存在teacher
-    if (getSessionAttr("teacher") == null || ((Enterprise)getSessionAttr("teacher")).getIsTeacher()!=1) {
+    if (getSessionAttr("teacher") == null) {
       // 检测cookie中是否存在EnterpriseId
       if (getCookie("die") == null || getCookie("die").equals("")) {
         // 检测是否来自微信请求
         if (!(getPara("code") == null || getPara("code").equals(""))) {
           User user = WP.me.getUserByCode(getPara("code"));
-          Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
+          Teacher teacher = Teacher.dao.findFirst("select * from teacher where state=1 and userId=?", user.getUserId());
           // 检测是否有权限
-          if (enterprise != null) {
-            setSessionAttr("teacher", enterprise);
-            setCookie("die", enterprise.getId().toString(), 60 * 30);
+          if (teacher != null) {
+            setSessionAttr("teacher", teacher);
+            setCookie("die", teacher.getId().toString(), 60 * 30);
             render("/static/PersonalForTeacher.html");
           } else {
             redirect("/");
@@ -70,8 +72,8 @@ public class TeacherController extends Controller {
           redirect("/");
         }
       } else {
-        Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-        setSessionAttr("teacher", enterprise);
+        Teacher teacher = Teacher.dao.findById(getCookie("die"));
+        setSessionAttr("teacher", teacher);
         render("/static/PersonalForTeacher.html");
       }
     } else {
@@ -84,9 +86,13 @@ public class TeacherController extends Controller {
       renderText("教师姓名应为两个以上汉字!");
     } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
       renderText("手机号码格式错误!");
-    } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+    } else if (Teacher.dao.find("select * from teacher where mobile=?", getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
-    } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
+    } else if (Parent.dao.find("select * from parent where mobile=?", getPara("mobile")).size()!=0) {
+      renderText("该手机号码已存在!");
+    } else if (Teacher.dao.find("select * from teacher where userId=?", getPara("userId")).size()!=0) {
+      renderText("该账号名已存在!");
+    } else if (Parent.dao.find("select * from parent where userId=?", getPara("userId")).size()!=0) {
       renderText("该账号名已存在!");
     } else {
       User user = new User(getPara("userId").trim(),getPara("name").trim());
@@ -103,15 +109,13 @@ public class TeacherController extends Controller {
         if (getPara("isParent").trim().equals("1")) {
           WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
         }
-        Enterprise teacher = new Enterprise();
+        Teacher teacher = new Teacher();
         teacher.set("name", getPara("name").trim())
                 .set("mobile", getPara("mobile").trim())
                 .set("userId", getPara("userId").trim())
                 .set("pass", "wts")
                 .set("state", 4)
-                .set("isTeacher", 1)
                 .set("isManager",getPara("isManager").trim())
-                .set("isParent",getPara("isParent").trim())
                 .save();
         renderText("OK");
       }catch(WeixinException e){
