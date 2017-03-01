@@ -16,25 +16,42 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 public class _MappingKit {
 
 	public static void mapping(ActiveRecordPlugin arp) {
+		arp.addMapping("assessment", "id", Assessment.class);
+		// Composite Primary Key order: assessment_id,student_id
+		arp.addMapping("assessmentdetail", "assessment_id,student_id", Assessmentdetail.class);
 		arp.addMapping("course", "id", Course.class);
-		arp.addMapping("enterprise", "id", Enterprise.class);
+		arp.addMapping("coursechoose", "id", Coursechoose.class);
+		arp.addMapping("coursemessage", "id", Coursemessage.class);
+		arp.addMapping("coursemessageread", "id", Coursemessageread.class);
+		// Composite Primary Key order: course_id,room_id,semester_id
+		arp.addMapping("courseroom", "course_id,room_id,semester_id", Courseroom.class);
+		// Composite Primary Key order: course_id,room_id,semester_id,teacher_id
+		arp.addMapping("courseroomteacher", "course_id,room_id,semester_id,teacher_id", Courseroomteacher.class);
 		arp.addMapping("exam", "id", Exam.class);
-		arp.addMapping("grade", "id", Grade.class);
+		// Composite Primary Key order: exam_id,student_id
+		arp.addMapping("grade", "exam_id,student_id", Grade.class);
+		arp.addMapping("homework", "id", Homework.class);
+		// Composite Primary Key order: homework_id,student_id
+		arp.addMapping("homeworkdetail", "homework_id,student_id", Homeworkdetail.class);
+		arp.addMapping("homeworkread", "id", Homeworkread.class);
 		arp.addMapping("identity", "id", Identity.class);
 		arp.addMapping("leave", "id", Leave.class);
 		arp.addMapping("notice", "id", Notice.class);
-		arp.addMapping("praise", "id", Praise.class);
-		arp.addMapping("praisedetail", "id", Praisedetail.class);
-		arp.addMapping("relation", "id", Relation.class);
+		arp.addMapping("parent", "id", Parent.class);
+		// Composite Primary Key order: identity_id,parent_id,student_id
+		arp.addMapping("relation", "identity_id,parent_id,student_id", Relation.class);
 		arp.addMapping("room", "id", Room.class);
-		arp.addMapping("roomplan", "id", Roomplan.class);
-		arp.addMapping("roomwork", "id", Roomwork.class);
-		arp.addMapping("roomworkread", "id", Roomworkread.class);
+		// Composite Primary Key order: room_id,student_id
+		arp.addMapping("roomstudent", "room_id,student_id", Roomstudent.class);
+		// Composite Primary Key order: order_course,order_day,semester_id
+		arp.addMapping("schedule", "order_course,order_day,semester_id", Schedule.class);
+		arp.addMapping("semester", "id", Semester.class);
 		arp.addMapping("student", "id", Student.class);
-		arp.addMapping("team", "id", Team.class);
-		arp.addMapping("teamplan", "id", Teamplan.class);
-		arp.addMapping("teamwork", "id", Teamwork.class);
-		arp.addMapping("teamworkread", "id", Teamworkread.class);
+		// Composite Primary Key order: course_id,semester_id,student_id
+		arp.addMapping("studentcourse", "course_id,semester_id,student_id", Studentcourse.class);
+		arp.addMapping("teacher", "id", Teacher.class);
+		arp.addMapping("teachermessage", "id", Teachermessage.class);
+		arp.addMapping("teachermessageread", "id", Teachermessageread.class);
 	}
 }
 

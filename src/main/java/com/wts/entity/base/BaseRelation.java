@@ -9,14 +9,6 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseRelation<M extends BaseRelation<M>> extends Model<M> implements IBean {
 
-	public void setId(java.lang.Integer id) {
-		set("id", id);
-	}
-
-	public java.lang.Integer getId() {
-		return get("id");
-	}
-
 	public void setParentId(java.lang.Integer parentId) {
 		set("parent_id", parentId);
 	}

@@ -65,22 +65,6 @@ public abstract class BaseStudent<M extends BaseStudent<M>> extends Model<M> imp
 		return get("address");
 	}
 
-	public void setRoomId(java.lang.Integer roomId) {
-		set("room_id", roomId);
-	}
-
-	public java.lang.Integer getRoomId() {
-		return get("room_id");
-	}
-
-	public void setTeamId(java.lang.Integer teamId) {
-		set("team_id", teamId);
-	}
-
-	public java.lang.Integer getTeamId() {
-		return get("team_id");
-	}
-
 	public void setState(java.lang.Integer state) {
 		set("state", state);
 	}

@@ -1,53 +1,166 @@
-Table: course
--------+--------------+------+-----+---------+---------
- Field | Type         | Null | Key | Default | Remarks 
--------+--------------+------+-----+---------+---------
- id    | INT(10)      | NO   | PRI |         | 课程序号    
- name  | VARCHAR(255) | YES  |     |         | 课程名称    
--------+--------------+------+-----+---------+---------
+Table: assessment
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         |         
+ title       | VARCHAR(255) | YES  |     |         | 标题      
+ content     | VARCHAR(255) | YES  |     |         | 内容      
+ time        | DATETIME(19) | YES  |     |         | 时间      
+ type        | INT(10)      | YES  |     |         | 评定类型1表扬2批评
+ teacher_id  | INT(10)      | YES  |     |         | 教师序号    
+ course_id   | INT(10)      | YES  |     |         | 课程序号    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ state       | INT(10)      | YES  |     |         | 状态0停用1可用
+ scope       | INT(10)      | YES  |     |         | 发送范围1指定发送2全部发送
+-------------+--------------+------+-----+---------+---------
 
-Table: enterprise
------------+--------------+------+-----+---------+---------
- Field     | Type         | Null | Key | Default | Remarks 
------------+--------------+------+-----+---------+---------
- id        | INT(10)      | NO   | PRI |         | 企业号用户序号 
- userId    | VARCHAR(255) | YES  |     |         | 微信号     
- pass      | VARCHAR(255) | YES  |     |         | 登录密码    
- openId    | VARCHAR(255) | YES  |     |         | 微信号     
- name      | VARCHAR(255) | YES  |     |         | 姓名      
- sex       | INT(10)      | YES  |     |         | 性别0未知1男2女
- mobile    | VARCHAR(255) | YES  |     |         | 手机号码    
- email     | VARCHAR(255) | YES  |     |         | 电子邮箱    
- weixinId  | VARCHAR(255) | YES  |     |         | 微信账号    
- state     | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
- isTeacher | INT(10)      | YES  |     |         | 是否教师0否1是
- isParent  | INT(10)      | YES  |     |         | 是否家长0否1是
- isManager | INT(10)      | YES  |     |         | 是否管理0否1是
- picUrl    | VARCHAR(255) | YES  |     |         | 头像地址    
------------+--------------+------+-----+---------+---------
+Table: assessmentdetail
+---------------+--------------+------+-----+---------+---------
+ Field         | Type         | Null | Key | Default | Remarks 
+---------------+--------------+------+-----+---------+---------
+ assessment_id | INT(10)      | NO   | PRI |         | 表扬序号    
+ student_id    | INT(10)      | NO   | PRI |         | 学生序号    
+ time          | DATETIME(19) | YES  |     |         |         
+ content       | VARCHAR(255) | YES  |     |         | 评语      
+ score         | INT(10)      | YES  |     |         | 分数      
+ state         | INT(10)      | YES  |     |         | 是否表扬0否1是
+---------------+--------------+------+-----+---------+---------
+
+Table: course
+----------+--------------+------+-----+---------+---------
+ Field    | Type         | Null | Key | Default | Remarks 
+----------+--------------+------+-----+---------+---------
+ id       | INT(10)      | NO   | PRI |         | 课程序号    
+ name     | VARCHAR(255) | YES  |     |         | 课程名称    
+ describe | VARCHAR(255) | YES  |     |         | 课程描述    
+ type     | VARCHAR(255) | YES  |     |         | 课程类型1必修课2选修课
+ state    | VARCHAR(255) | YES  |     |         | 课程状态0停用1可用
+----------+--------------+------+-----+---------+---------
+
+Table: coursechoose
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         |         
+ student_id  | INT(10)      | YES  |     |         | 学生序号    
+ course_id   | INT(10)      | YES  |     |         | 课程序号    
+ parent_id   | INT(10)      | YES  |     |         | 家长序号    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ time        | DATETIME(19) | YES  |     |         | 选课时间    
+-------------+--------------+------+-----+---------+---------
+
+Table: coursemessage
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         | 作业序号    
+ title       | VARCHAR(255) | YES  |     |         | 标题      
+ content     | VARCHAR(999) | YES  |     |         | 内容      
+ time        | DATETIME(19) | YES  |     |         | 发布时间    
+ teacher_id  | INT(10)      | YES  |     |         | 教师序号    
+ course_id   | INT(10)      | YES  |     |         | 课程序号    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ state       | INT(10)      | YES  |     |         | 消息状态0停用1可用
+ send        | INT(10)      | YES  |     |         | 是否发送0否1是
+-------------+--------------+------+-----+---------+---------
+
+Table: coursemessageread
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         |         
+ message_id  | INT(10)      | YES  |     |         | 消息序号    
+ parent_id   | INT(10)      | YES  |     |         | 家长序号    
+ student_id  | INT(10)      | YES  |     |         | 学生序号    
+ identity_id | INT(10)      | YES  |     |         | 身份序号    
+ time        | DATETIME(19) | YES  |     |         | 阅读时间    
+ state       | INT(10)      | YES  |     |         | 是否阅读0未读1已读
+-------------+--------------+------+-----+---------+---------
+
+Table: courseroom
+-------------+---------+------+-----+---------+---------
+ Field       | Type    | Null | Key | Default | Remarks 
+-------------+---------+------+-----+---------+---------
+ course_id   | INT(10) | NO   | PRI |         | 课程序号    
+ room_id     | INT(10) | NO   | PRI |         | 班级序号    
+ semester_id | INT(10) | NO   | PRI |         | 学期序号    
+-------------+---------+------+-----+---------+---------
+
+Table: courseroomteacher
+-------------+---------+------+-----+---------+---------
+ Field       | Type    | Null | Key | Default | Remarks 
+-------------+---------+------+-----+---------+---------
+ course_id   | INT(10) | NO   | PRI |         | 课程序号    
+ room_id     | INT(10) | NO   | PRI |         | 班级序号    
+ teacher_id  | INT(10) | NO   | PRI |         | 教师序号    
+ semester_id | INT(10) | NO   | PRI |         | 学期序号    
+-------------+---------+------+-----+---------+---------
 
 Table: exam
------------+--------------+------+-----+---------+---------
- Field     | Type         | Null | Key | Default | Remarks 
------------+--------------+------+-----+---------+---------
- id        | INT(10)      | NO   | PRI |         | 测试序号    
- name      | VARCHAR(255) | YES  |     |         | 测试名称    
- time      | DATETIME(19) | YES  |     |         | 测试时间    
- course_id | INT(10)      | YES  |     |         | 课程序号    
- type      | INT(10)      | YES  |     |         | 测试类型1随堂测验2单元测验3期末测试
- room_id   | INT(10)      | YES  |     |         | 班级序号    
- remark    | VARCHAR(255) | YES  |     |         | 测试备注    
------------+--------------+------+-----+---------+---------
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         | 测试序号    
+ title       | VARCHAR(255) | YES  |     |         | 测试标题    
+ describe    | VARCHAR(255) | YES  |     |         | 测试描述    
+ time        | DATETIME(19) | YES  |     |         | 测试时间    
+ course_id   | INT(10)      | YES  |     |         | 课程序号    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ type        | INT(10)      | YES  |     |         | 测试类型1随堂测验2单元测验3期末测试
+ remark      | VARCHAR(255) | YES  |     |         | 测试备注    
+-------------+--------------+------+-----+---------+---------
 
 Table: grade
-------------+---------+------+-----+---------+---------
- Field      | Type    | Null | Key | Default | Remarks 
-------------+---------+------+-----+---------+---------
- id         | INT(10) | NO   | PRI |         | 成绩序号    
- exam_id    | INT(10) | YES  |     |         | 测试序号    
- student_id | INT(10) | YES  |     |         | 学生序号    
- score      | INT(10) | YES  |     |         | 分数      
-------------+---------+------+-----+---------+---------
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ exam_id     | INT(10)      | NO   | PRI |         | 测试序号    
+ student_id  | INT(10)      | NO   | PRI |         | 学生序号    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ time        | DATETIME(19) | YES  |     |         | 时间      
+ content     | VARCHAR(255) | YES  |     |         | 评语      
+ score       | INT(10)      | YES  |     |         | 分数      
+ state       | INT(10)      | YES  |     |         | 是否评比0否1是
+-------------+--------------+------+-----+---------+---------
+
+Table: homework
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         | 作业序号    
+ content     | VARCHAR(999) | YES  |     |         | 作业内容    
+ time        | DATETIME(19) | YES  |     |         | 发布时间    
+ teacher_id  | INT(10)      | YES  |     |         | 教师序号    
+ course_id   | INT(10)      | YES  |     |         | 课程序号    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ state       | INT(10)      | YES  |     |         | 状态0停用1可用
+ send        | INT(10)      | YES  |     |         | 是否发送0否1是
+-------------+--------------+------+-----+---------+---------
+
+Table: homeworkdetail
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ homework_id | INT(10)      | NO   | PRI |         | 作业序号    
+ student_id  | INT(10)      | NO   | PRI |         | 学生序号    
+ state       | INT(10)      | YES  |     |         | 是否评比0否1是
+ time        | DATETIME(19) | YES  |     |         | 评分时间    
+ content     | VARCHAR(999) | YES  |     |         | 评语      
+ score       | INT(10)      | YES  |     |         | 分数      
+-------------+--------------+------+-----+---------+---------
+
+Table: homeworkread
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         |         
+ homework_id | INT(10)      | YES  |     |         | 作业序号    
+ parent_id   | INT(10)      | YES  |     |         | 家长序号    
+ student_id  | INT(10)      | YES  |     |         | 学生序号    
+ identity_id | INT(10)      | YES  |     |         | 身份序号    
+ time        | DATETIME(19) | YES  |     |         | 阅读时间    
+ state       | INT(10)      | YES  |     |         | 是否阅读0未读1已读
+-------------+--------------+------+-----+---------+---------
 
 Table: identity
 -------+--------------+------+-----+---------+---------
@@ -58,112 +171,103 @@ Table: identity
 -------+--------------+------+-----+---------+---------
 
 Table: leave
-----------------+--------------+------+-----+---------+---------
- Field          | Type         | Null | Key | Default | Remarks 
-----------------+--------------+------+-----+---------+---------
- id             | INT(10)      | NO   | PRI |         | 请假序号    
- type           | INT(10)      | YES  |     |         | 请假类型1病假2事假
- flow           | INT(10)      | YES  |     |         | 流转过程1申请2批准3未批准
- parentContent  | VARCHAR(999) | YES  |     |         | 请假说明    
- teacherContent | VARCHAR(999) | YES  |     |         | 教师回复    
- student_id     | INT(10)      | YES  |     |         | 请假学生    
- parent_id      | INT(10)      | YES  |     |         | 请假家长    
- teacher_id     | INT(10)      | YES  |     |         | 批准教师    
- time_apply     | DATETIME(19) | YES  |     |         | 申请时间    
- time_ratify    | DATETIME(19) | YES  |     |         | 批准时间    
- time_start     | DATETIME(19) | YES  |     |         | 开始时间    
- time_end       | DATETIME(19) | YES  |     |         | 终止时间    
-----------------+--------------+------+-----+---------+---------
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         | 请假序号    
+ type        | INT(10)      | YES  |     |         | 请假类型1病假2事假3其他
+ flow        | INT(10)      | YES  |     |         | 流转过程1申请中2已批准3未批准
+ reason      | VARCHAR(999) | YES  |     |         | 请假原因    
+ reply       | VARCHAR(999) | YES  |     |         | 教师回复    
+ student_id  | INT(10)      | YES  |     |         | 请假学生    
+ parent_id   | INT(10)      | YES  |     |         | 请假家长    
+ teacher_id  | INT(10)      | YES  |     |         | 批准教师    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ time_apply  | DATETIME(19) | YES  |     |         | 申请时间    
+ time_ratify | DATETIME(19) | YES  |     |         | 批准时间    
+ time_start  | DATETIME(19) | YES  |     |         | 开始时间    
+ time_end    | DATETIME(19) | YES  |     |         | 终止时间    
+-------------+--------------+------+-----+---------+---------
 
 Table: notice
-------------+--------------+------+-----+---------+---------
- Field      | Type         | Null | Key | Default | Remarks 
-------------+--------------+------+-----+---------+---------
- id         | INT(10)      | NO   | PRI |         | 消息序号    
- title      | VARCHAR(255) | YES  |     |         | 通知标题    
- content    | VARCHAR(999) | YES  |     |         | 消息内容    
- time       | DATETIME(19) | YES  |     |         | 发布时间    
- teacher_id | INT(10)      | YES  |     |         | 教师序号    
- type       | INT(10)      | YES  |     |         | 通知类型1全部1教师3家长
-------------+--------------+------+-----+---------+---------
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         | 消息序号    
+ title       | VARCHAR(255) | YES  |     |         | 通知标题    
+ content     | VARCHAR(999) | YES  |     |         | 消息内容    
+ time        | DATETIME(19) | YES  |     |         | 发布时间    
+ teacher_id  | INT(10)      | YES  |     |         | 教师序号    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ state       | INT(10)      | YES  |     |         | 消息状态0停用1可用
+-------------+--------------+------+-----+---------+---------
 
-Table: praise
-------------+--------------+------+-----+---------+---------
- Field      | Type         | Null | Key | Default | Remarks 
-------------+--------------+------+-----+---------+---------
- id         | INT(10)      | NO   | PRI |         |         
- reason     | VARCHAR(255) | YES  |     |         | 表扬原因    
- time       | DATETIME(19) | YES  |     |         | 表扬时间    
- type       | INT(10)      | YES  |     |         | 表扬类型1全部2部分
- teacher_id | INT(10)      | YES  |     |         | 教师序号    
- course_id  | INT(10)      | YES  |     |         | 课程序号    
- room_id    | INT(10)      | YES  |     |         | 班级序号    
-------------+--------------+------+-----+---------+---------
-
-Table: praisedetail
-------------+---------+------+-----+---------+---------
- Field      | Type    | Null | Key | Default | Remarks 
-------------+---------+------+-----+---------+---------
- id         | INT(10) | NO   | PRI |         |         
- praise_id  | INT(10) | YES  |     |         |         
- student_id | INT(10) | YES  |     |         |         
-------------+---------+------+-----+---------+---------
+Table: parent
+----------+--------------+------+-----+---------+---------
+ Field    | Type         | Null | Key | Default | Remarks 
+----------+--------------+------+-----+---------+---------
+ id       | INT(10)      | NO   | PRI |         | 企业号用户序号 
+ userId   | VARCHAR(255) | YES  |     |         | 微信号     
+ login    | VARCHAR(255) | YES  |     |         | 登录名     
+ pass     | VARCHAR(255) | YES  |     |         | 登录密码    
+ name     | VARCHAR(255) | YES  |     |         | 姓名      
+ sex      | INT(10)      | YES  |     |         | 性别0未知1男2女
+ mobile   | VARCHAR(255) | YES  |     |         | 手机号码    
+ email    | VARCHAR(255) | YES  |     |         | 电子邮箱    
+ weixinId | VARCHAR(255) | YES  |     |         | 微信账号    
+ state    | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
+ picUrl   | VARCHAR(255) | YES  |     |         | 头像地址    
+----------+--------------+------+-----+---------+---------
 
 Table: relation
 -------------+---------+------+-----+---------+---------
  Field       | Type    | Null | Key | Default | Remarks 
 -------------+---------+------+-----+---------+---------
- id          | INT(10) | NO   | PRI |         |         
- parent_id   | INT(10) | YES  |     |         | 家长序号    
- student_id  | INT(10) | YES  |     |         | 学生序号    
- identity_id | INT(10) | YES  |     |         | 身份序号    
+ parent_id   | INT(10) | NO   | PRI |         | 家长序号    
+ student_id  | INT(10) | NO   | PRI |         | 学生序号    
+ identity_id | INT(10) | NO   | PRI |         | 身份序号    
 -------------+---------+------+-----+---------+---------
 
 Table: room
--------+--------------+------+-----+---------+---------
- Field | Type         | Null | Key | Default | Remarks 
--------+--------------+------+-----+---------+---------
- id    | INT(10)      | NO   | PRI |         | 班级序号    
- name  | VARCHAR(255) | YES  |     |         | 班级名称    
- state | INT(10)      | YES  |     |         | 班级状态1激活2注销3删除
--------+--------------+------+-----+---------+---------
-
-Table: roomplan
-------------+---------+------+-----+---------+---------
- Field      | Type    | Null | Key | Default | Remarks 
-------------+---------+------+-----+---------+---------
- id         | INT(10) | NO   | PRI |         |         
- course_id  | INT(10) | YES  |     |         | 课程序号    
- teacher_id | INT(10) | YES  |     |         | 教师序号    
- room_id    | INT(10) | YES  |     |         | 班级序号    
-------------+---------+------+-----+---------+---------
-
-Table: roomwork
 ------------+--------------+------+-----+---------+---------
  Field      | Type         | Null | Key | Default | Remarks 
 ------------+--------------+------+-----+---------+---------
- id         | INT(10)      | NO   | PRI |         | 作业序号    
- title      | VARCHAR(255) | YES  |     |         | 标题      
- content    | VARCHAR(999) | YES  |     |         | 作业内容    
- time       | DATETIME(19) | YES  |     |         | 发布时间    
- teacher_id | INT(10)      | YES  |     |         | 教师序号    
- room_id    | INT(10)      | YES  |     |         | 班级序号    
- course_id  | INT(10)      | YES  |     |         | 课程序号    
- state      | INT(10)      | YES  |     |         | 消息状态1可用2注销
+ id         | INT(10)      | NO   | PRI |         | 班级序号    
+ roomYear   | VARCHAR(255) | YES  |     |         | 入学年份    
+ roomOrder  | VARCHAR(255) | YES  |     |         | 班级次序    
+ roomSlogan | VARCHAR(255) | YES  |     |         | 班级口号    
+ state      | INT(10)      | YES  |     |         | 班级状态0停用1可用
 ------------+--------------+------+-----+---------+---------
 
-Table: roomworkread
--------------+--------------+------+-----+---------+---------
- Field       | Type         | Null | Key | Default | Remarks 
--------------+--------------+------+-----+---------+---------
- id          | INT(10)      | NO   | PRI |         |         
- roomwork_id | INT(10)      | YES  |     |         | 作业序号    
- parent_id   | INT(10)      | YES  |     |         | 家长序号    
- student_id  | INT(10)      | YES  |     |         | 学生序号    
- identity_id | INT(10)      | YES  |     |         | 身份序号    
- state       | INT(10)      | YES  |     |         | 是否阅读0否1是
- time        | DATETIME(19) | YES  |     |         | 阅读时间    
--------------+--------------+------+-----+---------+---------
+Table: roomstudent
+------------+---------+------+-----+---------+---------
+ Field      | Type    | Null | Key | Default | Remarks 
+------------+---------+------+-----+---------+---------
+ room_id    | INT(10) | NO   | PRI |         | 社团序号    
+ student_id | INT(10) | NO   | PRI |         | 学生序号    
+------------+---------+------+-----+---------+---------
+
+Table: schedule
+--------------+--------------+------+-----+---------+---------
+ Field        | Type         | Null | Key | Default | Remarks 
+--------------+--------------+------+-----+---------+---------
+ order_day    | INT(10)      | NO   | PRI |         | 星期*(1,2,3,4,5)
+ order_course | INT(10)      | NO   | PRI |         | 第*堂课(1,2,3,4,5,6,7,8)
+ semester_id  | INT(10)      | NO   | PRI |         | 学期序号    
+ time_start   | DATETIME(19) | YES  |     |         | 开始时间    
+ time_end     | DATETIME(19) | YES  |     |         | 结束时间    
+--------------+--------------+------+-----+---------+---------
+
+Table: semester
+------------+--------------+------+-----+---------+---------
+ Field      | Type         | Null | Key | Default | Remarks 
+------------+--------------+------+-----+---------+---------
+ id         | INT(10)      | NO   | PRI |         | 序号      
+ name       | VARCHAR(255) | YES  |     |         | 学期名称    
+ time_start | DATETIME(19) | YES  |     |         | 开始时间    
+ time_end   | DATETIME(19) | YES  |     |         | 终止时间    
+ state      | INT(10)      | YES  |     |         | 状态0非当前学期1当前学期
+------------+--------------+------+-----+---------+---------
 
 Table: student
 ---------+--------------+------+-----+---------+---------
@@ -176,52 +280,56 @@ Table: student
  sex     | INT(10)      | YES  |     |         | 学生性别0未知1男2女
  birth   | DATETIME(19) | YES  |     |         | 出生日期    
  address | VARCHAR(255) | YES  |     |         | 家庭地址    
- room_id | INT(10)      | YES  |     |         | 班级序号    
- team_id | INT(10)      | YES  |     |         | 社团序号    
- state   | INT(10)      | YES  |     |         | 学生状态1激活2注销3删除
+ state   | INT(10)      | YES  |     |         | 学生状态0停用1可用
 ---------+--------------+------+-----+---------+---------
 
-Table: team
--------+--------------+------+-----+---------+---------
- Field | Type         | Null | Key | Default | Remarks 
--------+--------------+------+-----+---------+---------
- id    | INT(10)      | NO   | PRI |         | 社团序号    
- name  | VARCHAR(255) | YES  |     |         | 社团名称    
- state | INT(10)      | YES  |     |         | 1激活2注销  
--------+--------------+------+-----+---------+---------
+Table: studentcourse
+-------------+---------+------+-----+---------+---------
+ Field       | Type    | Null | Key | Default | Remarks 
+-------------+---------+------+-----+---------+---------
+ student_id  | INT(10) | NO   | PRI |         | 学生序号    
+ course_id   | INT(10) | NO   | PRI |         | 课程序号    
+ semester_id | INT(10) | NO   | PRI |         | 学期序号    
+-------------+---------+------+-----+---------+---------
 
-Table: teamplan
-------------+---------+------+-----+---------+---------
- Field      | Type    | Null | Key | Default | Remarks 
-------------+---------+------+-----+---------+---------
- id         | INT(10) | NO   | PRI |         |         
- team_id    | INT(10) | YES  |     |         | 社团序号    
- teacher_id | INT(10) | YES  |     |         | 教师序号    
-------------+---------+------+-----+---------+---------
+Table: teacher
+-----------+--------------+------+-----+---------+---------
+ Field     | Type         | Null | Key | Default | Remarks 
+-----------+--------------+------+-----+---------+---------
+ id        | INT(10)      | NO   | PRI |         | 企业号用户序号 
+ userId    | VARCHAR(255) | YES  |     |         | 微信号     
+ login     | VARCHAR(255) | YES  |     |         | 登录名     
+ pass      | VARCHAR(255) | YES  |     |         | 登录密码    
+ name      | VARCHAR(255) | YES  |     |         | 姓名      
+ sex       | INT(10)      | YES  |     |         | 性别0未知1男2女
+ mobile    | VARCHAR(255) | YES  |     |         | 手机号码    
+ email     | VARCHAR(255) | YES  |     |         | 电子邮箱    
+ weixinId  | VARCHAR(255) | YES  |     |         | 微信账号    
+ state     | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
+ isManager | INT(10)      | YES  |     |         | 是否管理0否1是
+ picUrl    | VARCHAR(255) | YES  |     |         | 头像地址    
+-----------+--------------+------+-----+---------+---------
 
-Table: teamwork
+Table: teachermessage
 ------------+--------------+------+-----+---------+---------
  Field      | Type         | Null | Key | Default | Remarks 
 ------------+--------------+------+-----+---------+---------
- id         | INT(10)      | NO   | PRI |         | 作业序号    
- title      | VARCHAR(255) | YES  |     |         | 标题      
- content    | VARCHAR(999) | YES  |     |         | 作业内容    
- time       | DATETIME(19) | YES  |     |         | 发布时间    
+ id         | INT(10)      | NO   | PRI |         | 序号      
+ title      | VARCHAR(255) | YES  |     |         | 消息标题    
+ content    | VARCHAR(255) | YES  |     |         | 消息内容    
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
- team_id    | INT(10)      | YES  |     |         | 班级序号    
- state      | INT(10)      | YES  |     |         | 消息状态1可用2注销
+ time       | DATETIME(19) | YES  |     |         | 发送时间    
+ state      | INT(10)      | YES  |     |         | 消息状态0停用1可用
 ------------+--------------+------+-----+---------+---------
 
-Table: teamworkread
--------------+--------------+------+-----+---------+---------
- Field       | Type         | Null | Key | Default | Remarks 
--------------+--------------+------+-----+---------+---------
- id          | INT(10)      | NO   | PRI |         |         
- teamwork_id | INT(10)      | YES  |     |         | 作业序号    
- parent_id   | INT(10)      | YES  |     |         | 家长序号    
- student_id  | INT(10)      | YES  |     |         | 学生序号    
- identity_id | INT(10)      | YES  |     |         | 身份序号    
- state       | INT(10)      | YES  |     |         | 是否阅读0否1是
- time        | DATETIME(19) | YES  |     |         | 阅读时间    
--------------+--------------+------+-----+---------+---------
+Table: teachermessageread
+------------+--------------+------+-----+---------+---------
+ Field      | Type         | Null | Key | Default | Remarks 
+------------+--------------+------+-----+---------+---------
+ id         | INT(10)      | NO   | PRI |         |         
+ message_id | INT(10)      | YES  |     |         | 消息序号    
+ teacher_id | INT(10)      | YES  |     |         | 教师序号    
+ time       | DATETIME(19) | YES  |     |         | 阅读时间    
+ state      | INT(10)      | YES  |     |         | 是否阅读0未读1已读
+------------+--------------+------+-----+---------+---------
 

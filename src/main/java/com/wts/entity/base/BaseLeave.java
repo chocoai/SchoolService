@@ -33,20 +33,20 @@ public abstract class BaseLeave<M extends BaseLeave<M>> extends Model<M> impleme
 		return get("flow");
 	}
 
-	public void setParentContent(java.lang.String parentContent) {
-		set("parentContent", parentContent);
+	public void setReason(java.lang.String reason) {
+		set("reason", reason);
 	}
 
-	public java.lang.String getParentContent() {
-		return get("parentContent");
+	public java.lang.String getReason() {
+		return get("reason");
 	}
 
-	public void setTeacherContent(java.lang.String teacherContent) {
-		set("teacherContent", teacherContent);
+	public void setReply(java.lang.String reply) {
+		set("reply", reply);
 	}
 
-	public java.lang.String getTeacherContent() {
-		return get("teacherContent");
+	public java.lang.String getReply() {
+		return get("reply");
 	}
 
 	public void setStudentId(java.lang.Integer studentId) {
@@ -71,6 +71,14 @@ public abstract class BaseLeave<M extends BaseLeave<M>> extends Model<M> impleme
 
 	public java.lang.Integer getTeacherId() {
 		return get("teacher_id");
+	}
+
+	public void setSemesterId(java.lang.Integer semesterId) {
+		set("semester_id", semesterId);
+	}
+
+	public java.lang.Integer getSemesterId() {
+		return get("semester_id");
 	}
 
 	public void setTimeApply(java.util.Date timeApply) {

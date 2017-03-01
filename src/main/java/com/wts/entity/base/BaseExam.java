@@ -17,12 +17,20 @@ public abstract class BaseExam<M extends BaseExam<M>> extends Model<M> implement
 		return get("id");
 	}
 
-	public void setName(java.lang.String name) {
-		set("name", name);
+	public void setTitle(java.lang.String title) {
+		set("title", title);
 	}
 
-	public java.lang.String getName() {
-		return get("name");
+	public java.lang.String getTitle() {
+		return get("title");
+	}
+
+	public void setDescribe(java.lang.String describe) {
+		set("describe", describe);
+	}
+
+	public java.lang.String getDescribe() {
+		return get("describe");
 	}
 
 	public void setTime(java.util.Date time) {
@@ -41,20 +49,20 @@ public abstract class BaseExam<M extends BaseExam<M>> extends Model<M> implement
 		return get("course_id");
 	}
 
+	public void setSemesterId(java.lang.Integer semesterId) {
+		set("semester_id", semesterId);
+	}
+
+	public java.lang.Integer getSemesterId() {
+		return get("semester_id");
+	}
+
 	public void setType(java.lang.Integer type) {
 		set("type", type);
 	}
 
 	public java.lang.Integer getType() {
 		return get("type");
-	}
-
-	public void setRoomId(java.lang.Integer roomId) {
-		set("room_id", roomId);
-	}
-
-	public java.lang.Integer getRoomId() {
-		return get("room_id");
 	}
 
 	public void setRemark(java.lang.String remark) {
