@@ -4,6 +4,7 @@ import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
@@ -31,12 +32,12 @@ public class TeacherController extends Controller {
         // 检测是否来自微信请求
         if (!(getPara("code") == null || getPara("code").equals(""))) {
           User user = WP.me.getUserByCode(getPara("code"));
-          Teacher teacher = Teacher.dao.findFirst("select * from teacher where state=1 and isManager=1 and userId=?", user.getUserId());
+          Teacher teacher = Teacher.dao.findFirst(Teacher.dao.getSql("weixin_manager"),user.getUserId(),1);
           // 检测是否有权限
           if (teacher != null) {
             setSessionAttr("manager", teacher);
             setCookie("die", teacher.getId().toString(), 60 * 30);
-            render("/static/TeacherForManager.html");
+            render("/static/ManagerOfTeacher.html");
           } else {
             redirect("/");
           }
@@ -46,10 +47,10 @@ public class TeacherController extends Controller {
       } else {
         Teacher teacher = Teacher.dao.findById(getCookie("die"));
         setSessionAttr("manager", teacher);
-        render("/static/TeacherForManager.html");
+        render("/static/ManagerOfTeacher.html");
       }
     } else {
-      render("/static/TeacherForManager.html");
+      render("/static/ManagerOfTeacher.html");
     }
   }
   /**
@@ -63,12 +64,12 @@ public class TeacherController extends Controller {
         // 检测是否来自微信请求
         if (!(getPara("code") == null || getPara("code").equals(""))) {
           User user = WP.me.getUserByCode(getPara("code"));
-          Teacher teacher = Teacher.dao.findFirst("select * from teacher where state=1 and userId=?", user.getUserId());
+          Teacher teacher = Teacher.dao.findFirst(Teacher.dao.getSql("weixin_teacher"),user.getUserId(),1);
           // 检测是否有权限
           if (teacher != null) {
             setSessionAttr("teacher", teacher);
             setCookie("die", teacher.getId().toString(), 60 * 30);
-            render("/static/teacher_personal.html");
+            render("/static/TeacherOfPersonal.html");
           } else {
             redirect("/");
           }
@@ -78,10 +79,10 @@ public class TeacherController extends Controller {
       } else {
         Teacher teacher = Teacher.dao.findById(getCookie("die"));
         setSessionAttr("teacher", teacher);
-        render("/static/teacher_personal.html");
+        render("/static/TeacherOfPersonal.html");
       }
     } else {
-      render("/static/teacher_personal.html");
+      render("/static/TeacherOfPersonal.html");
     }
   }
   /**
@@ -93,9 +94,9 @@ public class TeacherController extends Controller {
       renderText("教师姓名应为两个以上汉字!");
     } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
       renderText("手机号码格式错误!");
-    } else if (Teacher.dao.find("select * from teacher where mobile=?", getPara("mobile")).size()!=0) {
+    } else if (Teacher.dao.find(Teacher.dao.getSql("teacher_mobile"),getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
-    } else if (Parent.dao.find("select * from parent where mobile=?", getPara("mobile")).size()!=0) {
+    } else if (Parent.dao.find(Parent.dao.getSql("parent_mobile"),getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
     } else if (Teacher.dao.find("select * from teacher where userId=?", getPara("userId")).size()!=0) {
       renderText("该账号名已存在!");

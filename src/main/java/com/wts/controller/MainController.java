@@ -19,11 +19,11 @@ import java.util.List;
 
 public class MainController extends Controller {
     public void index() {
-//        JMap cond = JMap.create("login","w").set("pass","w");
-//        SqlPara sqlPara = Db.getSqlPara("main.login",cond);
-//        List<Record> a = Db.find(sqlPara);
         render("/static/Login.html");
     }
+    /**
+     * 登录跳转
+     * */
     public void login() {
         if (getPara("lme").equals("1") && getPara("pass").equals("1")) {
             Teacher teacher = new Teacher();
@@ -48,35 +48,21 @@ public class MainController extends Controller {
                     .set("email", getPara("lme"))
                     .set("pass", getPara("pass"))
                     .set("state", 1);
-            SqlPara sqlPara = Db.getSqlPara("teacher.findTeacherByLoginPassState",cond);
-            Teacher.dao.findFirst(sqlPara);
-            Teacher.dao.findFirst(Teacher.dao.getSql("teacher.findTeacherByLoginPassState"),sqlPara);
-
-            Teacher.dao.findFirst(Teacher.dao.getSql("teacher.findTeacherByLoginPassState"), getPara("lme"), getPara("pass"), 1);
-            if (getPara("type").equals("teacher")
-                    && (Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
-                    || Teacher.dao.findFirst("select * from teacher where mobile=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
-                    || Teacher.dao.findFirst("select * from teacher where email=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
-            )) {
-                Teacher teacher = Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1'", getPara("lme"), getPara("pass"));
+            SqlPara findTeacher = Db.getSqlPara("teacher.login_teacher",cond);
+            SqlPara findManager = Db.getSqlPara("teacher.login_manager",cond);
+            SqlPara findParent = Db.getSqlPara("parent.login_parent",cond);
+            if (getPara("type").equals("teacher") && Teacher.dao.findFirst(findTeacher) != null) {
+                Teacher teacher = Teacher.dao.findFirst(findTeacher);
                 setSessionAttr("teacher", teacher);
                 setCookie("die", teacher.getId().toString(), 60 * 30 * 30);
                 renderText("forTeacher");
-            } else if (getPara("type").equals("manager")
-                    && (Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1' and isManager='1'", getPara("lme"), getPara("pass")) != null
-                    || Teacher.dao.findFirst("select * from teacher where mobile=? and pass=? and state='1' and isManager='1'", getPara("lme"), getPara("pass")) != null
-                    || Teacher.dao.findFirst("select * from teacher where email=? and pass=? and state='1' and isManager='1'", getPara("lme"), getPara("pass")) != null
-            )) {
-                Teacher manager = Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1' and isManager='1'", getPara("lme"), getPara("pass"));
+            } else if (getPara("type").equals("manager") && Teacher.dao.findFirst(findManager) != null) {
+                Teacher manager = Teacher.dao.findFirst(findManager);
                 setSessionAttr("manager", manager);
                 setCookie("die", manager.getId().toString(), 60 * 30 * 30);
                 renderText("forManager");
-            } else if (getPara("type").equals("parent")
-                    && (Parent.dao.findFirst("select * from parent where login=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
-                    || Parent.dao.findFirst("select * from parent where mobile=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
-                    || Parent.dao.findFirst("select * from parent where email=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
-            )) {
-                Parent parent = Parent.dao.findFirst("select * from parent where login=? and pass=? and state='1'", getPara("lme"), getPara("pass"));
+            } else if (getPara("type").equals("parent") && Parent.dao.findFirst(findParent) != null) {
+                Parent parent = Parent.dao.findFirst(findParent);
                 setSessionAttr("parent", parent);
                 setCookie("die", parent.getId().toString(), 60 * 30 * 30);
                 renderText("forParent");
@@ -112,19 +98,21 @@ public class MainController extends Controller {
 
     @Before(LoginManager.class)
     public void forManager() {
-        render("/static/HomeForManager.html");
+        render("/static/ManagerOfHome.html");
     }
 
     @Before(LoginTeacher.class)
     public void forTeacher() {
-        render("/static/HomeForTeacher.html");
+        render("/static/TeacherOfHome.html");
     }
 
     @Before(LoginParent.class)
     public void forParent() {
-        render("/static/HomeForParent.html");
+        render("/static/ParentOfHome.html");
     }
-
+    /**
+     * 登出
+     * */
     public void exit() {
         setSessionAttr("manager", "");
         setSessionAttr("teacher", "");
