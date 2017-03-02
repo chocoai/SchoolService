@@ -7,5 +7,5 @@ import com.wts.entity.base.BaseNotice;
  */
 @SuppressWarnings("serial")
 public class Notice extends BaseNotice<Notice> {
-	public static final Notice dao = new Notice();
+	public static final Notice dao = new Notice().dao();
 }

@@ -26,7 +26,7 @@ module.exports = {
     studentOfTeamForTeacher: './src/ForTeacher/StudentOfTeam/Index.js',
     roomworkForTeacher: './src/ForTeacher/Roomwork/Index.js',
     teamworkForTeacher: './src/ForTeacher/Teamwork/Index.js',
-    personalForTeacher: './src/ForTeacher/Personal/Index.js',
+    teacher_personal: './src/ForTeacher/Personal/Index.js',
     homeForParent: './src/ForParent/Home/Index.js',
     noticeForParent: './src/ForParent/Notice/Index.js',
     roomworkForParent: './src/ForParent/Roomwork/Index.js',

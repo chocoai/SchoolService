@@ -244,10 +244,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '用户信息',
-      filename: '../dist/static/PersonalForTeacher.html',
+      filename: '../dist/static/teacher_personal.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'personalForTeacher'],
+      chunks: ['vendor', 'manifest', 'teacher_personal'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

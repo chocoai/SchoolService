@@ -3,6 +3,7 @@ package com.wts.common;
 import com.jfinal.config.*;
 import com.jfinal.core.JFinal;
 import com.jfinal.ext.handler.ContextPathHandler;
+import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.tx.TxByMethods;
@@ -34,21 +35,21 @@ public class Config extends JFinalConfig {
      */
     public void configRoute(Routes me) {
         me.add("/", MainController.class);
-        me.add("/callBack", CallBack.class);
-        me.add("/user", UserController.class);
-        me.add("/course", CourseController.class);
-        me.add("/enterprise", EnterpriseController.class);
-        me.add("/teacher", TeacherController.class);
-        me.add("/room", RoomController.class);
-        me.add("/team", TeamController.class);
-        me.add("/notice", NoticeController.class);
-        me.add("/parent", ParentController.class);
-        me.add("/student", StudentController.class);
-        me.add("/identity", IdentityController.class);
-        me.add("/roomwork", RoomworkController.class);
-        me.add("/roomworkread", RoomworkReadController.class);
-        me.add("/teamwork", TeamworkController.class);
-        me.add("/teamworkread", TeamworkReadController.class);
+//        me.add("/callBack", CallBack.class);
+//        me.add("/user", UserController.class);
+//        me.add("/course", CourseController.class);
+//        me.add("/enterprise", EnterpriseController.class);
+//        me.add("/teacher", TeacherController.class);
+//        me.add("/room", RoomController.class);
+//        me.add("/team", TeamController.class);
+//        me.add("/notice", NoticeController.class);
+//        me.add("/parent", ParentController.class);
+//        me.add("/student", StudentController.class);
+//        me.add("/identity", IdentityController.class);
+//        me.add("/roomwork", RoomworkController.class);
+//        me.add("/roomworkread", RoomworkReadController.class);
+//        me.add("/teamwork", TeamworkController.class);
+//        me.add("/teamworkread", TeamworkReadController.class);
     }
 
     /**
@@ -62,8 +63,10 @@ public class Config extends JFinalConfig {
         me.add(druidPlugin);
         // 配置ActiveRecord插件
         ActiveRecordPlugin arp = new ActiveRecordPlugin(druidPlugin);
-        me.add(arp);
+        arp.setBaseSqlTemplatePath(PathKit.getRootClassPath());
+        arp.addSqlTemplate("run.sql");
         _MappingKit.mapping(arp);
+        me.add(arp);
     }
     public static DruidPlugin createDruidPlugin() {
         return new DruidPlugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim());

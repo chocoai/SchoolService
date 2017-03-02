@@ -2,7 +2,6 @@ package com.wts.interceptor;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
-import com.wts.entity.model.Enterprise;
 
 import javax.servlet.http.HttpSession;
 

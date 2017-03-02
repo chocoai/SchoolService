@@ -7,5 +7,5 @@ import com.wts.entity.base.BaseIdentity;
  */
 @SuppressWarnings("serial")
 public class Identity extends BaseIdentity<Identity> {
-	public static final Identity dao = new Identity();
+	public static final Identity dao = new Identity().dao();
 }

@@ -1,6 +1,5 @@
 package com.wts.entity.model;
 
-import com.jfinal.plugin.activerecord.Page;
 import com.wts.entity.base.BaseStudent;
 
 /**
@@ -8,17 +7,5 @@ import com.wts.entity.base.BaseStudent;
  */
 @SuppressWarnings("serial")
 public class Student extends BaseStudent<Student> {
-	public static final Student dao = new Student();
-	public Page<Student> studentQuery(int pageNumber, int pageSize, String queryString) {
-		return paginate(pageNumber, pageSize, "SELECT *",
-				"FROM student WHERE (name LIKE '%"+queryString+"%' or number LIKE '%"+queryString+"%' or code LIKE '%"+queryString+"%') ORDER BY name ASC");
-	}
-	public Page<Student> studentQueryByRoomId(int pageNumber, int pageSize, String queryString, String roomId) {
-		return paginate(pageNumber, pageSize, "SELECT *",
-				"FROM student WHERE state=1 AND  room_id = "+ roomId +" and (name LIKE '%"+queryString+"%' or number LIKE '%"+queryString+"%' or code LIKE '%"+queryString+"%') ORDER BY name ASC");
-	}
-	public Page<Student> studentQueryByTeamId(int pageNumber, int pageSize, String queryString, String teamId) {
-		return paginate(pageNumber, pageSize, "SELECT *",
-				"FROM student WHERE state=1 AND  team_id = "+ teamId +" and (name LIKE '%"+queryString+"%' or number LIKE '%"+queryString+"%' or code LIKE '%"+queryString+"%') ORDER BY name ASC");
-	}
+	public static final Student dao = new Student().dao();
 }

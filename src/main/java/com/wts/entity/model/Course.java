@@ -7,5 +7,5 @@ import com.wts.entity.base.BaseCourse;
  */
 @SuppressWarnings("serial")
 public class Course extends BaseCourse<Course> {
-	public static final Course dao = new Course();
+	public static final Course dao = new Course().dao();
 }

@@ -7,5 +7,5 @@ import com.wts.entity.base.BaseExam;
  */
 @SuppressWarnings("serial")
 public class Exam extends BaseExam<Exam> {
-	public static final Exam dao = new Exam();
+	public static final Exam dao = new Exam().dao();
 }

@@ -1,7 +1,6 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
-import com.foxinmy.weixin4j.http.weixin.ApiResult;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -21,7 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeacherController extends Controller {
-
+  /**
+   * 登录到教师页面
+   */
   public void forManager() throws WeixinException {
     // 检测session中是否存在teacher
     if (getSessionAttr("manager") == null || ((Teacher)getSessionAttr("manager")).getIsManager()!=1) {
@@ -51,6 +52,9 @@ public class TeacherController extends Controller {
       render("/static/TeacherForManager.html");
     }
   }
+  /**
+   登录到教师个人页面
+   */
   public void forTeacherPersonal() throws WeixinException {
     // 检测session中是否存在teacher
     if (getSessionAttr("teacher") == null) {
@@ -64,7 +68,7 @@ public class TeacherController extends Controller {
           if (teacher != null) {
             setSessionAttr("teacher", teacher);
             setCookie("die", teacher.getId().toString(), 60 * 30);
-            render("/static/PersonalForTeacher.html");
+            render("/static/teacher_personal.html");
           } else {
             redirect("/");
           }
@@ -74,12 +78,15 @@ public class TeacherController extends Controller {
       } else {
         Teacher teacher = Teacher.dao.findById(getCookie("die"));
         setSessionAttr("teacher", teacher);
-        render("/static/PersonalForTeacher.html");
+        render("/static/teacher_personal.html");
       }
     } else {
-      render("/static/PersonalForTeacher.html");
+      render("/static/teacher_personal.html");
     }
   }
+  /**
+   保存
+   */
   @Before({Tx.class,AjaxManager.class})
   public void save()  {
     if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
@@ -123,6 +130,9 @@ public class TeacherController extends Controller {
       }
     }
   }
+  /**
+   管理员修改
+   */
   @Before({Tx.class,AjaxManager.class})
   public void edit() {
     Enterprise teacher = Enterprise.dao.findById(getPara("id"));
@@ -178,6 +188,9 @@ public class TeacherController extends Controller {
       }
     }
   }
+  /**
+   自主修改
+   */
   @Before({Tx.class,AjaxTeacher.class})
   public void editSelf() {
     Enterprise teacher = Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId());
@@ -205,6 +218,9 @@ public class TeacherController extends Controller {
       renderText("OK");
     }
   }
+  /**
+   查询
+   */
   @Before(AjaxManager.class)
   public void queryTeacher() {
     Page<Enterprise> teachers= Enterprise.dao.teacherQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));

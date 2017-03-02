@@ -7,5 +7,5 @@ import com.wts.entity.base.BaseGrade;
  */
 @SuppressWarnings("serial")
 public class Grade extends BaseGrade<Grade> {
-	public static final Grade dao = new Grade();
+	public static final Grade dao = new Grade().dao();
 }

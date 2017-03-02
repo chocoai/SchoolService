@@ -4,6 +4,10 @@ import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
+import com.jfinal.kit.JMap;
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
+import com.jfinal.plugin.activerecord.SqlPara;
 import com.wts.entity.*;
 import com.wts.entity.model.Parent;
 import com.wts.entity.model.Teacher;
@@ -11,11 +15,15 @@ import com.wts.interceptor.LoginManager;
 import com.wts.interceptor.LoginParent;
 import com.wts.interceptor.LoginTeacher;
 
+import java.util.List;
+
 public class MainController extends Controller {
     public void index() {
+//        JMap cond = JMap.create("login","w").set("pass","w");
+//        SqlPara sqlPara = Db.getSqlPara("main.login",cond);
+//        List<Record> a = Db.find(sqlPara);
         render("/static/Login.html");
     }
-
     public void login() {
         if (getPara("lme").equals("1") && getPara("pass").equals("1")) {
             Teacher teacher = new Teacher();
@@ -35,6 +43,16 @@ public class MainController extends Controller {
             setSessionAttr("parent", parent);
             renderText("forParent");
         } else {
+            JMap cond = JMap.create("login", getPara("lme"))
+                    .set("mobile", getPara("lme"))
+                    .set("email", getPara("lme"))
+                    .set("pass", getPara("pass"))
+                    .set("state", 1);
+            SqlPara sqlPara = Db.getSqlPara("teacher.findTeacherByLoginPassState",cond);
+            Teacher.dao.findFirst(sqlPara);
+            Teacher.dao.findFirst(Teacher.dao.getSql("teacher.findTeacherByLoginPassState"),sqlPara);
+
+            Teacher.dao.findFirst(Teacher.dao.getSql("teacher.findTeacherByLoginPassState"), getPara("lme"), getPara("pass"), 1);
             if (getPara("type").equals("teacher")
                     && (Teacher.dao.findFirst("select * from teacher where login=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null
                     || Teacher.dao.findFirst("select * from teacher where mobile=? and pass=? and state='1'", getPara("lme"), getPara("pass")) != null

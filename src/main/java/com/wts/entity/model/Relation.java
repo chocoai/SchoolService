@@ -7,5 +7,5 @@ import com.wts.entity.base.BaseRelation;
  */
 @SuppressWarnings("serial")
 public class Relation extends BaseRelation<Relation> {
-	public static final Relation dao = new Relation();
+	public static final Relation dao = new Relation().dao();
 }

@@ -7,5 +7,5 @@ import com.wts.entity.base.BaseLeave;
  */
 @SuppressWarnings("serial")
 public class Leave extends BaseLeave<Leave> {
-	public static final Leave dao = new Leave();
+	public static final Leave dao = new Leave().dao();
 }

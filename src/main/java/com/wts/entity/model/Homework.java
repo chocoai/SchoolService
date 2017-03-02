@@ -7,5 +7,5 @@ import com.wts.entity.base.BaseHomework;
  */
 @SuppressWarnings("serial")
 public class Homework extends BaseHomework<Homework> {
-	public static final Homework dao = new Homework();
+	public static final Homework dao = new Homework().dao();
 }
