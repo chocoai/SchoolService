@@ -6,11 +6,14 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.wts.entity.WP;
 import com.wts.entity.model.Enterprise;
+import com.wts.entity.model.Parent;
 import com.wts.entity.model.Room;
+import com.wts.entity.model.Teacher;
 import com.wts.interceptor.*;
 import com.wts.util.ParamesAPI;
 import com.wts.util.PinyinTool;
 import com.wts.util.msg.Util.MessageUtil;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -167,25 +170,6 @@ public class EnterpriseController extends Controller {
       } catch (WeixinException e) {
         renderText(e.getErrorText());
       }
-    }
-  }
-  @Before(AjaxManager.class)
-  public void getUserId() {
-    try {
-      String UserId = new PinyinTool().toPinYin(getPara("name"), "", PinyinTool.Type.FIRSTUPPER);
-      String UserIds;
-      if (Enterprise.dao.findFirst("select userId from enterprise where userId=?", UserId) == null) {
-        renderText(UserId);
-      } else {
-        int i = 1;
-        do {
-          UserIds = UserId + i;
-          i++;
-        } while (Enterprise.dao.findFirst("select userId from enterprise where userId=?", UserIds) != null);
-        renderText(UserIds);
-      }
-    } catch (Exception e) {
-      renderText("");
     }
   }
   @Before({Login.class, Ajax.class})

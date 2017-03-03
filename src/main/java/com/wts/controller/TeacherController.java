@@ -4,12 +4,9 @@ import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
-import com.jfinal.kit.StrKit;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
-import com.wts.entity.model.Enterprise;
 import com.wts.entity.model.Parent;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.AjaxManager;
@@ -19,6 +16,8 @@ import com.wts.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.wts.util.Util.getUserId;
 
 public class TeacherController extends Controller {
   /**
@@ -95,32 +94,35 @@ public class TeacherController extends Controller {
     } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
       renderText("手机号码格式错误!");
     } else if (Teacher.dao.find(Teacher.dao.getSql("teacher_mobile"),getPara("mobile")).size()!=0) {
-      renderText("该手机号码已存在!");
+      renderText("已有教师使用该手机号码!");
     } else if (Parent.dao.find(Parent.dao.getSql("parent_mobile"),getPara("mobile")).size()!=0) {
-      renderText("该手机号码已存在!");
-    } else if (Teacher.dao.find("select * from teacher where userId=?", getPara("userId")).size()!=0) {
-      renderText("该账号名已存在!");
-    } else if (Parent.dao.find("select * from parent where userId=?", getPara("userId")).size()!=0) {
-      renderText("该账号名已存在!");
+      renderText("已有家长使用该手机号码!");
     } else {
-      User user = new User(getPara("userId").trim(),getPara("name").trim());
+      User user = new User(getUserId(getPara("name")),getPara("name").trim());
       user.setMobile(getPara("mobile").trim());
       user.setPartyIds(1);
       try{
         WP.me.createUser(user);
         List<String> userIds = new ArrayList<String>();
-        userIds.add(getPara("userId").trim());
+        userIds.add(getUserId(getPara("name")));
         WP.me.addTagUsers(ParamesAPI.teacherTagId,userIds,new ArrayList<Integer>());
         if (getPara("isManager").trim().equals("1")) {
           WP.me.addTagUsers(ParamesAPI.managerTagId,userIds,new ArrayList<Integer>());
         }
         if (getPara("isParent").trim().equals("1")) {
           WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
+          Parent parent = new Parent();
+          parent.set("name", getPara("name").trim())
+                  .set("mobile", getPara("mobile").trim())
+                  .set("userId", getUserId(getPara("name")))
+                  .set("pass", "wts")
+                  .set("state", 4)
+                  .save();
         }
         Teacher teacher = new Teacher();
         teacher.set("name", getPara("name").trim())
                 .set("mobile", getPara("mobile").trim())
-                .set("userId", getPara("userId").trim())
+                .set("userId", getUserId(getPara("name")))
                 .set("pass", "wts")
                 .set("state", 4)
                 .set("isManager",getPara("isManager").trim())
@@ -136,7 +138,7 @@ public class TeacherController extends Controller {
    */
   @Before({Tx.class,AjaxManager.class})
   public void edit() {
-    Enterprise teacher = Enterprise.dao.findById(getPara("id"));
+    Teacher teacher = Teacher.dao.findById(getPara("id"));
     if (teacher == null) {
       renderText("要修改的教师不存在!");
     } else {

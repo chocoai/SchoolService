@@ -1,18 +1,43 @@
 package com.wts.util;
 
 
+import com.wts.entity.model.Parent;
+import com.wts.entity.model.Teacher;
+
 public class Util {
 
-    public static String getString(String str) {
-        if (str==null){
-            return "";
-        }else{
-            return str.trim();
+  public static String getUserId(String personName) {
+    try {
+      String UserId = new PinyinTool().toPinYin(personName, "", PinyinTool.Type.FIRSTUPPER);
+      String UserIds;
+      if (Teacher.dao.findFirst(Teacher.dao.getSql("teacher_userId"), UserId) == null
+              && Parent.dao.findFirst(Parent.dao.getSql("parent_userId"), UserId) == null) {
+        return UserId;
+      } else {
+        int i = 1;
+        do {
+          UserIds = UserId + i;
+          i++;
         }
+        while (Teacher.dao.findFirst(Teacher.dao.getSql("teacher_userId"), UserId) != null && Parent.dao.findFirst(Parent.dao.getSql("parent_userId"), UserId) != null);
+        return UserIds;
+      }
+    } catch (Exception e) {
+      return "";
     }
-    public static void main(String[] args) {
-        String b = "^([\\d]{4}(((0[13578]|1[02])((0[1-9])|([12][0-9])|(3[01])))|(((0[469])|11)((0[1-9])|([12][1-9])|30))|(02((0[1-9])|(1[0-9])|(2[1-8])))))|((((([02468][048])|([13579][26]))00)|([0-9]{2}(([02468][048])|([13579][26]))))(((0[13578]|1[02])((0[1-9])|([12][0-9])|(3[01])))|(((0[469])|11)((0[1-9])|([12][1-9])|30))|(02((0[1-9])|(1[0-9])|(2[1-9])))))";
-        System.out.println("201p0229".matches(b));
-        // System.out.println("111"+CheckNull(null));
+  }
+
+  public static String getString(String str) {
+    if (str == null) {
+      return "";
+    } else {
+      return str.trim();
     }
+  }
+
+  public static void main(String[] args) {
+    String b = "^([\\d]{4}(((0[13578]|1[02])((0[1-9])|([12][0-9])|(3[01])))|(((0[469])|11)((0[1-9])|([12][1-9])|30))|(02((0[1-9])|(1[0-9])|(2[1-8])))))|((((([02468][048])|([13579][26]))00)|([0-9]{2}(([02468][048])|([13579][26]))))(((0[13578]|1[02])((0[1-9])|([12][0-9])|(3[01])))|(((0[469])|11)((0[1-9])|([12][1-9])|30))|(02((0[1-9])|(1[0-9])|(2[1-9])))))";
+    System.out.println("201p0229".matches(b));
+    // System.out.println("111"+CheckNull(null));
+  }
 }
