@@ -5,6 +5,7 @@ import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.Parent;
@@ -153,7 +154,8 @@ public class TeacherController extends Controller {
       } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
         renderText("手机号码格式错误!");
       } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
-              &&  Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
+               && Teacher.dao.find(Teacher.dao.getSql("teacher_mobile"),getPara("mobile")).size()!=0
+               && Parent.dao.find(Parent.dao.getSql("parent_mobile"),getPara("mobile")).size()!=0) {
         renderText("该手机号码已存在!");
       } else {
         try{
@@ -172,17 +174,9 @@ public class TeacherController extends Controller {
               WP.me.deleteTagUsers(ParamesAPI.managerTagId,userIds,new ArrayList<Integer>());
             }
           }
-          if (!Util.getString(teacher.get("isParent").toString()).equals(getPara("isParent").trim())) {
-            if (getPara("isParent").trim().equals("1")) {
-              WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
-            } else {
-              WP.me.deleteTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
-            }
-          }
           teacher.set("name",getPara("name").trim())
                   .set("mobile",getPara("mobile").trim())
                   .set("isManager",getPara("isManager").trim())
-                  .set("isParent",getPara("isParent").trim())
                   .update();
           renderText("OK");
         }catch(WeixinException e){
@@ -196,13 +190,14 @@ public class TeacherController extends Controller {
    */
   @Before({Tx.class,AjaxTeacher.class})
   public void editSelf() {
-    Enterprise teacher = Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId());
+    Teacher teacher = Teacher.dao.findById(((Teacher) getSessionAttr("teacher")).getId());
     if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
       renderText("教师姓名应为两个以上汉字!");
     } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
       renderText("手机号码格式错误!");
     } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
-            && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size() != 0) {
+            && Teacher.dao.find(Teacher.dao.getSql("teacher_mobile"),getPara("mobile")).size()!=0
+            && Parent.dao.find(Parent.dao.getSql("parent_mobile"),getPara("mobile")).size()!=0) {
       renderText("该手机号码已存在!");
     } else {
       if (!Util.getString(teacher.getStr("name")).equals(getPara("name").trim())
@@ -226,7 +221,8 @@ public class TeacherController extends Controller {
    */
   @Before(AjaxManager.class)
   public void queryTeacher() {
-    Page<Enterprise> teachers= Enterprise.dao.teacherQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
+    Teacher.dao.paginate()
+    Page<Teacher> teachers= Teacher.dao.teacherQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
     renderJson(teachers.getList());
   }
   @Before(AjaxManager.class)
