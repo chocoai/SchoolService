@@ -28,20 +28,23 @@ import static com.wts.util.Util.getString;
 
 public class ParentController extends Controller {
 
+    /**
+     * 登录到家长页面
+     */
     public void forManager() throws WeixinException {
         // 检测session中是否存在teacher
-        if (getSessionAttr("manager") == null || ((Enterprise)getSessionAttr("manager")).getIsManager()!=1) {
+        if (getSessionAttr("manager") == null || ((Teacher)getSessionAttr("manager")).getIsManager()!=1) {
             // 检测cookie中是否存在EnterpriseId
             if (getCookie("die") == null || getCookie("die").equals("")) {
                 // 检测是否来自微信请求
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isManager=1 and userId=?", user.getUserId());
+                    Teacher teacher = Teacher.dao.findFirst(Teacher.dao.getSql("teacher.weixin_manager"),user.getUserId(),1);
                     // 检测是否有权限
-                    if (enterprise != null) {
-                        setSessionAttr("manager", enterprise);
-                        setCookie("die", enterprise.getId().toString(), 60 * 30);
-                        render("/static/ParentForManager.html");
+                    if (teacher != null) {
+                        setSessionAttr("manager", teacher);
+                        setCookie("die", teacher.getId().toString(), 60 * 30);
+                        render("/static/ManagerOfParent.html");
                     } else {
                         redirect("/");
                     }
@@ -49,28 +52,28 @@ public class ParentController extends Controller {
                     redirect("/");
                 }
             } else {
-                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-                setSessionAttr("manager", enterprise);
-                render("/static/ParentForManager.html");
+                Teacher teacher = Teacher.dao.findById(getCookie("die"));
+                setSessionAttr("manager", teacher);
+                render("/static/ManagerOfParent.html");
             }
         } else {
-            render("/static/ParentForManager.html");
+            render("/static/ManagerOfParent.html");
         }
     }
     public void forParentPersonal() throws WeixinException {
         // 检测session中是否存在teacher
-        if (getSessionAttr("parent") == null || ((Enterprise)getSessionAttr("parent")).getIsParent()!=1) {
+        if (getSessionAttr("parent") == null) {
             // 检测cookie中是否存在EnterpriseId
             if (getCookie("die") == null || getCookie("die").equals("")) {
                 // 检测是否来自微信请求
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isParent=1 and userId=?", user.getUserId());
+                    Parent parent = Parent.dao.findFirst(Parent.dao.getSql("parent.weixin_parent"),user.getUserId(),1);
                     // 检测是否有权限
-                    if (enterprise != null) {
-                        setSessionAttr("parent", enterprise);
-                        setCookie("die", enterprise.getId().toString(), 60 * 30);
-                        render("/static/PersonalForParent.html");
+                    if (parent != null) {
+                        setSessionAttr("parent", parent);
+                        setCookie("die", parent.getId().toString(), 60 * 30);
+                        render("/static/ParentOfPersonal.html");
                     } else {
                         redirect("/");
                     }
@@ -78,31 +81,36 @@ public class ParentController extends Controller {
                     redirect("/");
                 }
             } else {
-                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-                setSessionAttr("parent", enterprise);
-                render("/static/PersonalForParent.html");
+                Parent parent = Parent.dao.findById(getCookie("die"));
+                setSessionAttr("parent", parent);
+                render("/static/ParentOfPersonal.html");
             }
         } else {
-            render("/static/PersonalForParent.html");
+            render("/static/ParentOfPersonal.html");
         }
     }
+    /**
+     * 查询
+     */
     @Before(AjaxManager.class)
-    public void queryParent() {
-        Page<Enterprise> parents= Enterprise.dao.parentQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
-        renderJson(parents.getList());
+    public void query() {
+        renderJson(Parent.dao.paginate(getParaToInt("pageCurrent"),getParaToInt("pageSize"),"SELECT *","FROM parent WHERE name LIKE '%?%' OR userId LIKE '%?%' OR mobile LIKE '%?%' ORDER BY name ASC",getPara("queryString"),getPara("queryString"),getPara("queryString")).getList());
     }
+    /**
+     * 计数
+     */
     @Before(AjaxManager.class)
-    public void totalByName() {
-        Long count = Db.queryLong("select count(*) from enterprise where isParent=1 and (name like '%"+ getPara("queryString") +"%' or mobile LIKE '%"+getPara("queryString")+"%' or userId LIKE '%"+getPara("queryString")+"%') ORDER BY name ASC");
-        if (count%getParaToInt("pageSize")==0) {
-            renderText((count/getParaToInt("pageSize"))+"");
+    public void total() {
+        Long count = Db.queryLong("SELECT count(*) FROM parent WHERE name LIKE '%?%' OR mobile LIKE '%?%' OR userId LIKE '%?%' ORDER BY name ASC", getPara("queryString"), getPara("queryString"), getPara("queryString"));
+        if (count % getParaToInt("pageSize") == 0) {
+            renderText((count / getParaToInt("pageSize")) + "");
         } else {
-            renderText((count/getParaToInt("pageSize")+1)+"");
+            renderText((count / getParaToInt("pageSize") + 1) + "");
         }
     }
 
     public void getRelation() {
-        List<Relation> relations = Relation.dao.find("select * from relation where parent_id=? order by id asc",getPara("parentId"));
+        List<Relation> relations = Relation.dao.find(Relation.dao.getSql("relation.parentId"),getPara("parentId"));
         String[] relation = new String[4];
         String[] room_id = new String[4];
         String[] student_id = new String[4];
@@ -248,29 +256,29 @@ public class ParentController extends Controller {
             renderText("手机号码格式不正确!");
         } else if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
             renderText("账号名应为字母或数字的组合!");
-        } else if (Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
-            renderText("该手机号码已存在!");
-        } else if (Enterprise.dao.find("select * from enterprise where userId=?", getPara("userId")).size()!=0) {
-            renderText("该账号名已存在!");
-        } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+        } else if (Teacher.dao.find(Teacher.dao.getSql("teacher.mobile"), getPara("mobile")).size() != 0) {
+            renderText("已有教师使用该手机号码!");
+        } else if (Parent.dao.find(Parent.dao.getSql("parent.mobile"), getPara("mobile")).size() != 0) {
+            renderText("已有家长使用该手机号码!");
+        } else if(Relation.dao.find(Relation.dao.getSql("relation.getParent")
                 ,getPara("student_id1"),getPara("identity_id1")).size()!=0) {
-            renderText("学生1："+Student.dao.findFirst("select * from student where id=?",getPara("student_id1")).get("name")
-                    +"的" + Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id1")).get("name")
+            renderText("学生1："+Student.dao.findFirst(Student.dao.getSql("student.id"),getPara("student_id1")).get("name")
+                    +"的" + Identity.dao.findFirst(Identity.dao.getSql("identity.id"),getPara("identity_id1")).get("name")
                     + "已绑定!");
-        } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+        } else if(Relation.dao.find(Relation.dao.getSql("relation.getParent")
                 ,getPara("student_id2"),getPara("identity_id2")).size()!=0) {
-            renderText("学生2："+Student.dao.findFirst("select * from student where id=?",getPara("student_id2")).get("name")
-                    +"的" + Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id2")).get("name")
+            renderText("学生2："+Student.dao.findFirst(Student.dao.getSql("student.id"),getPara("student_id2")).get("name")
+                    +"的" + Identity.dao.findFirst(Identity.dao.getSql("identity.id"),getPara("identity_id2")).get("name")
                     + "已绑定!");
-        } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+        } else if(Relation.dao.find(Relation.dao.getSql("relation.getParent")
                 ,getPara("student_id3"),getPara("identity_id3")).size()!=0) {
-            renderText("学生3："+Student.dao.findFirst("select * from student where id=?",getPara("student_id3")).get("name")
-                    +"的" + Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id3")).get("name")
+            renderText("学生3："+Student.dao.findFirst(Student.dao.getSql("student.id"),getPara("student_id3")).get("name")
+                    +"的" + Identity.dao.findFirst(Identity.dao.getSql("identity.id"),getPara("identity_id3")).get("name")
                     + "已绑定!");
-        } else if(Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+        } else if(Relation.dao.find(Relation.dao.getSql("relation.getParent")
                 ,getPara("student_id4"),getPara("identity_id4")).size()!=0) {
-            renderText("学生4："+Student.dao.findFirst("select * from student where id=?",getPara("student_id4")).get("name")
-                    +"的" + Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id4")).get("name")
+            renderText("学生4："+Student.dao.findFirst(Student.dao.getSql("student.id"),getPara("student_id4")).get("name")
+                    +"的" + Identity.dao.findFirst(Identity.dao.getSql("identity.id"),getPara("identity_id4")).get("name")
                     + "已绑定!");
         } else {
             User user = new User(getPara("userId").trim(),getPara("name").trim());
@@ -281,7 +289,7 @@ public class ParentController extends Controller {
                 List<String> userIds = new ArrayList<String>();
                 userIds.add(getPara("userId").trim());
                 WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
-                Enterprise parent = new Enterprise();
+                Parent parent = new Parent();
                 parent.set("name", getPara("name").trim())
                         .set("mobile", getPara("mobile").trim())
                         .set("userId", getPara("userId").trim())
@@ -291,7 +299,7 @@ public class ParentController extends Controller {
                         .set("isParent",1)
                         .save();
                 if (!getPara("student_id1").equals("0") && !getPara("identity_id1").equals("0")
-                        && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                        && Relation.dao.find(Relation.dao.getSql("relation.getParent")
                         ,getPara("student_id1"),getPara("identity_id1")).size()==0) {
                     Relation relation = new Relation();
                     relation.set("parent_id", parent.get("id"))
@@ -299,14 +307,14 @@ public class ParentController extends Controller {
                             .set("identity_id", getPara("identity_id1")).save();
                     if (parent.getState()==1){
                         try {
-                            WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Room.dao.findById(Student.dao.findFirst("select * from student where id=?",getPara("student_id1")).getRoomId()).getName()+Student.dao.findFirst("select * from student where id=?",getPara("student_id1")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id1")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
+                            WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text("您已被设为"+Room.dao.findById(Student.dao.findFirst(Student.dao.getSql("student.id"),getPara("student_id1")).getRoomId()).getName()+Student.dao.findFirst("select * from student where id=?",getPara("student_id1")).get("name")+"的"+Identity.dao.findFirst("select * from identity where id=?",getPara("identity_id1")).get("name")), new IdParameter().putUserIds(parent.getUserId()), false));
                         } catch (Exception e) {
                             renderText(e.getMessage());
                         }
                     }
                 }
                 if (!getPara("student_id2").equals("0") && !getPara("identity_id2").equals("0")
-                        && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                        && Relation.dao.find(Relation.dao.getSql("relation.getParent")
                         ,getPara("student_id2"),getPara("identity_id2")).size()==0) {
                     Relation relation = new Relation();
                     relation.set("parent_id", parent.getId())
@@ -321,7 +329,7 @@ public class ParentController extends Controller {
                     }
                 }
                 if (!getPara("student_id3").equals("0") && !getPara("identity_id3").equals("0")
-                        && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                        && Relation.dao.find(Relation.dao.getSql("relation.getParent")
                         ,getPara("student_id3"),getPara("identity_id3")).size()==0) {
                     Relation relation = new Relation();
                     relation.set("parent_id", parent.getId())
@@ -336,7 +344,7 @@ public class ParentController extends Controller {
                     }
                 }
                 if (!getPara("student_id4").equals("0") && !getPara("identity_id4").equals("0")
-                        && Relation.dao.find("select * from relation where student_id=? and identity_id=?"
+                        && Relation.dao.find(Relation.dao.getSql("relation.getParent")
                         ,getPara("student_id4"),getPara("identity_id4")).size()==0) {
                     Relation relation = new Relation();
                     relation.set("parent_id", parent.getId())
