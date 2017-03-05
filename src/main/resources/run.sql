@@ -71,10 +71,15 @@
     SELECT * FROM student WHERE id = ?
   #end
 #end
-
 ### 操作数据表identity
 #namespace("identity")
   #sql("id")
     SELECT * FROM identity WHERE id = ?
+  #end
+#end
+### 操作数据表roomStudent
+#namespace("roomStudent")
+  #sql("studentId")
+    SELECT * FROM roomstudent WHERE studentId = ?
   #end
 #end
