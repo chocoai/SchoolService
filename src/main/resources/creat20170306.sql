@@ -9,9 +9,9 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `Room` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '班级序号',
-`roomYear` varchar(255) CHARACTER SET utf8 NULL COMMENT '入学年份',
-`roomOrder` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级次序',
-`roomSlogan` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级口号',
+`room_year` varchar(255) CHARACTER SET utf8 NULL COMMENT '入学年份',
+`room_order` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级次序',
+`room_slogan` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级口号',
 `state` int NULL COMMENT '班级状态0停用1可用',
 PRIMARY KEY (`id`) 
 );

@@ -24,19 +24,19 @@ import static com.jfinal.plugin.activerecord.Db.find;
 public class RoomController extends Controller {
 
   public void forManager() throws WeixinException {
-// 检测session中是否存在teacher
-    if (getSessionAttr("manager") == null || ((Enterprise)getSessionAttr("manager")).getIsManager()!=1) {
+    // 检测session中是否存在teacher
+    if (getSessionAttr("manager") == null || ((Teacher) getSessionAttr("manager")).getIsManager() != 1) {
       // 检测cookie中是否存在EnterpriseId
       if (getCookie("die") == null || getCookie("die").equals("")) {
         // 检测是否来自微信请求
         if (!(getPara("code") == null || getPara("code").equals(""))) {
           User user = WP.me.getUserByCode(getPara("code"));
-          Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isManager=1 and userId=?", user.getUserId());
+          Teacher teacher = Teacher.dao.findFirst(Teacher.dao.getSql("teacher.weixin_manager"), user.getUserId(), 1);
           // 检测是否有权限
-          if (enterprise != null) {
-            setSessionAttr("manager", enterprise);
-            setCookie("die", enterprise.getId().toString(), 60 * 30);
-            render("/static/RoomForManager.html");
+          if (teacher != null) {
+            setSessionAttr("manager", teacher);
+            setCookie("die", teacher.getId().toString(), 60 * 30);
+            render("/static/ManagerOfRoom.html");
           } else {
             redirect("/");
           }
@@ -44,22 +44,22 @@ public class RoomController extends Controller {
           redirect("/");
         }
       } else {
-        Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-        setSessionAttr("manager", enterprise);
-        render("/static/RoomForManager.html");
+        Teacher teacher = Teacher.dao.findById(getCookie("die"));
+        setSessionAttr("manager", teacher);
+        render("/static/ManagerOfRoom.html");
       }
     } else {
-      render("/static/RoomForManager.html");
+      render("/static/ManagerOfRoom.html");
     }
   }
   @Before(AjaxManager.class)
-  public void queryByName() {
-    Page<Room> rooms= Room.dao.queryByName(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
-    renderJson(rooms.getList());
+  public void query() {
+    renderJson(Room.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM room WHERE room_year LIKE '%?%' OR room_order LIKE '%?%' OR room_slogan LIKE '%?%' ORDER BY id ASC", getPara("queryString"), getPara("queryString"), getPara("queryString")).getList());
+
   }
   @Before(AjaxManager.class)
-  public void totalByName() {
-    Long count = Db.queryLong("select count(*) from room where name like '%"+ getPara("queryString") +"%'");
+  public void total() {
+    Long count = Db.queryLong("select count(*) from room where room_year like '%?%' OR room_order LIKE '%?%' OR room_slogan LIKE '%?%'", getPara("queryString"), getPara("queryString"), getPara("queryString"));
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {
@@ -67,33 +67,36 @@ public class RoomController extends Controller {
     }
   }
   @Before(AjaxManager.class)
-  public void checkNameForNew() {
-//    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-//      renderText("班级名称格式应为：XXXX级XX班");
-    if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+  public void checkSloganForNew() {
+    if (Room.dao.find(Room.dao.getSql("room.slogan"),getPara("slogan")).size()!=0) {
+      renderText("该班级标语已存在!");
+    } else {
+      renderText("OK");
+    }
+  }
+  @Before(AjaxManager.class)
+  public void checkSloganForEdit() {
+    if (!Room.dao.findById(getPara("id")).getRoomSlogan().equals(getPara("slogan"))
+            && Room.dao.find(Room.dao.getSql("room.slogan"),getPara("slogan")).size()!=0) {
+      renderText("该班级标语已存在!");
+    } else {
+      renderText("OK");
+    }
+  }
+  @Before(AjaxManager.class)
+  public void checkRoom() {
+    if (Room.dao.find(Room.dao.getSql("room.year_order"),getPara("year"),getPara("order")).size()!=0) {
       renderText("该班级已存在!");
     } else {
       renderText("OK");
     }
   }
   @Before(AjaxManager.class)
-  public void checkNameForEdit() {
-    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-      renderText("班级名称格式应为：XXXX级XX班");
-    } else if (!Room.dao.findById(getPara("id")).getName().equals(getPara("name"))
-            && Room.dao.find("select * from room where name=?", getPara("name")).size() != 0) {
-      renderText("该班级已存在!");
-    } else {
-      renderText("OK");
-    }
-  }
-  @Before(AjaxManager.class)
-  public void getById() {
-    Room room = Room.dao.findById(getPara("id"));
-    renderJson(room);
+  public void get() {
+    renderJson(Room.dao.findById(getPara("id")));
   }
   @Before({Tx.class,AjaxManager.class})
-  public void inactiveById() {
+  public void inactive() {
     Room room = Room.dao.findById(getPara("id"));
     if (room == null) {
       renderText("未找到指定id的班级");
@@ -105,7 +108,7 @@ public class RoomController extends Controller {
     }
   }
   @Before({Tx.class,AjaxManager.class})
-  public void activeById() {
+  public void active() {
     Room room = Room.dao.findById(getPara("id"));
     if (room == null) {
       renderText("要重新激活的班级不存在!");
@@ -117,42 +120,34 @@ public class RoomController extends Controller {
     }
   }
   @Before(AjaxManager.class)
-  public void roomList() {
-    List<Room> rooms = Room.dao.find("select * from room where state=1 order by name desc");
-    renderJson(rooms);
+  public void list() {
+    renderJson(Room.dao.find(Room.dao.getSql("room.list")));
   }
   @Before(AjaxParent.class)
-  public void parentRoomList() {
-    List<Record> rooms = Db.find("select distinct student.room_id as id,room.name as name,room.state as state" +
-            " from student" +
-            " left join room" +
-            " on room.id=student.room_id" +
-            " where room.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("parent")).getId());
-    renderJson(rooms);
+  public void listOfParent() {
+    renderJson(Roomstudent.dao.find(Roomstudent.dao.getSql("roomStudent.list_parent"),((Parent) getSessionAttr("parent")).getId()));
   }
   @Before(AjaxParent.class)
-  public void parentRoomFirst() {
-    Record room = Db.findFirst("select distinct student.room_id as id,room.name as name,room.state as state" +
-            " from student" +
-            " left join room" +
-            " on room.id=student.room_id" +
-            " where room.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("parent")).getId());
-    if (room!=null){
-      renderText(room.get("id").toString());
+  public void firstOfParent() {
+//    Record room = Db.findFirst("select distinct student.room_id as id,room.name as name,room.state as state" +
+//            " from student" +
+//            " left join room" +
+//            " on room.id=student.room_id" +
+//            " where room.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Parent) getSessionAttr("parent")).getId());
+    if (Roomstudent.dao.findFirst(Roomstudent.dao.getSql("roomStudent.list_parent"),((Parent) getSessionAttr("parent")).getId())!=null){
+      renderText(Roomstudent.dao.findFirst(Roomstudent.dao.getSql("list_parent"),((Parent) getSessionAttr("parent")).getId()).get("id").toString());
     }else{
       renderText("0");
     }
   }
   @Before(AjaxTeacher.class)
-  public void teacherRoomList() {
-    List<Record> rooms = Db.find("select DISTINCT room_id as id,room.name,room.state from roomplan left join room on room.id=roomplan.room_id where room.state=1 and teacher_id=?",((Enterprise) getSessionAttr("teacher")).getId());
-    renderJson(rooms);
+  public void listOfTeacher() {
+    renderJson(Courseroomteacher.dao.find(Courseroomteacher.dao.getSql("courseRoomTeacher.list_teacher"),((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId()));
   }
   @Before(AjaxTeacher.class)
-  public void teacherRoomFirst() {
-    Roomplan roomplan = Roomplan.dao.findFirst("select DISTINCT room_id as id from roomplan left join room on room.id=roomplan.room_id  where room.state=1 and teacher_id=?",((Enterprise) getSessionAttr("teacher")).get("id").toString());
-    if (roomplan!=null){
-        renderText(roomplan.get("id").toString());
+  public void firstOfTeacher() {
+    if (Courseroomteacher.dao.findFirst(Courseroomteacher.dao.getSql("courseRoomTeacher.list_teacher"),((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId())!=null){
+        renderText(Courseroomteacher.dao.findFirst(Courseroomteacher.dao.getSql("courseRoomTeacher.list_teacher"),((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId()).get("id").toString());
     }else{
         renderText("0");
     }

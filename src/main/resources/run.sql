@@ -57,11 +57,17 @@
 
 ### 操作数据表relation
 #namespace("relation")
+  #sql("delete")
+    DELETE FROM relation WHERE parent_id = ?
+  #end
   #sql("parentId")
     SELECT * FROM relation WHERE parent_id = ?
   #end
   #sql("getParent")
     SELECT * FROM relation WHERE student_id = ? AND identity_id = ?
+  #end
+  #sql("getIdentity")
+    SELECT * FROM relation WHERE student_id = ? AND parent_id = ?
   #end
 #end
 
@@ -71,15 +77,61 @@
     SELECT * FROM student WHERE id = ?
   #end
 #end
+
 ### 操作数据表identity
 #namespace("identity")
   #sql("id")
     SELECT * FROM identity WHERE id = ?
   #end
 #end
+
 ### 操作数据表roomStudent
 #namespace("roomStudent")
   #sql("studentId")
     SELECT * FROM roomstudent WHERE studentId = ?
+  #end
+#end
+
+### 操作数据表semester
+#namespace("semester")
+  #sql("used")
+    SELECT * FROM semester WHERE state = 1
+  #end
+#end
+
+### 操作数据表room
+#namespace("room")
+  #sql("slogan")
+    SELECT * FROM room WHERE room_slogan = ?
+  #end
+  #sql("year_order")
+    SELECT * FROM room WHERE room_year = ? AND room_order = ?
+  #end
+  #sql("list")
+    SELECT * FROM room WHERE  state = 1 ORDER BY id DESC
+  #end
+#end
+
+### 操作数据表roomStudent
+#namespace("roomStudent")
+  #sql("list_parent")
+    SELECT DISTINCT room.id, room.name, room.state
+    FROM ((roomstudent
+    LEFT JOIN room ON room.id = roomstudent.room_id)
+    LEFT JOIN student ON student.id = roomstudent.student_id)
+    WHERE room.state = 1 AND student.state = 1 AND student.id
+      IN (SELECT DISTINCT student_id FROM relation WHERE parent_id = ?)
+  #end
+#end
+
+### 操作数据表courseRoomTeacher
+#namespace("courseRoomTeacher")
+  #sql("list_teacher")
+    SELECT DISTINCT room.id, room.name, room.state
+    FROM (((courseroomteacher
+    LEFT JOIN room ON room.id = courseroomteacher.room_id)
+    LEFT JOIN teacher ON teacher.id = courseroomteacher.teacher_id)
+    LEFT JOIN semester ON semester.id = courseroomteacher.semester_id)
+    WHERE room.state = 1 AND teacher.id = ? AND semester.id = ?
   #end
 #end
