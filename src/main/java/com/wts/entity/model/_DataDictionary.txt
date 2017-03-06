@@ -11,7 +11,7 @@ Table: assessment
  course_id   | INT(10)      | YES  |     |         | 课程序号    
  semester_id | INT(10)      | YES  |     |         | 学期序号    
  state       | INT(10)      | YES  |     |         | 状态0停用1可用
- scope       | INT(10)      | YES  |     |         | 发送范围1指定发送2全部发送
+ send        | INT(10)      | YES  |     |         | 发送范围0不发送1指定发送2全部发送
 -------------+--------------+------+-----+---------+---------
 
 Table: assessmentdetail
@@ -229,15 +229,16 @@ Table: relation
 -------------+---------+------+-----+---------+---------
 
 Table: room
-------------+--------------+------+-----+---------+---------
- Field      | Type         | Null | Key | Default | Remarks 
-------------+--------------+------+-----+---------+---------
- id         | INT(10)      | NO   | PRI |         | 班级序号    
- roomYear   | VARCHAR(255) | YES  |     |         | 入学年份    
- roomOrder  | VARCHAR(255) | YES  |     |         | 班级次序    
- roomSlogan | VARCHAR(255) | YES  |     |         | 班级口号    
- state      | INT(10)      | YES  |     |         | 班级状态0停用1可用
-------------+--------------+------+-----+---------+---------
+--------+--------------+------+-----+---------+---------
+ Field  | Type         | Null | Key | Default | Remarks 
+--------+--------------+------+-----+---------+---------
+ id     | INT(10)      | NO   | PRI |         | 班级序号    
+ name   | VARCHAR(255) | YES  |     |         | 班级名称(标签)
+ year   | VARCHAR(255) | YES  |     |         | 入学年份    
+ order  | VARCHAR(255) | YES  |     |         | 班级次序    
+ slogan | VARCHAR(255) | YES  |     |         | 班级口号    
+ state  | INT(10)      | YES  |     |         | 班级状态0停用1可用
+--------+--------------+------+-----+---------+---------
 
 Table: roomstudent
 ------------+---------+------+-----+---------+---------
@@ -308,6 +309,7 @@ Table: teacher
  state     | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
  isManager | INT(10)      | YES  |     |         | 是否管理0否1是
  picUrl    | VARCHAR(255) | YES  |     |         | 头像地址    
+ type      | INT(10)      | YES  |     |         | 1在编2聘用3校外
 -----------+--------------+------+-----+---------+---------
 
 Table: teachermessage
@@ -320,6 +322,7 @@ Table: teachermessage
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  time       | DATETIME(19) | YES  |     |         | 发送时间    
  state      | INT(10)      | YES  |     |         | 消息状态0停用1可用
+ send       | INT(10)      | YES  |     |         | 是否发送0否1是
 ------------+--------------+------+-----+---------+---------
 
 Table: teachermessageread

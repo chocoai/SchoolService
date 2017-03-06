@@ -54,12 +54,12 @@ public class RoomController extends Controller {
   }
   @Before(AjaxManager.class)
   public void query() {
-    renderJson(Room.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM room WHERE room_year LIKE '%?%' OR room_order LIKE '%?%' OR room_slogan LIKE '%?%' ORDER BY id ASC", getPara("queryString"), getPara("queryString"), getPara("queryString")).getList());
+    renderJson(Room.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM room WHERE year LIKE '%?%' OR order LIKE '%?%' OR slogan LIKE '%?%' ORDER BY id ASC", getPara("queryString"), getPara("queryString"), getPara("queryString")).getList());
 
   }
   @Before(AjaxManager.class)
   public void total() {
-    Long count = Db.queryLong("select count(*) from room where room_year like '%?%' OR room_order LIKE '%?%' OR room_slogan LIKE '%?%'", getPara("queryString"), getPara("queryString"), getPara("queryString"));
+    Long count = Db.queryLong("select count(*) from room where year like '%?%' OR order LIKE '%?%' OR slogan LIKE '%?%'", getPara("queryString"), getPara("queryString"), getPara("queryString"));
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {
@@ -76,7 +76,7 @@ public class RoomController extends Controller {
   }
   @Before(AjaxManager.class)
   public void checkSloganForEdit() {
-    if (!Room.dao.findById(getPara("id")).getRoomSlogan().equals(getPara("slogan"))
+    if (!Room.dao.findById(getPara("id")).getSlogan().equals(getPara("slogan"))
             && Room.dao.find(Room.dao.getSql("room.slogan"),getPara("slogan")).size()!=0) {
       renderText("该班级标语已存在!");
     } else {
@@ -125,203 +125,137 @@ public class RoomController extends Controller {
   }
   @Before(AjaxParent.class)
   public void listOfParent() {
-    renderJson(Roomstudent.dao.find(Roomstudent.dao.getSql("roomStudent.list_parent"),((Parent) getSessionAttr("parent")).getId()));
+    String SQL = "SELECT DISTINCT room.id, room.name, room.state" +
+            " FROM ((roomstudent" +
+            " LEFT JOIN room ON room.id = roomstudent.room_id)" +
+            " LEFT JOIN student ON student.id = roomstudent.student_id)" +
+            " WHERE room.state = 1 AND student.state = 1 AND student.id" +
+            " IN (SELECT DISTINCT student_id FROM relation WHERE parent_id = ?)";
+    renderJson(Db.find(SQL,((Parent) getSessionAttr("parent")).getId()));
   }
   @Before(AjaxParent.class)
   public void firstOfParent() {
-//    Record room = Db.findFirst("select distinct student.room_id as id,room.name as name,room.state as state" +
-//            " from student" +
-//            " left join room" +
-//            " on room.id=student.room_id" +
-//            " where room.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Parent) getSessionAttr("parent")).getId());
-    if (Roomstudent.dao.findFirst(Roomstudent.dao.getSql("roomStudent.list_parent"),((Parent) getSessionAttr("parent")).getId())!=null){
-      renderText(Roomstudent.dao.findFirst(Roomstudent.dao.getSql("list_parent"),((Parent) getSessionAttr("parent")).getId()).get("id").toString());
+    String SQL = "SELECT DISTINCT room.id, room.name, room.state" +
+            " FROM ((roomstudent" +
+            " LEFT JOIN room ON room.id = roomstudent.room_id)" +
+            " LEFT JOIN student ON student.id = roomstudent.student_id)" +
+            " WHERE room.state = 1 AND student.state = 1 AND student.id" +
+            " IN (SELECT DISTINCT student_id FROM relation WHERE parent_id = ?)";
+    Record record = Db.findFirst(SQL,((Parent) getSessionAttr("parent")).getId());
+    if (record!=null){
+      renderText(record.get("id").toString());
     }else{
       renderText("0");
     }
   }
   @Before(AjaxTeacher.class)
   public void listOfTeacher() {
-    renderJson(Courseroomteacher.dao.find(Courseroomteacher.dao.getSql("courseRoomTeacher.list_teacher"),((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId()));
+    String SQL = "SELECT DISTINCT room.id, room.name, room.state" +
+            " FROM (((courseroomteacher" +
+            " LEFT JOIN room ON room.id = courseroomteacher.room_id)" +
+            " LEFT JOIN teacher ON teacher.id = courseroomteacher.teacher_id)" +
+            " LEFT JOIN semester ON semester.id = courseroomteacher.semester_id)" +
+            " WHERE room.state = 1 AND teacher.id = ? AND semester.id = ?";
+    renderJson(Db.find(SQL,((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId()));
   }
   @Before(AjaxTeacher.class)
   public void firstOfTeacher() {
-    if (Courseroomteacher.dao.findFirst(Courseroomteacher.dao.getSql("courseRoomTeacher.list_teacher"),((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId())!=null){
-        renderText(Courseroomteacher.dao.findFirst(Courseroomteacher.dao.getSql("courseRoomTeacher.list_teacher"),((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId()).get("id").toString());
+    String SQL = "SELECT DISTINCT room.id, room.name, room.state" +
+            " FROM (((courseroomteacher" +
+            " LEFT JOIN room ON room.id = courseroomteacher.room_id)" +
+            " LEFT JOIN teacher ON teacher.id = courseroomteacher.teacher_id)" +
+            " LEFT JOIN semester ON semester.id = courseroomteacher.semester_id)" +
+            " WHERE room.state = 1 AND teacher.id = ? AND semester.id = ?";
+    Record record = Db.findFirst(SQL,((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId());
+    if (record!=null){
+        renderText(record.get("id").toString());
     }else{
         renderText("0");
     }
   }
   @Before(AjaxTeacher.class)
   public void roomCourseList() {
-    List<Record> courses = Db.find("select DISTINCT course.name,roomplan.course_id as id from roomplan left join course on course.id=roomplan.course_id where roomplan.teacher_id=? and roomplan.room_id=?",((Enterprise) getSessionAttr("teacher")).getId(),getPara("id"));
-    renderJson(courses);
+    String SQL = "SELECT DISTINCT course.name,courseroomteacher.course_id" +
+            "FROM courseroomteacher" +
+            "LEFT JOIN course ON courseroomteacher.course_id = course.id" +
+            "WHERE courseroomteacher.teacher_id = ? AND courseroomteacher.semester_id = ? AND courseroomteacher.room_id = ?";
+    renderJson(Db.find(SQL,((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId(),getPara("id")));
   }
   @Before(AjaxTeacher.class)
   public void roomCourseFirst() {
-    Roomplan roomplan = Roomplan.dao.findFirst("select DISTINCT course_id as id from roomplan where teacher_id=? and roomplan.room_id=?",((Enterprise) getSessionAttr("teacher")).get("id").toString(),getPara("id"));
-    if (roomplan!=null){
-      renderText(roomplan.get("id").toString());
+    String SQL = "SELECT DISTINCT course.name,courseroomteacher.course_id" +
+            "FROM courseroomteacher" +
+            "LEFT JOIN course ON courseroomteacher.course_id = course.id" +
+            "WHERE courseroomteacher.teacher_id = ? AND courseroomteacher.semester_id = ? AND courseroomteacher.room_id = ?";
+    Record record = Db.findFirst(SQL,((Teacher) getSessionAttr("teacher")).getId(),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId(),getPara("id"));
+    if (record!=null){
+      renderText(record.get("id").toString());
     }else{
       renderText("0");
     }
   }
   @Before({Login.class, Ajax.class})
-  public void getNameById() {
-    Room room = Room.dao.findById(getPara("id"));
-    renderText(room.get("name").toString());
+  public void getName() {
+    renderText(Room.dao.findById(getPara("id")).get("name").toString());
   }
-  @Before(AjaxManager.class)
-  public  void courseList() {
-    List<Course> courses = Course.dao.find("select * from course");
-    renderJson(courses);
-  }
-  public void getRoomTeachers() {
-    List<Roomplan> roomplan = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=?",getPara("room"),getPara("course"));
-    if (roomplan.size()!=0) {
+
+  public void getCourseRoomTeachers() {
+    List<Courseroomteacher> courseroomteacher = Courseroomteacher.dao.find("select * from courseroomteacher where room_id=? and course_id=? and semester_id=?",getPara("room"),getPara("course"),Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId());
+    if (courseroomteacher.size()!=0) {
       String sp1 = "";
-      for (int i = 0; i < roomplan.size(); i++) {
-        sp1 = sp1 + "'" + roomplan.get(i).get("teacher_id") + "',";
+      for (int i = 0; i < courseroomteacher.size(); i++) {
+        sp1 = sp1 + "'" + courseroomteacher.get(i).get("teacher_id") + "',";
       }
       renderText("{course: [" + sp1.substring(0,sp1.length()-1) + "]}");
     } else {
       renderText("{}");
     }
   }
-  @Before(AjaxManager.class)
-  public void getRoomTeacher() {
-    List<Roomplan> roomplan1 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=1",getPara("roomId"));
-    List<Roomplan> roomplan2 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=2",getPara("roomId"));
-    List<Roomplan> roomplan3 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=3",getPara("roomId"));
-    List<Roomplan> roomplan4 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=4",getPara("roomId"));
-    List<Roomplan> roomplan5 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=5",getPara("roomId"));
-    List<Roomplan> roomplan6 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=6",getPara("roomId"));
-    List<Roomplan> roomplan7 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=7",getPara("roomId"));
-    List<Roomplan> roomplan8 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=8",getPara("roomId"));
-    List<Roomplan> roomplan9 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=9",getPara("roomId"));
-    List<Roomplan> roomplan10 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=10",getPara("roomId"));
-    List<Roomplan> roomplan11 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=11",getPara("roomId"));
-    List<Roomplan> roomplan12 = Roomplan.dao.find("select * from roomplan where room_id=? and course_id=12",getPara("roomId"));
-
-    String rp1 = "";
-    String rp2 = "";
-    String rp3 = "";
-    String rp4 = "";
-    String rp5 = "";
-    String rp6 = "";
-    String rp7 = "";
-    String rp8 = "";
-    String rp9 = "";
-    String rp10 = "";
-    String rp11 = "";
-    String rp12 = "";
-    if (roomplan1.size()!=0) {
-      for (int i = 0; i < roomplan1.size(); i++) {
-        rp1 = rp1 + "'" + roomplan1.get(i).get("teacher_id") + "',";
+  private String crt (String courseId,String roomId){
+    List<Courseroomteacher> courseroomteacher = Courseroomteacher.dao.find("select * from courseroomteacher where room_id=? and course_id=? and semester_id=?",roomId,courseId,Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId());
+    String crt = "";
+    if (courseroomteacher.size()!=0) {
+      for (int i = 0; i < courseroomteacher.size(); i++) {
+        crt = crt + "'" + courseroomteacher.get(i).get("teacher_id") + "',";
       }
-      rp1 = "course1: [" + rp1.substring(0,rp1.length()-1) + "]";
+      crt = "course"+courseId+": [" + crt.substring(0,crt.length()-1) + "]";
     } else {
-      rp1 = "course1: []";
+      crt = "course"+courseId+":: []";
     }
-    if (roomplan2.size()!=0) {
-      for (int i = 0; i < roomplan2.size(); i++) {
-        rp2 = rp2 + "'" + roomplan2.get(i).get("teacher_id") + "',";
-      }
-      rp2 = "course2: [" + rp2.substring(0,rp2.length()-1) + "]";
-    } else {
-      rp2 = "course2: []";
-    }
-    if (roomplan3.size()!=0) {
-      for (int i = 0; i < roomplan3.size(); i++) {
-        rp3 = rp3 + "'" + roomplan3.get(i).get("teacher_id") + "',";
-      }
-      rp3 = "course3: [" + rp3.substring(0,rp3.length()-1) + "]";
-    } else {
-      rp3 = "course3: []";
-    }
-    if (roomplan4.size()!=0) {
-      for (int i = 0; i < roomplan4.size(); i++) {
-        rp4 = rp4 + "'" + roomplan4.get(i).get("teacher_id") + "',";
-      }
-      rp4 = "course4: [" + rp4.substring(0,rp4.length()-1) + "]";
-    } else {
-      rp4 = "course4: []";
-    }
-    if (roomplan5.size()!=0) {
-      for (int i = 0; i < roomplan5.size(); i++) {
-        rp5 = rp5 + "'" + roomplan5.get(i).get("teacher_id") + "',";
-      }
-      rp5 = "course5: [" + rp5.substring(0,rp5.length()-1) + "]";
-    } else {
-      rp5 = "course5: []";
-    }
-    if (roomplan6.size()!=0) {
-      for (int i = 0; i < roomplan6.size(); i++) {
-        rp6 = rp6 + "'" + roomplan6.get(i).get("teacher_id") + "',";
-      }
-      rp6 = "course6: [" + rp6.substring(0,rp6.length()-1) + "]";
-    } else {
-      rp6 = "course6: []";
-    }
-    if (roomplan7.size()!=0) {
-      for (int i = 0; i < roomplan7.size(); i++) {
-        rp7 = rp7 + "'" + roomplan7.get(i).get("teacher_id") + "',";
-      }
-      rp7 = "course7: [" + rp7.substring(0,rp7.length()-1) + "]";
-    } else {
-      rp7 = "course7: []";
-    }
-    if (roomplan8.size()!=0) {
-      for (int i = 0; i < roomplan8.size(); i++) {
-        rp8 = rp8 + "'" + roomplan8.get(i).get("teacher_id") + "',";
-      }
-      rp8 = "course8: [" + rp8.substring(0,rp8.length()-1) + "]";
-    } else {
-      rp8 = "course8: []";
-    }
-    if (roomplan9.size()!=0) {
-      for (int i = 0; i < roomplan9.size(); i++) {
-        rp9 = rp9 + "'" + roomplan9.get(i).get("teacher_id") + "',";
-      }
-      rp9 = "course9: [" + rp9.substring(0,rp9.length()-1) + "]";
-    } else {
-      rp9 = "course9: []";
-    }
-    if (roomplan10.size()!=0) {
-      for (int i = 0; i < roomplan10.size(); i++) {
-        rp10 = rp10 + "'" + roomplan10.get(i).get("teacher_id") + "',";
-      }
-      rp10 = "course10: [" + rp10.substring(0,rp10.length()-1) + "]";
-    } else {
-      rp10 = "course10: []";
-    }
-    if (roomplan11.size()!=0) {
-      for (int i = 0; i < roomplan11.size(); i++) {
-        rp11 = rp11 + "'" + roomplan11.get(i).get("teacher_id") + "',";
-      }
-      rp11 = "course11: [" + rp11.substring(0,rp11.length()-1) + "]";
-    } else {
-      rp11 = "course11: []";
-    }
-    if (roomplan12.size()!=0) {
-      for (int i = 0; i < roomplan12.size(); i++) {
-        rp12 = rp12 + "'" + roomplan12.get(i).get("teacher_id") + "',";
-      }
-      rp12 = "course12: [" + rp12.substring(0,rp12.length()-1) + "]";
-    } else {
-      rp12 = "course12: []";
-    }
-    renderText("{"+rp1+","+rp2+","+rp3+","+rp4+","+rp5+","+rp6+","+rp7+","+rp8+","+rp9+","+rp10+","+rp11+","+rp12+"}");
+    return crt;
   }
+
+  @Before(AjaxManager.class)
+  public void getCourseRoomTeacher() {
+    List<Course> courses = Course.dao.find("SELECT * FROM course WHERE state = 1");
+    String crt = "";
+    if (courses.size()!=0) {
+      for (int i = 0; i < courses.size(); i++) {
+        crt = crt + crt(courses.get(i).get("id").toString(),getPara("roomId")) + ",";
+      }
+    }
+    renderText("{"+crt.substring(0,crt.length()-1) + "}");
+  }
+
   @Before({Tx.class,AjaxManager.class})
   public void save()  {
-    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-      renderText("班级名称格式应为：XXXX级XX班");
-    } else if (Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+    if (!getPara("year").matches("\\d{4}")) {
+      renderText("入学年份应为4位数字");
+    } else if (!getPara("order").matches("\\d{1,2}")) {
+      renderText("班级序号应为1-2位数字");
+    } else if (Room.dao.find("SELECT * FROM room WHERE year=? AND order=?", getPara("year"), getPara("order")).size()!=0) {
       renderText("该班级已存在!");
+    } else if (Room.dao.find("SELECT * FROM room WHERE slogan=?", getPara("slogan")).size()!=0) {
+      renderText("该班级标语已存在!");
+    } else if (Room.dao.find("SELECT * FROM room WHERE name=?", getPara("year")+"级"+getPara("order")+"班").size()!=0) {
+      renderText("该班级标签已存在!");
     } else {
       Room room = new Room();
-      room.set("name",getPara("name")).set("state",1).save();
+      room.set("name",getPara("year")+"级"+getPara("order")+"班")
+              .set("year",getPara("year"))
+              .set("order",getPara("order"))
+              .set("slogan",getPara("slogan"))
+              .set("state",1).save();
       String[] course1 = getParaValues("course1[]");
       String[] course2 = getParaValues("course2[]");
       String[] course3 = getParaValues("course3[]");

@@ -16,6 +16,8 @@ public class Test {
 
 
   public static void main(String[] args) throws Exception {
+//    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
+//      renderText("班级名称格式应为：XXXX级XX班");
     // 电子邮箱的正则
     // System.out.println("nelson@126.com".matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$"));
     // 两个以上汉字的正则

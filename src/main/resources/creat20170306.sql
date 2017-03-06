@@ -9,9 +9,10 @@ PRIMARY KEY (`id`)
 
 CREATE TABLE `Room` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '班级序号',
-`room_year` varchar(255) CHARACTER SET utf8 NULL COMMENT '入学年份',
-`room_order` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级次序',
-`room_slogan` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级口号',
+`name` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级名称(标签)',
+`year` varchar(255) CHARACTER SET utf8 NULL COMMENT '入学年份',
+`order` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级次序',
+`slogan` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级口号',
 `state` int NULL COMMENT '班级状态0停用1可用',
 PRIMARY KEY (`id`) 
 );
@@ -37,6 +38,7 @@ CREATE TABLE `Teacher` (
 `state` int NULL COMMENT '账号状态1关注2已冻结3取消关注4未关注',
 `isManager` int NULL COMMENT '是否管理0否1是',
 `picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
+`type` int NULL COMMENT '1在编2聘用3校外',
 PRIMARY KEY (`id`) 
 );
 
@@ -127,7 +129,7 @@ CREATE TABLE `Assessment` (
 `course_id` int NULL COMMENT '课程序号',
 `semester_id` int NULL COMMENT '学期序号',
 `state` int NULL COMMENT '状态0停用1可用',
-`scope` int NULL COMMENT '发送范围1指定发送2全部发送',
+`send` int NULL COMMENT '发送范围0不发送1指定发送2全部发送',
 PRIMARY KEY (`id`) 
 );
 
@@ -200,6 +202,7 @@ CREATE TABLE `TeacherMessage` (
 `teacher_id` int NULL COMMENT '教师序号',
 `time` datetime NULL COMMENT '发送时间',
 `state` int NULL COMMENT '消息状态0停用1可用',
+`send` int NULL COMMENT '是否发送0否1是',
 PRIMARY KEY (`id`) 
 );
 
