@@ -81,12 +81,12 @@ public abstract class BaseAssessment<M extends BaseAssessment<M>> extends Model<
 		return get("state");
 	}
 
-	public void setSend(java.lang.Integer send) {
-		set("send", send);
+	public void setScope(java.lang.Integer scope) {
+		set("scope", scope);
 	}
 
-	public java.lang.Integer getSend() {
-		return get("send");
+	public java.lang.Integer getScope() {
+		return get("scope");
 	}
 
 }

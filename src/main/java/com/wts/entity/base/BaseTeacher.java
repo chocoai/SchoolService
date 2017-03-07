@@ -81,6 +81,14 @@ public abstract class BaseTeacher<M extends BaseTeacher<M>> extends Model<M> imp
 		return get("weixinId");
 	}
 
+	public void setQq(java.lang.String qq) {
+		set("qq", qq);
+	}
+
+	public java.lang.String getQq() {
+		return get("qq");
+	}
+
 	public void setState(java.lang.Integer state) {
 		set("state", state);
 	}
@@ -103,14 +111,6 @@ public abstract class BaseTeacher<M extends BaseTeacher<M>> extends Model<M> imp
 
 	public java.lang.String getPicUrl() {
 		return get("picUrl");
-	}
-
-	public void setType(java.lang.Integer type) {
-		set("type", type);
-	}
-
-	public java.lang.Integer getType() {
-		return get("type");
 	}
 
 }

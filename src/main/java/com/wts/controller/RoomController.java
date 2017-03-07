@@ -3,6 +3,7 @@ package com.wts.controller;
 import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.message.NotifyMessage;
 import com.foxinmy.weixin4j.qy.model.IdParameter;
+import com.foxinmy.weixin4j.qy.model.Tag;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.foxinmy.weixin4j.tuple.Text;
 import com.jfinal.aop.Before;
@@ -20,6 +21,7 @@ import com.wts.util.Util;
 import java.util.List;
 
 import static com.jfinal.plugin.activerecord.Db.find;
+import static com.wts.controller.SemesterController.getNow;
 
 public class RoomController extends Controller {
 
@@ -59,7 +61,7 @@ public class RoomController extends Controller {
   }
   @Before(AjaxManager.class)
   public void total() {
-    Long count = Db.queryLong("select count(*) from room where year like '%?%' OR order LIKE '%?%' OR slogan LIKE '%?%'", getPara("queryString"), getPara("queryString"), getPara("queryString"));
+    Long count = Db.queryLong("SELECT COUNT(*) FROM room WHERE year LIKE '%?%' OR order LIKE '%?%' OR slogan LIKE '%?%'", getPara("queryString"), getPara("queryString"), getPara("queryString"));
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {
@@ -212,7 +214,7 @@ public class RoomController extends Controller {
     }
   }
   private String crt (String courseId,String roomId){
-    List<Courseroomteacher> courseroomteacher = Courseroomteacher.dao.find("select * from courseroomteacher where room_id=? and course_id=? and semester_id=?",roomId,courseId,Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId());
+    List<Courseroomteacher> courseroomteacher = Courseroomteacher.dao.find("select * from courseroomteacher where room_id=? and course_id=? and semester_id=?",roomId,courseId,getNow().getId());
     String crt = "";
     if (courseroomteacher.size()!=0) {
       for (int i = 0; i < courseroomteacher.size(); i++) {
@@ -220,7 +222,7 @@ public class RoomController extends Controller {
       }
       crt = "course"+courseId+": [" + crt.substring(0,crt.length()-1) + "]";
     } else {
-      crt = "course"+courseId+":: []";
+      crt = "course"+courseId+": []";
     }
     return crt;
   }
@@ -251,189 +253,34 @@ public class RoomController extends Controller {
       renderText("该班级标签已存在!");
     } else {
       Room room = new Room();
-      room.set("name",getPara("year")+"级"+getPara("order")+"班")
-              .set("year",getPara("year"))
-              .set("order",getPara("order"))
-              .set("slogan",getPara("slogan"))
-              .set("state",1).save();
-      String[] course1 = getParaValues("course1[]");
-      String[] course2 = getParaValues("course2[]");
-      String[] course3 = getParaValues("course3[]");
-      String[] course4 = getParaValues("course4[]");
-      String[] course5 = getParaValues("course5[]");
-      String[] course6 = getParaValues("course6[]");
-      String[] course7 = getParaValues("course7[]");
-      String[] course8 = getParaValues("course8[]");
-      String[] course9 = getParaValues("course9[]");
-      String[] course10 = getParaValues("course10[]");
-      String[] course11 = getParaValues("course11[]");
-      String[] course12 = getParaValues("course12[]");
-      if (course1!=null){
-        for (String i : course1){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",1).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的班主任"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
+      room.set("name", getPara("year") + "级" + getPara("order") + "班")
+              .set("year", getPara("year"))
+              .set("order", getPara("order"))
+              .set("slogan", getPara("slogan"))
+              .set("state", 1).save();
+      try {
+        WP.me.createTag(new Tag(room.getId(), room.getName()));
+      } catch (WeixinException e) {
+        renderText(e.getMessage());
+      }
+      String[] courseAId = getParaValues("courseA_id[]");
+      String[] courseBId = getParaValues("courseB_id[]");
+      if (courseAId!=null) {
+        for (String i : courseAId) {
+          Courseroom courseroom = new Courseroom();
+          courseroom.set("semester_id", Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId())
+                  .set("course_id", i)
+                  .set("room_id", room.getId())
+                  .save();
         }
       }
-      if (course2!=null){
-        for (String i : course2){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",2).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的语文老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course3!=null){
-        for (String i : course3){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",3).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的数学老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course4!=null){
-        for (String i : course4){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",4).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的英语老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course5!=null){
-        for (String i : course5){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",5).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的音乐老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course6!=null){
-        for (String i : course6){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",6).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的体育老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course7!=null){
-        for (String i : course7){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",7).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的美术老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course8!=null){
-        for (String i : course8){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",8).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的科学老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course9!=null){
-        for (String i : course9){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",9).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的计算机老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course10!=null){
-        for (String i : course10){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",10).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的品生老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course11!=null){
-        for (String i : course11){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",11).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的品社老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
-        }
-      }
-      if (course12!=null){
-        for (String i : course12){
-          Roomplan roomplan = new Roomplan();
-          roomplan.set("course_id",12).set("room_id",room.get("id")).set("teacher_id",i).save();
-          Enterprise teacher = Enterprise.dao.findById(i);
-          if (teacher.getState()==1){
-            try {
-              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的传统文化老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-            } catch (Exception e) {
-              renderText(e.getMessage());
-            }
-          }
+      if (courseBId!=null) {
+        for (String i : courseBId) {
+          Courseroom courseroom = new Courseroom();
+          courseroom.set("semester_id", Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId())
+                  .set("course_id", i)
+                  .set("room_id", room.getId())
+                  .save();
         }
       }
       renderText("OK");
@@ -445,198 +292,58 @@ public class RoomController extends Controller {
     if (room == null) {
       renderText("要修改的班级不存在!");
     } else {
-//      if (Util.getString(room.getStr("name")).equals(getPara("name").trim())) {
-//        renderText("未找到修改内容!");
-      if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
-        renderText("班级名称格式应为：XXXX级XX班");
-      } else if (!Util.getString(room.getStr("name")).equals(getPara("name"))
-              &&  Room.dao.find("select * from room where name=?", getPara("name")).size()!=0) {
+      if (Util.getString(room.getStr("year")).equals(getPara("year").trim())
+              && Util.getString(room.getStr("order")).equals(getPara("order").trim())
+              && Util.getString(room.getStr("slogan")).equals(getPara("slogan").trim())) {
+        renderText("未找到修改内容!");
+      } else if (!getPara("year").matches("\\d{4}")) {
+        renderText("入学年份应为4位数字");
+      } else if (!getPara("order").matches("\\d{1,2}")) {
+        renderText("班级序号应为1-2位数字");
+      } else if (Room.dao.find("SELECT * FROM room WHERE slogan=?", getPara("slogan")).size()!=0) {
+        renderText("该班级标语已存在!");
+      } else if (Room.dao.find("SELECT * FROM room WHERE name=?", getPara("year")+"级"+getPara("order")+"班").size()!=0) {
+        renderText("该班级标签已存在!");
+      } else if (!Util.getString(room.getStr("year")).equals(getPara("year"))
+              && !Util.getString(room.getStr("order")).equals(getPara("order"))
+              && Room.dao.find("SELECT * FROM room WHERE year=? AND order=?", getPara("year"), getPara("order")).size()!=0) {
         renderText("该班级已存在!");
       } else {
-        room.set("name",getPara("name")).update();
-        Db.update("delete from roomplan where room_id = ?", getPara("id"));
-        String[] course1 = getParaValues("course1[]");
-        String[] course2 = getParaValues("course2[]");
-        String[] course3 = getParaValues("course3[]");
-        String[] course4 = getParaValues("course4[]");
-        String[] course5 = getParaValues("course5[]");
-        String[] course6 = getParaValues("course6[]");
-        String[] course7 = getParaValues("course7[]");
-        String[] course8 = getParaValues("course8[]");
-        String[] course9 = getParaValues("course9[]");
-        String[] course10 = getParaValues("course10[]");
-        String[] course11 = getParaValues("course11[]");
-        String[] course12 = getParaValues("course12[]");
-        if (course1!=null){
-          for (String i : course1){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",1).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的班主任"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
+        room.set("name",getPara("year")+"级"+getPara("order")+"班")
+                .set("year",getPara("year"))
+                .set("order",getPara("order"))
+                .set("slogan",getPara("slogan"))
+                .update();
+        try {
+          WP.me.updateTag(new Tag(room.getId(), room.getName()));
+        } catch (WeixinException e) {
+          renderText(e.getMessage());
+        }
+        String[] courseAId = getParaValues("courseA_id[]");
+        String[] courseBId = getParaValues("courseB_id[]");
+        Db.update("DELETE FROM courseroom WHERE room_id = ? AND semester_id = ?", room.getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId());
+        Db.update("DELETE FROM courseroomteacher WHERE room_id = ? AND semester_id = ?", room.getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId());
+        if (courseAId!=null) {
+          for (String i : courseAId) {
+            Courseroom courseroom = new Courseroom();
+            courseroom.set("semester_id", Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId())
+                    .set("course_id", i)
+                    .set("room_id", room.getId())
+                    .save();
           }
         }
-        if (course2!=null){
-          for (String i : course2){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",2).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的语文老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course3!=null){
-          for (String i : course3){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",3).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的数学老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course4!=null){
-          for (String i : course4){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",4).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的英语老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course5!=null){
-          for (String i : course5){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",5).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的音乐老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course6!=null){
-          for (String i : course6){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",6).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的体育老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course7!=null){
-          for (String i : course7){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",7).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的美术老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course8!=null){
-          for (String i : course8){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",8).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的科学老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course9!=null){
-          for (String i : course9){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",9).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的计算机老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course10!=null){
-          for (String i : course10){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",10).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的品生老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course11!=null){
-          for (String i : course11){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",11).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的品社老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
-          }
-        }
-        if (course12!=null){
-          for (String i : course12){
-            Roomplan roomplan = new Roomplan();
-            roomplan.set("course_id",12).set("room_id",room.get("id")).set("teacher_id",i).save();
-            Enterprise teacher = Enterprise.dao.findById(i);
-            if (teacher.getState()==1){
-              try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+room.getName()+"的传统文化老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
-              } catch (Exception e) {
-                renderText(e.getMessage());
-              }
-            }
+        if (courseBId!=null) {
+          for (String i : courseBId) {
+            Courseroom courseroom = new Courseroom();
+            courseroom.set("semester_id", Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId())
+                    .set("course_id", i)
+                    .set("room_id", room.getId())
+                    .save();
           }
         }
         renderText("OK");
       }
     }
   }
+
 }

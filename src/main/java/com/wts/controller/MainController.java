@@ -19,7 +19,10 @@ import java.util.List;
 
 public class MainController extends Controller {
     public void index() {
-        render("/static/Login.html");
+        render("/static/Mobile_Login.html");
+    }
+    public void mobile() {
+        render("/static/Mobile_Login.html");
     }
     /**
      * 登录跳转
@@ -43,9 +46,7 @@ public class MainController extends Controller {
             setSessionAttr("parent", parent);
             renderText("forParent");
         } else {
-            JMap cond = JMap.create("login", getPara("lme"))
-                    .set("mobile", getPara("lme"))
-                    .set("email", getPara("lme"))
+            JMap cond = JMap.create("lmewuq", getPara("lme"))
                     .set("pass", getPara("pass"))
                     .set("state", 1);
             SqlPara findTeacher = Db.getSqlPara("teacher.login_teacher",cond);
@@ -97,18 +98,18 @@ public class MainController extends Controller {
 ////    renderText(WP.me.getUserByCode(getPara("code")).getName());
 
     @Before(LoginManager.class)
-    public void forManager() {
-        render("/static/ManagerOfHome.html");
+    public void Mobile_Manager_Home() {
+        render("/static/Mobile_Manager_Home.html");
     }
 
     @Before(LoginTeacher.class)
-    public void forTeacher() {
-        render("/static/TeacherOfHome.html");
+    public void Mobile_Teacher_Home() {
+        render("/static/Mobile_Teacher_Home.html");
     }
 
     @Before(LoginParent.class)
-    public void forParent() {
-        render("/static/ParentOfHome.html");
+    public void Mobile_Parent_Home() {
+        render("/static/Mobile_Parent_Home.html");
     }
     /**
      * 登出

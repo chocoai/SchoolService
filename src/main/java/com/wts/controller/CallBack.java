@@ -65,7 +65,7 @@ public class CallBack extends Controller {
       }
       // 调用核心业务类接收消息、处理消息
       String respMessage = CoreService.processRequest(Msg);
-      EnterpriseController.subscribe(Msg);
+      //EnterpriseController.subscribe(Msg);
       // respMessage打印结果
       String encryptMsg = "";
       try {

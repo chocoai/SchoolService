@@ -18,8 +18,8 @@
 </template>
 <script>
   import MenuList from '../Menu/MenuList'
-  import sign1 from '../../assets/schoolIcon.jpg'
-  import sign2 from '../../assets/biaoyu.png'
+  import sign1 from '../../../assets/schoolIcon.jpg'
+  import sign2 from '../../../assets/biaoyu.png'
   export default {
     name: 'Home',
     components: {

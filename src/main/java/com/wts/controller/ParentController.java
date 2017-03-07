@@ -398,7 +398,7 @@ public class ParentController extends Controller {
     }
     private String setSuccess (String studentId,String identityId){
         Room room = Room.dao.findById(Roomstudent.dao.findFirst(Roomstudent.dao.getSql("roomStudent.studentId"),studentId).getRoomId());
-        return "您已被设为"+room.getRoomYear()+"级"+room.getRoomOrder()+"班"+Student.dao.findFirst(Student.dao.getSql("student.id"),studentId).getName()+"的"+Identity.dao.findFirst(Identity.dao.getSql("identity.id"),identityId).get("name");
+        return "您已被设为"+room.getYear()+"级"+room.getOrder()+"班"+Student.dao.findFirst(Student.dao.getSql("student.id"),studentId).getName()+"的"+Identity.dao.findFirst(Identity.dao.getSql("identity.id"),identityId).get("name");
     }
 
     private Boolean checkMobile(Parent parent, String mobile) {

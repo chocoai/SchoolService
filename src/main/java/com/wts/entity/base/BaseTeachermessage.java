@@ -57,12 +57,4 @@ public abstract class BaseTeachermessage<M extends BaseTeachermessage<M>> extend
 		return get("state");
 	}
 
-	public void setSend(java.lang.Integer send) {
-		set("send", send);
-	}
-
-	public java.lang.Integer getSend() {
-		return get("send");
-	}
-
 }

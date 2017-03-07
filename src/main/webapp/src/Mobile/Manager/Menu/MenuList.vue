@@ -51,7 +51,7 @@
         this.$emit('closeMenu')
       },
       goHome () {
-        window.location.href = '/forManager'
+        window.location.href = '/Mobile_Manager_Home'
       },
       goTeacher () {
         window.location.href = '/teacher/forManager'

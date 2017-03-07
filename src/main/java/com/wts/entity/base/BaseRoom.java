@@ -17,36 +17,28 @@ public abstract class BaseRoom<M extends BaseRoom<M>> extends Model<M> implement
 		return get("id");
 	}
 
-	public void setName(java.lang.String name) {
-		set("name", name);
+	public void setRoomYear(java.lang.String roomYear) {
+		set("roomYear", roomYear);
 	}
 
-	public java.lang.String getName() {
-		return get("name");
+	public java.lang.String getRoomYear() {
+		return get("roomYear");
 	}
 
-	public void setYear(java.lang.String year) {
-		set("year", year);
+	public void setRoomOrder(java.lang.String roomOrder) {
+		set("roomOrder", roomOrder);
 	}
 
-	public java.lang.String getYear() {
-		return get("year");
+	public java.lang.String getRoomOrder() {
+		return get("roomOrder");
 	}
 
-	public void setOrder(java.lang.String order) {
-		set("order", order);
+	public void setRoomSlogan(java.lang.String roomSlogan) {
+		set("roomSlogan", roomSlogan);
 	}
 
-	public java.lang.String getOrder() {
-		return get("order");
-	}
-
-	public void setSlogan(java.lang.String slogan) {
-		set("slogan", slogan);
-	}
-
-	public java.lang.String getSlogan() {
-		return get("slogan");
+	public java.lang.String getRoomSlogan() {
+		return get("roomSlogan");
 	}
 
 	public void setState(java.lang.Integer state) {

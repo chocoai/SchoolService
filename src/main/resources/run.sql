@@ -2,19 +2,21 @@
 #namespace("teacher")
   #sql("login_teacher")
     SELECT * FROM teacher
-    WHERE (login = #p(login) AND pass = #p(pass) AND state = #p(state))
-      OR (mobile = #p(mobile) AND pass = #p(pass) AND state = #p(state))
-      OR (email = #p(email) AND pass = #p(pass) AND state = #p(state))
-      OR (weixinId = #p(weixinId) AND pass = #p(pass) AND state = #p(state))
-      OR (userId = #p(userId) AND pass = #p(pass) AND state = #p(state))
+    WHERE (login = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (mobile = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (email = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (weixinId = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (userId = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (qq = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
   #end
   #sql("login_manager")
     SELECT * FROM teacher
-    WHERE (login = #p(login) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
-      OR (mobile = #p(mobile) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
-      OR (email = #p(email) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
-      OR (weixinId = #p(weixinId) AND pass = #p(pass) AND state = #p(state))
-      OR (userId = #p(userId) AND pass = #p(pass) AND state = #p(state))
+    WHERE (login = #p(lmewuq) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
+      OR (mobile = #p(lmewuq) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
+      OR (email = #p(lmewuq) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
+      OR (weixinId = #p(lmewuq) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
+      OR (userId = #p(lmewuq) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
+      OR (qq = #p(lmewuq) AND pass = #p(pass) AND state = #p(state) AND isManager = 1)
   #end
   #sql("weixin_teacher")
     select * FROM teacher WHERE userId = ? AND state = ?
@@ -41,11 +43,12 @@
 #namespace("parent")
   #sql("login_parent")
     SELECT * FROM parent
-    WHERE (login = #p(login) AND pass = #p(pass) AND state = #p(state))
-      OR (mobile = #p(mobile) AND pass = #p(pass) AND state = #p(state))
-      OR (email = #p(email) AND pass = #p(pass) AND state = #p(state))
-      OR (weixinId = #p(weixinId) AND pass = #p(pass) AND state = #p(state))
-      OR (userId = #p(userId) AND pass = #p(pass) AND state = #p(state))
+    WHERE (login = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (mobile = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (email = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (weixinId = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (userId = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
+      OR (qq = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
   #end
   #sql("weixin_parent")
     SELECT * FROM parent WHERE userId = ? AND state = ?

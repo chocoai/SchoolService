@@ -81,6 +81,14 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 		return get("weixinId");
 	}
 
+	public void setQq(java.lang.String qq) {
+		set("qq", qq);
+	}
+
+	public java.lang.String getQq() {
+		return get("qq");
+	}
+
 	public void setState(java.lang.Integer state) {
 		set("state", state);
 	}
