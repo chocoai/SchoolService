@@ -61,6 +61,19 @@ var webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
+    new HtmlWebpackPlugin({
+      title: '移动_管理_主页',
+      filename: '../dist/static/Mobile_Manager_Home.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Manager_Home'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',
@@ -84,11 +97,14 @@ var webpackConfig = merge(baseWebpackConfig, {
     // copy custom static assets
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, '../static'),
-        to: config.build.assetsSubDirectory,
+        from: path.resolve(__dirname, '../dist'),
+        to: path.resolve(__dirname, '../static'),
+        force: true,
+        toType: 'dir',
         ignore: ['.*']
       }
-    ])
+    ]),
+
   ]
 })
 

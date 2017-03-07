@@ -22,9 +22,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
+      'vue': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
-      'assets': resolve('src/assets'),
+      'assets': resolve('src\\assets'),
       'muse-components': 'muse-ui/src',
     }
   },
@@ -47,9 +47,6 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        query: {
-          presets: ['es2015']
-        },
         include: [resolve('src'), resolve('test')]
       },
       {
@@ -67,6 +64,10 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
+      },
+      {
+        test: /muse-ui.src.*?js$/,
+        loader: 'babel-loader'
       }
     ]
   }

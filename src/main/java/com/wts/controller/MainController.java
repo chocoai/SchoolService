@@ -28,23 +28,23 @@ public class MainController extends Controller {
      * 登录跳转
      * */
     public void login() {
-        if (getPara("lme").equals("1") && getPara("pass").equals("1")) {
+        if (getPara("lmewuq").equals("1") && getPara("pass").equals("1")) {
             Teacher teacher = new Teacher();
             teacher.setIsManager(1);
             teacher.setId(1);
             setSessionAttr("manager", teacher);
-            renderText("forManager");
-        } else if (getPara("lme").equals("2") && getPara("pass").equals("2")) {
+            renderText("Mobile_Manager_Home");
+        } else if (getPara("lmewuq").equals("2") && getPara("pass").equals("2")) {
             Teacher teacher = new Teacher();
             teacher.setIsManager(0);
             teacher.setId(1);
             setSessionAttr("teacher", teacher);
-            renderText("forTeacher");
-        } else if (getPara("lme").equals("3") && getPara("pass").equals("3")) {
+            renderText("Mobile_Teacher_Home");
+        } else if (getPara("lmewuq").equals("3") && getPara("pass").equals("3")) {
             Parent parent = new Parent();
             parent.setId(1);
             setSessionAttr("parent", parent);
-            renderText("forParent");
+            renderText("Mobile_Parent_Home");
         } else {
             JMap cond = JMap.create("lmewuq", getPara("lme"))
                     .set("pass", getPara("pass"))
@@ -56,17 +56,17 @@ public class MainController extends Controller {
                 Teacher teacher = Teacher.dao.findFirst(findTeacher);
                 setSessionAttr("teacher", teacher);
                 setCookie("die", teacher.getId().toString(), 60 * 30 * 30);
-                renderText("forTeacher");
+                renderText("Mobile_Teacher_Home");
             } else if (getPara("type").equals("manager") && Teacher.dao.findFirst(findManager) != null) {
                 Teacher manager = Teacher.dao.findFirst(findManager);
                 setSessionAttr("manager", manager);
                 setCookie("die", manager.getId().toString(), 60 * 30 * 30);
-                renderText("forManager");
+                renderText("Mobile_Manager_Home");
             } else if (getPara("type").equals("parent") && Parent.dao.findFirst(findParent) != null) {
                 Parent parent = Parent.dao.findFirst(findParent);
                 setSessionAttr("parent", parent);
                 setCookie("die", parent.getId().toString(), 60 * 30 * 30);
-                renderText("forParent");
+                renderText("Mobile_Parent_Home");
             } else {
                 renderText("error");
             }

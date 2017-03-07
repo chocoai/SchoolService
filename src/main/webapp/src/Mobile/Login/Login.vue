@@ -51,14 +51,14 @@
             { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
           ).then((response) => {
             switch (response.body) {
-              case 'forManager':
-                window.location.href = '/forManager'
+              case 'Mobile_Manager_Home':
+                window.location.href = '/Mobile_Manager_Home'
                 break
-              case 'forTeacher':
-                window.location.href = '/forTeacher'
+              case 'Mobile_Teacher_Home':
+                window.location.href = '/Mobile_Teacher_Home'
                 break
-              case 'forParent':
-                window.location.href = '/forParent'
+              case 'Mobile_Parent_Home':
+                window.location.href = '/Mobile_Parent_Home'
                 break
               case 'noPower':
                 this.openPopup('用户无管理权限!', 'report_problem', 'orange')
@@ -79,7 +79,7 @@
         this.icon = icon
         this.color = color
         this.bottomPopup = true
-        setTimeout(() => { this.bottomPopup = false }, 1500)
+        setTimeout(() => { this.bottomPopup = false }, 2000)
       }
     }
   }

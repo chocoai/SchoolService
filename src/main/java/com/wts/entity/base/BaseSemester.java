@@ -26,19 +26,19 @@ public abstract class BaseSemester<M extends BaseSemester<M>> extends Model<M> i
 	}
 
 	public void setTimeStart(java.util.Date timeStart) {
-		set("timeStart", timeStart);
+		set("time_start", timeStart);
 	}
 
 	public java.util.Date getTimeStart() {
-		return get("timeStart");
+		return get("time_start");
 	}
 
 	public void setTimeEnd(java.util.Date timeEnd) {
-		set("timeEnd", timeEnd);
+		set("time_end", timeEnd);
 	}
 
 	public java.util.Date getTimeEnd() {
-		return get("timeEnd");
+		return get("time_end");
 	}
 
 	public void setState(java.lang.Integer state) {
