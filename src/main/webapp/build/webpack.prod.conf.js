@@ -47,7 +47,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       title: '移动_登录',
-      filename: '../dist/static/Mobile_Login.html',
+      filename: '../dist/static/html/mobile/Mobile_Login.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Mobile_Login'],
@@ -63,10 +63,23 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '移动_管理_主页',
-      filename: '../dist/static/Mobile_Manager_Home.html',
+      filename: '../dist/static/html/mobile/manager/Mobile_Manager_Home.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Mobile_Manager_Home'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '移动_管理_学期',
+      filename: '../dist/static/html/mobile/manager/Mobile_Manager_Semester.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Manager_Semester'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

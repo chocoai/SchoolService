@@ -1,12 +1,12 @@
 <template>
   <div>
-    <mu-appbar title="新建学期">
+    <mu-appbar title="创建新学期">
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
-    <mu-text-field label="名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
-    <mu-date-picker label="开始时间" v-model="timeStart" :errorColor="startErrorColor" :errorText="startErrorText" fullWidth labelFloat icon="title"/> <br/>
-    <mu-date-picker label="终止时间" v-model="timeEnd" :errorColor="endErrorColor" :errorText="endErrorText" fullWidth labelFloat icon="title"/> <br/>
-    <mu-dialog :open="forSave" title="正在保存" >
+    <mu-text-field label="学期名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
+    <mu-date-picker label="开始时间" v-model="timeStart" fullWidth labelFloat icon="schedule"/><br/>
+    <mu-date-picker label="终止时间" v-model="timeEnd" fullWidth labelFloat icon="schedule"/><br/>
+    <mu-dialog :open="Saving" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
     <mu-flexbox>
@@ -14,7 +14,7 @@
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button :disabled="saveAble" icon="send" @click="forSend=true" backgroundColor="green"/>
+        <mu-float-button :disabled="Save_Able" icon="save" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
@@ -30,24 +30,20 @@ export default {
   data () {
     return {
       bottomPopup: false,
-      forSave: false,
-      forSend: false,
+      Saving: false,
       icon: '',
       color: '',
-      title: '',
-      content: '',
-      type: '1',
+      name: '',
+      timeStart: '',
+      timeEnd: '',
       message: '',
-      titleErrorText: '',
-      contentErrorText: '',
-      titleErrorColor: '',
-      contentErrorColor: '',
-      saveAble: true
+      nameErrorText: '',
+      nameErrorColor: ''
     }
   },
   computed: {
-    saveAble: function () {
-      if (this.titleErrorText.toString() === 'OK' && this.contentErrorText.toString() === 'OK') {
+    Save_Able: function () {
+      if (this.nameErrorText.toString() === 'OK') {
         return false
       } else {
         return true
@@ -56,10 +52,7 @@ export default {
   },
   methods: {
     gorReply () {
-      this.$router.push({ path: '/noticeList' })
-    },
-    goClose () {
-      this.forSend = false
+      this.$router.push({ path: '/list' })
     },
     openPopup (message, icon, color) {
       this.message = message
@@ -69,63 +62,64 @@ export default {
       setTimeout(() => { this.bottomPopup = false }, 1500)
     },
     goReset () {
-      this.title = ''
-      this.content = ''
-      this.type = '1'
-      this.titleErrorText = ''
-      this.contentErrorText = ''
-      this.titleErrorColor = ''
-      this.contentErrorColor = ''
+      this.name = ''
+      this.nameErrorText = ''
+      this.nameErrorColor = ''
+      this.timeStart = ''
+      this.timeEnd = ''
     },
-    checkTitle (value) {
+    checkName (value) {
       if (value === null || value === undefined || value === '') {
-        this.titleErrorText = '标题为必填项!'
-        this.titleErrorColor = 'orange'
+        this.nameErrorText = '名称为必填项!'
+        this.nameErrorColor = 'orange'
       } else if (value.length > 20) {
-        this.contentErrorText = '标题不得超过20字符'
-        this.contentErrorColor = 'orange'
+        this.nameErrorText = '名称不得超过20字符'
+        this.nameErrorColor = 'orange'
       } else {
-        this.titleErrorText = 'OK'
-        this.titleErrorColor = 'green'
-      }
-    },
-    checkContent (value) {
-      if (value === null || value === undefined || value === '') {
-        this.contentErrorText = '内容为必填项!'
-        this.contentErrorColor = 'orange'
-      } else if (value.length > 300) {
-        this.contentErrorText = '内容不得超过300字符'
-        this.contentErrorColor = 'orange'
-      } else {
-        this.contentErrorText = 'OK'
-        this.contentErrorColor = 'green'
+        this.$http.get(
+          API.Semester_CheckName_Add,
+          { params: { name: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.nameErrorText = 'OK'
+            this.nameErrorColor = 'green'
+          } else {
+            this.nameErrorText = response.body
+            this.nameErrorColor = 'red'
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
       }
     },
     goSave () {
-      this.forSend = false
-      this.forSave = true
+      this.Saving = true
       this.$http.get(
-        API.Save,
+        API.Semester_Save,
         { params: {
-          title: this.title,
-          content: this.content,
-          type: this.type
+          name: this.name,
+          timeStart: this.timeStart,
+          timeEnd: this.timeStart
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.forSave = false
+        this.Saving = false
         if (response.body === 'error') {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
         } else if (response.body === 'OK') {
           this.openPopup('保存成功！', 'check_circle', 'green')
-          setTimeout(() => { this.$router.push({ path: '/noticeList' }) }, 1000)
+          setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')
         }
-        this.forSave = false
+        this.Saving = false
       }, (response) => {
-        this.forSave = false
+        this.Saving = false
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     }

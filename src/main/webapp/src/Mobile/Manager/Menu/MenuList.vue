@@ -8,6 +8,9 @@
         <mu-list-item title="主页" @click.native="goHome">
           <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
+        <mu-list-item title="学期管理" @click.native="goSemester">
+          <mu-icon slot="left" value="group" color="#f44336"/>
+        </mu-list-item>
         <mu-list-item title="教师管理" @click.native="goTeacher">
           <mu-icon slot="left" value="group" color="#f44336"/>
         </mu-list-item>
@@ -52,6 +55,9 @@
       },
       goHome () {
         window.location.href = '/Mobile_Manager_Home'
+      },
+      goSemester () {
+        window.location.href = '/semester/Mobile_Manager_Semester'
       },
       goTeacher () {
         window.location.href = '/teacher/forManager'

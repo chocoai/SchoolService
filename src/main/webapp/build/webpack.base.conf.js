@@ -10,7 +10,8 @@ function resolve (dir) {
 module.exports = {
   entry: {
     Mobile_Login: './src/Mobile/Login/Index.js',
-    Mobile_Manager_Home: './src/Mobile/Manager/Home/Index.js'
+    Mobile_Manager_Home: './src/Mobile/Manager/Home/Index.js',
+    Mobile_Manager_Semester: './src/Mobile/Manager/Semester/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

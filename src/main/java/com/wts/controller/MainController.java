@@ -19,10 +19,10 @@ import java.util.List;
 
 public class MainController extends Controller {
     public void index() {
-        render("/static/Mobile_Login.html");
+        render("/static/html/mobile/Mobile_Login.html");
     }
     public void mobile() {
-        render("/static/Mobile_Login.html");
+        render("/static/html/mobile/Mobile_Login.html");
     }
     /**
      * 登录跳转
@@ -99,17 +99,17 @@ public class MainController extends Controller {
 
     @Before(LoginManager.class)
     public void Mobile_Manager_Home() {
-        render("/static/Mobile_Manager_Home.html");
+        render("/static/html/mobile/manager/Mobile_Manager_Home.html");
     }
 
     @Before(LoginTeacher.class)
     public void Mobile_Teacher_Home() {
-        render("/static/Mobile_Teacher_Home.html");
+        render("/static/html/mobile/manager/Mobile_Teacher_Home.html");
     }
 
     @Before(LoginParent.class)
     public void Mobile_Parent_Home() {
-        render("/static/Mobile_Parent_Home.html");
+        render("/static/html/mobile/manager/Mobile_Parent_Home.html");
     }
     /**
      * 登出

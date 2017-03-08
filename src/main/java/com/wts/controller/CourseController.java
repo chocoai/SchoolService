@@ -16,11 +16,11 @@ import static com.wts.controller.SemesterController.getNow;
 public class CourseController extends Controller {
   @Before(AjaxManager.class)
   public void query() {
-    renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%?%' OR describe LIKE '%?%' ORDER BY id ASC", getPara("queryString"), getPara("queryString")).getList());
+    renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%"+getPara("queryString")+"%' OR describe LIKE '%"+getPara("queryString")+"%' ORDER BY id ASC").getList());
   }
   @Before(AjaxManager.class)
   public void total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%?%' OR describe LIKE '%?%'", getPara("queryString"), getPara("queryString"));
+    Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%"+getPara("queryString")+"%' OR describe LIKE '%"+getPara("queryString")+"%'");
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {
@@ -34,7 +34,7 @@ public class CourseController extends Controller {
   }
 
   @Before({Login.class, Ajax.class})
-  public void getCourse() {
+  public void get() {
     renderJson(Course.dao.findById(getPara("courseId")));
   }
 
