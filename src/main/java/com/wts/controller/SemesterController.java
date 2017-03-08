@@ -15,7 +15,7 @@ import static com.wts.util.Util.getString;
 
 public class SemesterController extends Controller {
   /**
-   * 登录到教师页面
+   * 登录移动_管理_学期
    */
   public void Mobile_Manager_Semester() throws WeixinException {
     if (getSessionAttr("manager") == null || ((Teacher) getSessionAttr("manager")).getIsManager() != 1) {
@@ -26,6 +26,9 @@ public class SemesterController extends Controller {
           if (manager != null) {
             setSessionAttr("manager", manager);
             setCookie("dim", manager.getId().toString(), 60 * 30);
+            if(user.getAvatar().equals(manager.getPicUrl())){
+              manager.set("picUrl", user.getAvatar()).update();
+            }
             render("/static/html/mobile/manager/Mobile_Manager_Semester.html");
           } else {
             redirect("/");
@@ -141,8 +144,8 @@ public class SemesterController extends Controller {
     } else {
       Semester semester = new Semester();
       semester.set("name", getPara("name"))
-              .set("timeStart", getPara("timeStart"))
-              .set("timeEnd", getPara("timeEnd"))
+              .set("time_start", getPara("timeStart"))
+              .set("time_end", getPara("timeEnd"))
               .set("state", 0)
               .save();
       renderText("OK");
@@ -165,8 +168,8 @@ public class SemesterController extends Controller {
         renderText("开始时间晚于终止时间!");
       } else {
         semester.set("name", getPara("name"))
-                .set("timeStart", getPara("timeStart"))
-                .set("timeEnd", getPara("timeEnd"))
+                .set("time_start", getPara("timeStart"))
+                .set("time_end", getPara("timeEnd"))
                 .update();
         renderText("OK");
       }

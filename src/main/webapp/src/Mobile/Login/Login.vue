@@ -1,5 +1,5 @@
 <template>
-  <div class="Login">
+  <div>
     <mu-appbar title="欢迎使用校园管理系统"/>
     <mu-flexbox>
       <mu-flexbox-item >
@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-  import * as API from '../API.js'
+  import * as API from './API.js'
   export default {
     name: 'Login',
     data () {
@@ -42,7 +42,7 @@
           this.openPopup('密码不能为空!', 'report_problem', 'orange')
         } else {
           this.$http.get(
-            API.Login,
+            API.login,
             { params: {
               lmewuq: this.lmewuq,
               pass: this.pass,

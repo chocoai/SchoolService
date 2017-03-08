@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import * as API from '../../API.js'
+import * as API from './API.js'
 export default {
   name: 'Edit',
   data () {
@@ -97,7 +97,7 @@ export default {
     },
     goActive () {
       this.$http.get(
-        API.Semester_Active,
+        API.active,
         { params: { semesterId: this.$route.params.id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
@@ -127,7 +127,7 @@ export default {
     goSave () {
       this.Saving = true
       this.$http.get(
-        API.Semester_Edit,
+        API.edit,
         { params: {
           semesterId: this.$route.params.id,
           name: this.name,
@@ -153,14 +153,14 @@ export default {
     },
     fetchData (semesterId) {
       this.$http.get(
-        API.Semester_Get,
+        API.get,
         { params: { semesterId: semesterId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.semester = response.body
         this.name = this.semester.name
-        this.timeStart = this.semester.timeStart
-        this.timeEnd = this.semester.timeEnd
+        this.timeStart = this.semester.time_start
+        this.timeEnd = this.semester.time_end
         this.state = this.semester.state
         if (this.semester.state.toString() === '0') {
           this.Active_Able = false
@@ -179,7 +179,7 @@ export default {
         this.nameErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.Semester_CheckName_Edit,
+          API.checkNameForEdit,
           { params: {
             semesterId: this.$route.params.id,
             name: value

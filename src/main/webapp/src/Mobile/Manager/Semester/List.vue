@@ -6,7 +6,7 @@
       <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="semester in semesters" :value="semester.id" :title="semester.name" @click="goEdit(semester.id)">
+      <mu-list-item v-for="semester in list" :value="semester.id" :title="semester.name" :afterText="semester.state.toString() === '0'?'注销':'激活'" @click="goEdit(semester.id)">
         <mu-icon v-if="semester.state.toString() === '0'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
         <mu-icon v-if="semester.state.toString() === '1'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
       </mu-list-item>
@@ -33,7 +33,7 @@
 </template>
 
 <script>
-  import * as API from '../../API.js'
+  import * as API from './API.js'
   import MenuList from '../Menu/MenuList'
   export default {
     name: 'list',
@@ -51,7 +51,7 @@
         color: '',
         message: '',
         queryString: '',
-        semesters: [],
+        list: [],
         pageTotal: '',
         pageSize: '7',
         pageCurrent: ''
@@ -79,7 +79,7 @@
       },
       query (queryString, pageCurrent, pageSize) {
         this.$http.get(
-          API.Semester_Query,
+          API.query,
           { params: {
             queryString: queryString,
             pageCurrent: pageCurrent,
@@ -87,7 +87,7 @@
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
-          this.semesters = response.body
+          this.list = response.body
           this.pageCurrent = pageCurrent
           this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         }, (response) => {
@@ -96,7 +96,7 @@
       },
       total (queryString, pageSize) {
         this.$http.get(
-          API.Semester_Total,
+          API.total,
           { params: {
             queryString: queryString,
             pageSize: pageSize
@@ -121,8 +121,8 @@
         this.total(this.queryString, this.pageSize)
         this.before = false
       },
-      goEdit (semesterId) {
-        this.$router.push({ path: '/edit/' + semesterId })
+      goEdit (id) {
+        this.$router.push({ path: '/edit/' + id })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent

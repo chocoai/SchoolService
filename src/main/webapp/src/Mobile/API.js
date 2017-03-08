@@ -1,8 +1,9 @@
 const h = ''
 // const h = '/yuming'
+import * as Mobile from './Mobile.js'
 /* eslint-disable camelcase */
 export const Login = `${h}/login`
-export const Semester_CheckName_Add = `${h}/semester/checkNameForAdd`
+export const Semester_CheckName_Add = `${Mobile.Prefix}/semester/checkNameForAdd`
 export const Semester_CheckName_Edit = `${h}/semester/checkNameForEdit`
 export const Semester_Save = `${h}/semester/save`
 export const Semester_Edit = `${h}/semester/edit`

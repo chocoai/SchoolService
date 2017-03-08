@@ -189,33 +189,5 @@
 //    }
 //  }
 //
-//  /**
-//   * 处理微信发来的关注
-//   *账号状态1关注2已冻结3取消关注4未关注
-//   * @param request
-//   */
-//  public static void subscribe(String request) {
-//    try {
-//      // 调用parseXml方法解析请求消息
-//      Map<String, String> requestMap = MessageUtil.parseXml(request);
-//      // 发送方帐号
-//      String FromUserName = requestMap.get("FromUserName");
-//      if (requestMap.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
-//        User user = WP.me.getUser(FromUserName);
-//        Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=?", FromUserName);
-//        enterprise.set("sex", user.getGender())
-//                .set("picUrl", user.getAvatar())
-//                .set("state", 1)
-//                .update();
-//      }
-//      if (requestMap.get("Event").equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
-//        Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where userId=?", FromUserName);
-//        enterprise.set("picUrl", "")
-//                .set("state", 3)
-//                .update();
-//      }
-//    } catch (Exception e) {
-//      e.printStackTrace();
-//    }
-//  }
+
 //}

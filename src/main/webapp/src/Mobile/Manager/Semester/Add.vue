@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import * as API from '../../API.js'
+import * as API from './API.js'
 export default {
   name: 'Add',
   data () {
@@ -77,7 +77,7 @@ export default {
         this.nameErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.Semester_CheckName_Add,
+          API.checkNameForAdd,
           { params: { name: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -99,7 +99,7 @@ export default {
     goSave () {
       this.Saving = true
       this.$http.get(
-        API.Semester_Save,
+        API.save,
         { params: {
           name: this.name,
           timeStart: this.timeStart,

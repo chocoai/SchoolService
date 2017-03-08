@@ -11,14 +11,14 @@
         <mu-list-item title="学期管理" @click.native="goSemester">
           <mu-icon slot="left" value="group" color="#f44336"/>
         </mu-list-item>
+        <mu-list-item title="课程管理" @click.native="goCourse">
+          <mu-icon slot="left" value="group" color="#f44336"/>
+        </mu-list-item>
         <mu-list-item title="教师管理" @click.native="goTeacher">
           <mu-icon slot="left" value="group" color="#f44336"/>
         </mu-list-item>
         <mu-list-item title="班级管理" @click.native="goRoom">
           <mu-icon slot="left" value="store" color="#9c27b0"/>
-        </mu-list-item>
-        <mu-list-item title="社团管理" @click.native="goTeam">
-          <mu-icon slot="left" value="account_balance" color="#673ab7"/>
         </mu-list-item>
         <mu-list-item title="学生管理" @click.native="goStudent">
           <mu-icon slot="left" value="face" color="#4caf50"/>
@@ -59,23 +59,23 @@
       goSemester () {
         window.location.href = '/semester/Mobile_Manager_Semester'
       },
+      goCourse () {
+        window.location.href = '/course/Mobile_Manager_Course'
+      },
       goTeacher () {
-        window.location.href = '/teacher/forManager'
+        window.location.href = '/teacher/Mobile_Manager_Teacher'
       },
       goRoom () {
-        window.location.href = '/room/forManager'
-      },
-      goTeam () {
-        window.location.href = '/team/forManager'
+        window.location.href = '/room/Mobile_Manager_Room'
       },
       goStudent () {
-        window.location.href = '/student/forManager'
+        window.location.href = '/student/Mobile_Manager_Student'
       },
       goParent () {
-        window.location.href = '/parent/forManager'
+        window.location.href = '/parent/Mobile_Manager_Parent'
       },
       goNotice () {
-        window.location.href = '/notice/forManager'
+        window.location.href = '/notice/Mobile_Manager_Notice'
       },
       goExit () {
         window.location.href = '/exit'
