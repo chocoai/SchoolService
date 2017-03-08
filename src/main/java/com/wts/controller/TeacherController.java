@@ -232,7 +232,7 @@ public class TeacherController extends Controller {
      */
     @Before(AjaxManager.class)
     public void total() {
-        Long count = Db.queryLong("SELECT count(*) FROM teacher WHERE name LIKE '%?%' OR mobile LIKE '%?%' OR userId LIKE '%?%' ORDER BY name ASC", getPara("queryString"), getPara("queryString"), getPara("queryString"));
+        Long count = Db.queryLong("SELECT COUNT(*) FROM teacher WHERE name LIKE '%?%' OR mobile LIKE '%?%' OR userId LIKE '%?%' ORDER BY name ASC", getPara("queryString"), getPara("queryString"), getPara("queryString"));
         if (count % getParaToInt("pageSize") == 0) {
             renderText((count / getParaToInt("pageSize")) + "");
         } else {
