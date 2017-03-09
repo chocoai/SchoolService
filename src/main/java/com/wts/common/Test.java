@@ -11,6 +11,8 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wts.controller.MainController.getUserId;
+
 public class Test {
   private static Logger logger = Logger.getLogger(Test.class);
 
@@ -42,13 +44,14 @@ public class Test {
 
      //System.out.println("20t6级43班".matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]"));
       //System.out.println(new PinyinTool().toPinYin("王燚硕","",PinyinTool.Type.FIRSTUPPER));
-    int[] integers = {11};
-    for (int i = 0; i < integers.length; i++){
-      System.out.println("第一组："+integers[i]);
-    }
-    for (int i = 0; i<4-integers.length; i++){
-      System.out.println("第二组："+i);
-    }
+//    int[] integers = {11};
+//    for (int i = 0; i < integers.length; i++){
+//      System.out.println("第一组："+integers[i]);
+//    }
+//    for (int i = 0; i<4-integers.length; i++){
+//      System.out.println("第二组："+i);
+//    }
+    System.out.println(getUserId("爱的所发生的"));
   }
 
 }

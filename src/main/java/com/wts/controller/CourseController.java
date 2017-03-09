@@ -56,14 +56,14 @@ public class CourseController extends Controller {
    */
   @Before(AjaxManager.class)
   public void query() {
-    renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%"+getPara("queryString")+"%' OR `describe` LIKE '%"+getPara("queryString")+"%' ORDER BY id ASC").getList());
+    renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%"+getPara("queryString")+"%' OR detail LIKE '%"+getPara("queryString")+"%' ORDER BY id ASC").getList());
   }
   /**
    * 计数
    */
   @Before(AjaxManager.class)
   public void total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%"+getPara("queryString")+"%' OR `describe` LIKE '%"+getPara("queryString")+"%'");
+    Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%"+getPara("queryString")+"%' OR detail LIKE '%"+getPara("queryString")+"%'");
     if (count%getParaToInt("pageSize")==0) {
       renderText((count/getParaToInt("pageSize"))+"");
     } else {
@@ -124,7 +124,7 @@ public class CourseController extends Controller {
     } else {
       Course course = new Course();
       course.set("name", getPara("name"))
-              .set("describe", getPara("describe"))
+              .set("detail", getPara("detail"))
               .set("type", getPara("type"))
               .set("state", 1)
               .save();
@@ -145,7 +145,7 @@ public class CourseController extends Controller {
         renderText("该名称已存在!");
       } else {
         course.set("name", getPara("name"))
-                .set("describe", getPara("describe"))
+                .set("detail", getPara("detail"))
                 .set("type", getPara("type"))
                 .update();
         renderText("OK");

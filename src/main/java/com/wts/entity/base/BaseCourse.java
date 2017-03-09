@@ -25,12 +25,12 @@ public abstract class BaseCourse<M extends BaseCourse<M>> extends Model<M> imple
 		return get("name");
 	}
 
-	public void setDescribe(java.lang.String describe) {
-		set("describe", describe);
+	public void setDetail(java.lang.String detail) {
+		set("detail", detail);
 	}
 
-	public java.lang.String getDescribe() {
-		return get("describe");
+	public java.lang.String getDetail() {
+		return get("detail");
 	}
 
 	public void setType(java.lang.String type) {

@@ -22,9 +22,9 @@ import dialog from 'muse-components/dialog'
 import chip from 'muse-components/chip'
 import popup from 'muse-components/popup'
 import drawer from 'muse-components/drawer'
+import radio from 'muse-components/radio'
 import datePicker from 'muse-components/datePicker'
 import circularProgress from 'muse-components/circularProgress'
-import selectField from 'muse-components/selectField'
 import { listItem, list } from 'muse-components/list'
 import { menuItem, menu } from 'muse-components/menu'
 import { flexboxItem, flexbox } from 'muse-components/flexbox'
@@ -42,9 +42,9 @@ Vue.component(dialog.name, dialog)
 Vue.component(chip.name, chip)
 Vue.component(popup.name, popup)
 Vue.component(drawer.name, drawer)
+Vue.component(radio.name, radio)
 Vue.component(datePicker.name, datePicker)
 Vue.component(circularProgress.name, circularProgress)
-Vue.component(selectField.name, selectField)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)
 Vue.component(flexboxItem.name, flexboxItem)

@@ -89,6 +89,14 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 		return get("qq");
 	}
 
+	public void setAddress(java.lang.String address) {
+		set("address", address);
+	}
+
+	public java.lang.String getAddress() {
+		return get("address");
+	}
+
 	public void setState(java.lang.Integer state) {
 		set("state", state);
 	}

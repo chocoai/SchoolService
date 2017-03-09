@@ -6,26 +6,7 @@ import com.wts.entity.model.Teacher;
 
 public class Util {
 
-  public static String getUserId(String personName) {
-    try {
-      String UserId = new PinyinTool().toPinYin(personName, "", PinyinTool.Type.FIRSTUPPER);
-      String UserIds;
-      if (Teacher.dao.findFirst(Teacher.dao.getSql("teacher_userId"), UserId) == null
-              && Parent.dao.findFirst(Parent.dao.getSql("parent_userId"), UserId) == null) {
-        return UserId;
-      } else {
-        int i = 1;
-        do {
-          UserIds = UserId + i;
-          i++;
-        }
-        while (Teacher.dao.findFirst(Teacher.dao.getSql("teacher_userId"), UserId) != null && Parent.dao.findFirst(Parent.dao.getSql("parent_userId"), UserId) != null);
-        return UserIds;
-      }
-    } catch (Exception e) {
-      return "";
-    }
-  }
+
 
   public static String getString(String str) {
     if (str == null) {

@@ -6,7 +6,7 @@
       <mu-icon-button icon='person_add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="teacher in list" :value="teacher.id" :title="teacher.name" :describeText="teacher.mobile" :afterText="getType(teacher.state)" @click="goEdit(teacher.id)">
+      <mu-list-item v-for="teacher in list" :value="teacher.id" :title="teacher.name" :describeText="getType(teacher.type)" :afterText="getState(teacher.state)" @click="goEdit(teacher.id)">
         <mu-avatar v-if="teacher.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
         <mu-icon v-if="teacher.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
         <mu-icon v-if="teacher.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
@@ -123,15 +123,26 @@
         this.total(this.queryString, this.pageSize)
         this.before = false
       },
-      getType (type) {
-        if (type.toString === '1') {
+      getState (state) {
+        if (state.toString() === '1') {
           return '已关注'
-        } else if(type.toString === '2') {
+        } else if (state.toString() === '2') {
           return '已冻结'
-        } else if(type.toString === '3') {
+        } else if (state.toString() === '3') {
           return '取消关注'
-        } else if(type.toString === '1') {
+        } else if (state.toString() === '4') {
           return '未关注'
+        } else {
+          return '状态错误'
+        }
+      },
+      getType (type) {
+        if (type.toString() === '1') {
+          return '在编教师'
+        } else if (type.toString() === '2') {
+          return '聘用教师'
+        } else if (type.toString() === '3') {
+          return '外校教师'
         } else {
           return '状态错误'
         }

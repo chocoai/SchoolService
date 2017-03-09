@@ -1,7 +1,7 @@
 CREATE TABLE `Course` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '课程序号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程名称',
-`describe` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程描述',
+`detail` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程描述',
 `type` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程类型1必修课2选修课',
 `state` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程状态0停用1可用',
 PRIMARY KEY (`id`) 
@@ -36,6 +36,7 @@ CREATE TABLE `Teacher` (
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT '电子邮箱',
 `weixinId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信账号',
 `qq` varchar(255) CHARACTER SET utf8 NULL COMMENT 'QQ号',
+`address` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系地址',
 `state` int NULL COMMENT '账号状态1关注2已冻结3取消关注4未关注',
 `isManager` int NULL COMMENT '是否管理0否1是',
 `picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
@@ -279,6 +280,7 @@ CREATE TABLE `Parent` (
 `email` varchar(255) CHARACTER SET utf8 NULL COMMENT '电子邮箱',
 `weixinId` varchar(255) CHARACTER SET utf8 NULL COMMENT '微信账号',
 `qq` varchar(255) CHARACTER SET utf8 NULL COMMENT 'QQ号',
+`address` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系地址',
 `state` int NULL COMMENT '账号状态1关注2已冻结3取消关注4未关注',
 `picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
 PRIMARY KEY (`id`) 

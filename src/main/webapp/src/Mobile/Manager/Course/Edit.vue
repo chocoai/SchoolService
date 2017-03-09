@@ -4,7 +4,7 @@
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field label="课程名称" :disabled="Edit_Able" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
-    <mu-text-field label="课程描述" :disabled="Edit_Able" v-model="describe" :errorColor="describeErrorColor" :errorText="describeErrorText" @input="checkDescribe" fullWidth labelFloat icon="title" maxLength="100" multiLine :rows="3" :rowsMax="6"/><br/>
+    <mu-text-field label="课程描述" :disabled="Edit_Able" v-model="detail" :errorColor="detailErrorColor" :errorText="detailErrorText" @input="checkDetail" fullWidth labelFloat icon="title" maxLength="100" multiLine :rows="3" :rowsMax="6"/><br/>
     <mu-select-field hintText="课程类别" :disabled="Edit_Able" icon="settings" v-model="type" fullWidth>
       <mu-menu-item value="1" title="必修课"/>
       <mu-menu-item value="2" title="选修课"/>
@@ -60,13 +60,13 @@ export default {
       message: '',
       course: [],
       name: '',
-      describe: '',
+      detail: '',
       type: '',
       state: '',
       nameErrorText: '',
       nameErrorColor: '',
-      describeErrorText: '',
-      describeErrorColor: ''
+      detailErrorText: '',
+      detailErrorColor: ''
     }
   },
   created () {
@@ -78,7 +78,7 @@ export default {
   },
   computed: {
     saveAble: function () {
-      if (this.nameErrorText.toString() === 'OK' && this.describeErrorText.toString() === 'OK') {
+      if (this.nameErrorText.toString() === 'OK' && this.detailErrorText.toString() === 'OK') {
         return false
       } else {
         return true
@@ -182,9 +182,9 @@ export default {
       this.$http.get(
         API.edit,
         { params: {
-          courseId: this.$route.params.id,
+          id: this.$route.params.id,
           name: this.name,
-          describe: this.describe,
+          detail: this.detail,
           type: this.type
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
@@ -212,7 +212,7 @@ export default {
       ).then((response) => {
         this.course = response.body
         this.name = this.course.name
-        this.describe = this.course.describe
+        this.detail = this.course.detail
         this.type = this.course.type
         this.state = this.course.state
         if (this.course.state.toString() === '0') {
@@ -257,16 +257,16 @@ export default {
         })
       }
     },
-    checkDescribe (value) {
+    checkDetail (value) {
       if (value === null || value === undefined || value === '') {
-        this.describeErrorText = '课程表述为必填项!'
-        this.describeErrorColor = 'orange'
+        this.detailErrorText = '课程表述为必填项!'
+        this.detailErrorColor = 'orange'
       } else if (value.length > 100) {
-        this.describeErrorText = '课程表述不得超过100字符'
-        this.describeErrorColor = 'orange'
+        this.detailErrorText = '课程表述不得超过100字符'
+        this.detailErrorColor = 'orange'
       } else {
-        this.describeErrorText = 'OK'
-        this.describeErrorColor = 'green'
+        this.detailErrorText = 'OK'
+        this.detailErrorColor = 'green'
       }
     }
   }

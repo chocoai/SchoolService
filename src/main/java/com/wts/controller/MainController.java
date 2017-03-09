@@ -14,6 +14,7 @@ import com.wts.entity.model.Teacher;
 import com.wts.interceptor.LoginManager;
 import com.wts.interceptor.LoginParent;
 import com.wts.interceptor.LoginTeacher;
+import com.wts.util.PinyinTool;
 
 import java.util.List;
 
@@ -125,5 +126,25 @@ public class MainController extends Controller {
         User u = WP.me.getUserByCode(getPara("code"));
         System.out.println(u.getUserId());
         renderText(u.getName());
+    }
+    public static String getUserId(String personName) {
+        try {
+            String UserId = new PinyinTool().toPinYin(personName, "", PinyinTool.Type.FIRSTUPPER);
+            String UserIds;
+            if (Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ?", UserId) == null
+                    && Parent.dao.findFirst("SELECT * FROM parent WHERE userId = ?", UserId) == null) {
+                return UserId;
+            } else {
+                int i = 1;
+                do {
+                    UserIds = UserId + i;
+                    i++;
+                }
+                while (Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ?", UserId) != null && Parent.dao.findFirst("SELECT * FROM parent WHERE userId = ?", UserId) != null);
+                return UserIds;
+            }
+        } catch (Exception e) {
+            return "";
+        }
     }
 }

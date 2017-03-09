@@ -5,13 +5,18 @@
     </mu-appbar>
     <mu-text-field label="姓名" :disabled="Edit_Able" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
     <mu-text-field label="手机" :disabled="Edit_Able" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
-    <mu-text-field label="微信" :disabled="Edit_Able" v-model="wx" :errorColor="wxErrorColor" :errorText="wxErrorText" @input="checkWX" fullWidth labelFloat icon="email" /><br/>
+    <mu-text-field label="微信" :disabled="Edit_Able" v-model="weixinId" :errorColor="weixinIdErrorColor" :errorText="weixinIdErrorText" @input="checkWeixinId" fullWidth labelFloat icon="email" /><br/>
     <mu-text-field label="QQ" :disabled="Edit_Able" v-model="qq" :errorColor="qqErrorColor" :errorText="qqErrorText" @input="checkQQ" fullWidth labelFloat icon="email" /><br/>
     <mu-text-field label="电子邮箱" :disabled="Edit_Able" v-model="email" :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email" /><br/>
-    <mu-select-field hintText="类别" :disabled="Edit_Able" v-model="type" icon="settings" fullWidth>
-      <mu-menu-item value="0" title="一般教师"/>
-      <mu-menu-item value="1" title="管理人员"/>
-    </mu-select-field>
+    <mu-text-field label="联系地址" :disabled="Edit_Able" v-model="address" fullWidth labelFloat icon="email" /><br/>
+    <mu-flexbox>
+      <mu-flexbox-item class="flex-demo">
+        <mu-flat-button :label="manager" :disabled="Edit_Able" @click="openManager=true" primary/>
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <mu-flat-button :label="types" :disabled="Edit_Able" @click="openType=true" primary/>
+      </mu-flexbox-item>
+    </mu-flexbox>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="Edit_Able" @click="goEdit" primary/>
@@ -44,6 +49,35 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
+    <mu-drawer right :open="openManager" docked="false">
+      <mu-appbar title="请选择管理类别" @click.native="openManager=false">
+        <mu-icon-button icon='done' slot="right"/>
+      </mu-appbar>
+      <mu-list>
+        <mu-list-item title="一般教师">
+          <mu-radio  v-model="isManager" label="" labelLeft :nativeValue="0" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
+        </mu-list-item>
+        <mu-list-item title="管理人员">
+          <mu-radio  v-model="isManager" label="" labelLeft :nativeValue="1" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
+        </mu-list-item>
+      </mu-list>
+    </mu-drawer>
+    <mu-drawer right :open="openType" docked="false">
+      <mu-appbar title="请选择人员类别" @click.native="openType=false">
+        <mu-icon-button icon='done' slot="right"/>
+      </mu-appbar>
+      <mu-list>
+        <mu-list-item title="在编教师">
+          <mu-radio  v-model="type" label="" labelLeft :nativeValue="1" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
+        </mu-list-item>
+        <mu-list-item title="聘用教师">
+          <mu-radio  v-model="type" label="" labelLeft :nativeValue="2" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
+        </mu-list-item>
+        <mu-list-item title="外校教师">
+          <mu-radio  v-model="type" label="" labelLeft :nativeValue="3" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
+        </mu-list-item>
+      </mu-list>
+    </mu-drawer>
   </div>
 </template>
 
@@ -61,6 +95,8 @@ export default {
       Inactiving: false,
       Saving: false,
       Reading: true,
+      openManager: false,
+      openType: false,
       bottomPopup: false,
       icon: '',
       color: '',
@@ -68,17 +104,19 @@ export default {
       teacher: [],
       name: '',
       mobile: '',
-      wx: '',
+      weixinId: '',
       qq: '',
       email: '',
+      isManager: '',
+      address: '',
       type: '',
       state: '',
       nameErrorText: '',
       nameErrorColor: '',
       mobileErrorText: '',
       mobileErrorColor: '',
-      wxErrorText: '',
-      wxErrorColor: '',
+      weixinIdErrorText: '',
+      weixinIdErrorColor: '',
       qqErrorText: '',
       qqErrorColor: '',
       emailErrorText: '',
@@ -98,6 +136,26 @@ export default {
         return false
       } else {
         return true
+      }
+    },
+    manager: function () {
+      if (this.isManager.toString() === '0') {
+        return '一般教师'
+      } else if (this.isManager.toString() === '1') {
+        return '管理人员'
+      } else {
+        return ''
+      }
+    },
+    types: function () {
+      if (this.type.toString() === '1') {
+        return '在编教师'
+      } else if (this.type.toString() === '2') {
+        return '聘用教师'
+      } else if (this.type.toString() === '3') {
+        return '外校教师'
+      } else {
+        return ''
       }
     }
   },
@@ -203,7 +261,8 @@ export default {
           mobile: this.mobile,
           email: this.email,
           qq: this.qq,
-          wx: this.wx,
+          weixinId: this.weixinId,
+          isManager: this.isManager,
           type: this.type
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
@@ -226,7 +285,7 @@ export default {
     fetchData (id) {
       this.$http.get(
         API.get,
-        { params: { teacherId: id } },
+        { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.teacher = response.body
@@ -234,9 +293,11 @@ export default {
         this.mobile = this.teacher.mobile
         this.email = this.teacher.email
         this.qq = this.teacher.qq
-        this.wx = this.teacher.wx
+        this.weixinId = this.teacher.weixinId
+        this.isManager = this.teacher.isManager
         this.type = this.teacher.type
         this.state = this.teacher.state
+        this.address = this.teacher.address
         if (this.teacher.state.toString() === '0') {
           this.Active_Able = false
           this.Inactive_Able = true
@@ -360,28 +421,28 @@ export default {
         })
       }
     },
-    checkWX (value) {
+    checkWeixinId (value) {
       if (value === null || value === undefined || value === '') {
-        this.wxErrorText = ''
-        this.wxErrorColor = ''
-      } else if (!value.match(/^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}+$/)) {
-        this.wxErrorText = '微信格式错误!'
-        this.wxErrorColor = 'orange'
+        this.weixinIdErrorText = ''
+        this.weixinIdErrorColor = ''
+      } else if (!value.match(/^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}$/)) {
+        this.weixinIdErrorText = '微信格式错误!'
+        this.weixinIdErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.checkWXForEdit,
-          { params: { id: this.$route.params.id, wx: value } },
+          API.checkWeixinIdForEdit,
+          { params: { id: this.$route.params.id, weixinId: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body === 'error') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
             window.location.href = '/'
           } else if (response.body === 'OK') {
-            this.wxErrorText = 'OK'
-            this.wxErrorColor = 'green'
+            this.weixinIdErrorText = 'OK'
+            this.weixinIdErrorColor = 'green'
           } else {
-            this.wxErrorText = response.body
-            this.wxErrorColor = 'red'
+            this.weixinIdErrorText = response.body
+            this.vErrorColor = 'red'
           }
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')

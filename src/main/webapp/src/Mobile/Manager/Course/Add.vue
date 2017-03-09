@@ -4,7 +4,7 @@
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
     <mu-text-field label="课程名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
-    <mu-text-field label="课程描述" v-model="describe" :errorColor="describeErrorColor" :errorText="describeErrorText" @input="checkDescribe" fullWidth labelFloat icon="title" maxLength="100" multiLine :rows="3" :rowsMax="6"/><br/>
+    <mu-text-field label="课程描述" v-model="detail" :errorColor="detailErrorColor" :errorText="detailErrorText" @input="checkDetail" fullWidth labelFloat icon="title" maxLength="100" multiLine :rows="3" :rowsMax="6"/><br/>
     <mu-select-field hintText="课程类别" icon="settings" v-model="type" fullWidth>
       <mu-menu-item value="1" title="必修课"/>
       <mu-menu-item value="2" title="选修课"/>
@@ -37,18 +37,18 @@ export default {
       icon: '',
       color: '',
       name: '',
-      describe: '',
+      detail: '',
       type: '1',
       message: '',
       nameErrorText: '',
       nameErrorColor: '',
-      describeErrorText: '',
-      describeErrorColor: ''
+      detailErrorText: '',
+      detailErrorColor: ''
     }
   },
   computed: {
     Save_Able: function () {
-      if (this.nameErrorText.toString() === 'OK' && this.describeErrorText.toString() === 'OK') {
+      if (this.nameErrorText.toString() === 'OK' && this.detailErrorText.toString() === 'OK') {
         return false
       } else {
         return true
@@ -103,16 +103,16 @@ export default {
         })
       }
     },
-    checkDescribe (value) {
+    checkDetail (value) {
       if (value === null || value === undefined || value === '') {
-        this.describeErrorText = '课程表述为必填项!'
-        this.describeErrorColor = 'orange'
+        this.detailErrorText = '课程表述为必填项!'
+        this.detailErrorColor = 'orange'
       } else if (value.length > 100) {
-        this.describeErrorText = '课程表述不得超过100字符'
-        this.describeErrorColor = 'orange'
+        this.detailErrorText = '课程表述不得超过100字符'
+        this.detailErrorColor = 'orange'
       } else {
-        this.describeErrorText = 'OK'
-        this.describeErrorColor = 'green'
+        this.detailErrorText = 'OK'
+        this.detailErrorColor = 'green'
       }
     },
     goSave () {
@@ -121,7 +121,7 @@ export default {
         API.save,
         { params: {
           name: this.name,
-          describe: this.describe,
+          detail: this.detail,
           type: this.type
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
