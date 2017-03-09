@@ -1,13 +1,16 @@
 <template>
   <div>
-    <mu-appbar title="课程详情">
+    <mu-appbar title="教师详情">
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
-    <mu-text-field label="课程名称" :disabled="Edit_Able" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
-    <mu-text-field label="课程描述" :disabled="Edit_Able" v-model="describe" :errorColor="describeErrorColor" :errorText="describeErrorText" @input="checkDescribe" fullWidth labelFloat icon="title" maxLength="100" multiLine :rows="3" :rowsMax="6"/><br/>
-    <mu-select-field hintText="课程类别" :disabled="Edit_Able" icon="settings" v-model="type" fullWidth>
-      <mu-menu-item value="1" title="必修课"/>
-      <mu-menu-item value="2" title="选修课"/>
+    <mu-text-field label="姓名" :disabled="Edit_Able" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
+    <mu-text-field label="手机" :disabled="Edit_Able" v-model="mobile" :errorColor="mobileErrorColor" :errorText="mobileErrorText" @input="checkMobile" fullWidth labelFloat icon="phone" maxLength="11"/><br/>
+    <mu-text-field label="微信" :disabled="Edit_Able" v-model="wx" :errorColor="wxErrorColor" :errorText="wxErrorText" @input="checkWX" fullWidth labelFloat icon="email" /><br/>
+    <mu-text-field label="QQ" :disabled="Edit_Able" v-model="qq" :errorColor="qqErrorColor" :errorText="qqErrorText" @input="checkQQ" fullWidth labelFloat icon="email" /><br/>
+    <mu-text-field label="电子邮箱" :disabled="Edit_Able" v-model="email" :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email" /><br/>
+    <mu-select-field hintText="类别" :disabled="Edit_Able" v-model="type" icon="settings" fullWidth>
+      <mu-menu-item value="0" title="一般教师"/>
+      <mu-menu-item value="1" title="管理人员"/>
     </mu-select-field>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
@@ -15,9 +18,13 @@
         <mu-float-button icon="cancel" v-if="Save_Able" @click="goCancel" secondary/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="compare_arrows" v-if="Edit_Able && Inactive_Able" :disabled="Active_Able" @click="openActive" backgroundColor="green"/>
-        <mu-float-button icon="compare_arrows" v-if="Edit_Able && Active_Able" :disabled="Inactive_Able" @click="openInactive" backgroundColor="orange"/>
+        <mu-float-button icon="delete" v-if="Edit_Able && Active_Able"  @click="openInactive" backgroundColor="red"/>
+        <mu-float-button icon="compare_arrows" v-if="Edit_Able && Inactive_Able" @click="openActive" backgroundColor="green"/>
         <mu-float-button icon="done" v-if="Save_Able" :disabled="saveAble" @click="goSave" backgroundColor="green"/>
+      </mu-flexbox-item>
+      <mu-flexbox-item class="flex-demo">
+        <mu-float-button icon="dialer_sip" v-if="Edit_Able" @click="goCall" backgroundColor="#6633CC"/>
+        <mu-float-button icon="cached" v-if="Save_Able" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="Reading" title="正在读取" >
@@ -26,11 +33,11 @@
     <mu-dialog :open="Saving" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
-    <mu-dialog :open="Activing" title="确定要激活该课程吗?" @close="goClose">
+    <mu-dialog :open="Activing" title="确定要激活该教师吗?" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goActive" secondary/>
     </mu-dialog>
-    <mu-dialog :open="Inactiving" title="确定要注销该课程吗?" @close="goClose">
+    <mu-dialog :open="Inactiving" title="确定要注销该教师吗?" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goInactive" secondary/>
     </mu-dialog>
@@ -58,15 +65,24 @@ export default {
       icon: '',
       color: '',
       message: '',
-      course: [],
+      teacher: [],
       name: '',
-      describe: '',
+      mobile: '',
+      wx: '',
+      qq: '',
+      email: '',
       type: '',
       state: '',
       nameErrorText: '',
       nameErrorColor: '',
-      describeErrorText: '',
-      describeErrorColor: ''
+      mobileErrorText: '',
+      mobileErrorColor: '',
+      wxErrorText: '',
+      wxErrorColor: '',
+      qqErrorText: '',
+      qqErrorColor: '',
+      emailErrorText: '',
+      emailErrorColor: ''
     }
   },
   created () {
@@ -78,7 +94,7 @@ export default {
   },
   computed: {
     saveAble: function () {
-      if (this.nameErrorText.toString() === 'OK' && this.describeErrorText.toString() === 'OK') {
+      if (this.nameErrorText.toString() === 'OK' && this.mobileErrorText.toString() === 'OK') {
         return false
       } else {
         return true
@@ -131,7 +147,7 @@ export default {
           this.Inactive_Able = false
           this.openPopup('激活成功!', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
-        } else if (response.body === '要激活的课程不存在!') {
+        } else if (response.body === '要激活的教师不存在!') {
           this.Edit_Able = true
           this.Save_Able = false
           this.Active_Able = true
@@ -162,7 +178,7 @@ export default {
           this.Inactive_Able = true
           this.openPopup('注销成功!', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
-        } else if (response.body === '要注销的课程不存在!') {
+        } else if (response.body === '要注销的教师不存在!') {
           this.Edit_Able = true
           this.Save_Able = false
           this.Active_Able = false
@@ -182,9 +198,12 @@ export default {
       this.$http.get(
         API.edit,
         { params: {
-          courseId: this.$route.params.id,
+          id: this.$route.params.id,
           name: this.name,
-          describe: this.describe,
+          mobile: this.mobile,
+          email: this.email,
+          qq: this.qq,
+          wx: this.wx,
           type: this.type
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
@@ -207,15 +226,18 @@ export default {
     fetchData (id) {
       this.$http.get(
         API.get,
-        { params: { id: id } },
+        { params: { teacherId: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.course = response.body
-        this.name = this.course.name
-        this.describe = this.course.describe
-        this.type = this.course.type
-        this.state = this.course.state
-        if (this.course.state.toString() === '0') {
+        this.teacher = response.body
+        this.name = this.teacher.name
+        this.mobile = this.teacher.mobile
+        this.email = this.teacher.email
+        this.qq = this.teacher.qq
+        this.wx = this.teacher.wx
+        this.type = this.teacher.type
+        this.state = this.teacher.state
+        if (this.teacher.state.toString() === '0') {
           this.Active_Able = false
           this.Inactive_Able = true
         } else {
@@ -228,18 +250,15 @@ export default {
     },
     checkName (value) {
       if (value === null || value === undefined || value === '') {
-        this.nameErrorText = '名称为必填项!'
+        this.nameErrorText = '姓名为必填项!'
         this.nameErrorColor = 'orange'
       } else if (value.length > 20) {
-        this.nameErrorText = '名称不得超过20字符'
+        this.nameErrorText = '姓名不得超过20字符'
         this.nameErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.checkNameForEdit,
-          { params: {
-            id: this.$route.params.id,
-            name: value
-          } },
+          API.checkName,
+          { params: { name: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body === 'error') {
@@ -257,16 +276,116 @@ export default {
         })
       }
     },
-    checkDescribe (value) {
+    checkMobile (value) {
       if (value === null || value === undefined || value === '') {
-        this.describeErrorText = '课程表述为必填项!'
-        this.describeErrorColor = 'orange'
-      } else if (value.length > 100) {
-        this.describeErrorText = '课程表述不得超过100字符'
-        this.describeErrorColor = 'orange'
+        this.mobileErrorText = '手机号码为必填项!'
+        this.mobileErrorColor = 'orange'
+      } else if (!value.match(/^1(3|4|5|7|8)\d{9}$/)) {
+        this.mobileErrorText = '手机号码格式错误!'
+        this.mobileErrorColor = 'orange'
       } else {
-        this.describeErrorText = 'OK'
-        this.describeErrorColor = 'green'
+        this.$http.get(
+          API.checkMobileForEdit,
+          { params: { id: this.$route.params.id, mobile: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.mobileErrorText = 'OK'
+            this.mobileErrorColor = 'green'
+          } else {
+            this.mobileErrorText = response.body
+            this.mobileErrorColor = 'red'
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
+      }
+    },
+    checkEmail (value) {
+      if (value === null || value === undefined || value === '') {
+        this.emailErrorText = ''
+        this.emailErrorColor = ''
+      } else if (!value.match(/^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\.[a-zA-Z0-9_-]{2,3}){1,2})$/)) {
+        this.emailErrorText = '电子邮箱格式错误!'
+        this.emailErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.checkEmailForEdit,
+          { params: { id: this.$route.params.id, email: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.emailErrorText = 'OK'
+            this.emailErrorColor = 'green'
+          } else {
+            this.emailErrorText = response.body
+            this.emailErrorColor = 'red'
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
+      }
+    },
+    checkQQ (value) {
+      if (value === null || value === undefined || value === '') {
+        this.qqErrorText = ''
+        this.qqErrorColor = ''
+      } else if (!value.match(/^\d{5,12}$/)) {
+        this.qqErrorText = 'QQ格式错误!'
+        this.qqErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.checkQQForEdit,
+          { params: { id: this.$route.params.id, qq: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.qqErrorText = 'OK'
+            this.qqErrorColor = 'green'
+          } else {
+            this.qqErrorText = response.body
+            this.qqErrorColor = 'red'
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
+      }
+    },
+    checkWX (value) {
+      if (value === null || value === undefined || value === '') {
+        this.wxErrorText = ''
+        this.wxErrorColor = ''
+      } else if (!value.match(/^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}+$/)) {
+        this.wxErrorText = '微信格式错误!'
+        this.wxErrorColor = 'orange'
+      } else {
+        this.$http.get(
+          API.checkWXForEdit,
+          { params: { id: this.$route.params.id, wx: value } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.wxErrorText = 'OK'
+            this.wxErrorColor = 'green'
+          } else {
+            this.wxErrorText = response.body
+            this.wxErrorColor = 'red'
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
       }
     }
   }

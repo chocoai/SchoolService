@@ -16,6 +16,9 @@
         <mu-float-button icon="done" v-if="Save_Able" :disabled="saveAble" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
+    <mu-dialog :open="Reading" title="正在读取" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
     <mu-dialog :open="Saving" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
@@ -40,6 +43,7 @@ export default {
       Active_Able: false,
       Activing: false,
       Saving: false,
+      Reading: true,
       bottomPopup: false,
       icon: '',
       color: '',
@@ -98,7 +102,7 @@ export default {
     goActive () {
       this.$http.get(
         API.active,
-        { params: { semesterId: this.$route.params.id } },
+        { params: { id: this.$route.params.id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         if (response.body === 'error') {
@@ -129,7 +133,7 @@ export default {
       this.$http.get(
         API.edit,
         { params: {
-          semesterId: this.$route.params.id,
+          id: this.$route.params.id,
           name: this.name,
           timeStart: this.timeStart,
           timeEnd: this.timeEnd
@@ -151,10 +155,10 @@ export default {
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
-    fetchData (semesterId) {
+    fetchData (id) {
       this.$http.get(
         API.get,
-        { params: { semesterId: semesterId } },
+        { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.semester = response.body
@@ -167,6 +171,7 @@ export default {
         } else {
           this.Active_Able = true
         }
+        this.Reading = false
       }, (response) => {
       })
     },
@@ -180,10 +185,7 @@ export default {
       } else {
         this.$http.get(
           API.checkNameForEdit,
-          { params: {
-            semesterId: this.$route.params.id,
-            name: value
-          } },
+          { params: { id: this.$route.params.id, name: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body === 'error') {

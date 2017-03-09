@@ -78,7 +78,7 @@ public class SemesterController extends Controller {
    */
   @Before(AjaxManager.class)
   public void checkNameForEdit() {
-    if (!Semester.dao.findById(getPara("semesterId")).get("name").equals(getPara("name"))
+    if (!Semester.dao.findById(getPara("id")).get("name").equals(getPara("name"))
             && Semester.dao.find("SELECT * FROM semester WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该学期名称已存在!");
     } else {
@@ -91,7 +91,7 @@ public class SemesterController extends Controller {
    */
   @Before(AjaxManager.class)
   public void get() {
-    renderJson(Semester.dao.findById(getPara("semesterId")));
+    renderJson(Semester.dao.findById(getPara("id")));
   }
 
   /**
@@ -120,14 +120,14 @@ public class SemesterController extends Controller {
    */
   @Before({Tx.class, AjaxManager.class})
   public void active() {
-    Semester semester = Semester.dao.findById(getPara("semesterId"));
+    Semester semester = Semester.dao.findById(getPara("id"));
     if (semester == null) {
       renderText("要重新激活的学期不存在!");
     } else if (semester.get("state").toString().equals("1")) {
       renderText("该学期已激活!");
     } else {
       semester.set("state", 1).update();
-      Db.update("UPDATE semester SET state = 0 WHERE id <> ?", getPara("semesterId"));
+      Db.update("UPDATE semester SET state = 0 WHERE id <> ?", getPara("id"));
       renderText("OK");
     }
   }
@@ -157,7 +157,7 @@ public class SemesterController extends Controller {
    */
   @Before({Tx.class, AjaxManager.class})
   public void edit() {
-    Semester semester = Semester.dao.findById(getPara("semesterId"));
+    Semester semester = Semester.dao.findById(getPara("id"));
     if (semester == null) {
       renderText("要修改的学期不存在!");
     } else {

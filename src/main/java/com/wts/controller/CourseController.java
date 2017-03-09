@@ -75,21 +75,21 @@ public class CourseController extends Controller {
    */
   @Before({Login.class, Ajax.class})
   public void getCourseName() {
-    renderText(Course.dao.findById(getPara("courseId")).getName());
+    renderText(Course.dao.findById(getPara("id")).getName());
   }
   /**
    * 获取
    */
   @Before({Login.class, Ajax.class})
   public void get() {
-    renderJson(Course.dao.findById(getPara("courseId")));
+    renderJson(Course.dao.findById(getPara("id")));
   }
   /**
    * 激活
    */
   @Before({Tx.class, AjaxManager.class})
   public void active() {
-    Course course = Course.dao.findById(getPara("courseId"));
+    Course course = Course.dao.findById(getPara("id"));
     if (course == null) {
       renderText("要重新激活的课程不存在!");
     } else if (course.get("state").toString().equals("1")) {
@@ -104,7 +104,7 @@ public class CourseController extends Controller {
    */
   @Before({Tx.class, AjaxManager.class})
   public void inactive() {
-    Course course = Course.dao.findById(getPara("courseId"));
+    Course course = Course.dao.findById(getPara("id"));
     if (course == null) {
       renderText("要重新注销的课程不存在!");
     } else if (course.get("state").toString().equals("0")) {
@@ -136,7 +136,7 @@ public class CourseController extends Controller {
    */
   @Before({Tx.class, AjaxManager.class})
   public void edit() {
-    Course course = Course.dao.findById(getPara("courseId"));
+    Course course = Course.dao.findById(getPara("id"));
     if (course == null) {
       renderText("要修改的课程不存在!");
     } else {
@@ -169,7 +169,7 @@ public class CourseController extends Controller {
    */
   @Before(AjaxManager.class)
   public void checkNameForEdit() {
-    if (!Course.dao.findById(getPara("courseId")).get("name").equals(getPara("name"))
+    if (!Course.dao.findById(getPara("id")).get("name").equals(getPara("name"))
             && Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该课程名称已存在!");
     } else {
