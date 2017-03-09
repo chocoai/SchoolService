@@ -11,10 +11,10 @@
     <mu-text-field label="联系地址" :disabled="Edit_Able" v-model="address" fullWidth labelFloat icon="email" /><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="manager" :disabled="Edit_Able" @click="openManager=true" primary/>
+        <mu-flat-button :label="manager" :disabled="Edit_Able" @click="openManager=true" backgroundColor="#ce93d8" color="#000"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="types" :disabled="Edit_Able" @click="openType=true" primary/>
+        <mu-flat-button :label="types" :disabled="Edit_Able" @click="openType=true" backgroundColor="#ce93d8" color="#000"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-flexbox>

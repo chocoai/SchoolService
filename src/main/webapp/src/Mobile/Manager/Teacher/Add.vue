@@ -11,10 +11,10 @@
     <mu-text-field label="联系地址" v-model="address" fullWidth labelFloat icon="email" /><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="manager" @click="openManager=true" primary/>
+        <mu-flat-button :label="manager" @click="openManager=true" backgroundColor="#ce93d8" color="#000"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="types" @click="openType=true" primary/>
+        <mu-flat-button :label="types" @click="openType=true" backgroundColor="#ce93d8" color="#000"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="Saving" title="正在保存" >

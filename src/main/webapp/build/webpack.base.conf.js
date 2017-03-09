@@ -13,7 +13,8 @@ module.exports = {
     Mobile_Manager_Home: './src/Mobile/Manager/Home/Index.js',
     Mobile_Manager_Semester: './src/Mobile/Manager/Semester/Index.js',
     Mobile_Manager_Course: './src/Mobile/Manager/Course/Index.js',
-    Mobile_Manager_Teacher: './src/Mobile/Manager/Teacher/Index.js'
+    Mobile_Manager_Teacher: './src/Mobile/Manager/Teacher/Index.js',
+    Mobile_Manager_Room: './src/Mobile/Manager/Room/Index.js'
   },
   output: {
     path: config.build.assetsRoot,
