@@ -177,4 +177,11 @@ public class SemesterController extends Controller {
     public static Semester getNow() {
         return Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1");
     }
+    /**
+     * 获取
+     */
+    @Before(AjaxManager.class)
+    public void getNows() {
+        renderJson(Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1"));
+    }
 }

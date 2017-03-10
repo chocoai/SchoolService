@@ -57,7 +57,7 @@ public class CourseController extends Controller {
      */
     @Before(AjaxManager.class)
     public void list() {
-        renderJson(Course.dao.find("SELECT * FROM course WHERE state = 1"));
+        renderJson(Course.dao.find("SELECT * FROM course WHERE state = ? AND type= ? ",getPara("state"),getPara("type")));
     }
 
     /**

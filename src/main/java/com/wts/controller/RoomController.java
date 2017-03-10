@@ -25,11 +25,10 @@ import static com.wts.controller.SemesterController.getNow;
 
 public class RoomController extends Controller {
   private String getSQL(String sql) {
-    return "FROM room WHERE name LIKE '%" + sql +
-            "%' OR name LIKE '%" + sql +
-            "%' OR year LIKE '%" + sql +
-            "%' OR order LIKE '%" + sql +
-            "%' OR slogan LIKE '%" + sql +
+    return "FROM room WHERE `name` LIKE '%" + sql +
+            "%' OR `year` LIKE '%" + sql +
+            "%' OR `order` LIKE '%" + sql +
+            "%' OR `slogan` LIKE '%" + sql +
             "%' ORDER BY id DESC";
   }
   /**
@@ -147,7 +146,7 @@ public class RoomController extends Controller {
   public void checkNameForEdit() {
     if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
       renderText("班级名称格式应为：XXXX级XX班!");
-    } else if (!Room.dao.findById(getPara("id")).getSlogan().equals(getPara("name"))
+    } else if (!Room.dao.findById(getPara("id")).getName().equals(getPara("name"))
             && Room.dao.find("SELECT * FROM room WHERE name = ?",getPara("name")).size()!=0) {
       renderText("该班级名称已存在!");
     } else {
@@ -187,7 +186,7 @@ public class RoomController extends Controller {
       renderText("入学年份应为4位数字");
     } else if (!getPara("order").matches("\\d{1,2}")) {
       renderText("班级序号应为1-2位数字");
-    } else if (Room.dao.find("SELECT * FROM room WHERE year=? AND order=?", getPara("year"), getPara("order")).size()!=0) {
+    } else if (Room.dao.find("SELECT * FROM room WHERE `year`=? AND `order`=?", getPara("year"), getPara("order")).size()!=0) {
       renderText("该班级已存在!");
     } else if (Room.dao.find("SELECT * FROM room WHERE slogan=?", getPara("slogan")).size()!=0) {
       renderText("该班级标语已存在!");
@@ -204,16 +203,6 @@ public class RoomController extends Controller {
         WP.me.createTag(new Tag(room.getId(), room.getName()));
       } catch (WeixinException e) {
         renderText(e.getMessage());
-      }
-      String[] course = getParaValues("course[]");
-      if (course!=null) {
-        for (String i : course) {
-          Courseroom courseroom = new Courseroom();
-          courseroom.set("semester_id", getNow().getId())
-                  .set("course_id", i)
-                  .set("room_id", room.getId())
-                  .save();
-        }
       }
       renderText("OK");
     }
@@ -243,7 +232,7 @@ public class RoomController extends Controller {
         renderText("该班级标签已存在!");
       } else if (!Util.getString(room.getStr("year")).equals(getPara("year"))
               && !Util.getString(room.getStr("order")).equals(getPara("order"))
-              && Room.dao.find("SELECT * FROM room WHERE year=? AND order=?", getPara("year"), getPara("order")).size()!=0) {
+              && Room.dao.find("SELECT * FROM room WHERE `year`=? AND `order`=?", getPara("year"), getPara("order")).size()!=0) {
         renderText("该班级已存在!");
       } else {
         room.set("name",getPara("year")+"级"+getPara("order")+"班")
@@ -251,41 +240,33 @@ public class RoomController extends Controller {
                 .set("order",getPara("order"))
                 .set("slogan",getPara("slogan"))
                 .update();
-        try {
-          WP.me.updateTag(new Tag(room.getId(), room.getName()));
-        } catch (WeixinException e) {
-          renderText(e.getMessage());
-        }
-        String[] course = getParaValues("course[]");
-
-
-        List<Courseroom> courserooms=Courseroom.dao.find("SELECT * FROM courseroom room_id = ? AND semester_id = ?", room.getId(), getNow().getId());
-        String[] c;
-        if (courserooms!=null) {
-          for (Courseroom i :courserooms){
-
-              i.getCourseId().toString()
-          }
-        }
-
-
-
-
-
-        Db.update("DELETE FROM courseroom WHERE room_id = ? AND semester_id = ?", room.getId(), getNow().getId());
-        Db.update("DELETE FROM courseroomteacher WHERE room_id = ? AND semester_id = ?", room.getId(), getNow().getId());
-        if (course!=null) {
-          for (String i : course) {
-            Courseroom courseroom = new Courseroom();
-            courseroom.set("semester_id", getNow().getId())
-                    .set("course_id", i)
-                    .set("room_id", room.getId())
-                    .save();
+        if (!Util.getString(room.getStr("name")).equals(getPara("name").trim())) {
+          try {
+            WP.me.updateTag(new Tag(room.getId(), room.getName()));
+          } catch (WeixinException e) {
+            renderText(e.getMessage());
           }
         }
         renderText("OK");
       }
     }
+  }
+  /**
+   * 设置课程
+   */
+  @Before({Tx.class,AjaxManager.class})
+  public void setCourse(){
+    String[] course = getParaValues("course[]");
+    if (course!=null) {
+      for (String i : course) {
+        Courseroom courseroom = new Courseroom();
+        courseroom.set("semester_id", getNow().getId())
+                .set("course_id", i)
+                .set("room_id", getPara("id"))
+                .save();
+      }
+    }
+    renderText("OK");
   }
 
 

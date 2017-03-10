@@ -7,11 +7,6 @@
     <mu-text-field label="班级序号" v-model="order" :errorColor="orderErrorColor" :errorText="orderErrorText" @input="checkOrder" fullWidth labelFloat icon="title" maxLength="2"/><br/>
     <mu-text-field label="班级名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" disable="true"/><br/>
     <mu-text-field label="班级口号" v-model="slogan" fullWidth labelFloat icon="title"/><br/>
-    <mu-flexbox>
-      <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="label" @click="openCourse=true" :icon="icons" :backgroundColor="back" color="#FFFFFF"/>
-      </mu-flexbox-item>
-    </mu-flexbox>
     <mu-dialog :open="Saving" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
@@ -29,22 +24,6 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
-    <mu-drawer right :open="openCourse" docked="false">
-      <mu-appbar title="请选择课程" @click.native="openCourse=false">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="全选" @click.native="course=course_All">
-          <mu-icon slot="left" value="supervisor_account" :size="40"/>
-        </mu-list-item>
-        <mu-list-item title="清空" @click.native="course=[]">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
-        </mu-list-item>
-        <mu-list-item v-for="course in courses" :title="course.name" :describeText="course.type.toString() === '1'?'必修课':'选修课'">
-          <mu-checkbox v-model="course" label="" labelLeft :nativeValue="course.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
-        </mu-list-item>
-      </mu-list>
-    </mu-drawer>
   </div>
 </template>
 <script>
@@ -59,8 +38,6 @@ export default {
       icon: '',
       color: '',
       message: '',
-      course: [],
-      course_All: [],
       name: '',
       nameErrorText: '',
       nameErrorColor: '',
@@ -70,32 +47,8 @@ export default {
       order: '',
       orderErrorText: '',
       orderErrorColor: '',
-      slogan: '',
-      openCourse: false,
-      label: '请选择课程',
-      icons: 'bookmark_border',
-      back: '#66CCCC'
+      slogan: ''
     }
-  },
-  created: function () {
-    this.$http.get(
-      API.list,
-      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-    ).then((response) => {
-      this.courses = response.body
-      this.$http.get(
-        API.all,
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-      ).then((response) => {
-        this.course_All = response.body
-        this.course = this.course_All
-        this.Reading = false
-      }, (response) => {
-        this.openPopup('服务器内部错误！', 'error', 'red')
-      })
-    }, (response) => {
-      this.openPopup('服务器内部错误！', 'error', 'red')
-    })
   },
   computed: {
     Save_Able: function () {
@@ -107,27 +60,6 @@ export default {
     },
     name: function () {
       return this.year + '级' + this.order + '班'
-    },
-    back: function () {
-      if (this.course.length > 0) {
-        return '#9999CC'
-      } else {
-        return '#66CCCC'
-      }
-    },
-    icons: function () {
-      if (this.course.length > 0) {
-        return 'bookmark'
-      } else {
-        return 'bookmark_border'
-      }
-    },
-    label: function () {
-      if (this.course.length > 0) {
-        return '课程已选择'
-      } else {
-        return '请选择课程'
-      }
     }
   },
   methods: {
@@ -152,7 +84,6 @@ export default {
       this.orderErrorText = ''
       this.orderErrorColor = ''
       this.slogan = ''
-      this.course = []
     },
     checkName (value) {
       if (value === null || value === undefined || value === '') {
@@ -214,8 +145,7 @@ export default {
           name: this.name,
           year: this.year,
           order: this.order,
-          slogan: this.slogan,
-          course: this.course
+          slogan: this.slogan
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {

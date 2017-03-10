@@ -6,6 +6,8 @@ import Vuex from 'vuex'
 import List from './List.vue'
 import Add from './Add.vue'
 import Edit from './Edit.vue'
+import Course from './Course.vue'
+import Teachr from './Teacher.vue'
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'muse-components/styles/base.less' // 加载基础的样式
@@ -19,10 +21,12 @@ import textField from 'muse-components/textField'
 import checkbox from 'muse-components/checkbox'
 import avatar from 'muse-components/avatar'
 import iconMenu from 'muse-components/iconMenu'
+import subHeader from 'muse-components/subHeader'
 import dialog from 'muse-components/dialog'
 import chip from 'muse-components/chip'
 import popup from 'muse-components/popup'
 import drawer from 'muse-components/drawer'
+import bottomSheet from 'muse-components/bottomSheet'
 import circularProgress from 'muse-components/circularProgress'
 import { listItem, list } from 'muse-components/list'
 import { menuItem, menu } from 'muse-components/menu'
@@ -37,11 +41,13 @@ Vue.component(raisedButton.name, raisedButton)
 Vue.component(textField.name, textField)
 Vue.component(avatar.name, avatar)
 Vue.component(iconMenu.name, iconMenu)
+Vue.component(subHeader.name, subHeader)
 Vue.component(dialog.name, dialog)
 Vue.component(chip.name, chip)
 Vue.component(popup.name, popup)
 Vue.component(checkbox.name, checkbox)
 Vue.component(drawer.name, drawer)
+Vue.component(bottomSheet.name, bottomSheet)
 Vue.component(circularProgress.name, circularProgress)
 Vue.component(listItem.name, listItem)
 Vue.component(menuItem.name, menuItem)
@@ -58,6 +64,8 @@ const routes = [
   { path: '/list', component: List },
   { path: '/add', component: Add },
   { path: '/edit/:id', component: Edit },
+  { path: '/course/:id', component: Course },
+  { path: '/teacher/:id', component: Teachr },
   { path: '/', redirect: '/list' }
 ]
 
@@ -68,12 +76,14 @@ const router = new VueRouter({
 const store = new Vuex.Store({
   state: {
     queryString: '',
-    pageCurrent: '1'
+    pageCurrent: '1',
+    id: ''
   },
   mutations: {
     save (state, page) {
       state.queryString = page.queryString
       state.pageCurrent = page.pageCurrent
+      state.id = page.id
     }
   }
 })

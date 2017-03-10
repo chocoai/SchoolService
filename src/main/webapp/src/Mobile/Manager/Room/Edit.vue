@@ -9,11 +9,6 @@
     <mu-text-field label="班级口号" :disabled="Edit_Able" v-model="slogan" fullWidth labelFloat icon="title"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="label" :disabled="Edit_Able" @click="openCourse=true" :icon="icons" :backgroundColor="back" color="#FFFFFF"/>
-      </mu-flexbox-item>
-    </mu-flexbox>
-    <mu-flexbox>
-      <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="Edit_Able" @click="goEdit" primary/>
         <mu-float-button icon="cancel" v-if="Save_Able" @click="goCancel" secondary/>
       </mu-flexbox-item>
@@ -40,22 +35,6 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
-    <mu-drawer right :open="openCourse" docked="false">
-      <mu-appbar title="请选择课程" @click.native="openCourse=false">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="全选" @click.native="course=course_All">
-          <mu-icon slot="left" value="supervisor_account" :size="40"/>
-        </mu-list-item>
-        <mu-list-item title="清空" @click.native="course=[]">
-          <mu-icon slot="left" value="delete_forever" :size="40"/>
-        </mu-list-item>
-        <mu-list-item v-for="course in courseas" :title="course.name" :describeText="course.type.toString() === '1'?'必修课':'选修课'">
-          <mu-checkbox v-model="course" label="" labelLeft  :nativeValue="course.id" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right"/>
-        </mu-list-item>
-      </mu-list>
-    </mu-drawer>
   </div>
 </template>
 
@@ -75,8 +54,6 @@ export default {
       icon: '',
       color: '',
       message: '',
-      course: [],
-      course_All: [],
       name: '',
       nameErrorText: '',
       nameErrorColor: '',
@@ -86,12 +63,7 @@ export default {
       order: '',
       orderErrorText: '',
       orderErrorColor: '',
-      slogan: '',
-      openCourseA: false,
-      openCourseB: false,
-      label: '请选择课程',
-      icons: 'bookmark_border',
-      back: '#66CCCC'
+      slogan: ''
     }
   },
   created () {
@@ -111,27 +83,6 @@ export default {
     },
     name: function () {
       return this.year + '级' + this.order + '班'
-    },
-    back: function () {
-      if (this.course.length > 0) {
-        return '#9999CC'
-      } else {
-        return '#66CCCC'
-      }
-    },
-    icons: function () {
-      if (this.course.length > 0) {
-        return 'bookmark'
-      } else {
-        return 'bookmark_border'
-      }
-    },
-    label: function () {
-      if (this.course.length > 0) {
-        return '课程已选择'
-      } else {
-        return '请选择课程'
-      }
     }
   },
   methods: {
@@ -235,8 +186,7 @@ export default {
           name: this.name,
           year: this.year,
           order: this.order,
-          slogan: this.slogan,
-          course: this.course
+          slogan: this.slogan
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
@@ -277,19 +227,6 @@ export default {
         this.Reading = false
       }, (response) => {
       })
-      this.$http.get(
-        API.getCourse,
-        { params: { id: id } },
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-      ).then((response) => {
-        if (response.body.toString() !== 'null') {
-          this.course = response.body
-        } else {
-          this.course = []
-        }
-      }, (response) => {
-        this.openPopup('服务器内部错误!', 'error', 'red')
-      })
     },
     checkName (value) {
       if (value === null || value === undefined || value === '') {
@@ -301,7 +238,10 @@ export default {
       } else {
         this.$http.get(
           API.checkNameForEdit,
-          { params: { name: value } },
+          { params: {
+            id: this.$route.params.id,
+            name: value
+          } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body === 'error') {
