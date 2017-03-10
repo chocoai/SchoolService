@@ -10,9 +10,6 @@
     <mu-dialog :open="Saving" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
-    <mu-dialog :open="Reading" title="正在读取" >
-      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
-    </mu-dialog>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
@@ -34,7 +31,6 @@ export default {
     return {
       bottomPopup: false,
       Saving: false,
-      Reading: true,
       icon: '',
       color: '',
       message: '',

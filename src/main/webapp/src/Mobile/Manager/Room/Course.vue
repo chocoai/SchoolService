@@ -8,13 +8,18 @@
     <mu-sub-header>必修课</mu-sub-header>
     <mu-flexbox wrap="wrap">
       <mu-flexbox-item class="flex-demo">
-        <mu-checkbox v-for="courseA in courses" :label="courseA.name" :nativeValue="courseA.id" v-model="course"/>
+        <mu-checkbox v-for="courseA in courses" :label="courseA.name" :nativeValue="courseA.id" v-model="course" labelClass="a" iconClass="b"/>
       </mu-flexbox-item>
     </mu-flexbox>
+    <br/>
+    <br/>
+    <br/>
     <mu-sub-header>选修课</mu-sub-header>
-    <div class="box">
-      <mu-checkbox v-for="courseB in courzes" :label="courseB.name" :nativeValue="courseB.id" v-model="courze"/>
-    </div>
+    <mu-flexbox wrap="wrap">
+      <mu-flexbox-item class="flex-demo">
+        <mu-checkbox v-for="courseB in courzes" :label="courseB.name" :nativeValue="courseB.id" v-model="courze" labelClass="a" iconClass="b"/>
+      </mu-flexbox-item>
+    </mu-flexbox>
     <br/>
     <mu-flexbox v-if="Edit_Able && State_Able">
       <mu-flexbox-item class="flex-demo">
@@ -76,13 +81,6 @@ export default {
     '$route': 'fetchData'
   },
   computed: {
-    State_Able: function () {
-      if (this.roomState.toString() === '1') {
-        return true
-      } else {
-        return false
-      }
-    },
     name: function () {
       return this.year + '级' + this.order + '班'
     }
@@ -161,6 +159,11 @@ export default {
               this.semester = response.body
               this.semesterName = this.semester.name
               this.Reading = false
+              if (this.roomState.toString() === '1') {
+                this.State_Able = true
+              } else {
+                this.State_Able =  false
+              }
             }, (response) => {
             })
           }, (response) => {
@@ -192,5 +195,13 @@ export default {
   .box{
     display: flex;
     flex-wrap: wrap;
+  }
+  .a{
+    width: 70px;
+    text-align: left;
+  }
+  .b{
+    width: 10px;
+    text-align: right;
   }
 </style>

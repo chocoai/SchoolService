@@ -114,6 +114,8 @@ export default {
     goClose () {
       this.Activing = false
       this.Inactiving = false
+      this.Edit_Able = true,
+      this.Save_Able = false,
     },
     goActive () {
       this.$http.get(
