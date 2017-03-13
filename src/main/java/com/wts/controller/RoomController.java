@@ -384,4 +384,34 @@ public class RoomController extends Controller {
     renderText("{"+crt.substring(0,crt.length()-1) + "}");
   }
 
+  public void getString() {
+    String semesterName;
+    String roomName;
+    String courseA,courseB;
+    roomName="'roomName': '"+Room.dao.findById(getPara("id")).get("name").toString()+"'";
+    Semester semester = Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1");
+    if (semester!=null){
+      semesterName="'semesterName': '"+semester.getName()+"'";
+    }else{
+      semesterName="'semesterName': ''";
+    }
+    List<Course> coursesA = Course.dao.find("SELECT * FROM course WHERE state = 1 AND type= 1");
+    String ss = "";
+    if (coursesA.size() != 0) {
+      for (Course i : coursesA) {
+        ss = ss + "{'id': '" + i.getId() + "','name': '" + i.getName() + "'},";
+      }
+      courseA="'courseA': ["+ ss.substring(0, ss.length() - 1) + "]";
+    }else{
+      courseA="'courseA': []";
+    }
+
+  }
+
+
+
+
+
+
+
 }
