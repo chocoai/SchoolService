@@ -114,8 +114,8 @@ export default {
     goClose () {
       this.Activing = false
       this.Inactiving = false
-      this.Edit_Able = true,
-      this.Save_Able = false,
+      this.Edit_Able = true
+      this.Save_Able = false
     },
     goActive () {
       this.$http.get(
@@ -228,6 +228,7 @@ export default {
         }
         this.Reading = false
       }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     checkName (value) {

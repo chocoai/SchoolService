@@ -8,7 +8,7 @@
     <mu-sub-header>必修课</mu-sub-header>
     <mu-flexbox wrap="wrap">
       <mu-flexbox-item class="flex-demo">
-        <mu-checkbox v-for="courseA in courses" :label="courseA.name" :nativeValue="courseA.id" v-model="course" labelClass="a" iconClass="b"/>
+        <mu-checkbox v-for="course in courses" :label="course.name" :nativeValue="course.id" v-model="course" labelClass="a" iconClass="b"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <br/>
@@ -17,7 +17,7 @@
     <mu-sub-header>选修课</mu-sub-header>
     <mu-flexbox wrap="wrap">
       <mu-flexbox-item class="flex-demo">
-        <mu-checkbox v-for="courseB in courzes" :label="courseB.name" :nativeValue="courseB.id" v-model="courze" labelClass="a" iconClass="b"/>
+        <mu-checkbox v-for="course in courzes" :label="course.name" :nativeValue="course.id" v-model="courze" labelClass="a" iconClass="b"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <br/>
@@ -65,10 +65,9 @@ export default {
       message: '',
       roomName: '',
       roomState: '',
-      semester: '',
       semesterName: '',
-      courseA: '',
-      courseB: '',
+      course: '',
+      courze: '',
       courses: '',
       courzes: ''
     }
@@ -79,11 +78,6 @@ export default {
   watch: {
     // 如果路由有变化，会再次执行该方法
     '$route': 'fetchData'
-  },
-  computed: {
-    name: function () {
-      return this.year + '级' + this.order + '班'
-    }
   },
   methods: {
     goReply () {
@@ -103,6 +97,7 @@ export default {
     goCancel () {
       this.Edit_Able = true
       this.Save_Able = false
+      this.Reading = true
       this.fetchData(this.$route.params.id)
     },
     goSave () {
@@ -133,44 +128,22 @@ export default {
     },
     fetchData (id) {
       this.$http.get(
-        API.get,
+        API.getString,
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.room = response.body
-        this.roomName = this.room.name
-        this.roomState = this.room.state
-        this.$http.get(
-          API.getCourseList,
-          { params: {state: 1, type: 1} },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          this.courses = response.body
-          this.$http.get(
-            API.getCourseList,
-            { params: {state: 1, type: 2} },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-          ).then((response) => {
-            this.courzes = response.body
-            this.$http.get(
-              API.getSemester,
-              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-            ).then((response) => {
-              this.semester = response.body
-              this.semesterName = this.semester.name
-              this.Reading = false
-              if (this.roomState.toString() === '1') {
-                this.State_Able = true
-              } else {
-                this.State_Able =  false
-              }
-            }, (response) => {
-            })
-          }, (response) => {
-          })
-        }, (response) => {
-        })
+        console.log(response)
+        console.log(response.body)
+        this.roomName = response.body.roomName
+        this.roomState = response.body.roomState
+        this.course = response.body.courseAbleA
+        this.courze = response.body.courseAbleB
+        this.semesterName = response.body.semesterName
+        this.courses = response.body.courseA
+        this.courzes = response.body.courseB
+        this.Reading = false
       }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     }
   }
