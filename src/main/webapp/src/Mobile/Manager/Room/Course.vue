@@ -3,8 +3,10 @@
     <mu-appbar title="班级课程">
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
-    <mu-text-field label="班级名称" disabled="true" v-model="roomName" fullWidth labelFloat icon="title"/><br/>
-    <mu-text-field label="当前学期" disabled="true" v-model="semesterName" fullWidth labelFloat icon="title"/><br/>
+    <mu-sub-header>班级名称</mu-sub-header>
+    <mu-raised-button :label="roomName" fullWidth disabled/>
+    <mu-sub-header>指定学期</mu-sub-header>
+    <mu-raised-button :label="semesterName" fullWidth @click="openSemester=true" />
     <mu-sub-header>必修课</mu-sub-header>
     <mu-flexbox wrap="wrap">
       <mu-flexbox-item class="flex-demo">
@@ -43,6 +45,14 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
+    <mu-drawer right :open="openSemester" docked="false">
+      <mu-appbar title="请选择学期" />
+      <mu-list :value="semester_id" @itemClick="semesterChange">
+        <mu-list-item v-for="s in semesters" :title="s.name" :value="s.id" :afterText="getState(s.state)" @click="getSemester(s.id, s.name, s.state)">
+          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
+        </mu-list-item>
+      </mu-list>
+    </mu-drawer>
   </div>
 </template>
 
@@ -56,6 +66,8 @@ export default {
       Save_Able: false,
       Active_Able: false,
       State_Able: false,
+      semesterAble: false,
+      openSemester: true,
       Activing: false,
       Saving: false,
       Reading: true,
@@ -66,7 +78,10 @@ export default {
       roomName: '',
       roomState: '',
       semesterName: '',
-      course: ['1', '2', '3'],
+      semesterId: '',
+      semesterState: '',
+      semesters: [],
+      course: [],
       courze: [],
       courses: '',
       courzes: ''
@@ -77,7 +92,14 @@ export default {
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
-    '$route': 'fetchData'
+    '$route': 'fetchData',
+    semesterState: function (val) {
+      if (val.toString() === '1') {
+        this.semesterAble = true
+      } else {
+        this.semesterAble = false
+      }
+    }
   },
   methods: {
     goReply () {
@@ -98,7 +120,23 @@ export default {
       this.Edit_Able = true
       this.Save_Able = false
       this.Reading = true
-      this.fetchData(this.$route.params.id)
+      this.fetchData(this.$route.params.id, this.semesterId)
+    },
+    getState (state) {
+      if (state.toString() === '1') {
+        return '当前学期'
+      } else if (state.toString() === '0') {
+        return '非当前学期'
+      } else {
+        return '状态错误'
+      }
+    },
+    getSemester (id, name, state) {
+      this.semesterId = id
+      this.semesterName = name
+      this.semesterState = state
+      this.fetchData(this.$route.params.id, this.semesterId)
+      this.openSemester = false
     },
     goSave () {
       this.Saving = true
@@ -126,10 +164,10 @@ export default {
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
-    fetchData (id) {
+    fetchData (roomId, semesterId) {
       this.$http.get(
         API.getString,
-        { params: { id: id } },
+        { params: { roomId: roomId, semesterId: semesterId } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.roomName = response.body.roomName
@@ -139,8 +177,6 @@ export default {
         this.courze = response.body.courseAbleB
         this.courses = response.body.courseA
         this.courzes = response.body.courseB
-        console.log(this.course)
-        console.log(this.courze)
         this.Reading = false
       }, (response) => {
         this.openPopup('服务器内部错误!', 'error', 'red')
