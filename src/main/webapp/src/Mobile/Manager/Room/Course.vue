@@ -88,7 +88,25 @@ export default {
     }
   },
   created () {
-    this.fetchData(this.$route.params.id)
+    this.$http.get(
+      API.getList,
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+    ).then((response) => {
+      this.semesters = response.body
+      this.$http.get(
+        API.getFirst,
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.semesterId = response.body.id
+        this.semesterName = response.body.name
+        this.semesterState = response.body.state
+        this.fetchData(this.$route.params.id, this.semesterId)
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
+    }, (response) => {
+      this.openPopup('服务器内部错误!', 'error', 'red')
+    })
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
