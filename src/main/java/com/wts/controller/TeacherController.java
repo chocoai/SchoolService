@@ -71,7 +71,7 @@ public class TeacherController extends Controller {
      */
     @Before(AjaxManager.class)
     public void list() {
-        renderJson(Teacher.dao.find("SELECT * FROM teacher WHERE state = 1 OR state = 2 ORDER BY id ASC"));
+        renderJson(Teacher.dao.find("SELECT * FROM teacher WHERE state = 1 ORDER BY name ASC"));
     }
 
     /**
@@ -158,7 +158,19 @@ public class TeacherController extends Controller {
         }
     }
 
-
+    @Before({Ajax.class,Login.class})
+    public  void all() {
+        List<Teacher> teachers = Teacher.dao.find("SELECT id FROM teacher WHERE state=1");
+        String tt = "";
+        if (teachers.size() > 0) {
+            for (Teacher t : teachers) {
+                tt = tt + t.getId() + ",";
+            }
+            renderJson("[" + tt.substring(0, tt.length() - 1) + "]");
+        } else {
+            renderJson("[]");
+        }
+    }
     /**
      * 检测姓名
      */

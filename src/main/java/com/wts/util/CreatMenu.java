@@ -24,7 +24,7 @@ public class CreatMenu {
   private static String TEAM = BASIC.replaceAll("XXXXX","team%2fforManager%2f");
   private static String STUDENT = BASIC.replaceAll("XXXXX","student%2fforManager%2f");
   private static String PARENT = BASIC.replaceAll("XXXXX","parent%2fforManager%2f");
-  private static String NOTICE = BASIC.replaceAll("XXXXX","notice%2fforManager%2f");
+  private static String NOTICE = BASIC.replaceAll("XXXXX","teacherMessage%2fMobile_Manager_TeacherMessage%2f");
 
   public static void CreateManager (){
     Button manager_1 = new Button("教师管理", TEACHER, ButtonType.view);

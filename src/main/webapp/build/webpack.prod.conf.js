@@ -114,6 +114,19 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
+      title: '移动_管理_教师消息',
+      filename: '../dist/static/html/mobile/manager/Mobile_Manager_TeacherMessage.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Manager_TeacherMessage'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
       title: '移动_管理_班级',
       filename: '../dist/static/html/mobile/manager/Mobile_Manager_Room.html',
       template: 'html/template.html',

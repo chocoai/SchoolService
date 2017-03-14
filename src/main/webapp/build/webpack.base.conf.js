@@ -14,6 +14,7 @@ module.exports = {
     Mobile_Manager_Semester: './src/Mobile/Manager/Semester/Index.js',
     Mobile_Manager_Course: './src/Mobile/Manager/Course/Index.js',
     Mobile_Manager_Teacher: './src/Mobile/Manager/Teacher/Index.js',
+    Mobile_Manager_TeacherMessage: './src/Mobile/Manager/TeacherMessage/Index.js',
     Mobile_Manager_Room: './src/Mobile/Manager/Room/Index.js'
   },
   output: {
