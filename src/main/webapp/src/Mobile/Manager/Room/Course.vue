@@ -8,7 +8,7 @@
     <mu-sub-header>必修课</mu-sub-header>
     <mu-flexbox wrap="wrap">
       <mu-flexbox-item class="flex-demo">
-        <mu-checkbox v-for="course in courses" :label="course.name" :nativeValue="course.id" v-model="course" labelClass="a" iconClass="b"/>
+        <mu-checkbox v-for="aa in courses" :label="aa.name" :nativeValue="aa.id" v-model="course" labelClass="a" iconClass="b"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <br/>
@@ -17,7 +17,7 @@
     <mu-sub-header>选修课</mu-sub-header>
     <mu-flexbox wrap="wrap">
       <mu-flexbox-item class="flex-demo">
-        <mu-checkbox v-for="course in courzes" :label="course.name" :nativeValue="course.id" v-model="courze" labelClass="a" iconClass="b"/>
+        <mu-checkbox v-for="bb in courzes" :label="bb.name" :nativeValue="bb.id" v-model="courze" labelClass="a" iconClass="b"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <br/>
@@ -66,8 +66,8 @@ export default {
       roomName: '',
       roomState: '',
       semesterName: '',
-      course: '',
-      courze: '',
+      course: ['1', '2', '3'],
+      courze: [],
       courses: '',
       courzes: ''
     }
@@ -132,15 +132,15 @@ export default {
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        console.log(response)
-        console.log(response.body)
         this.roomName = response.body.roomName
         this.roomState = response.body.roomState
+        this.semesterName = response.body.semesterName
         this.course = response.body.courseAbleA
         this.courze = response.body.courseAbleB
-        this.semesterName = response.body.semesterName
         this.courses = response.body.courseA
         this.courzes = response.body.courseB
+        console.log(this.course)
+        console.log(this.courze)
         this.Reading = false
       }, (response) => {
         this.openPopup('服务器内部错误!', 'error', 'red')

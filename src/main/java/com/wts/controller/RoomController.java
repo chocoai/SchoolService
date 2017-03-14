@@ -407,60 +407,60 @@ public class RoomController extends Controller {
     public void getString() {
         String semesterName, roomName,roomState, courseA, courseB, courseAbleA, courseAbleB;
         Room room = Room.dao.findById(getPara("id"));
-        roomName = "'roomName': '" + room.getName() + "'";
-        roomState = "'roomState': '" + room.getState() + "'";
+        roomName = "\"roomName\": \"" + room.getName() + "\"";
+        roomState = "\"roomState\": \"" + room.getState() + "\"";
         Semester semester = Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1");
         if (semester != null) {
-            semesterName = "'semesterName': '" + semester.getName() + "'";
+            semesterName = "\"semesterName\": \"" + semester.getName() + "\"";
             List<Courseroom> courseroomsA = Courseroom.dao.find("SELECT * FROM courseroom LEFT JOIN course ON courseroom.course_Id = course.id WHERE course.state = 1 AND course.type = 1 AND courseroom.room_id=? AND courseroom.semester_id=?", room.getId(), semester.getId());
             String sra = "";
             if (courseroomsA.size() != 0) {
                 for (Courseroom i : courseroomsA) {
-                    sra = sra + "'" + i.getCourseId() + "',";
+                    sra = sra + "" + i.getCourseId() + ",";
                 }
-                courseAbleA = "'courseAbleA': [" + sra.substring(0, sra.length() - 1) + "]";
+                courseAbleA = "\"courseAbleA\": [" + sra.substring(0, sra.length() - 1) + "]";
             } else {
-                courseAbleA = "'courseAbleA': []";
+                courseAbleA = "\"courseAbleA\": []";
             }
             List<Courseroom> courseroomsB = Courseroom.dao.find("SELECT * FROM courseroom LEFT JOIN course ON courseroom.course_Id = course.id WHERE course.state = 1 AND course.type = 2 AND courseroom.room_id=? AND courseroom.semester_id=?", room.getId(), semester.getId());
             String srb = "";
             if (courseroomsB.size() != 0) {
                 for (Courseroom i : courseroomsB) {
-                    srb = srb + "'" + i.getCourseId() + "',";
+                    srb = srb + "" + i.getCourseId() + ",";
                 }
-                courseAbleB = "'courseAbleB': [" + srb.substring(0, srb.length() - 1) + "]";
+                courseAbleB = "\"courseAbleB\": [" + srb.substring(0, srb.length() - 1) + "]";
             } else {
-                courseAbleB = "'courseAbleB': []";
+                courseAbleB = "\"courseAbleB\": []";
             }
         } else {
-            semesterName = "'semesterName': ''";
-            courseAbleA = "'courseAbleA': []";
-            courseAbleB = "'courseAbleB': []";
+            semesterName = "\"semesterName\": \"\"";
+            courseAbleA = "\"courseAbleA\": []";
+            courseAbleB = "\"courseAbleB\": []";
         }
         List<Course> coursesA = Course.dao.find("SELECT * FROM course WHERE state = 1 AND type= 1");
         String sa = "";
         if (coursesA.size() != 0) {
             for (Course i : coursesA) {
-                sa = sa + "{'id': '" + i.getId() + "','name': '" + i.getName() + "'},";
+                sa = sa + "{\"id\": \"" + i.getId() + "\",\"name\": \"" + i.getName() + "\"},";
             }
-            courseA = "'courseA': [" + sa.substring(0, sa.length() - 1) + "]";
+            courseA = "\"courseA\": [" + sa.substring(0, sa.length() - 1) + "]";
         } else {
-            courseA = "'courseA': []";
+            courseA = "\"courseA\": []";
         }
         List<Course> coursesB = Course.dao.find("SELECT * FROM course WHERE state = 1 AND type= 2");
         String sb = "";
         if (coursesB.size() != 0) {
             for (Course i : coursesB) {
-                sb = sb + "{'id': '" + i.getId() + "','name': '" + i.getName() + "'},";
+                sb = sb + "{\"id\": \"" + i.getId() + "\",\"name\": \"" + i.getName() + "\"},";
             }
-            courseB = "'courseB': [" + sb.substring(0, sb.length() - 1) + "]";
+            courseB = "\"courseB\": [" + sb.substring(0, sb.length() - 1) + "]";
         } else {
-            courseB = "'courseB': []";
+            courseB = "\"courseB\": []";
         }
-        renderJson("roomName: '2017级1班'");
+        //renderJson("{\"roomName\": \"2017级1班\"}");
         //renderText("{'roomName': '2017级1班'}");
         //renderText("{'roomName': '2017级1班','roomState': '1','semesterName': '第一学期','courseA': [{'id': '1','name': '班主任'},{'id': '2','name': '语文'},{'id': '3','name': '数学'},{'id': '4','name': '英语'},{'id': '5','name': '音乐'},{'id': '6','name': '体育'},{'id': '7','name': '美术'},{'id': '8','name': '科学'},{'id': '9','name': '计算机'},{'id': '10','name': '品生'},{'id': '11','name': '品社'},{'id': '12','name': '传统文化'}],'courseB': [{'id': '13','name': '围棋'},{'id': '14','name': '魔方'},{'id': '15','name': '合唱团'},{'id': '16','name': '篮球队'}],'courseAbleA': ['1','2','11'],'courseAbleB': ['13','15']}");
-        //renderText("{" + roomName + ","+ roomState + "," + semesterName + "," + courseA + "," + courseB + "," + courseAbleA + "," + courseAbleB + "}");
+        renderJson("{" + roomName + ","+ roomState + "," + semesterName + "," + courseA + "," + courseB + "," + courseAbleA + "," + courseAbleB + "}");
     }
 
 }
