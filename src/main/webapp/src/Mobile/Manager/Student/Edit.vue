@@ -256,7 +256,16 @@ export default {
     }
   },
   created () {
-    this.fetchData(this.$route.params.id)
+    this.$http.get(
+      API.list,
+      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+    ).then((response) => {
+      this.list = response.body
+      this.fetchData(this.$route.params.id)
+      this.getParent(this.$route.params.id)
+    }, (response) => {
+      this.openPopup('服务器内部错误！', 'error', 'red')
+    })
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -287,34 +296,6 @@ export default {
     },
     parentTitle6: function () {
       return this.name + '的外婆'
-    },
-    roomBack: function () {
-      if (this.room_id.toString() !== '0') {
-        return '#9999CC'
-      } else {
-        return '#66CCCC'
-      }
-    },
-    teamBack: function () {
-      if (this.team_id.toString() !== '0') {
-        return '#9999CC'
-      } else {
-        return '#66CCCC'
-      }
-    },
-    roomIcon: function () {
-      if (this.room_id.toString() !== '0') {
-        return 'bookmark'
-      } else {
-        return 'bookmark_border'
-      }
-    },
-    teamIcon: function () {
-      if (this.team_id.toString() !== '0') {
-        return 'bookmark'
-      } else {
-        return 'bookmark_border'
-      }
     }
   },
   methods: {
@@ -414,8 +395,10 @@ export default {
         { params: {
           id: this.$route.params.id,
           name: this.name,
-          timeStart: this.timeStart,
-          timeEnd: this.timeEnd
+          number: this.number,
+          code: this.code,
+          address: this.address,
+          room_id: this.room_id
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
@@ -440,23 +423,25 @@ export default {
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.semester = response.body
-        this.name = this.semester.name
-        this.timeStart = this.semester.time_start
-        this.timeEnd = this.semester.time_end
-        this.state = this.semester.state
-        if (this.semester.state.toString() === '0') {
-          this.Active_Able = false
+        this.name = this.response.body.name
+        this.number = this.response.body.number
+        this.code = this.response.body.code
+        this.address = this.response.body.address
+        this.state = this.response.body.state
+        this.roomName = this.response.body.roomName
+        if (this.student.state.toString() === '1') {
+          this.inactive = true
+          this.active = false
         } else {
-          this.Active_Able = true
+          this.inactive = false
+          this.active = true
         }
-        this.Reading = false
       }, (response) => {
       })
     },
-    getParent (studentId) {
+    getParent (id) {
       this.$http.get(
-        API.GetParent,
+        API.parent,
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
