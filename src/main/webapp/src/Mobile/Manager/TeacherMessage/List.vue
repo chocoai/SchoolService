@@ -7,6 +7,8 @@
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="teacherMessage in list" :value="teacherMessage.id" :title="teacherMessage.title" :describeText="getString(teacherMessage.name, teacherMessage.time, teacherMessage.send)" :afterText="getState(teacherMessage.state)" @click="goEdit(teacherMessage.id)">
+        <mu-icon v-if="teacherMessage.state.toString() === '0'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+        <mu-icon v-if="teacherMessage.state.toString() === '1'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
       </mu-list-item>
     </mu-list>
     <mu-flexbox>

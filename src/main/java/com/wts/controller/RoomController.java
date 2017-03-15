@@ -270,16 +270,53 @@ public class RoomController extends Controller {
     @Before({Tx.class, AjaxManager.class})
     public void setCourse() {
         String[] course = getParaValues("course[]");
+        String[] courze = getParaValues("courze[]");
+        int ca=0;
+        int cb=0;
         if (course != null) {
             for (String i : course) {
-                Courseroom courseroom = new Courseroom();
-                courseroom.set("semester_id", getNow().getId())
-                        .set("course_id", i)
-                        .set("room_id", getPara("id"))
-                        .save();
+                if (Courseroomteacher.dao.find("SELECT * FROM courseroomteacher WHERE course_id=? AND semester_id=? AND room_id=?", i, getNow().getId(), getPara("id")).size() != 0) {
+                    ca=1;
+                    break;
+                }
             }
         }
-        renderText("OK");
+        if (courze != null) {
+            for (String i : courze) {
+                if (Courseroomteacher.dao.find("SELECT * FROM courseroomteacher WHERE course_id=? AND semester_id=? AND room_id=?", i, getNow().getId(), getPara("id")).size() != 0) {
+                    cb=1;
+                    break;
+                }
+            }
+        }
+        if (ca == 0 && cb == 0) {
+            if (course != null) {
+                for (String i : course) {
+                    Courseroom.dao.deleteById(i, getPara("id"), getNow().getId());
+                    Courseroom courseroom = new Courseroom();
+                    courseroom.set("semester_id", getNow().getId())
+                            .set("course_id", i)
+                            .set("room_id", getPara("id"))
+                            .save();
+                }
+            }
+
+            if (courze != null) {
+                for (String i : courze) {
+                    Courseroom.dao.deleteById(i, getPara("id"), getNow().getId());
+                    Courseroom courseroom = new Courseroom();
+                    courseroom.set("semester_id", getNow().getId())
+                            .set("course_id", i)
+                            .set("room_id", getPara("id"))
+                            .save();
+                }
+            }
+            renderText("OK");
+        }else{
+            renderText("OK");
+        }
+
+
     }
 
 
@@ -403,13 +440,16 @@ public class RoomController extends Controller {
         }
         renderText("{" + crt.substring(0, crt.length() - 1) + "}");
     }
+    /**
+     * 班级课程页面初始化时的字符串
+     */
     @Before({Login.class, Ajax.class})
     public void getString() {
         String semesterName, roomName,roomState, courseA, courseB, courseAbleA, courseAbleB;
         Room room = Room.dao.findById(getPara("id"));
         roomName = "\"roomName\": \"" + room.getName() + "\"";
         roomState = "\"roomState\": \"" + room.getState() + "\"";
-        Semester semester = Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1");
+        Semester semester = getNow();
         if (semester != null) {
             semesterName = "\"semesterName\": \"" + semester.getName() + "\"";
             List<Courseroom> courseroomsA = Courseroom.dao.find("SELECT * FROM courseroom LEFT JOIN course ON courseroom.course_Id = course.id WHERE course.state = 1 AND course.type = 1 AND courseroom.room_id=? AND courseroom.semester_id=?", room.getId(), semester.getId());
@@ -457,9 +497,6 @@ public class RoomController extends Controller {
         } else {
             courseB = "\"courseB\": []";
         }
-        //renderJson("{\"roomName\": \"2017级1班\"}");
-        //renderText("{'roomName': '2017级1班'}");
-        //renderText("{'roomName': '2017级1班','roomState': '1','semesterName': '第一学期','courseA': [{'id': '1','name': '班主任'},{'id': '2','name': '语文'},{'id': '3','name': '数学'},{'id': '4','name': '英语'},{'id': '5','name': '音乐'},{'id': '6','name': '体育'},{'id': '7','name': '美术'},{'id': '8','name': '科学'},{'id': '9','name': '计算机'},{'id': '10','name': '品生'},{'id': '11','name': '品社'},{'id': '12','name': '传统文化'}],'courseB': [{'id': '13','name': '围棋'},{'id': '14','name': '魔方'},{'id': '15','name': '合唱团'},{'id': '16','name': '篮球队'}],'courseAbleA': ['1','2','11'],'courseAbleB': ['13','15']}");
         renderJson("{" + roomName + ","+ roomState + "," + semesterName + "," + courseA + "," + courseB + "," + courseAbleA + "," + courseAbleB + "}");
     }
 

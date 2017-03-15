@@ -6,7 +6,7 @@
       <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="room in list" :value="room.id" :title="room.name" :afterText="room.state.toString() === '0'?'注销':'激活'" @click="goSheet(room.id, room.name)">
+      <mu-list-item v-for="room in list" :value="room.id" :title="room.name" :afterText="room.state.toString() === '0'?'注销':'激活'" @click="goEdit(room.id)">
         <mu-icon v-if="room.state.toString() === '0'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
         <mu-icon v-if="room.state.toString() === '1'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
       </mu-list-item>
@@ -29,14 +29,6 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
-    <mu-bottom-sheet :open="bottomSheet" @close="bottomSheet=false">
-      <mu-list>
-        <mu-sub-header>{{roomName}}</mu-sub-header>
-        <mu-list-item title="班级详情" @click="goEdit"/>
-        <mu-list-item title="班级课程" @click="goCourse"/>
-        <mu-list-item title="授课教师" @click="goTeacher"/>
-      </mu-list>
-    </mu-bottom-sheet>
   </div>
 </template>
 
@@ -59,7 +51,6 @@
         icon: '',
         color: '',
         message: '',
-        roomName: '',
         queryString: '',
         list: [],
         pageTotal: '',
@@ -136,21 +127,6 @@
       },
       goEdit () {
         this.$router.push({ path: '/edit/' + this.$store.state.id })
-      },
-      goCourse () {
-        this.$router.push({ path: '/course/' + this.$store.state.id })
-      },
-      goTeacher () {
-        this.$router.push({ path: '/teacher/' + this.$store.state.id })
-      },
-      goSheet (id, name) {
-        this.$store.commit('save', {
-          queryString: this.queryString,
-          pageCurrent: this.pageCurrent,
-          id: id
-        })
-        this.roomName = name
-        this.bottomSheet = true
       },
       pageBefore () {
         this.pageCurrent--

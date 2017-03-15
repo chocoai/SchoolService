@@ -5,12 +5,12 @@
     </mu-appbar>
     <mu-sub-header>班级名称</mu-sub-header>
     <mu-raised-button :label="roomName" fullWidth disabled/>
-    <mu-sub-header>指定学期</mu-sub-header>
-    <mu-raised-button :label="semesterName" fullWidth @click="openSemester=true" />
+    <mu-sub-header>当前学期</mu-sub-header>
+    <mu-raised-button :label="semesterName" fullWidth disabled/>
     <mu-sub-header>必修课</mu-sub-header>
     <mu-flexbox wrap="wrap">
       <mu-flexbox-item class="flex-demo">
-        <mu-checkbox v-for="aa in courses" :label="aa.name" :nativeValue="aa.id" v-model="course" labelClass="a" iconClass="b"/>
+        <mu-checkbox v-for="aa in courses" :label="aa.name" :nativeValue="aa.id" :disabled="Edit_Able" v-model="course" labelClass="a" />
       </mu-flexbox-item>
     </mu-flexbox>
     <br/>
@@ -19,11 +19,11 @@
     <mu-sub-header>选修课</mu-sub-header>
     <mu-flexbox wrap="wrap">
       <mu-flexbox-item class="flex-demo">
-        <mu-checkbox v-for="bb in courzes" :label="bb.name" :nativeValue="bb.id" v-model="courze" labelClass="a" iconClass="b"/>
+        <mu-checkbox v-for="bb in courzes" :label="bb.name" :nativeValue="bb.id" :disabled="Edit_Able" v-model="courze" labelClass="a" />
       </mu-flexbox-item>
     </mu-flexbox>
     <br/>
-    <mu-flexbox v-if="Edit_Able && State_Able">
+    <mu-flexbox v-if="Edit_Able">
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" @click="goEdit" primary/>
       </mu-flexbox-item>
@@ -45,29 +45,19 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
-    <mu-drawer right :open="openSemester" docked="false">
-      <mu-appbar title="请选择学期" />
-      <mu-list :value="semester_id" @itemClick="semesterChange">
-        <mu-list-item v-for="s in semesters" :title="s.name" :value="s.id" :afterText="getState(s.state)" @click="getSemester(s.id, s.name, s.state)">
-          <mu-icon slot="left" :size="40" value="store" color="#9c27b0"/>
-        </mu-list-item>
-      </mu-list>
-    </mu-drawer>
   </div>
 </template>
 
 <script>
 import * as API from './API.js'
 export default {
-  name: 'Edit',
+  name: 'Course',
   data () {
     return {
       Edit_Able: true,
       Save_Able: false,
       Active_Able: false,
-      State_Able: false,
       semesterAble: false,
-      openSemester: true,
       Activing: false,
       Saving: false,
       Reading: true,
@@ -78,7 +68,6 @@ export default {
       roomName: '',
       roomState: '',
       semesterName: '',
-      semesterId: '',
       semesterState: '',
       semesters: [],
       course: [],
@@ -88,36 +77,11 @@ export default {
     }
   },
   created () {
-    this.$http.get(
-      API.getList,
-      { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-    ).then((response) => {
-      this.semesters = response.body
-      this.$http.get(
-        API.getFirst,
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-      ).then((response) => {
-        this.semesterId = response.body.id
-        this.semesterName = response.body.name
-        this.semesterState = response.body.state
-        this.fetchData(this.$route.params.id, this.semesterId)
-      }, (response) => {
-        this.openPopup('服务器内部错误!', 'error', 'red')
-      })
-    }, (response) => {
-      this.openPopup('服务器内部错误!', 'error', 'red')
-    })
+    this.fetchData(this.$route.params.id)
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
-    '$route': 'fetchData',
-    semesterState: function (val) {
-      if (val.toString() === '1') {
-        this.semesterAble = true
-      } else {
-        this.semesterAble = false
-      }
-    }
+    '$route': 'fetchData'
   },
   methods: {
     goReply () {
@@ -138,7 +102,7 @@ export default {
       this.Edit_Able = true
       this.Save_Able = false
       this.Reading = true
-      this.fetchData(this.$route.params.id, this.semesterId)
+      this.fetchData(this.$route.params.id)
     },
     getState (state) {
       if (state.toString() === '1') {
@@ -149,17 +113,10 @@ export default {
         return '状态错误'
       }
     },
-    getSemester (id, name, state) {
-      this.semesterId = id
-      this.semesterName = name
-      this.semesterState = state
-      this.fetchData(this.$route.params.id, this.semesterId)
-      this.openSemester = false
-    },
     goSave () {
       this.Saving = true
       this.$http.get(
-        API.edit,
+        API.setCourse,
         { params: {
           id: this.$route.params.id,
           course: this.course,
@@ -182,10 +139,10 @@ export default {
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
-    fetchData (roomId, semesterId) {
+    fetchData (id) {
       this.$http.get(
         API.getString,
-        { params: { roomId: roomId, semesterId: semesterId } },
+        { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.roomName = response.body.roomName

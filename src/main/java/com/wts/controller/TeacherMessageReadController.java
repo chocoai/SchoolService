@@ -25,16 +25,21 @@ public class TeacherMessageReadController extends Controller {
                     teacherMessageRead.set("state", 1)
                             .set("time", new Date())
                             .update();
-                    renderText("OK");
+                    setAttr("title","确认完成!");
+                    setAttr("content","系统将汇总所有确认情况并反馈!");
                 } else {
-                    renderText("该消息已确认读取!");
+                    setAttr("title","重复确认!");
+                    setAttr("content","该消息您已经确认读取，无需再次确认!");
                 }
             } else {
-                renderText("该消息已经失效，无需确认读取!");
+                setAttr("title","消息失效!");
+                setAttr("content","该消息已经失效，无需确认读取!");
             }
         } else {
-            renderText("您无权阅读此消息!");
+            setAttr("title","权限错误!");
+            setAttr("content","您无权阅读此消息!");
         }
+        render("/html/read.html");
     }
 
 }

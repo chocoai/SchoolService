@@ -6,8 +6,6 @@ import Vuex from 'vuex'
 import List from './List.vue'
 import Add from './Add.vue'
 import Edit from './Edit.vue'
-import Course from './Course.vue'
-import Teachr from './Teacher.vue'
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'muse-components/styles/base.less' // 加载基础的样式
@@ -64,8 +62,6 @@ const routes = [
   { path: '/list', component: List },
   { path: '/add', component: Add },
   { path: '/edit/:id', component: Edit },
-  { path: '/course/:id', component: Course },
-  { path: '/teacher/:id', component: Teachr },
   { path: '/', redirect: '/list' }
 ]
 

@@ -4,14 +4,14 @@
       <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
     </mu-appbar>
     <mu-text-field label="标题" underlineShow="false" v-model="title" :errorColor="titleErrorColor" :errorText="titleErrorText" @input="checkTitle" fullWidth labelFloat icon="title" maxLength="20"/><br/>
-    <mu-text-field label="内容" underlineShow="false" v-model="content" :errorColor="contentErrorColor" :errorText="contentErrorText" @input="checkContent" fullWidth labelFloat icon="note" multiLine :rows="6" :rowsMax="8" :maxLength="300"/><br/>
+    <mu-text-field label="内容" underlineShow="false" v-model="content" :errorColor="contentErrorColor" :errorText="contentErrorText" @input="checkContent" fullWidth labelFloat icon="note" multiLine :rows="5" :rowsMax="8" :maxLength="200"/><br/>
     <mu-select-field hintText="确认回复" icon="settings" v-model="send" fullWidth>
       <mu-menu-item value="0" title="不需要回复确认"/>
       <mu-menu-item value="1" title="需要回复确认"/>
     </mu-select-field>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="teacherName" @click="openTeacher=true" primary/>
+        <mu-raised-button :label="teacherName" @click="openTeacher=true" primary/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="Saving" title="正在保存" >
@@ -88,16 +88,9 @@ export default {
       API.list,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
-      this.list = response.body
-      this.$http.get(
-        API.all,
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-      ).then((response) => {
-        this.teacherAll = response.body
-        this.teacher_id = this.teacherAll
-      }, (response) => {
-        this.openPopup('服务器内部错误！', 'error', 'red')
-      })
+      this.list = response.body.list
+      this.teacherAll = response.body.select
+      this.teacher_id = this.teacherAll
     }, (response) => {
       this.openPopup('服务器内部错误！', 'error', 'red')
     })
@@ -184,8 +177,8 @@ export default {
       if (value === null || value === undefined || value === '') {
         this.contentErrorText = '内容为必填项!'
         this.contentErrorColor = 'orange'
-      } else if (value.length > 300) {
-        this.contentErrorText = '内容不得超过300字符'
+      } else if (value.length > 200) {
+        this.contentErrorText = '内容不得超过200字符'
         this.contentErrorColor = 'orange'
       } else {
         this.contentErrorText = 'OK'
