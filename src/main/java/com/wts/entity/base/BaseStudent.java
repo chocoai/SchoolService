@@ -73,4 +73,12 @@ public abstract class BaseStudent<M extends BaseStudent<M>> extends Model<M> imp
 		return get("state");
 	}
 
+	public void setBind(java.lang.Integer bind) {
+		set("bind", bind);
+	}
+
+	public java.lang.Integer getBind() {
+		return get("bind");
+	}
+
 }

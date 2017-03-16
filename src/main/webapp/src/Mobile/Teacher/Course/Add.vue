@@ -33,14 +33,14 @@
     <mu-drawer right :open="openCourse" docked="false">
       <mu-appbar title="请选择所授课程"/>
       <mu-list :value="course_id" @itemClick="courseChange">
-        <mu-list-item v-for="course in lists" :title="course.name" :value="course.id" :describeText="course.detail" :afterText="getType(course.type)">
+        <mu-list-item v-for="course in courses" :title="course.name" :value="course.id" :describeText="course.detail" :afterText="getType(course.type)">
         </mu-list-item>
       </mu-list>
     </mu-drawer>
     <mu-drawer right :open="openRoom" docked="false">
       <mu-appbar title="请选择所授班级"/>
       <mu-list :value="room_id" @itemClick="roomChange">
-        <mu-list-item v-for="room in listz" :title="room.name" :value="room.id" :describeText="room.slogan">
+        <mu-list-item v-for="room in rooms" :title="room.name" :value="room.id" :describeText="room.slogan">
         </mu-list-item>
       </mu-list>
     </mu-drawer>
@@ -60,8 +60,8 @@ export default {
       color: '',
       courseName: '请选择所授课程',
       roomName: '请选择所授班级',
-      lists: [],
-      listz: [],
+      courses: [],
+      rooms: [],
       message: ''
     }
   },
@@ -70,8 +70,8 @@ export default {
       API.list,
       { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
     ).then((response) => {
-      this.lists = response.body.lists
-      this.listz = response.body.listz
+      this.courses = response.body.courses
+      this.rooms = response.body.rooms
       this.Reading = false
     }, (response) => {
       this.openPopup('服务器内部错误！', 'error', 'red')

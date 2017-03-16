@@ -32,7 +32,8 @@ public class TeacherMessageController extends Controller {
                 "WHERE teacher.name LIKE '%" + sql +
                 "%' OR teachermessage.title LIKE '%" + sql +
                 "%' OR teachermessage.content LIKE '%" + sql +
-                "%' ORDER BY teachermessage.id DESC";
+                "%' AND teachermessage.teacher_id = " +((Teacher) getSessionAttr("manager")).getId().toString() +
+                " ORDER BY teachermessage.id DESC";
     }
 
     /**
@@ -66,14 +67,13 @@ public class TeacherMessageController extends Controller {
             render("/static/html/mobile/manager/Mobile_Manager_TeacherMessage.html");
         }
     }
+
     /**
      * 初始化新建时的数据
      */
     @Before(AjaxManager.class)
     public void list() {
         String list,select;
-
-
         List<Teacher> teacherz=Teacher.dao.find("SELECT * FROM teacher WHERE state = 1 ORDER BY name ASC");
         String ss = "";
         if (teacherz.size() > 0) {
@@ -120,6 +120,9 @@ public class TeacherMessageController extends Controller {
             renderText((count / getParaToInt("pageSize") + 1) + "");
         }
     }
+    /**
+     * 获取
+     */
     @Before({Login.class, Ajax.class})
     public void get() {
         String teacheres,teacherez,messages;

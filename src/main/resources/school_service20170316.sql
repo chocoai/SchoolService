@@ -54,6 +54,7 @@ CREATE TABLE `Student` (
 `birth` datetime NULL COMMENT '出生日期',
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '家庭地址',
 `state` int NULL COMMENT '学生状态0停用1可用',
+`bind` int NULL COMMENT '是否绑定家长0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -244,7 +245,7 @@ CREATE TABLE `HomeworkDetail` (
 PRIMARY KEY (`homework_id`, `student_id`) 
 );
 
-CREATE TABLE `CourseChoose` (
+CREATE TABLE `CourseChooseDetail` (
 `id` int NOT NULL AUTO_INCREMENT,
 `student_id` int NULL COMMENT '学生序号',
 `course_id` int NULL COMMENT '课程序号',
@@ -277,6 +278,25 @@ CREATE TABLE `Parent` (
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系地址',
 `state` int NULL COMMENT '账号状态1关注2已冻结3取消关注4未关注',
 `picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
+`bind` int NULL COMMENT '是否绑定学生0否1是',
+PRIMARY KEY (`id`) 
+);
+
+CREATE TABLE `CourseRoom` (
+`course_id` int NOT NULL,
+`room_id` int NOT NULL,
+`semester_id` int NOT NULL,
+PRIMARY KEY (`course_id`, `room_id`, `semester_id`) 
+);
+
+CREATE TABLE `CourseChoose` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '序号',
+`course_id` int NULL COMMENT '课程序号',
+`semester_id` int NULL COMMENT '学期序号',
+`time_start` datetime NULL COMMENT '选课开始时间',
+`time_end` datetime NULL COMMENT '选课终止时间',
+`total` int NULL COMMENT '人员总数',
+`less` int NULL COMMENT '剩余人数',
 PRIMARY KEY (`id`) 
 );
 
@@ -319,18 +339,23 @@ ALTER TABLE `HomeworkRead` ADD CONSTRAINT `homeworkRead_student` FOREIGN KEY (`s
 ALTER TABLE `HomeworkRead` ADD CONSTRAINT `homeworkRead_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
 ALTER TABLE `HomeworkDetail` ADD CONSTRAINT `homeworkCheck_homework` FOREIGN KEY (`homework_id`) REFERENCES `Homework` (`id`);
 ALTER TABLE `HomeworkDetail` ADD CONSTRAINT `homeworkCheck_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
-ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
-ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
-ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
+ALTER TABLE `CourseChooseDetail` ADD CONSTRAINT `courseChooseDetail_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `CourseChooseDetail` ADD CONSTRAINT `courseChooseDetail_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
+ALTER TABLE `CourseChooseDetail` ADD CONSTRAINT `courseChooseDetail_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
 ALTER TABLE `StudentCourse` ADD CONSTRAINT `studentCourse_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `CourseRoomTeacher` ADD CONSTRAINT `teacherPlan_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Schedule` ADD CONSTRAINT `schedule_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Grade` ADD CONSTRAINT `grade_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
-ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
+ALTER TABLE `CourseChooseDetail` ADD CONSTRAINT `courseChooseDetail_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Homework` ADD CONSTRAINT `homework_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Exam` ADD CONSTRAINT `exam_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Assessment` ADD CONSTRAINT `assessment_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Leave` ADD CONSTRAINT `leave_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `CourseMessage` ADD CONSTRAINT `courseMessage_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Notice` ADD CONSTRAINT `notice_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
+ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
+ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
+ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
+ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
+ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 

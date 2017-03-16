@@ -6,7 +6,7 @@
       <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="courseRoom in list" :value="courseRoom.id" :title="courseRoom.cname" :describeText="courseRoom.rname" @click="goEdit(courseRoom.id)">
+      <mu-list-item v-for="courseRoom in list" :value="courseRoom.id" :title="courseRoom.cname" :describeText="courseRoom.rname" @click="goSheet(courseRoom.id)">
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -27,6 +27,15 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
+    <mu-bottom-sheet :open="bottomSheet" @close="bottomSheet=false">
+      <mu-list>
+        <mu-list-item title="删除" @click="goDelete"/>
+        <mu-list-item title="取消" @click="bottomSheet=false"/>
+      </mu-list>
+    </mu-bottom-sheet>
+    <mu-dialog :open="Deleting" title="正在删除" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
   </div>
 </template>
 
@@ -45,6 +54,8 @@
         chip: false,
         open: false,
         bottomPopup: false,
+        bottomSheet: false,
+        Deleting: false,
         icon: '',
         color: '',
         message: '',
@@ -119,11 +130,42 @@
         this.total(this.queryString, this.pageSize)
         this.before = false
       },
+      goSheet (id) {
+        this.$store.commit('save', {
+          queryString: this.queryString,
+          pageCurrent: this.pageCurrent,
+          id: id
+        })
+        this.bottomSheet = true
+      },
       goEdit (id) {
         this.$router.push({ path: '/edit/' + id })
         this.$store.commit('save', {
           queryString: this.queryString,
           pageCurrent: this.pageCurrent
+        })
+      },
+      goDelete () {
+        this.Deleting = true
+        this.$http.get(
+          API.dele,
+          { params: { id: this.$store.state.id } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          this.Deleting = false
+          if (response.body === 'error') {
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
+            window.location.href = '/'
+          } else if (response.body === 'OK') {
+            this.openPopup('保存成功！', 'check_circle', 'green')
+            setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'orange')
+          }
+          this.Deleting = false
+        }, (response) => {
+          this.Deleting = false
+          this.openPopup('服务器内部错误!', 'error', 'red')
         })
       },
       pageBefore () {

@@ -113,4 +113,12 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 		return get("picUrl");
 	}
 
+	public void setBind(java.lang.Integer bind) {
+		set("bind", bind);
+	}
+
+	public java.lang.Integer getBind() {
+		return get("bind");
+	}
+
 }

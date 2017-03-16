@@ -41,6 +41,19 @@ Table: coursechoose
 -------------+--------------+------+-----+---------+---------
  Field       | Type         | Null | Key | Default | Remarks 
 -------------+--------------+------+-----+---------+---------
+ id          | INT(10)      | NO   | PRI |         | 序号      
+ course_id   | INT(10)      | YES  |     |         | 课程序号    
+ semester_id | INT(10)      | YES  |     |         | 学期序号    
+ time_start  | DATETIME(19) | YES  |     |         | 选课开始时间  
+ time_end    | DATETIME(19) | YES  |     |         | 选课终止时间  
+ total       | INT(10)      | YES  |     |         | 人员总数    
+ less        | INT(10)      | YES  |     |         | 剩余人数    
+-------------+--------------+------+-----+---------+---------
+
+Table: coursechoosedetail
+-------------+--------------+------+-----+---------+---------
+ Field       | Type         | Null | Key | Default | Remarks 
+-------------+--------------+------+-----+---------+---------
  id          | INT(10)      | NO   | PRI |         |         
  student_id  | INT(10)      | YES  |     |         | 学生序号    
  course_id   | INT(10)      | YES  |     |         | 课程序号    
@@ -76,6 +89,15 @@ Table: coursemessageread
  time        | DATETIME(19) | YES  |     |         | 阅读时间    
  state       | INT(10)      | YES  |     |         | 是否阅读0未读1已读
 -------------+--------------+------+-----+---------+---------
+
+Table: courseroom
+-------------+---------+------+-----+---------+---------
+ Field       | Type    | Null | Key | Default | Remarks 
+-------------+---------+------+-----+---------+---------
+ course_id   | INT(10) | NO   | PRI |         |         
+ room_id     | INT(10) | NO   | PRI |         |         
+ semester_id | INT(10) | NO   | PRI |         |         
+-------------+---------+------+-----+---------+---------
 
 Table: courseroomteacher
 -------------+---------+------+-----+---------+---------
@@ -211,6 +233,7 @@ Table: parent
  address  | VARCHAR(255) | YES  |     |         | 联系地址    
  state    | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
  picUrl   | VARCHAR(255) | YES  |     |         | 头像地址    
+ bind     | INT(10)      | YES  |     |         | 是否绑定学生0否1是
 ----------+--------------+------+-----+---------+---------
 
 Table: relation
@@ -276,6 +299,7 @@ Table: student
  birth   | DATETIME(19) | YES  |     |         | 出生日期    
  address | VARCHAR(255) | YES  |     |         | 家庭地址    
  state   | INT(10)      | YES  |     |         | 学生状态0停用1可用
+ bind    | INT(10)      | YES  |     |         | 是否绑定家长0否1是
 ---------+--------------+------+-----+---------+---------
 
 Table: studentcourse

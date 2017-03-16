@@ -6,7 +6,7 @@
       <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="student in list" :value="student.id" :title="student.name" :describeText="student.number" :afterText="student.code" @click="goEdit(student.id)">
+      <mu-list-item v-for="student in list" :value="student.id" :title="student.name" :describeText="student.number" :afterText="getBind(student.bind)" @click="goEdit(student.id)">
         <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="Cyan"/>
         <mu-icon v-if="student.state.toString() === '1' && student.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="pink"/>
         <mu-icon v-if="student.state.toString() === '2' && student.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
@@ -122,6 +122,15 @@
         this.query(this.queryString, this.pageCurrent, this.pageSize)
         this.total(this.queryString, this.pageSize)
         this.before = false
+      },
+      getBind (bind) {
+        if (bind.toString() === '0') {
+          return '未绑定家长'
+        } else if (bind.toString() === '1') {
+          return '已绑定家长'
+        } else {
+          return '绑定错误'
+        }
       },
       goEdit (id) {
         this.$router.push({ path: '/edit/' + id })

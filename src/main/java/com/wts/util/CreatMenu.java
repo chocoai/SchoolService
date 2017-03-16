@@ -15,32 +15,34 @@ public class CreatMenu {
 
   private static String BASIC = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+ParamesAPI.corpId+"&redirect_uri=http%3a%2f%2f"+ParamesAPI.URL+"%2f"+"XXXXX"+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect";
 
-  private static String CONNECT = BASIC.replaceAll("XXXXX","user%2faddUserPage%2f");
-  private static String All = BASIC.replaceAll("XXXXX","");
-
-  // 校园管理入口菜单
-  private static String TEACHER = BASIC.replaceAll("XXXXX","teacher%2fforManager%2f");
-  private static String ROOM = BASIC.replaceAll("XXXXX","room%2fforManager%2f");
-  private static String TEAM = BASIC.replaceAll("XXXXX","team%2fforManager%2f");
-  private static String STUDENT = BASIC.replaceAll("XXXXX","student%2fforManager%2f");
-  private static String PARENT = BASIC.replaceAll("XXXXX","parent%2fforManager%2f");
-  private static String NOTICE = BASIC.replaceAll("XXXXX","teacherMessage%2fMobile_Manager_TeacherMessage%2f");
 
   public static void CreateManager (){
-    Button manager_1 = new Button("教师管理", TEACHER, ButtonType.view);
-    Button manager_2 = new Button("班级管理", ROOM, ButtonType.view);
-    Button manager_3 = new Button("社团管理", TEAM, ButtonType.view);
-    Button manager_4 = new Button("学生管理", STUDENT, ButtonType.view);
-    Button manager_5 = new Button("家长管理", PARENT, ButtonType.view);
+    // 校园管理入口菜单
+    String TEACHER = BASIC.replaceAll("XXXXX","teacher%2fMobile_Manager_Teacher%2f");
+    String ROOM = BASIC.replaceAll("XXXXX","room%2fMobile_Manager_Room%2f");
+    String COURSE = BASIC.replaceAll("XXXXX","course%2fMobile_Manager_Course%2f");
+    String STUDENT = BASIC.replaceAll("XXXXX","student%2fMobile_Manager_Student%2f");
+    String PARENT = BASIC.replaceAll("XXXXX","parent%2fMobile_Manager_Parent%2f");
+    String SEMESTER = BASIC.replaceAll("XXXXX","semester%2fMobile_Manager_Semester%2f");
+    String TEACHERMESSAGE = BASIC.replaceAll("XXXXX","teacherMessage%2fMobile_Manager_TeacherMessage%2f");
 
-    Button managerButtonA = new Button("综合管理A", manager_1, manager_2, manager_3, manager_4, manager_5);
+    Button manager_1 = new Button("教师", TEACHER, ButtonType.view);
+    Button manager_2 = new Button("学生", STUDENT, ButtonType.view);
+    Button manager_3 = new Button("家长", PARENT, ButtonType.view);
+    Button manager_4 = new Button("班级", ROOM, ButtonType.view);
+    Button manager_5 = new Button("课程", COURSE, ButtonType.view);
+    Button manager_6 = new Button("学期", SEMESTER, ButtonType.view);
+    Button manager_7 = new Button("教师消息", TEACHERMESSAGE, ButtonType.view);
 
-    Button manager_6 = new Button("公告管理", NOTICE, ButtonType.view);
-    Button managerButtonB = new Button("综合管理B", manager_6);
 
+
+    Button managerButtonA = new Button("相关人员", manager_1, manager_2, manager_3);
+    Button managerButtonB = new Button("基础设定", manager_4, manager_5, manager_6);
+    Button managerButtonC = new Button("消息管理", manager_7);
     List<Button> managers = new ArrayList<Button>();
     managers.add(managerButtonA);
     managers.add(managerButtonB);
+    managers.add(managerButtonC);
     try {
       ApiResult ret = new WeixinProxy().createMenu(ParamesAPI.managerId, managers);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
@@ -48,33 +50,28 @@ public class CreatMenu {
       System.out.println(e.getMessage());
     }
   }
-  // 班级管理入口菜单
-  private static String NOTICES = BASIC.replaceAll("XXXXX","notice%2fforTeacher%2f");
-  private static String ROOMSTUDENT = BASIC.replaceAll("XXXXX","student%2fforRoomTeacher%2f");
-  private static String TEAMSTUDENT = BASIC.replaceAll("XXXXX","student%2fforTeamTeacher%2f");
-  private static String ROOMWORK = BASIC.replaceAll("XXXXX","roomwork%2fforTeacher%2f");
-  private static String TEAMWORK = BASIC.replaceAll("XXXXX","teamwork%2fforTeacher%2f");
-  private static String PERSONALA = BASIC.replaceAll("XXXXX","teacher%2fforTeacherPersonal%2f");
+
+
 
   private static String PICTURE = BASIC.replaceAll("XXXXX","user%2ftokenSignature%2f");
 
   public static void CreateTeacher (){
-    Button teacher_1 = new Button("校园公告", NOTICES, ButtonType.view);
-    Button teacher_2 = new Button("班级学生", ROOMSTUDENT, ButtonType.view);
-    Button teacher_3 = new Button("社团学生", TEAMSTUDENT, ButtonType.view);
-    Button teacher_4 = new Button("班级消息", ROOMWORK, ButtonType.view);
-    Button teacher_5 = new Button("社团消息", TEAMWORK, ButtonType.view);
-    Button teacher_6 = new Button("用户信息", PERSONALA, ButtonType.view);
-    Button teacher_7 = new Button("图片上传", PICTURE, ButtonType.view);
+    // 班级管理入口菜单
+    String COURSE = BASIC.replaceAll("XXXXX","course%2fMobile_Teacher_Course%2f");
+    String TEACHERMESSAGE = BASIC.replaceAll("XXXXX","teacherMessageRead%2fMobile_Teacher_TeacherMessage%2f");
 
-    Button managerButtonA = new Button("班级管理", teacher_2, teacher_4);
-    Button managerButtonB = new Button("社团管理", teacher_3, teacher_5);
-    Button managerButtonC = new Button("其他", teacher_1, teacher_6, teacher_7);
+
+    Button teacher_1 = new Button("课程设定", COURSE, ButtonType.view);
+    Button teacher_2 = new Button("教师消息", TEACHERMESSAGE, ButtonType.view);
+
+    Button managerButtonA = new Button("基础管理A", teacher_1, teacher_2);
+//    Button managerButtonB = new Button("基础管理B", teacher_1, teacher_2);
+//    Button managerButtonC = new Button("基础管理C", teacher_1, teacher_2);
 
     List<Button> managers = new ArrayList<Button>();
     managers.add(managerButtonA);
-    managers.add(managerButtonB);
-    managers.add(managerButtonC);
+//    managers.add(managerButtonB);
+//    managers.add(managerButtonC);
     try {
       ApiResult ret = new WeixinProxy().createMenu(ParamesAPI.teacherId, managers);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());

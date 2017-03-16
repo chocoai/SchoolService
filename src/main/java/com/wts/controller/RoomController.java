@@ -264,60 +264,6 @@ public class RoomController extends Controller {
         }
     }
 
-    /**
-     * 设置课程
-     */
-    @Before({Tx.class, AjaxManager.class})
-    public void setCourse() {
-        String[] course = getParaValues("course[]");
-        String[] courze = getParaValues("courze[]");
-        int ca=0;
-        int cb=0;
-        if (course != null) {
-            for (String i : course) {
-                if (Courseroomteacher.dao.find("SELECT * FROM courseroomteacher WHERE course_id=? AND semester_id=? AND room_id=?", i, getNow().getId(), getPara("id")).size() != 0) {
-                    ca=1;
-                    break;
-                }
-            }
-        }
-        if (courze != null) {
-            for (String i : courze) {
-                if (Courseroomteacher.dao.find("SELECT * FROM courseroomteacher WHERE course_id=? AND semester_id=? AND room_id=?", i, getNow().getId(), getPara("id")).size() != 0) {
-                    cb=1;
-                    break;
-                }
-            }
-        }
-        if (ca == 0 && cb == 0) {
-            if (course != null) {
-                for (String i : course) {
-                    Courseroom.dao.deleteById(i, getPara("id"), getNow().getId());
-                    Courseroom courseroom = new Courseroom();
-                    courseroom.set("semester_id", getNow().getId())
-                            .set("course_id", i)
-                            .set("room_id", getPara("id"))
-                            .save();
-                }
-            }
-
-            if (courze != null) {
-                for (String i : courze) {
-                    Courseroom.dao.deleteById(i, getPara("id"), getNow().getId());
-                    Courseroom courseroom = new Courseroom();
-                    courseroom.set("semester_id", getNow().getId())
-                            .set("course_id", i)
-                            .set("room_id", getPara("id"))
-                            .save();
-                }
-            }
-            renderText("OK");
-        }else{
-            renderText("OK");
-        }
-
-
-    }
 
 
     @Before(AjaxParent.class)

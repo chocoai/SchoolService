@@ -3,12 +3,11 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="goQuery" :value="queryString"/>
-      <mu-icon-button icon='add' slot="right" @click="goAdd"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="teacherMessage in list" :value="teacherMessage.id" :title="teacherMessage.title" :describeText="getString(teacherMessage.name, teacherMessage.time, teacherMessage.reply)" :afterText="getState(teacherMessage.state)" @click="goEdit(teacherMessage.id)">
-        <mu-icon v-if="teacherMessage.state.toString() === '0'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
-        <mu-icon v-if="teacherMessage.state.toString() === '1'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+      <mu-list-item v-for="teacherMessage in list" :value="teacherMessage.id" :title="teacherMessage.title" :describeText="getString(teacherMessage.tname, teacherMessage.ttime, teacherMessage.treply)" :afterText="getState(teacherMessage.tstate)" @click="goEdit(teacherMessage.id)">
+        <mu-icon v-if="teacherMessage.tstate.toString() === '0'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
+        <mu-icon v-if="teacherMessage.tstate.toString() === '1'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -157,9 +156,6 @@
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
         this.query(this.queryString, this.pageCurrent, this.pageSize)
-      },
-      goAdd () {
-        this.$router.push({ path: '/add' })
       }
     }
   }
