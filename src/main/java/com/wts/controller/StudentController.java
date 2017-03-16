@@ -18,123 +18,66 @@ import static com.wts.util.IDNumber.*;
 import static com.wts.util.Util.getString;
 
 public class StudentController extends Controller {
-//
-//    public void forManager() throws WeixinException {
-//        // 检测session中是否存在manager
-//        if (getSessionAttr("manager") == null || ((Enterprise) getSessionAttr("manager")).getIsManager() != 1) {
-//            // 检测cookie中是否存在EnterpriseId
-//            if (getCookie("die") == null || getCookie("die").equals("")) {
-//                // 检测是否来自微信请求
-//                if (!(getPara("code") == null || getPara("code").equals(""))) {
-//                    User user = WP.me.getUserByCode(getPara("code"));
-//                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isManager=1 and userId=?", user.getUserId());
-//                    // 检测是否有权限
-//                    if (enterprise != null) {
-//                        setSessionAttr("manager", enterprise);
-//                        setCookie("die", enterprise.getId().toString(), 60 * 30);
-//                        render("/static/StudentForManager.html");
-//                    } else {
-//                        redirect("/");
-//                    }
-//                } else {
-//                    redirect("/");
-//                }
-//            } else {
-//                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-//                setSessionAttr("manager", enterprise);
-//                render("/static/StudentForManager.html");
-//            }
-//        } else {
-//            render("/static/StudentForManager.html");
-//        }
-//    }
-//    public void forRoomTeacher() throws WeixinException {
-//        // 检测session中是否存在teacher
-//        if (getSessionAttr("teacher") == null || ((Enterprise) getSessionAttr("teacher")).getIsTeacher() != 1) {
-//            // 检测cookie中是否存在EnterpriseId
-//            if (getCookie("die") == null || getCookie("die").equals("")) {
-//                // 检测是否来自微信请求
-//                if (!(getPara("code") == null || getPara("code").equals(""))) {
-//                    User user = WP.me.getUserByCode(getPara("code"));
-//                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
-//                    // 检测是否有权限
-//                    if (enterprise != null) {
-//                        setSessionAttr("teacher", enterprise);
-//                        setCookie("die", enterprise.getId().toString(), 60 * 30);
-//                        render("/static/StudentOfRoomForTeacher.html");
-//                    } else {
-//                        redirect("/");
-//                    }
-//                } else {
-//                    redirect("/");
-//                }
-//            } else {
-//                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-//                setSessionAttr("teacher", enterprise);
-//                render("/static/StudentOfRoomForTeacher.html");
-//            }
-//        } else {
-//            render("/static/StudentOfRoomForTeacher.html");
-//        }
-//    }
-//    public void forTeamTeacher() throws WeixinException {
-//        // 检测session中是否存在teacher
-//        if (getSessionAttr("teacher") == null || ((Enterprise) getSessionAttr("teacher")).getIsTeacher() != 1) {
-//            // 检测cookie中是否存在EnterpriseId
-//            if (getCookie("die") == null || getCookie("die").equals("")) {
-//                // 检测是否来自微信请求
-//                if (!(getPara("code") == null || getPara("code").equals(""))) {
-//                    User user = WP.me.getUserByCode(getPara("code"));
-//                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
-//                    // 检测是否有权限
-//                    if (enterprise != null) {
-//                        setSessionAttr("teacher", enterprise);
-//                        setCookie("die", enterprise.getId().toString(), 60 * 30);
-//                        render("/static/StudentOfTeamForTeacher.html");
-//                    } else {
-//                        redirect("/");
-//                    }
-//                } else {
-//                    redirect("/");
-//                }
-//            } else {
-//                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-//                setSessionAttr("teacher", enterprise);
-//                render("/static/StudentOfTeamForTeacher.html");
-//            }
-//        } else {
-//            render("/static/StudentOfTeamForTeacher.html");
-//        }
-//    }
-//    public void forParent() throws WeixinException {
-//        // 检测session中是否存在manager
-//        if (getSessionAttr("parent") == null || ((Enterprise) getSessionAttr("parent")).getIsParent() != 1) {
-//            // 检测cookie中是否存在EnterpriseId
-//            if (getCookie("die") == null || getCookie("die").equals("")) {
-//                // 检测是否来自微信请求
-//                if (!(getPara("code") == null || getPara("code").equals(""))) {
-//                    User user = WP.me.getUserByCode(getPara("code"));
-//                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isParent=1 and userId=?", user.getUserId());
-//                    // 检测是否有权限
-//                    if (enterprise != null) {
-//                        setSessionAttr("parent", enterprise);
-//                        setCookie("die", enterprise.getId().toString(), 60 * 30);
-//                        render("/static/StudentForParent.html");
-//                    } else {
-//                        redirect("/");
-//                    }
-//                } else {
-//                    redirect("/");
-//                }
-//            } else {
-//                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-//                setSessionAttr("parent", enterprise);
-//                render("/static/StudentForParent.html");
-//            }
-//        } else {
-//            render("/static/StudentForParent.html");
-//        }
-//    }
+    private String getSQL(String sql) {
+        return "FROM student WHERE `name` LIKE '%" + sql +
+                "%' OR `number` LIKE '%" + sql +
+                "%' OR `code` LIKE '%" + sql +
+                "%' OR `address` LIKE '%" + sql +
+                "%' ORDER BY id DESC";
+    }
+    /**
+     * 登录移动_管理_学生
+     */
+    public void Mobile_Manager_Student() throws WeixinException {
+        if (getSessionAttr("manager") == null || ((Teacher) getSessionAttr("manager")).getIsManager() != 1) {
+            if (getCookie("dim") == null || getCookie("dim").equals("")) {
+                if (!(getPara("code") == null || getPara("code").equals(""))) {
+                    User user = WP.me.getUserByCode(getPara("code"));
+                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
+                    if (manager != null) {
+                        setSessionAttr("manager", manager);
+                        setCookie("dim", manager.getId().toString(), 60 * 30);
+                        if (user.getAvatar().equals(manager.getPicUrl())) {
+                            manager.set("picUrl", user.getAvatar()).update();
+                        }
+                        render("/static/html/mobile/manager/Mobile_Manager_Student.html");
+                    } else {
+                        redirect("/");
+                    }
+                } else {
+                    redirect("/");
+                }
+            } else {
+                Teacher manager = Teacher.dao.findById(getCookie("dim"));
+                setSessionAttr("manager", manager);
+                render("/static/html/mobile/manager/Mobile_Manager_Student.html");
+            }
+        } else {
+            render("/static/html/mobile/manager/Mobile_Manager_Student.html");
+        }
+    }
+
+    /**
+     * 查询
+     */
+    @Before(AjaxManager.class)
+    public void query() {
+        renderJson(Student.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", getSQL(getPara("queryString"))).getList());
+
+    }
+
+    /**
+     * 计数
+     */
+    @Before(AjaxManager.class)
+    public void total() {
+        Long count = Db.queryLong("SELECT COUNT(*) " + getSQL(getPara("queryString")));
+        if (count % getParaToInt("pageSize") == 0) {
+            renderText((count / getParaToInt("pageSize")) + "");
+        } else {
+            renderText((count / getParaToInt("pageSize") + 1) + "");
+        }
+    }
 //    @Before({Ajax.class,Login.class})
 //    public  void studentListByRoom() {
 //        List<Student> students = Student.dao.find("select * from student where state=1 and room_id=?",getPara("id"));
@@ -182,30 +125,30 @@ public class StudentController extends Controller {
 //        Student student = Student.dao.findById(getPara("id"));
 //        renderText(student.get("name").toString());
 //    }
-//    @Before(AjaxManager.class)
-//    public void inactiveById() {
-//        Student student = Student.dao.findById(getPara("id"));
-//        if (student == null) {
-//            renderText("未找到指定id的学生");
-//        } else if (student.get("state").toString().equals("2")) {
-//            renderText("该学生已处于注销状态!");
-//        } else {
-//            student.set("state",2).update();
-//            renderText("OK");
-//        }
-//    }
-//    @Before(AjaxManager.class)
-//    public void activeById() {
-//        Student student = Student.dao.findById(getPara("id"));
-//        if (student == null) {
-//            renderText("未找到指定id的学生");
-//        } else if (student.get("state").toString().equals("1")) {
-//            renderText("该学生已处于激活状态!");
-//        } else {
-//            student.set("state",1).update();
-//            renderText("OK");
-//        }
-//    }
+    @Before(AjaxManager.class)
+    public void inactive() {
+        Student student = Student.dao.findById(getPara("id"));
+        if (student == null) {
+            renderText("未找到指定id的学生");
+        } else if (student.get("state").toString().equals("2")) {
+            renderText("该学生已处于注销状态!");
+        } else {
+            student.set("state",2).update();
+            renderText("OK");
+        }
+    }
+    @Before(AjaxManager.class)
+    public void active() {
+        Student student = Student.dao.findById(getPara("id"));
+        if (student == null) {
+            renderText("未找到指定id的学生");
+        } else if (student.get("state").toString().equals("1")) {
+            renderText("该学生已处于激活状态!");
+        } else {
+            student.set("state",1).update();
+            renderText("OK");
+        }
+    }
 //    @Before(AjaxManager.class)
 //    public void queryForManager() {
 //        Page<Student> students= Student.dao.studentQuery(getParaToInt("pageCurrent"),getParaToInt("pageSize"),getPara("queryString"));
@@ -278,48 +221,48 @@ public class StudentController extends Controller {
 //            renderText((count/getParaToInt("pageSize")+1)+"");
 //        }
 //    }
-//    /**
-//     * 新增时检测学生证件号码
-//     * */
-//    @Before(AjaxManager.class)
-//    public void checkNumberForNew() {
-//        if (!checkIDNumberDetailB(getPara("number"))){
-//            renderText(checkIDNumberDetail(getPara("number")));
-//        } else if (Student.dao.find("select * from student where number=?", getPara("number")).size()!=0) {
-//            renderText("该证件号码已存在!");
-//        } else {
-//            renderText("OK");
-//        }
-//    }
-//    /**
-//     * 修改时检测学生证件号码
-//     * */
-//    @Before(AjaxManager.class)
-//    public void checkNumberForEdit() {
-//        if (!checkIDNumberDetailB(getPara("number"))){
-//            renderText(checkIDNumberDetail(getPara("number")));
-//        } else if (!Student.dao.findById(getPara("id")).get("number").equals(getPara("number"))
-//                && Student.dao.find("select * from student where number=?", getPara("number")).size()>=1) {
-//            renderText("该证件号码已存在!");
-//        } else {
-//            renderText("OK");
-//        }
-//    }
-//    /**
-//     * 新增时检测学生学籍号
-//     * */
-//    @Before(AjaxManager.class)
-//    public void checkCodeForNew() {
-//        renderText("OK");
-//    }
-//    /**
-//     * 修改时检测学生学籍号
-//     * */
-//    @Before(AjaxManager.class)
-//    public void checkCodeForEdit() {
-//        renderText("OK");
-//    }
-//
+    /**
+     * 新增时检测学生证件号码
+     * */
+    @Before(AjaxManager.class)
+    public void checkNumberForAdd() {
+        if (!checkIDNumberDetailB(getPara("number"))){
+            renderText(checkIDNumberDetail(getPara("number")));
+        } else if (Student.dao.find("select * from student where number=?", getPara("number")).size()!=0) {
+            renderText("该证件号码已存在!");
+        } else {
+            renderText("OK");
+        }
+    }
+    /**
+     * 修改时检测学生证件号码
+     * */
+    @Before(AjaxManager.class)
+    public void checkNumberForEdit() {
+        if (!checkIDNumberDetailB(getPara("number"))){
+            renderText(checkIDNumberDetail(getPara("number")));
+        } else if (!Student.dao.findById(getPara("id")).get("number").equals(getPara("number"))
+                && Student.dao.find("select * from student where number=?", getPara("number")).size()>=1) {
+            renderText("该证件号码已存在!");
+        } else {
+            renderText("OK");
+        }
+    }
+    /**
+     * 新增时检测学生学籍号
+     * */
+    @Before(AjaxManager.class)
+    public void checkCodeForAdd() {
+        renderText("OK");
+    }
+    /**
+     * 修改时检测学生学籍号
+     * */
+    @Before(AjaxManager.class)
+    public void checkCodeForEdit() {
+        renderText("OK");
+    }
+
 
 
     @Before({Login.class, Ajax.class})
@@ -374,35 +317,37 @@ public class StudentController extends Controller {
         }
         renderText("{" + r1 + "," + r2 + "," + r3 + "," + r4 + "," + r5 + "," + r6 + "}");
     }
-//
-//    @Before({Tx.class,AjaxManager.class})
-//    public void save()  {
-//        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-//            renderText("学生姓名为两个以上汉字!");
-//        } else if (!checkIDNumberDetailB(getPara("number"))){
-//            renderText(checkIDNumberDetail(getPara("number")));
-//        } else if (Student.dao.find("select * from student where number=?", getPara("number")).size()!=0) {
-//            renderText("该证件号码已存在!");
-//        } else {
-//            Student student = new Student();
-//            if (!getString(getPara("room_id")).equals("0")) {
-//                student.set("room_id",getPara("room_id"));
-//            }
-//            if (!getString(getPara("team_id")).equals("0")) {
-//                student.set("team_id",getPara("team_id"));
-//            }
-//            student.set("name",getPara("name"))
-//                    .set("number",getPara("number"))
-//                    .set("code",getPara("code"))
-//                    .set("address", getPara("address"))
-//                    .set("sex",getSex(getPara("number")))
-//                    .set("birth",getBirthDate(getPara("number")))
-//                    .set("state",1)
-//                    .save();
-//            renderText("OK");
-//        }
-//    }
-//
+
+    @Before({Tx.class,AjaxManager.class})
+    public void save()  {
+        if (!getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+            renderText("学生姓名为两个以上汉字!");
+        } else if (!checkIDNumberDetailB(getPara("number"))){
+            renderText(checkIDNumberDetail(getPara("number")));
+        } else if (Student.dao.find("select * from student where number=?", getPara("number")).size()!=0) {
+            renderText("该证件号码已存在!");
+        } else if (Student.dao.find("select * from student where code=?", getPara("code")).size()!=0) {
+            renderText("该学籍号码已存在!");
+        } else if (getPara("room_id")==null) {
+            renderText("未指定学生所属班级!");
+        } else {
+            Student student = new Student();
+            student.set("name",getPara("name"))
+                    .set("number",getPara("number"))
+                    .set("code",getPara("code"))
+                    .set("address", getPara("address"))
+                    .set("sex",getSex(getPara("number")))
+                    .set("birth",getBirthDate(getPara("number")))
+                    .set("state",1)
+                    .save();
+            Roomstudent roomstudent = new Roomstudent();
+            roomstudent.set("room_id",getPara("room_id"))
+                    .set("student_id",student.getId())
+                    .save();
+            renderText("OK");
+        }
+    }
+
 //    @Before({Tx.class, AjaxManager.class})
 //    public void edit() {
 //        Student student = Student.dao.findById(getPara("id"));

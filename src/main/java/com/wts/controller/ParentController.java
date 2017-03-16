@@ -13,9 +13,7 @@ import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
-import com.wts.interceptor.AjaxManager;
-import com.wts.interceptor.AjaxParent;
-import com.wts.interceptor.AjaxTeacher;
+import com.wts.interceptor.*;
 import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
@@ -23,29 +21,39 @@ import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.wts.controller.MainController.getUserId;
 import static com.wts.util.IDNumber.checkIDNumberDetail;
 import static com.wts.util.IDNumber.checkIDNumberDetailB;
 import static com.wts.util.Util.getString;
 
 public class ParentController extends Controller {
-
+    private String getSQL(String sql) {
+        return "FROM parent WHERE name LIKE '%" + sql +
+                "%' OR userId LIKE '%" + sql +
+                "%' OR mobile LIKE '%" + sql +
+                "%' OR weixinId LIKE '%" + sql +
+                "%' OR qq LIKE '%" + sql +
+                "%' OR email LIKE '%" + sql +
+                "%' OR address LIKE '%" + sql +
+                "%' OR login LIKE '%" + sql +
+                "%' ORDER BY id DESC";
+    }
     /**
-     * 登录到家长页面
+     * 登录移动_管理_家长
      */
-    public void forManager() throws WeixinException {
-        // 检测session中是否存在teacher
-        if (getSessionAttr("manager") == null || ((Teacher)getSessionAttr("manager")).getIsManager()!=1) {
-            // 检测cookie中是否存在EnterpriseId
-            if (getCookie("die") == null || getCookie("die").equals("")) {
-                // 检测是否来自微信请求
+    public void Mobile_Manager_Parent() throws WeixinException {
+        if (getSessionAttr("manager") == null || ((Teacher) getSessionAttr("manager")).getIsManager() != 1) {
+            if (getCookie("dim") == null || getCookie("dim").equals("")) {
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher teacher = Teacher.dao.findFirst(Teacher.dao.getSql("teacher.weixin_manager"),user.getUserId(),1);
-                    // 检测是否有权限
-                    if (teacher != null) {
-                        setSessionAttr("manager", teacher);
-                        setCookie("die", teacher.getId().toString(), 60 * 30);
-                        render("/static/ManagerOfParent.html");
+                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
+                    if (manager != null) {
+                        setSessionAttr("manager", manager);
+                        setCookie("dim", manager.getId().toString(), 60 * 30);
+                        if (user.getAvatar().equals(manager.getPicUrl())) {
+                            manager.set("picUrl", user.getAvatar()).update();
+                        }
+                        render("/static/html/mobile/manager/Mobile_Manager_Parent.html");
                     } else {
                         redirect("/");
                     }
@@ -53,14 +61,317 @@ public class ParentController extends Controller {
                     redirect("/");
                 }
             } else {
-                Teacher teacher = Teacher.dao.findById(getCookie("die"));
-                setSessionAttr("manager", teacher);
-                render("/static/ManagerOfParent.html");
+                Teacher manager = Teacher.dao.findById(getCookie("dim"));
+                setSessionAttr("manager", manager);
+                render("/static/html/mobile/manager/Mobile_Manager_Parent.html");
             }
         } else {
-            render("/static/ManagerOfParent.html");
+            render("/static/html/mobile/manager/Mobile_Manager_Parent.html");
         }
     }
+
+    /**
+     * 列表
+     */
+    @Before(AjaxManager.class)
+    public void list() {
+        renderJson(Parent.dao.find("SELECT * FROM parent WHERE state = 1 ORDER BY id DESC"));
+    }
+
+    /**
+     * 查询
+     */
+    @Before(AjaxManager.class)
+    public void query() {
+        renderJson(Teacher.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", getSQL(getPara("queryString"))).getList());
+    }
+
+    /**
+     * 计数
+     */
+    @Before(AjaxManager.class)
+    public void total() {
+        Long count = Db.queryLong("SELECT COUNT(*) " + getSQL(getPara("queryString")));
+        if (count % getParaToInt("pageSize") == 0) {
+            renderText((count / getParaToInt("pageSize")) + "");
+        } else {
+            renderText((count / getParaToInt("pageSize") + 1) + "");
+        }
+    }
+
+    /**
+     * 获取
+     */
+    @Before({Login.class, Ajax.class})
+    public void get() {
+        renderJson(Parent.dao.findById(getPara("id")));
+    }
+
+    /**
+     * 激活
+     */
+    @Before(AjaxManager.class)
+    public void active() {
+        Parent parent = Parent.dao.findById(getPara("id"));
+        if (parent == null) {
+            renderText("要激活的家长不存在!");
+        } else if (parent.get("state").toString().equals("1")) {
+            renderText("该家长已处于关注状态!");
+        } else {
+            User user = new User(parent.get("userId").toString(), parent.get("name").toString());
+            user.setMobile(parent.get("mobile").toString());
+            user.setEmail(parent.get("email").toString());
+            user.setWeixinId(parent.get("weixinId").toString());
+            user.setPartyIds(1);
+            try {
+                WP.me.createUser(user);
+                List<String> userIds = new ArrayList<String>();
+                userIds.add(parent.get("userId").toString());
+                WP.me.addTagUsers(ParamesAPI.parentTagId, userIds, new ArrayList<Integer>());
+                parent.set("state", 1).update();
+                renderText("OK");
+            } catch (WeixinException e) {
+                renderText(e.getErrorText());
+            }
+        }
+    }
+
+    /**
+     * 注销
+     */
+    @Before(AjaxManager.class)
+    public void inactive() {
+        Parent parent = Parent.dao.findById(getPara("id"));
+        if (parent == null) {
+            renderText("要注销的家长不存在!");
+        } else if (parent.get("state").toString().equals("3")) {
+            renderText("该家长已处于取消关注状态!");
+        } else if (parent.get("state").toString().equals("2")) {
+            renderText("该家长已处于冻结状态!");
+        } else {
+            try {
+                WP.me.deleteUser(parent.getUserId());
+                parent.set("state", 3).update();
+                renderText("OK");
+            } catch (WeixinException e) {
+                renderText(e.getErrorText());
+            }
+        }
+    }
+
+    /**
+     * 检测手机_修改
+     */
+    @Before(AjaxManager.class)
+    public void checkMobileForEdit() {
+        if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
+            renderText("手机号码格式错误!");
+        } else if (!Parent.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
+                && Teacher.dao.find("select * from teacher where mobile=?", getPara("mobile")).size() != 0
+                && Parent.dao.find("select * from parent where mobile=?", getPara("mobile")).size() != 0
+                ) {
+            renderText("该手机号码已存在!");
+        } else {
+            renderText("OK");
+        }
+    }
+
+    /**
+     * 检测邮箱_修改
+     */
+    @Before(AjaxManager.class)
+    public void checkEmailForEdit() {
+        if (!Util.getString(getPara("email")).matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\\\.[a-zA-Z0-9_-]{2,3}){1,2})$")) {
+            renderText("电子邮箱格式错误!");
+        } else if (!Parent.dao.findById(getPara("id")).get("email").equals(getPara("email"))
+                && Teacher.dao.find("select * from teacher where email=?", getPara("email")).size() != 0
+                && Parent.dao.find("select * from parent where email=?", getPara("email")).size() != 0
+                ) {
+            renderText("该电子邮箱已存在!");
+        } else {
+            renderText("OK");
+        }
+    }
+
+    /**
+     * 检测QQ_修改
+     */
+    @Before(AjaxManager.class)
+    public void checkQQForEdit() {
+        if (!Util.getString(getPara("qq")).matches("^\\d{5,12}$")) {
+            renderText("QQ号格式错误!");
+        } else if (!Parent.dao.findById(getPara("id")).get("qq").equals(getPara("qq"))
+                && Teacher.dao.find("select * from teacher where qq=?", getPara("qq")).size() != 0
+                && Parent.dao.find("select * from parent where qq=?", getPara("qq")).size() != 0
+                ) {
+            renderText("该QQ号已存在!");
+        } else {
+            renderText("OK");
+        }
+    }
+
+
+    /**
+     * 检测微信_修改
+     */
+    @Before(AjaxManager.class)
+    public void checkWeixinIdForEdit() {
+        if (!Util.getString(getPara("weixinId")).matches("^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}+$")) {
+            renderText("微信号格式错误!");
+        } else if (!Parent.dao.findById(getPara("id")).get("weixinId").equals(getPara("weixinId"))
+                && Teacher.dao.find("select * from teacher where weixinId=?", getPara("weixinId")).size() != 0
+                && Parent.dao.find("select * from parent where weixinId=?", getPara("weixinId")).size() != 0
+                ) {
+            renderText("该微信号已存在!");
+        } else {
+            renderText("OK");
+        }
+    }
+
+    /**
+     * 保存
+     */
+    @Before({Tx.class, AjaxManager.class})
+    public void save() {
+        if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+            renderText("家长姓名应为两个以上汉字!");
+        } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+            renderText("手机号码格式错误!");
+        } else if (Teacher.dao.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+            renderText("已有教师使用该手机号码!");
+        } else if (Parent.dao.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+            renderText("已有家长使用该手机号码!");
+        } else if (getPara("email") != null && !getPara("email").equals("") && Teacher.dao.find("SELECT * FROM teacher WHERE email = ?", getPara("email")).size() != 0) {
+            renderText("已有教师使用该电子邮箱!");
+        } else if (getPara("email") != null && !getPara("email").equals("") && Parent.dao.find("SELECT * FROM parent WHERE email = ?", getPara("email")).size() != 0) {
+            renderText("已有家长使用该电子邮箱!");
+        } else if (getPara("qq") != null && !getPara("qq").equals("") && Teacher.dao.find("SELECT * FROM teacher WHERE qq = ?", getPara("qq")).size() != 0) {
+            renderText("已有教师使用该QQ号!");
+        } else if (getPara("qq") != null && !getPara("qq").equals("") && Parent.dao.find("SELECT * FROM parent WHERE qq = ?", getPara("qq")).size() != 0) {
+            renderText("已有家长使用该QQ号!");
+        } else if (getPara("weixinId") != null && !getPara("weixinId").equals("") && Teacher.dao.find("SELECT * FROM teacher WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
+            renderText("已有教师使用该微信号!");
+        } else if (getPara("weixinId") != null && !getPara("weixinId").equals("") && Parent.dao.find("SELECT * FROM parent WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
+            renderText("已有家长使用该微信号!");
+        } else if (Teacher.dao.find("SELECT * FROM teacher WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
+            renderText("已有教师使用该userID!");
+        } else if (Parent.dao.find("SELECT * FROM parent WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
+            renderText("已有家长使用该userID!");
+        } else {
+            User user = new User(getUserId(getPara("name")), getPara("name").trim());
+            user.setMobile(getPara("mobile").trim());
+            user.setWeixinId(getPara("weixinId").trim());
+            user.setEmail(getPara("email").trim());
+            user.setPartyIds(1);
+            try {
+                WP.me.createUser(user);
+                List<String> userIds = new ArrayList<String>();
+                userIds.add(getUserId(getPara("name")));
+                WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
+                Parent parent = new Parent();
+                parent.set("name", getPara("name").trim())
+                        .set("mobile", getPara("mobile").trim())
+                        .set("qq", getPara("qq").trim())
+                        .set("email", getPara("email").trim())
+                        .set("weixinId", getPara("weixinId").trim())
+                        .set("address", getPara("address").trim())
+                        .set("userId", getUserId(getPara("name")))
+                        .set("pass", "0011223344")
+                        .set("state", 4)
+                        .save();
+                renderText("OK");
+            } catch (WeixinException e) {
+                renderText(e.getErrorText());
+            }
+        }
+    }
+    /**
+     * 管理员修改
+     */
+    @Before({Tx.class, AjaxManager.class})
+    public void edit() {
+        Parent parent = Parent.dao.findById(getPara("id"));
+        if (parent == null) {
+            renderText("要修改的家长不存在!");
+        } else {
+            if (Util.getString(parent.getStr("name")).equals(getPara("name").trim())
+                    && Util.getString(parent.getStr("mobile")).equals(getPara("mobile").trim())
+                    && Util.getString(parent.getStr("email")).equals(getPara("email").trim())
+                    && Util.getString(parent.getStr("qq")).equals(getPara("qq").trim())
+                    && Util.getString(parent.getStr("weixinId")).equals(getPara("weixinId").trim())
+                    && Util.getString(parent.get("address").toString()).equals(getPara("address").trim())
+                    ) {
+                renderText("未找到修改内容!");
+            } else if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
+                renderText("教师姓名应为两个以上汉字!");
+            } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
+                renderText("手机号码格式错误!");
+            } else if (!Util.getString(parent.getStr("mobile")).equals(getPara("mobile"))
+                    && Teacher.dao.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+                renderText("已有教师使用该手机号码!");
+            } else if (!Util.getString(parent.getStr("mobile")).equals(getPara("mobile"))
+                    && Parent.dao.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+                renderText("已有家长使用该手机号码!");
+            } else if (!Util.getString(parent.getStr("email")).equals(getPara("email"))
+                    && !getPara("email").equals("")
+                    && Teacher.dao.find("SELECT * FROM teacher WHERE email = ?", getPara("email")).size() != 0) {
+                renderText("已有教师使用该电子邮箱!");
+            } else if (!Util.getString(parent.getStr("email")).equals(getPara("email"))
+                    && !getPara("email").equals("")
+                    && Parent.dao.find("SELECT * FROM parent WHERE email = ?", getPara("email")).size() != 0) {
+                renderText("已有家长使用该电子邮箱!");
+            } else if (!Util.getString(parent.getStr("qq")).equals(getPara("qq"))
+                    && !getPara("qq").equals("")
+                    && Teacher.dao.find("SELECT * FROM teacher WHERE qq = ?", getPara("qq")).size() != 0) {
+                renderText("已有教师使用该QQ号!");
+            } else if (!Util.getString(parent.getStr("qq")).equals(getPara("qq"))
+                    && !getPara("qq").equals("")
+                    && Parent.dao.find("SELECT * FROM parent WHERE qq = ?", getPara("qq")).size() != 0) {
+                renderText("已有家长使用该QQ号!");
+            } else if (!Util.getString(parent.getStr("weixinId")).equals(getPara("weixinId"))
+                    && !getPara("weixinId").equals("")
+                    && Teacher.dao.find("SELECT * FROM teacher WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
+                renderText("已有教师使用该微信号!");
+            } else if (!Util.getString(parent.getStr("weixinId")).equals(getPara("weixinId"))
+                    && !getPara("weixinId").equals("")
+                    && Parent.dao.find("SELECT * FROM parent WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
+                renderText("已有家长使用该微信号!");
+            } else if (!Util.getString(parent.getStr("userId")).equals(getUserId(getPara("name")))
+                    && Teacher.dao.find("SELECT * FROM teacher WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
+                renderText("已有教师使用该userId!");
+            } else if (!Util.getString(parent.getStr("userId")).equals(getUserId(getPara("name")))
+                    && Parent.dao.find("SELECT * FROM parent WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
+                renderText("已有家长使用该userId!");
+            } else {
+                try {
+                    if (!Util.getString(parent.getStr("name")).equals(getPara("name").trim())
+                            || !Util.getString(parent.getStr("mobile")).equals(getPara("mobile").trim())
+                            || !Util.getString(parent.getStr("email")).equals(getPara("email").trim())
+                            || !Util.getString(parent.getStr("weixinId")).equals(getPara("weixinId").trim())
+                            ) {
+                        User user = new User(parent.get("userId").toString(), parent.get("name").toString());
+                        user.setMobile(getPara("mobile").trim());
+                        user.setEmail(getPara("email").trim());
+                        user.setWeixinId(getPara("weixinId").trim());
+                        WP.me.updateUser(user);
+                    }
+                    parent.set("name", getPara("name").trim())
+                            .set("mobile", getPara("mobile").trim())
+                            .set("email", getPara("email").trim())
+                            .set("weixinId", getPara("weixinId").trim())
+                            .set("qq", getPara("qq").trim())
+                            .set("address", getPara("address").trim())
+                            .update();
+                    renderText("OK");
+                } catch (WeixinException e) {
+                    renderText(e.getErrorText());
+                }
+            }
+        }
+    }
+
+
+
     public void forParentPersonal() throws WeixinException {
         // 检测session中是否存在teacher
         if (getSessionAttr("parent") == null) {
@@ -88,25 +399,6 @@ public class ParentController extends Controller {
             }
         } else {
             render("/static/ParentOfPersonal.html");
-        }
-    }
-    /**
-     * 查询
-     */
-    @Before(AjaxManager.class)
-    public void query() {
-        renderJson(Parent.dao.paginate(getParaToInt("pageCurrent"),getParaToInt("pageSize"),"SELECT *","FROM parent WHERE name LIKE '%?%' OR userId LIKE '%?%' OR mobile LIKE '%?%' ORDER BY name ASC",getPara("queryString"),getPara("queryString"),getPara("queryString")).getList());
-    }
-    /**
-     * 计数
-     */
-    @Before(AjaxManager.class)
-    public void total() {
-        Long count = Db.queryLong("SELECT count(*) FROM parent WHERE name LIKE '%?%' OR mobile LIKE '%?%' OR userId LIKE '%?%' ORDER BY name ASC", getPara("queryString"), getPara("queryString"), getPara("queryString"));
-        if (count % getParaToInt("pageSize") == 0) {
-            renderText((count / getParaToInt("pageSize")) + "");
-        } else {
-            renderText((count / getParaToInt("pageSize") + 1) + "");
         }
     }
 
@@ -249,87 +541,7 @@ public class ParentController extends Controller {
         }
         renderText("{"+relation[0]+","+relation[1]+","+relation[2]+","+relation[3]+"}");
     }
-    @Before({Tx.class,AjaxManager.class})
-    public void save()  {
-        if (!Util.getString(getPara("name")).matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-            renderText("家长姓名应为两个以上汉字!");
-        } else if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
-            renderText("手机号码格式不正确!");
-        } else if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
-            renderText("账号名应为字母或数字的组合!");
-        } else if (Teacher.dao.find(Teacher.dao.getSql("teacher.mobile"), getPara("mobile")).size() != 0) {
-            renderText("已有教师使用该手机号码!");
-        } else if (Parent.dao.find(Parent.dao.getSql("parent.mobile"), getPara("mobile")).size() != 0) {
-            renderText("已有家长使用该手机号码!");
-        } else if(Relation.dao.find(Relation.dao.getSql("relation.getParent") ,getPara("student_id1"),getPara("identity_id1")).size()!=0) {
-            renderText(boundString(getPara("student_id1"),getPara("identity_id1")));
-        } else if(Relation.dao.find(Relation.dao.getSql("relation.getParent") ,getPara("student_id2"),getPara("identity_id2")).size()!=0) {
-            renderText(boundString(getPara("student_id2"),getPara("identity_id2")));
-        } else if(Relation.dao.find(Relation.dao.getSql("relation.getParent") ,getPara("student_id3"),getPara("identity_id3")).size()!=0) {
-            renderText(boundString(getPara("student_id3"),getPara("identity_id3")));
-        } else if(Relation.dao.find(Relation.dao.getSql("relation.getParent") ,getPara("student_id4"),getPara("identity_id4")).size()!=0) {
-            renderText(boundString(getPara("student_id4"),getPara("identity_id4")));
-        } else {
-            User user = new User(getPara("userId").trim(),getPara("name").trim());
-            user.setMobile(getPara("mobile").trim());
-            user.setPartyIds(1);
-            try{
-                WP.me.createUser(user);
-                List<String> userIds = new ArrayList<String>();
-                userIds.add(getPara("userId").trim());
-                WP.me.addTagUsers(ParamesAPI.parentTagId,userIds,new ArrayList<Integer>());
-                Parent parent = new Parent();
-                parent.set("name", getPara("name").trim())
-                        .set("mobile", getPara("mobile").trim())
-                        .set("userId", getPara("userId").trim())
-                        .set("state", 4)
-                        .save();
-                sendMessage(parent,getPara("student_id1"),getPara("identity_id1"));
-                sendMessage(parent,getPara("student_id2"),getPara("identity_id2"));
-                sendMessage(parent,getPara("student_id3"),getPara("identity_id3"));
-                sendMessage(parent,getPara("student_id4"),getPara("identity_id4"));
-                renderText("OK");
-            }catch(WeixinException e){
-                renderText(e.getErrorText());
-            }
-        }
-    }
-    @Before({Tx.class,AjaxManager.class})
-    public void edit(){
-        Parent parent = Parent.dao.findById(getPara("id"));
-        if (parent == null) {
-            renderText("要修改的家长不存在!");
-        } else {
-            if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
-                renderText("家长姓名应为两个以上汉字!");
-            } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
-                renderText("手机号码格式错误!");
-            } else if (checkMobile(parent,getPara("mobile"))) {
-                renderText("该手机号码已使用!");
-            } else {
-                try {
-                    Db.update(Relation.dao.getSql("relation.delete"),getPara("id"));
-                    sendMessage(parent,getPara("student_id1"),getPara("identity_id1"));
-                    sendMessage(parent,getPara("student_id2"),getPara("identity_id2"));
-                    sendMessage(parent,getPara("student_id3"),getPara("identity_id3"));
-                    sendMessage(parent,getPara("student_id4"),getPara("identity_id4"));
-                    if (!Util.getString(parent.getStr("name")).equals(getPara("name").trim())
-                            || !Util.getString(parent.getStr("mobile")).equals(getPara("mobile").trim())
-                            ) {
-                        parent.set("name", getPara("name").trim())
-                                .set("mobile", getPara("mobile").trim())
-                                .update();
-                        User user = new User(parent.get("userId").toString(), parent.get("name").toString());
-                        user.setMobile(getPara("mobile").trim());
-                        WP.me.updateUser(user);
-                    }
-                    renderText("OK");
-                } catch (WeixinException e) {
-                    renderText(e.getErrorText());
-                }
-            }
-        }
-    }
+
     @Before({Tx.class,AjaxParent.class})
     public void editSelf() {
         Parent parent = Parent.dao.findById(((Parent) getSessionAttr("parent")).getId());

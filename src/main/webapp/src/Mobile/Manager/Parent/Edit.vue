@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mu-appbar title="教师详情">
+    <mu-appbar title="家长详情">
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field label="姓名" :disabled="Edit_Able" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="person"/><br/>
@@ -9,14 +9,6 @@
     <mu-text-field label="QQ" :disabled="Edit_Able" v-model="qq" :errorColor="qqErrorColor" :errorText="qqErrorText" @input="checkQQ" fullWidth labelFloat icon="email" /><br/>
     <mu-text-field label="电子邮箱" :disabled="Edit_Able" v-model="email" :errorColor="emailErrorColor" :errorText="emailErrorText" @input="checkEmail" fullWidth labelFloat icon="email" /><br/>
     <mu-text-field label="联系地址" :disabled="Edit_Able" v-model="address" fullWidth labelFloat icon="email" /><br/>
-    <mu-flexbox>
-      <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="manager" :disabled="Edit_Able" @click="openManager=true" backgroundColor="#ce93d8" color="#000"/>
-      </mu-flexbox-item>
-      <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="types" :disabled="Edit_Able" @click="openType=true" backgroundColor="#ce93d8" color="#000"/>
-      </mu-flexbox-item>
-    </mu-flexbox>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="Edit_Able" @click="goEdit" primary/>
@@ -38,46 +30,17 @@
     <mu-dialog :open="Saving" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
-    <mu-dialog :open="Activing" title="确定要激活该教师吗?" @close="goClose">
+    <mu-dialog :open="Activing" title="确定要激活该家长吗?" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goActive" secondary/>
     </mu-dialog>
-    <mu-dialog :open="Inactiving" title="确定要注销该教师吗?" @close="goClose">
+    <mu-dialog :open="Inactiving" title="确定要注销该家长吗?" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
       <mu-flat-button label="确定" @click="goInactive" secondary/>
     </mu-dialog>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
-    <mu-drawer right :open="openManager" docked="false">
-      <mu-appbar title="请选择管理类别" @click.native="openManager=false">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="一般教师">
-          <mu-radio  v-model="isManager" label="" labelLeft :nativeValue="0" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
-        </mu-list-item>
-        <mu-list-item title="管理人员">
-          <mu-radio  v-model="isManager" label="" labelLeft :nativeValue="1" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
-        </mu-list-item>
-      </mu-list>
-    </mu-drawer>
-    <mu-drawer right :open="openType" docked="false">
-      <mu-appbar title="请选择人员类别" @click.native="openType=false">
-        <mu-icon-button icon='done' slot="right"/>
-      </mu-appbar>
-      <mu-list>
-        <mu-list-item title="在编教师">
-          <mu-radio  v-model="type" label="" labelLeft :nativeValue="1" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
-        </mu-list-item>
-        <mu-list-item title="聘用教师">
-          <mu-radio  v-model="type" label="" labelLeft :nativeValue="2" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
-        </mu-list-item>
-        <mu-list-item title="外校教师">
-          <mu-radio  v-model="type" label="" labelLeft :nativeValue="3" uncheckIcon="favorite_border" checkedIcon="favorite" slot="right" />
-        </mu-list-item>
-      </mu-list>
-    </mu-drawer>
   </div>
 </template>
 
@@ -101,15 +64,13 @@ export default {
       icon: '',
       color: '',
       message: '',
-      teacher: [],
+      parent: [],
       name: '',
       mobile: '',
       weixinId: '',
       qq: '',
       email: '',
-      isManager: '',
       address: '',
-      type: '',
       state: '',
       nameErrorText: '',
       nameErrorColor: '',
@@ -136,26 +97,6 @@ export default {
         return false
       } else {
         return true
-      }
-    },
-    manager: function () {
-      if (this.isManager.toString() === '0') {
-        return '一般教师'
-      } else if (this.isManager.toString() === '1') {
-        return '管理人员'
-      } else {
-        return ''
-      }
-    },
-    types: function () {
-      if (this.type.toString() === '1') {
-        return '在编教师'
-      } else if (this.type.toString() === '2') {
-        return '聘用教师'
-      } else if (this.type.toString() === '3') {
-        return '外校教师'
-      } else {
-        return ''
       }
     }
   },
@@ -256,8 +197,7 @@ export default {
           email: this.email,
           qq: this.qq,
           weixinId: this.weixinId,
-          isManager: this.isManager,
-          type: this.type
+          address: this.address
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
@@ -282,17 +222,15 @@ export default {
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.teacher = response.body
-        this.name = this.teacher.name
-        this.mobile = this.teacher.mobile
-        this.email = this.teacher.email
-        this.qq = this.teacher.qq
-        this.weixinId = this.teacher.weixinId
-        this.isManager = this.teacher.isManager
-        this.type = this.teacher.type
-        this.state = this.teacher.state
+        this.parent = response.body
+        this.name = this.parent.name
+        this.mobile = this.parent.mobile
+        this.email = this.parent.email
+        this.qq = this.parent.qq
+        this.weixinId = this.parent.weixinId
+        this.state = this.parent.state
         this.address = this.teacher.address
-        if (this.teacher.state.toString() === '0') {
+        if (this.parent.state.toString() === '0') {
           this.Active_Able = false
           this.Inactive_Able = true
         } else {

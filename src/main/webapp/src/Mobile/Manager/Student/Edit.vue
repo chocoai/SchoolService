@@ -9,7 +9,7 @@
     <mu-text-field :disabled="Edit_Able" v-model="address" label="住址" icon="store_mall_directory" :errorColor="addressErrorColor" :errorText="addressErrorText" @input="checkAddress" fullWidth labelFloat/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :disabled="Edit_Able" :label="roomName" @click="openRoom=true" primary/>
+        <mu-raised-button :disabled="Edit_Able" :label="roomName" @click="openRoom=true" primary/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-flexbox>
@@ -388,6 +388,35 @@ export default {
         this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
+    goInactive () {
+      this.$http.get(
+        API.inactive,
+        { params: { id: this.$route.params.id } },
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        if (response.body === 'error') {
+          this.openPopup('请重新登录!', 'report_problem', 'red')
+          window.location.href = '/'
+        } else if (response.body === 'OK') {
+          this.Edit_Able = true
+          this.Save_Able = false
+          this.Inactive_Able = true
+          this.openPopup('激活成功!', 'check_circle', 'green')
+          setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
+        } else if (response.body === '要激活的学期不存在!') {
+          this.Edit_Able = true
+          this.Save_Able = false
+          this.Inactive_Able = true
+          this.openPopup(response.body, 'report_problem', 'red')
+          setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
+        } else {
+          this.openPopup(response.body, 'report_problem', 'red')
+          setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
+        }
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
+    },
     goSave () {
       this.Saving = true
       this.$http.get(
@@ -441,7 +470,7 @@ export default {
     },
     getParent (id) {
       this.$http.get(
-        API.parent,
+        API.get,
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
       ).then((response) => {
@@ -490,14 +519,14 @@ export default {
     },
     checkNumber (value) {
       if (value === null || value === undefined || value === '') {
-        this.nameErrorText = '证件号码为必填项!'
-        this.nameErrorColor = 'orange'
+        this.numberErrorText = '证件号码为必填项!'
+        this.numberErrorColor = 'orange'
       } else if (!/\d{17}[0-9,X]/.test(value)) {
         this.numberErrorText = '证件号码应为18位字符'
         this.numberErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.CheckNumberForEdit,
+          API.checkNumberForEdit,
           { params: { id: this.$route.params.id, number: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -522,7 +551,7 @@ export default {
         this.codeErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.CheckCodeForEdit,
+          API.checkCodeForEdit,
           { params: { id: this.$route.params.id, code: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

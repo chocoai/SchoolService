@@ -9,7 +9,7 @@
     <mu-text-field v-model="address" label="住址" icon="store_mall_directory" :errorColor="addressErrorColor" :errorText="addressErrorText" @input="checkAddress" fullWidth labelFloat/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-flat-button :label="roomName" @click="openRoom=true" primary/>
+        <mu-raised-button :label="roomName" @click="openRoom=true" primary/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="Saving" title="正在保存" >
@@ -48,10 +48,10 @@ export default {
       bottomPopup: false,
       Saving: false,
       Reading: true,
-      Save_Able: true,
       openRoom: false,
       icon: '',
       color: '',
+      roomName: '请选择班级',
       name: '',
       number: '',
       code: '',
@@ -81,7 +81,7 @@ export default {
   },
   computed: {
     Save_Able: function () {
-      if (this.nameErrorText.toString() === 'OK' && this.numberErrorText.toString() === 'OK' && this.codeErrorText.toString() === 'OK' && this.addressErrorText.toString() === 'OK') {
+      if (this.nameErrorText.toString() === 'OK' && this.numberErrorText.toString() === 'OK' && this.codeErrorText.toString() === 'OK' && this.addressErrorText.toString() === 'OK' && this.roomName.toString() !== '请选择班级') {
         return false
       } else {
         return true
@@ -139,14 +139,14 @@ export default {
     },
     checkNumber (value) {
       if (value === null || value === undefined || value === '') {
-        this.nameErrorText = '证件号码为必填项!'
-        this.nameErrorColor = 'orange'
+        this.numberErrorText = '证件号码为必填项!'
+        this.numberErrorColor = 'orange'
       } else if (!/\d{17}[0-9,X]/.test(value)) {
         this.numberErrorText = '证件号码应为18位字符'
         this.numberErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.CheckNumberForAdd,
+          API.checkNumberForAdd,
           { params: { number: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -171,7 +171,7 @@ export default {
         this.codeErrorColor = 'orange'
       } else {
         this.$http.get(
-          API.CheckCodeForAdd,
+          API.checkCodeForAdd,
           { params: { code: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
