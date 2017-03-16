@@ -211,7 +211,7 @@ public class TeacherMessageController extends Controller {
             Teachermessage teacherMessage = new Teachermessage();
             teacherMessage.set("title", getPara("title"))
                     .set("content", getPara("content"))
-                    .set("send", getPara("send"))
+                    .set("reply", getPara("reply"))
                     .set("state", 1)
                     .set("time", new Date())
                     .set("teacher_id", ((Teacher) getSessionAttr("manager")).getId())
@@ -225,7 +225,7 @@ public class TeacherMessageController extends Controller {
             buffer.append("教师：" + Teacher.dao.findById(((Teacher) getSessionAttr("manager")).getId()).getName()).append("\n");
             buffer.append("时间：" + dateFm.format(teacherMessage.get("time"))).append("\n");
             buffer.append("内容：" + getPara("content")).append("\n");
-            if (getPara("send").equals("1")) {
+            if (getPara("reply").equals("1")) {
                 for (String i : teacherId) {
                     if (Teacher.dao.findById(i).getState() == 1) {
                         idParameter.putUserIds(Teacher.dao.findById(i).getUserId());
@@ -270,7 +270,7 @@ public class TeacherMessageController extends Controller {
             buffer.append("时间：" + dateFm.format(teacherMessage.get("time"))).append("\n");
             buffer.append("内容：" + teacherMessage.get("content")).append("\n");
             buffer.append("<a href=\"" + read + "\">确认已读点击这里</a>");
-            if (teacherMessage.get("send").equals("1")) {
+            if (teacherMessage.get("reply").equals("1")) {
                 for (Record i : teachers) {
                     if (Teacher.dao.findById(i.get("id")).getState() == 1) {
                         idParameter.putUserIds(Teacher.dao.findById(i).getUserId());

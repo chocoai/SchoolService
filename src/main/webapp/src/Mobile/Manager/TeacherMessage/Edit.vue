@@ -7,7 +7,7 @@
     <mu-text-field label="时间" disabled v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="发布人" disabled v-model="name" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="内容" disabled v-model="content" fullWidth labelFloat icon="note" multiLine :rows="5" :rowsMax="8" :maxLength="200"/><br/>
-    <mu-text-field label="确认回复" disabled v-model="sendString" fullWidth labelFloat icon="query_builder"/><br/>
+    <mu-text-field label="确认回复" disabled v-model="replyString" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-text-field label="状态" disabled v-model="stateString" fullWidth labelFloat icon="query_builder"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo" v-if="sends">
@@ -90,8 +90,8 @@ export default {
       title: '',
       content: '',
       name: '',
-      send: '',
-      sendString: '',
+      reply: '',
+      replyString: '',
       state: '',
       stateString: '',
       time: '',
@@ -113,7 +113,7 @@ export default {
         this.states = false
       }
     },
-    send: function (val) {
+    reply: function (val) {
       if (val.toString() === '1') {
         this.sends = true
       } else {
@@ -172,7 +172,7 @@ export default {
         this.content = response.body.message[0].content
         this.time = response.body.message[0].time
         this.state = response.body.message[0].state
-        this.send = response.body.message[0].send
+        this.reply = response.body.message[0].reply
         this.name = response.body.message[0].name
         if (this.state.toString() === '1') {
           this.stateString = '可用'
@@ -181,12 +181,12 @@ export default {
         } else {
           this.stateString = '状态错误'
         }
-        if (this.send.toString() === '1') {
-          this.sendString = '要求回复'
-        } else if (this.send.toString() === '0') {
-          this.sendString = '不要求回复'
+        if (this.reply.toString() === '1') {
+          this.replyString = '要求回复'
+        } else if (this.reply.toString() === '0') {
+          this.replyString = '不要求回复'
         } else {
-          this.sendString = '状态错误'
+          this.replyString = '状态错误'
         }
         this.Reading = false
       }, (response) => {

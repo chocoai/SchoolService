@@ -114,7 +114,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      title: '家长',
+      title: '移动_管理_家长',
       filename: '../dist/static/html/mobile/manager/Mobile_Manager_Parent.html',
       template: 'html/template.html',
       inject: true,
@@ -158,6 +158,32 @@ var webpackConfig = merge(baseWebpackConfig, {
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Mobile_Manager_Room'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '移动_教师_主页',
+      filename: '../dist/static/html/mobile/teacher/Mobile_Teacher_Home.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Teacher_Home'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '移动_教师_课程',
+      filename: '../dist/static/html/mobile/teacher/Mobile_Teacher_Course.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Teacher_Course'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

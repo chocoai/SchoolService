@@ -65,12 +65,12 @@ public abstract class BaseHomework<M extends BaseHomework<M>> extends Model<M> i
 		return get("state");
 	}
 
-	public void setSend(java.lang.Integer send) {
-		set("send", send);
+	public void setReply(java.lang.Integer reply) {
+		set("reply", reply);
 	}
 
-	public java.lang.Integer getSend() {
-		return get("send");
+	public java.lang.Integer getReply() {
+		return get("reply");
 	}
 
 }

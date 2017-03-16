@@ -51,6 +51,37 @@ public class CourseController extends Controller {
             render("/static/html/mobile/manager/Mobile_Manager_Course.html");
         }
     }
+    /**
+     * 登录移动_教师_课程
+     */
+    public void Mobile_Teacher_Course() throws WeixinException {
+        if (getSessionAttr("teacher") == null) {
+            if (getCookie("dit") == null || getCookie("dim").equals("")) {
+                if (!(getPara("code") == null || getPara("code").equals(""))) {
+                    User user = WP.me.getUserByCode(getPara("code"));
+                    Teacher teacher = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? ", user.getUserId(), 1);
+                    if (teacher != null) {
+                        setSessionAttr("teacher", teacher);
+                        setCookie("dit", teacher.getId().toString(), 60 * 30);
+                        if (user.getAvatar().equals(teacher.getPicUrl())) {
+                            teacher.set("picUrl", user.getAvatar()).update();
+                        }
+                        render("/static/html/mobile/teacher/Mobile_Teacher_Course.html");
+                    } else {
+                        redirect("/");
+                    }
+                } else {
+                    redirect("/");
+                }
+            } else {
+                Teacher teacher = Teacher.dao.findById(getCookie("dit"));
+                setSessionAttr("teacher", teacher);
+                render("/static/html/mobile/teacher/Mobile_Teacher_Course.html");
+            }
+        } else {
+            render("/static/html/mobile/teacher/Mobile_Teacher_Course.html");
+        }
+    }
 
     /**
      * 列表

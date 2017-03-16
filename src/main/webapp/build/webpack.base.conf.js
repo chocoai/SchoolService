@@ -17,7 +17,9 @@ module.exports = {
     Mobile_Manager_TeacherMessage: './src/Mobile/Manager/TeacherMessage/Index.js',
     Mobile_Manager_Room: './src/Mobile/Manager/Room/Index.js',
     Mobile_Manager_Student: './src/Mobile/Manager/Student/Index.js',
-    Mobile_Manager_Parent: './src/Mobile/Manager/Parent/Index.js'
+    Mobile_Manager_Parent: './src/Mobile/Manager/Parent/Index.js',
+    Mobile_Teacher_Home: './src/Mobile/Teacher/Home/Index.js',
+    Mobile_Teacher_Course: './src/Mobile/Teacher/Course/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

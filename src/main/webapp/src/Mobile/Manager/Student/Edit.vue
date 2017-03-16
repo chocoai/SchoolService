@@ -1,6 +1,6 @@
 <template>
   <div>
-    <mu-appbar title="学期详情">
+    <mu-appbar title="学生详情">
       <mu-icon-button icon='reply' slot="right" @click="goReply"/>
     </mu-appbar>
     <mu-text-field :disabled="Edit_Able" v-model="name" label="姓名" icon="comment" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat/><br/>
@@ -40,8 +40,8 @@
         <mu-float-button icon="cancel" v-if="Save_Able" @click="goCancel" secondary/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="delete" v-if="Inactive_Able"  @click="openInactive" backgroundColor="red"/>
-        <mu-float-button icon="compare_arrows" v-if="Active_Able" @click="openActive" backgroundColor="green"/>
+        <mu-float-button icon="delete" v-if="Inactive_Able && Edit_Able"  @click="openInactive" backgroundColor="red"/>
+        <mu-float-button icon="compare_arrows" v-if="Active_Able && Edit_Able" @click="openActive" backgroundColor="green"/>
         <mu-float-button icon="done" v-if="Save_Able" :disabled="saveAble" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
@@ -178,6 +178,7 @@ export default {
       Save_Able: false,
       Active_Able: false,
       Activing: false,
+      Inactiving: false,
       Saving: false,
       Reading: true,
       bottomPopup: false,
@@ -189,7 +190,7 @@ export default {
       code: '',
       address: '',
       state: '',
-      parents: '',
+      roomName: '',
       parentAble1: false,
       parentAble2: false,
       parentAble3: false,
@@ -197,7 +198,6 @@ export default {
       parentAble5: false,
       parentAble6: false,
       openRoom: false,
-      openTeam: false,
       openParent1: false,
       openParent2: false,
       openParent3: false,
@@ -228,16 +228,12 @@ export default {
       parentMobile4: '',
       parentMobile5: '',
       parentMobile6: '',
-      roomIcon: 'bookmark_border',
-      teamIcon: 'bookmark_border',
       parentIcon1: 'account_box',
       parentIcon2: 'account_circle',
       parentIcon3: 'account_box',
       parentIcon4: 'account_circle',
       parentIcon5: 'account_box',
       parentIcon6: 'account_circle',
-      roomBack: '#66CCCC',
-      teamBack: '#66CCCC',
       parentBack1: '#009688',
       parentBack2: '#ff5722',
       parentBack3: '#4caf50',
@@ -252,20 +248,11 @@ export default {
       codeErrorColor: '',
       addressErrorText: '',
       addressErrorColor: '',
-      rooms: []
+      list: []
     }
   },
   created () {
-    this.$http.get(
-      API.list,
-      { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-    ).then((response) => {
-      this.list = response.body
-      this.fetchData(this.$route.params.id)
-      this.getParent(this.$route.params.id)
-    }, (response) => {
-      this.openPopup('服务器内部错误！', 'error', 'red')
-    })
+    this.fetchData(this.$route.params.id)
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
@@ -273,7 +260,7 @@ export default {
   },
   computed: {
     saveAble: function () {
-      if (this.nameErrorText.toString() === 'OK' && this.numberErrorText.toString() === 'OK' && this.codeErrorText.toString() === 'OK' && this.addressErrorText.toString() === 'OK') {
+      if (this.nameErrorText.toString() === 'OK' && this.numberErrorText.toString() === 'OK' && this.codeErrorText.toString() === 'OK' && this.addressErrorText.toString() === 'OK' && this.roomName.toString() !== '请选择班级') {
         return false
       } else {
         return true
@@ -359,6 +346,15 @@ export default {
       this.roomName = val.title
       this.openRoom = false
     },
+    getState (state) {
+      if (state.toString() === '1') {
+        return '可用'
+      } else if (state.toString() === '0') {
+        return '停用'
+      } else {
+        return '状态错误'
+      }
+    },
     goActive () {
       this.$http.get(
         API.active,
@@ -374,7 +370,7 @@ export default {
           this.Active_Able = true
           this.openPopup('激活成功!', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
-        } else if (response.body === '要激活的学期不存在!') {
+        } else if (response.body === '要激活的学生不存在!') {
           this.Edit_Able = true
           this.Save_Able = false
           this.Active_Able = true
@@ -401,9 +397,9 @@ export default {
           this.Edit_Able = true
           this.Save_Able = false
           this.Inactive_Able = true
-          this.openPopup('激活成功!', 'check_circle', 'green')
+          this.openPopup('注销成功!', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
-        } else if (response.body === '要激活的学期不存在!') {
+        } else if (response.body === '要注销的学生不存在!') {
           this.Edit_Able = true
           this.Save_Able = false
           this.Inactive_Able = true
@@ -452,57 +448,46 @@ export default {
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.name = this.response.body.name
-        this.number = this.response.body.number
-        this.code = this.response.body.code
-        this.address = this.response.body.address
-        this.state = this.response.body.state
-        this.roomName = this.response.body.roomName
-        if (this.student.state.toString() === '1') {
-          this.inactive = true
-          this.active = false
+        this.name = response.body.student[0].name
+        this.number = response.body.student[0].number
+        this.code = response.body.student[0].code
+        this.address = response.body.student[0].address
+        this.state = response.body.student[0].state
+        this.roomName = response.body.student[0].roomName
+        this.list = response.body.rooms
+        this.parentName1 = response.body.parent[0].parentName
+        this.parentName2 = response.body.parent[1].parentName
+        this.parentName3 = response.body.parent[2].parentName
+        this.parentName4 = response.body.parent[3].parentName
+        this.parentName5 = response.body.parent[4].parentName
+        this.parentName6 = response.body.parent[5].parentName
+        this.parentUserId1 = response.body.parent[0].parentUserId
+        this.parentUserId2 = response.body.parent[1].parentUserId
+        this.parentUserId3 = response.body.parent[2].parentUserId
+        this.parentUserId4 = response.body.parent[3].parentUserId
+        this.parentUserId5 = response.body.parent[4].parentUserId
+        this.parentUserId6 = response.body.parent[5].parentUserId
+        this.parentMobile1 = response.body.parent[0].parentMobile
+        this.parentMobile2 = response.body.parent[1].parentMobile
+        this.parentMobile3 = response.body.parent[2].parentMobile
+        this.parentMobile4 = response.body.parent[3].parentMobile
+        this.parentMobile5 = response.body.parent[4].parentMobile
+        this.parentMobile6 = response.body.parent[5].parentMobile
+        this.parentAble1 = response.body.parent[0].parentAble
+        this.parentAble2 = response.body.parent[1].parentAble
+        this.parentAble3 = response.body.parent[2].parentAble
+        this.parentAble4 = response.body.parent[3].parentAble
+        this.parentAble5 = response.body.parent[4].parentAble
+        this.parentAble6 = response.body.parent[5].parentAble
+        if (response.body.student[0].state.toString() === '1') {
+          this.Inactive_Able = true
+          this.Active_Able = false
         } else {
-          this.inactive = false
-          this.active = true
+          this.Inactive_Able = false
+          this.Active_Able = true
         }
-      }, (response) => {
-      })
-    },
-    getParent (id) {
-      this.$http.get(
-        API.get,
-        { params: { id: id } },
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-      ).then((response) => {
-        /* eslint-disable no-eval  */
-        this.parents = eval('(' + response.body + ')')
-        this.parentName1 = this.parents.parentName1
-        this.parentName2 = this.parents.parentName2
-        this.parentName3 = this.parents.parentName3
-        this.parentName4 = this.parents.parentName4
-        this.parentName5 = this.parents.parentName5
-        this.parentName6 = this.parents.parentName6
-        this.parentUserId1 = this.parents.parentUserId1
-        this.parentUserId2 = this.parents.parentUserId2
-        this.parentUserId3 = this.parents.parentUserId3
-        this.parentUserId4 = this.parents.parentUserId4
-        this.parentUserId5 = this.parents.parentUserId5
-        this.parentUserId6 = this.parents.parentUserId6
-        this.parentMobile1 = this.parents.parentMobile1
-        this.parentMobile2 = this.parents.parentMobile2
-        this.parentMobile3 = this.parents.parentMobile3
-        this.parentMobile4 = this.parents.parentMobile4
-        this.parentMobile5 = this.parents.parentMobile5
-        this.parentMobile6 = this.parents.parentMobile6
-        this.parentAble1 = this.parents.parentAble1
-        this.parentAble2 = this.parents.parentAble2
-        this.parentAble3 = this.parents.parentAble3
-        this.parentAble4 = this.parents.parentAble4
-        this.parentAble5 = this.parents.parentAble5
-        this.parentAble6 = this.parents.parentAble6
         this.Reading = false
       }, (response) => {
-        this.openPopup('服务器内部错误!', 'error', 'red')
       })
     },
     checkName (value) {

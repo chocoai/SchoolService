@@ -61,7 +61,7 @@ Table: coursemessage
  course_id   | INT(10)      | YES  |     |         | 课程序号    
  semester_id | INT(10)      | YES  |     |         | 学期序号    
  state       | INT(10)      | YES  |     |         | 消息状态0停用1可用
- send        | INT(10)      | YES  |     |         | 是否发送0否1是
+ reply       | INT(10)      | YES  |     |         | 是否要求回复0否1是
 -------------+--------------+------+-----+---------+---------
 
 Table: coursemessageread
@@ -77,23 +77,15 @@ Table: coursemessageread
  state       | INT(10)      | YES  |     |         | 是否阅读0未读1已读
 -------------+--------------+------+-----+---------+---------
 
-Table: courseroom
--------------+---------+------+-----+---------+---------
- Field       | Type    | Null | Key | Default | Remarks 
--------------+---------+------+-----+---------+---------
- course_id   | INT(10) | NO   | PRI |         | 课程序号    
- room_id     | INT(10) | NO   | PRI |         | 班级序号    
- semester_id | INT(10) | NO   | PRI |         | 学期序号    
--------------+---------+------+-----+---------+---------
-
 Table: courseroomteacher
 -------------+---------+------+-----+---------+---------
  Field       | Type    | Null | Key | Default | Remarks 
 -------------+---------+------+-----+---------+---------
- course_id   | INT(10) | NO   | PRI |         | 课程序号    
- room_id     | INT(10) | NO   | PRI |         | 班级序号    
- teacher_id  | INT(10) | NO   | PRI |         | 教师序号    
- semester_id | INT(10) | NO   | PRI |         | 学期序号    
+ id          | INT(10) | NO   | PRI |         | 序号      
+ course_id   | INT(10) | NO   |     |         | 课程序号    
+ room_id     | INT(10) | NO   |     |         | 班级序号    
+ teacher_id  | INT(10) | NO   |     |         | 教师序号    
+ semester_id | INT(10) | NO   |     |         | 学期序号    
 -------------+---------+------+-----+---------+---------
 
 Table: exam
@@ -134,7 +126,7 @@ Table: homework
  course_id   | INT(10)      | YES  |     |         | 课程序号    
  semester_id | INT(10)      | YES  |     |         | 学期序号    
  state       | INT(10)      | YES  |     |         | 状态0停用1可用
- send        | INT(10)      | YES  |     |         | 是否发送0否1是
+ reply       | INT(10)      | YES  |     |         | 是否要求回复0否1是
 -------------+--------------+------+-----+---------+---------
 
 Table: homeworkdetail
@@ -326,7 +318,7 @@ Table: teachermessage
  teacher_id | INT(10)      | YES  |     |         | 教师序号    
  time       | DATETIME(19) | YES  |     |         | 发送时间    
  state      | INT(10)      | YES  |     |         | 消息状态0停用1可用
- send       | INT(10)      | YES  |     |         | 是否发送0否1是
+ reply      | INT(10)      | YES  |     |         | 是否要求回复0否1是
 ------------+--------------+------+-----+---------+---------
 
 Table: teachermessageread

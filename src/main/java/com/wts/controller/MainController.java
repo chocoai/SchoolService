@@ -105,12 +105,12 @@ public class MainController extends Controller {
 
     @Before(LoginTeacher.class)
     public void Mobile_Teacher_Home() {
-        render("/static/html/mobile/manager/Mobile_Teacher_Home.html");
+        render("/static/html/mobile/teacher/Mobile_Teacher_Home.html");
     }
 
     @Before(LoginParent.class)
     public void Mobile_Parent_Home() {
-        render("/static/html/mobile/manager/Mobile_Parent_Home.html");
+        render("/static/html/mobile/parent/Mobile_Parent_Home.html");
     }
     /**
      * 登出

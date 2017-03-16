@@ -5,7 +5,7 @@
     </mu-appbar>
     <mu-text-field label="标题" underlineShow="false" v-model="title" :errorColor="titleErrorColor" :errorText="titleErrorText" @input="checkTitle" fullWidth labelFloat icon="title" maxLength="20"/><br/>
     <mu-text-field label="内容" underlineShow="false" v-model="content" :errorColor="contentErrorColor" :errorText="contentErrorText" @input="checkContent" fullWidth labelFloat icon="note" multiLine :rows="5" :rowsMax="8" :maxLength="200"/><br/>
-    <mu-select-field hintText="确认回复" icon="settings" v-model="send" fullWidth>
+    <mu-select-field hintText="确认回复" icon="settings" v-model="reply" fullWidth>
       <mu-menu-item value="0" title="不需要回复确认"/>
       <mu-menu-item value="1" title="需要回复确认"/>
     </mu-select-field>
@@ -71,7 +71,7 @@ export default {
       color: '',
       title: '',
       content: '',
-      send: '1',
+      reply: '1',
       message: '',
       teacherName: '请选择要发送的人员',
       list: '',
@@ -121,7 +121,7 @@ export default {
     goReset () {
       this.title = ''
       this.content = ''
-      this.send = '1'
+      this.reply = '1'
       this.titleErrorText = ''
       this.contentErrorText = ''
       this.titleErrorColor = ''
@@ -193,7 +193,7 @@ export default {
         { params: {
           title: this.title,
           content: this.content,
-          send: this.send,
+          reply: this.reply,
           teacher_id: this.teacher_id
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }

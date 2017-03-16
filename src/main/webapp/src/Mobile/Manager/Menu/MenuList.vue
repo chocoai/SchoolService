@@ -9,28 +9,28 @@
           <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
         <mu-list-item title="学期管理" @click.native="goSemester">
-          <mu-icon slot="left" value="group" color="#f44336"/>
+          <mu-icon slot="left" value="account_balance_wallet" color="red300"/>
         </mu-list-item>
         <mu-list-item title="课程管理" @click.native="goCourse">
-          <mu-icon slot="left" value="group" color="#f44336"/>
+          <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
         </mu-list-item>
         <mu-list-item title="教师管理" @click.native="goTeacher">
-          <mu-icon slot="left" value="group" color="#f44336"/>
+          <mu-icon slot="left" value="group" color="indigo300"/>
         </mu-list-item>
         <mu-list-item title="班级管理" @click.native="goRoom">
-          <mu-icon slot="left" value="store" color="#9c27b0"/>
+          <mu-icon slot="left" value="store" color="lightBlue300"/>
         </mu-list-item>
         <mu-list-item title="学生管理" @click.native="goStudent">
-          <mu-icon slot="left" value="face" color="#4caf50"/>
+          <mu-icon slot="left" value="face" color="teal300"/>
         </mu-list-item>
         <mu-list-item title="家长管理" @click.native="goParent">
-          <mu-icon slot="left" value="accessibility" color="#ffc107"/>
+          <mu-icon slot="left" value="accessibility" color="lightGreen300"/>
         </mu-list-item>
         <mu-list-item title="教师消息管理" @click.native="goTeacherMessage">
-          <mu-icon slot="left" value="note" color="#2196f3"/>
+          <mu-icon slot="left" value="note" color="yellow300"/>
         </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
-          <mu-icon slot="left" value="exit_to_app" color="#212121"/>
+          <mu-icon slot="left" value="exit_to_app" color="grey900"/>
         </mu-list-item>
       </mu-list>
     </mu-drawer>

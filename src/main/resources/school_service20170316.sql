@@ -18,11 +18,12 @@ PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `CourseRoomTeacher` (
+`id` int NOT NULL AUTO_INCREMENT COMMENT '序号',
 `course_id` int NOT NULL COMMENT '课程序号',
 `room_id` int NOT NULL COMMENT '班级序号',
 `teacher_id` int NOT NULL COMMENT '教师序号',
 `semester_id` int NOT NULL COMMENT '学期序号',
-PRIMARY KEY (`course_id`, `room_id`, `teacher_id`, `semester_id`) 
+PRIMARY KEY (`id`) 
 );
 
 CREATE TABLE `Teacher` (
@@ -89,7 +90,7 @@ CREATE TABLE `CourseMessage` (
 `course_id` int NULL COMMENT '课程序号',
 `semester_id` int NULL COMMENT '学期序号',
 `state` int NULL COMMENT '消息状态0停用1可用',
-`send` int NULL COMMENT '是否发送0否1是',
+`reply` int NULL COMMENT '是否要求回复0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -183,13 +184,6 @@ CREATE TABLE `Schedule` (
 PRIMARY KEY (`order_day`, `order_course`, `semester_id`) 
 );
 
-CREATE TABLE `CourseRoom` (
-`course_id` int NOT NULL COMMENT '课程序号',
-`room_id` int NOT NULL COMMENT '班级序号',
-`semester_id` int NOT NULL COMMENT '学期序号',
-PRIMARY KEY (`course_id`, `room_id`, `semester_id`) 
-);
-
 CREATE TABLE `StudentCourse` (
 `student_id` int NOT NULL COMMENT '学生序号',
 `course_id` int NOT NULL COMMENT '课程序号',
@@ -204,7 +198,7 @@ CREATE TABLE `TeacherMessage` (
 `teacher_id` int NULL COMMENT '教师序号',
 `time` datetime NULL COMMENT '发送时间',
 `state` int NULL COMMENT '消息状态0停用1可用',
-`send` int NULL COMMENT '是否发送0否1是',
+`reply` int NULL COMMENT '是否要求回复0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -225,7 +219,7 @@ CREATE TABLE `Homework` (
 `course_id` int NULL COMMENT '课程序号',
 `semester_id` int NULL COMMENT '学期序号',
 `state` int NULL COMMENT '状态0停用1可用',
-`send` int NULL COMMENT '是否发送0否1是',
+`reply` int NULL COMMENT '是否要求回复0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -312,8 +306,6 @@ ALTER TABLE `AssessmentDetail` ADD CONSTRAINT `assessmentDetail_assessment` FORE
 ALTER TABLE `AssessmentDetail` ADD CONSTRAINT `assessmentDetail_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `RoomStudent` ADD CONSTRAINT `studentRoom_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `RoomStudent` ADD CONSTRAINT `studentRoom_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
-ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
-ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
 ALTER TABLE `StudentCourse` ADD CONSTRAINT `studentCourse_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
 ALTER TABLE `StudentCourse` ADD CONSTRAINT `studentCourse_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `TeacherMessage` ADD CONSTRAINT `teacherMessage_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
@@ -331,7 +323,6 @@ ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_student` FOREIGN KEY (`s
 ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);
 ALTER TABLE `StudentCourse` ADD CONSTRAINT `studentCourse_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
-ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `CourseRoomTeacher` ADD CONSTRAINT `teacherPlan_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Schedule` ADD CONSTRAINT `schedule_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Grade` ADD CONSTRAINT `grade_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);

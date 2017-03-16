@@ -229,7 +229,7 @@ export default {
         this.qq = this.parent.qq
         this.weixinId = this.parent.weixinId
         this.state = this.parent.state
-        this.address = this.teacher.address
+        this.address = this.parent.address
         if (this.parent.state.toString() === '0') {
           this.Active_Able = false
           this.Inactive_Able = true
