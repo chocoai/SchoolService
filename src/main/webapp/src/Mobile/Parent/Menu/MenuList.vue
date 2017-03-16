@@ -8,12 +8,6 @@
         <mu-list-item title="主页" @click.native="goHome">
           <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
-        <mu-list-item title="教师消息" @click.native="goTeacherMessage">
-          <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
-        </mu-list-item>
-        <mu-list-item title="班级课程" @click.native="goCourse">
-          <mu-icon slot="left" value="chrome_reader_mode" color="orange300"/>
-        </mu-list-item>
         <mu-list-item title="班级学生" @click.native="goStudent">
           <mu-icon slot="left" value="face" color="teal300"/>
         </mu-list-item>
@@ -43,12 +37,6 @@
       },
       goHome () {
         window.location.href = '/Mobile_Teacher_Home'
-      },
-      goTeacherMessage () {
-        window.location.href = '/teacherMessageRead/Mobile_Teacher_TeacherMessage'
-      },
-      goCourse () {
-        window.location.href = '/course/Mobile_Teacher_Course'
       },
       goStudent () {
         window.location.href = '/student/Mobile_Teacher_Student'

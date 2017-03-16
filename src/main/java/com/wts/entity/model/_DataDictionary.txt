@@ -240,9 +240,10 @@ Table: relation
 -------------+---------+------+-----+---------+---------
  Field       | Type    | Null | Key | Default | Remarks 
 -------------+---------+------+-----+---------+---------
- parent_id   | INT(10) | NO   | PRI |         | 家长序号    
- student_id  | INT(10) | NO   | PRI |         | 学生序号    
- identity_id | INT(10) | NO   | PRI |         | 身份序号    
+ id          | INT(10) | NO   | PRI |         | 序号      
+ parent_id   | INT(10) | YES  |     |         | 家长序号    
+ student_id  | INT(10) | YES  |     |         | 学生序号    
+ identity_id | INT(10) | YES  |     |         | 身份序号    
 -------------+---------+------+-----+---------+---------
 
 Table: room

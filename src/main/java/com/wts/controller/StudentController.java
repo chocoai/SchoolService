@@ -25,6 +25,17 @@ public class StudentController extends Controller {
                 "%' OR `address` LIKE '%" + sql +
                 "%' ORDER BY id DESC";
     }
+    private String getSQLByRoom(String sql,String roomId) {
+        return "FROM ((roomstudent " +
+                "LEFT JOIN room ON roomstudent.room_id = room.id) " +
+                "LEFT JOIN student ON roomstudent.student_id = student.id) " +
+                "WHERE student.`name` LIKE '%" + sql +
+                "%' OR student.`number` LIKE '%" + sql +
+                "%' OR student.`code` LIKE '%" + sql +
+                "%' OR student.`address` LIKE '%" + sql +
+                "%' AND student.`state`=1 AND room.`state`=1 AND room.id=" + roomId +
+                "ORDER BY student.`name` ASC";
+    }
     /**
      * 登录移动_管理_学生
      */
@@ -56,6 +67,37 @@ public class StudentController extends Controller {
             render("/static/html/mobile/manager/Mobile_Manager_Student.html");
         }
     }
+    /**
+     * 登录移动_教师_学生
+     */
+    public void Mobile_Teacher_Student() throws WeixinException {
+        if (getSessionAttr("teacher") == null) {
+            if (getCookie("dit") == null || getCookie("dit").equals("")) {
+                if (!(getPara("code") == null || getPara("code").equals(""))) {
+                    User user = WP.me.getUserByCode(getPara("code"));
+                    Teacher teacher = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ?", user.getUserId(), 1);
+                    if (teacher != null) {
+                        setSessionAttr("teacher", teacher);
+                        setCookie("dit", teacher.getId().toString(), 60 * 30);
+                        if (user.getAvatar().equals(teacher.getPicUrl())) {
+                            teacher.set("picUrl", user.getAvatar()).update();
+                        }
+                        render("/static/html/mobile/manager/Mobile_Teacher_Student.html");
+                    } else {
+                        redirect("/");
+                    }
+                } else {
+                    redirect("/");
+                }
+            } else {
+                Teacher teacher = Teacher.dao.findById(getCookie("dit"));
+                setSessionAttr("teacher", teacher);
+                render("/static/html/mobile/manager/Mobile_Teacher_Student.html");
+            }
+        } else {
+            render("/static/html/mobile/manager/Mobile_Teacher_Student.html");
+        }
+    }
 
     /**
      * 查询
@@ -63,7 +105,15 @@ public class StudentController extends Controller {
     @Before(AjaxManager.class)
     public void query() {
         renderJson(Student.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", getSQL(getPara("queryString"))).getList());
-
+    }
+    /**
+     * 查询
+     */
+    @Before(AjaxManager.class)
+    public void queryByRoom() {
+        renderJson(Student.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"),
+                "SELECT student.*,room.name AS rname",
+                getSQLByRoom(getPara("queryString"),getPara("roomId"))).getList());
     }
 
     /**
@@ -78,6 +128,23 @@ public class StudentController extends Controller {
             renderText((count / getParaToInt("pageSize") + 1) + "");
         }
     }
+    /**
+     * 计数
+     */
+    @Before(AjaxManager.class)
+    public void totalByRoom() {
+        Long count = Db.queryLong("SELECT COUNT(*) " + getSQLByRoom(getPara("queryString"),getPara("roomId")));
+        if (count % getParaToInt("pageSize") == 0) {
+            renderText((count / getParaToInt("pageSize")) + "");
+        } else {
+            renderText((count / getParaToInt("pageSize") + 1) + "");
+        }
+    }
+
+
+
+
+
     @Before(AjaxManager.class)
     public void inactive() {
         Student student = Student.dao.findById(getPara("id"));

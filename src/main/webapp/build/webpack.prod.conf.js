@@ -204,6 +204,45 @@ var webpackConfig = merge(baseWebpackConfig, {
       },
       chunksSortMode: 'dependency'
     }),
+    new HtmlWebpackPlugin({
+      title: '移动_教师_学生',
+      filename: '../dist/static/html/mobile/manager/Mobile_Teacher_Student.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Teacher_Student'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '移动_家长_主页',
+      filename: '../dist/static/html/mobile/manager/Mobile_Parent_Home.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Parent_Home'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '移动_家长_学生',
+      filename: '../dist/static/html/mobile/manager/Mobile_Parent_Student.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Parent_Student'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

@@ -20,7 +20,10 @@ module.exports = {
     Mobile_Manager_Parent: './src/Mobile/Manager/Parent/Index.js',
     Mobile_Teacher_Home: './src/Mobile/Teacher/Home/Index.js',
     Mobile_Teacher_Course: './src/Mobile/Teacher/Course/Index.js',
-    Mobile_Teacher_TeacherMessage: './src/Mobile/Teacher/TeacherMessage/Index.js'
+    Mobile_Teacher_TeacherMessage: './src/Mobile/Teacher/TeacherMessage/Index.js',
+    Mobile_Teacher_Student: './src/Mobile/Teacher/Student/Index.js',
+    Mobile_Parent_Home: './src/Mobile/Parent/Home/Index.js',
+    Mobile_Parent_Student: './src/Mobile/Parent/Student/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

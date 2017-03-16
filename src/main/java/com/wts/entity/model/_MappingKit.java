@@ -38,8 +38,7 @@ public class _MappingKit {
 		arp.addMapping("leave", "id", Leave.class);
 		arp.addMapping("notice", "id", Notice.class);
 		arp.addMapping("parent", "id", Parent.class);
-		// Composite Primary Key order: identity_id,parent_id,student_id
-		arp.addMapping("relation", "identity_id,parent_id,student_id", Relation.class);
+		arp.addMapping("relation", "id", Relation.class);
 		arp.addMapping("room", "id", Room.class);
 		// Composite Primary Key order: room_id,student_id
 		arp.addMapping("roomstudent", "room_id,student_id", Roomstudent.class);

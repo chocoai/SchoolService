@@ -65,10 +65,11 @@ PRIMARY KEY (`id`)
 );
 
 CREATE TABLE `Relation` (
-`parent_id` int NOT NULL COMMENT '家长序号',
-`student_id` int NOT NULL COMMENT '学生序号',
-`identity_id` int NOT NULL COMMENT '身份序号',
-PRIMARY KEY (`parent_id`, `student_id`, `identity_id`) 
+`id` int NOT NULL AUTO_INCREMENT COMMENT '序号',
+`parent_id` int NULL COMMENT '家长序号',
+`student_id` int NULL COMMENT '学生序号',
+`identity_id` int NULL COMMENT '身份序号',
+PRIMARY KEY (`id`) 
 );
 
 CREATE TABLE `Notice` (
