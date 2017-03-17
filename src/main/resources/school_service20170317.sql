@@ -301,6 +301,13 @@ CREATE TABLE `CourseChoose` (
 PRIMARY KEY (`id`) 
 );
 
+CREATE TABLE `CourseStudent` (
+`course_id` int NOT NULL COMMENT '课程序号',
+`student_id` int NOT NULL COMMENT '学生序号',
+`semester_id` int NOT NULL COMMENT '学期序号',
+PRIMARY KEY (`course_id`, `student_id`, `semester_id`) 
+);
+
 
 ALTER TABLE `CourseRoomTeacher` ADD CONSTRAINT `teacherPlan_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `CourseRoomTeacher` ADD CONSTRAINT `teacherPlan_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
@@ -359,4 +366,7 @@ ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_room` FOREIGN KEY (`room_id`
 ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
+ALTER TABLE `CourseStudent` ADD CONSTRAINT `courseStudent_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
+ALTER TABLE `CourseStudent` ADD CONSTRAINT `courseStudent_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `CourseStudent` ADD CONSTRAINT `courseStudent_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 
