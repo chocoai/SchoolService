@@ -27,6 +27,8 @@ public class _MappingKit {
 		// Composite Primary Key order: course_id,room_id,semester_id
 		arp.addMapping("courseroom", "course_id,room_id,semester_id", Courseroom.class);
 		arp.addMapping("courseroomteacher", "id", Courseroomteacher.class);
+		// Composite Primary Key order: course_id,semester_id,student_id
+		arp.addMapping("coursestudent", "course_id,semester_id,student_id", Coursestudent.class);
 		arp.addMapping("exam", "id", Exam.class);
 		// Composite Primary Key order: exam_id,student_id
 		arp.addMapping("grade", "exam_id,student_id", Grade.class);

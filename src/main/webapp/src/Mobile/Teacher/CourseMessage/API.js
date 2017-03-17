@@ -6,4 +6,5 @@ export const get = `${Mobile.Prefix}/${base}/get`
 export const send = `${Mobile.Prefix}/${base}/send`
 export const query = `${Mobile.Prefix}/${base}/query`
 export const total = `${Mobile.Prefix}/${base}/total`
-export const list = `${Mobile.Prefix}/${base}/list`
+export const listCourse = `${Mobile.Prefix}/${base}/listCourse`
+export const listRoom = `${Mobile.Prefix}/${base}/listRoom`

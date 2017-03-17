@@ -110,6 +110,15 @@ Table: courseroomteacher
  semester_id | INT(10) | NO   |     |         | 学期序号    
 -------------+---------+------+-----+---------+---------
 
+Table: coursestudent
+-------------+---------+------+-----+---------+---------
+ Field       | Type    | Null | Key | Default | Remarks 
+-------------+---------+------+-----+---------+---------
+ course_id   | INT(10) | NO   | PRI |         | 课程序号    
+ student_id  | INT(10) | NO   | PRI |         | 学生序号    
+ semester_id | INT(10) | NO   | PRI |         | 学期序号    
+-------------+---------+------+-----+---------+---------
+
 Table: exam
 -------------+--------------+------+-----+---------+---------
  Field       | Type         | Null | Key | Default | Remarks 
