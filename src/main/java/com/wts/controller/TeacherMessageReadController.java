@@ -16,13 +16,12 @@ import java.util.Date;
 
 public class TeacherMessageReadController extends Controller {
     private String getSQL(String sql) {
-        return "FROM ((teachermessageread " +
-                "LEFT JOIN teachermessage ON teachermessageread.message_id = teachermessage.id) " +
-                "LEFT JOIN teacher ON teachermessage.teacher_id = teacher.id) " +
-                "WHERE teachermessage.name LIKE '%" + sql +
-                "%' OR teachermessage.title LIKE '%" + sql +
+        return " FROM ((teachermessageread " +
+                " LEFT JOIN teachermessage ON teachermessageread.message_id = teachermessage.id) " +
+                " LEFT JOIN teacher ON teachermessage.teacher_id = teacher.id) " +
+                " WHERE (teachermessage.title LIKE '%" + sql +
                 "%' OR teachermessage.content LIKE '%" + sql +
-                "%' AND teachermessageread.teacher_id = " + ((Teacher) getSessionAttr("teacher")).getId().toString() +
+                "%') AND teachermessageread.teacher_id = " + ((Teacher) getSessionAttr("teacher")).getId().toString() +
                 " ORDER BY teachermessageread.id DESC";
     }
 
@@ -64,7 +63,7 @@ public class TeacherMessageReadController extends Controller {
     @Before(AjaxTeacher.class)
     public void query() {
         renderJson(Courseroomteacher.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"),
-                "SELECT teachermessageread.*, teachermessage.title, teachermessage.content, teacher.name AS tname, teachermessage.time AS ttime, teachermessage.state AS tstate, teachermessage.reply AS treply, teachermessage.id AS tid",
+                "SELECT DISTINCT teachermessageread.*, teachermessage.title, teachermessage.content, teacher.name AS tname, teachermessage.time AS ttime, teachermessage.state AS tstate, teachermessage.reply AS treply, teachermessage.id AS tid",
                 getSQL(getPara("queryString"))).getList());
     }
 
@@ -88,15 +87,15 @@ public class TeacherMessageReadController extends Controller {
     public void get() {
         Teachermessageread tmr = Teachermessageread.dao.findById(getPara("id"));
         Teachermessage tm = Teachermessage.dao.findById(tmr.getMessageId());
-        String teacherMessage = "\"teachermessage\": [{\"id\": \"" + tm.get("id") + "\","
+        String teacherMessage = "\"teacherMessage\": [{\"id\": \"" + tm.get("id") + "\","
                 + "\"title\": \"" + tm.get("title") + "\","
                 + "\"content\": \"" + tm.get("content") + "\","
                 + "\"state\": \"" + tm.get("state") + "\","
                 + "\"time\": \"" + tm.get("time") + "\","
                 + "\"name\": \"" + Teacher.dao.findById(tm.get("teacher_id")).getName() + "\","
                 + "\"reply\": \"" + tm.get("reply") + "\"}]";
-        String teacherMessageRead = "\"teachermessageread\": [{\"id\": \"" + tmr.get("id") + "\","
-                + "\"state\": \"" + tm.get("state") + "\","
+        String teacherMessageRead = "\"teacherMessageRead\": [{\"id\": \"" + tmr.get("id") + "\","
+                + "\"state\": \"" + tmr.get("state") + "\","
                 + "\"name\": \"" + Teacher.dao.findById(tmr.get("teacher_id")).getName() + "\"}]";
         renderJson("{" + teacherMessage + "," + teacherMessageRead + "}");
     }
@@ -108,7 +107,7 @@ public class TeacherMessageReadController extends Controller {
         } else if (tmr.get("state").toString().equals("1")) {
             renderText("该消息已确认读取!");
         } else {
-            tmr.set("state", 1).update();
+            tmr.set("state", 1).set("time",new Date()).update();
             renderText("OK");
         }
     }

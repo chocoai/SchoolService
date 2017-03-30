@@ -5,10 +5,10 @@
     </mu-appbar>
     <mu-text-field label="标题" disabled v-model="title" fullWidth labelFloat icon="title" maxLength="20"/><br/>
     <mu-text-field label="时间" disabled v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
-    <mu-text-field label="发布人" disabled v-model="name" fullWidth labelFloat icon="query_builder"/><br/>
+    <mu-text-field label="发布人" disabled v-model="name" fullWidth labelFloat icon="assignment_ind"/><br/>
     <mu-text-field label="内容" disabled v-model="content" fullWidth labelFloat icon="note" multiLine :rows="5" :rowsMax="8" :maxLength="200"/><br/>
-    <mu-text-field label="确认回复" disabled v-model="replyString" fullWidth labelFloat icon="query_builder"/><br/>
-    <mu-text-field label="状态" disabled v-model="stateString" fullWidth labelFloat icon="query_builder"/><br/>
+    <mu-text-field label="确认回复" disabled v-model="replyString" fullWidth labelFloat icon="send"/><br/>
+    <mu-text-field label="状态" disabled v-model="stateString" fullWidth labelFloat icon="spa"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo" v-if="sends">
         <mu-flat-button label="已读" @click="openRead=true" icon="visibility" backgroundColor="#9999CC" color="#FFFFFF"/>

@@ -29,10 +29,9 @@ public class TeacherMessageController extends Controller {
         return "FROM teachermessage " +
                 "LEFT JOIN teacher " +
                 "ON teachermessage.teacher_id = teacher.id " +
-                "WHERE teacher.name LIKE '%" + sql +
-                "%' OR teachermessage.title LIKE '%" + sql +
+                "WHERE (teachermessage.title LIKE '%" + sql +
                 "%' OR teachermessage.content LIKE '%" + sql +
-                "%' AND teachermessage.teacher_id = " +((Teacher) getSessionAttr("manager")).getId().toString() +
+                "%') AND teachermessage.teacher_id = " +((Teacher) getSessionAttr("manager")).getId().toString() +
                 " ORDER BY teachermessage.id DESC";
     }
 
@@ -176,7 +175,7 @@ public class TeacherMessageController extends Controller {
                         + "\"content\": \""+t.get("content")  + "\","
                         + "\"time\": \""+t.get("time") + "\","
                         + "\"state\": \""+t.get("state")  + "\","
-                        + "\"send\": \""+t.get("send") + "\"},";
+                        + "\"reply\": \""+t.get("reply") + "\"},";
             }
             messages="\"message\": [" + rr.substring(0, rr.length() - 1) + "]";
         } else {
@@ -242,7 +241,7 @@ public class TeacherMessageController extends Controller {
                 buffer.append("<a href=\"" + read + "\">确认已读点击这里</a>");
             }
             try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text(buffer.toString()), idParameter, false));
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text(buffer.toString()), idParameter, false));
             } catch (Exception e) {
                 renderText(e.getMessage());
             }
@@ -281,7 +280,7 @@ public class TeacherMessageController extends Controller {
                 }
             }
             try {
-                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.parentId, new Text(buffer.toString()), idParameter, false));
+                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text(buffer.toString()), idParameter, false));
             } catch (Exception e) {
                 renderText(e.getMessage());
             }
