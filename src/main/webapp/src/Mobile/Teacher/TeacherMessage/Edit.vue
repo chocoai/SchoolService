@@ -5,13 +5,13 @@
     </mu-appbar>
     <mu-text-field label="标题" disabled v-model="title" fullWidth labelFloat icon="title" maxLength="20"/><br/>
     <mu-text-field label="时间" disabled v-model="time" fullWidth labelFloat icon="query_builder"/><br/>
-    <mu-text-field label="发布人" disabled v-model="name" fullWidth labelFloat icon="query_builder"/><br/>
+    <mu-text-field label="发布人" disabled v-model="name" fullWidth labelFloat icon="assignment_ind"/><br/>
     <mu-text-field label="内容" disabled v-model="content" fullWidth labelFloat icon="note" multiLine :rows="5" :rowsMax="8" :maxLength="200"/><br/>
-    <mu-text-field label="确认回复" disabled v-model="replyString" fullWidth labelFloat icon="query_builder"/><br/>
-    <mu-text-field label="状态" disabled v-model="stateString" fullWidth labelFloat icon="query_builder"/><br/>
+    <mu-text-field label="确认回复" disabled v-model="replyString" fullWidth labelFloat icon="send"/><br/>
+    <mu-text-field label="状态" disabled v-model="stateString" fullWidth labelFloat icon="spa"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button v-if="Able" icon="send" @click="goRead" backgroundColor="green"/>
+        <mu-float-button v-if="Able" icon="assignment_ind" @click="goRead" backgroundColor="green"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="Reading" title="正在读取" >
@@ -119,7 +119,7 @@ export default {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
           window.location.href = '/'
         } else if (response.body === 'OK') {
-          this.openPopup('发送成功！', 'check_circle', 'green')
+          this.openPopup('确认读取成功！', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
         } else {
           this.openPopup(response.body, 'report_problem', 'orange')

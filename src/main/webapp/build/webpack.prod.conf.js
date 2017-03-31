@@ -193,7 +193,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '移动_教师_教师消息',
-      filename: '../dist/static/html/mobile/manager/Mobile_Teacher_TeacherMessage.html',
+      filename: '../dist/static/html/mobile/teacher/Mobile_Teacher_TeacherMessage.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Mobile_Teacher_TeacherMessage'],
@@ -206,7 +206,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '移动_教师_学生',
-      filename: '../dist/static/html/mobile/manager/Mobile_Teacher_Student.html',
+      filename: '../dist/static/html/mobile/teacher/Mobile_Teacher_Student.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Mobile_Teacher_Student'],
@@ -219,7 +219,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '移动_家长_主页',
-      filename: '../dist/static/html/mobile/manager/Mobile_Parent_Home.html',
+      filename: '../dist/static/html/mobile/parent/Mobile_Parent_Home.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Mobile_Parent_Home'],
@@ -232,7 +232,7 @@ var webpackConfig = merge(baseWebpackConfig, {
     }),
     new HtmlWebpackPlugin({
       title: '移动_家长_学生',
-      filename: '../dist/static/html/mobile/manager/Mobile_Parent_Student.html',
+      filename: '../dist/static/html/mobile/parent/Mobile_Parent_Student.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Mobile_Parent_Student'],

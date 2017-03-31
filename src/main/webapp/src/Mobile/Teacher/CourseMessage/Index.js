@@ -9,6 +9,8 @@ import Edit from './Edit.vue'
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'muse-components/styles/base.less' // 加载基础的样式
+import 'muse-ui/dist/muse-ui.css'
+import 'muse-ui/dist/theme-light.css' // 使用 light 主题
 import appBar from 'muse-components/appBar'
 import icon from 'muse-components/icon'
 import flatButton from 'muse-components/flatButton'

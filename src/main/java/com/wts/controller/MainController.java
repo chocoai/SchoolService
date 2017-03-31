@@ -133,7 +133,7 @@ public class MainController extends Controller {
             String UserIds;
             if (Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ?", UserId) == null
                     && Parent.dao.findFirst("SELECT * FROM parent WHERE userId = ?", UserId) == null) {
-                return UserId;
+                return UserId.replaceAll("u:","v");
             } else {
                 int i = 1;
                 do {
@@ -141,7 +141,7 @@ public class MainController extends Controller {
                     i++;
                 }
                 while (Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ?", UserId) != null && Parent.dao.findFirst("SELECT * FROM parent WHERE userId = ?", UserId) != null);
-                return UserIds;
+                return UserIds.replaceAll("u:","v");
             }
         } catch (Exception e) {
             return "";
