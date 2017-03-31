@@ -25,5 +25,5 @@ public class ParamesAPI {
   public static String REDIRECT_URI = "";
   // 网址
   public static String URL = "wts.s1.natapp.cc";
-
+  //public static String URL = "60.208.108.198:9090";
 }

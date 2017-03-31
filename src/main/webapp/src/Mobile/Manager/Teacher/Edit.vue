@@ -28,7 +28,7 @@
         <mu-float-button icon="done" v-if="Save_Able" :disabled="saveAble" @click="goSave" backgroundColor="green"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="dialer_sip" v-if="Edit_Able" @click="goCall" backgroundColor="#6633CC"/>
+        <mu-float-button icon="dialer_sip" v-if="Edit_Able" @click="goCall" backgroundColor="cyan300"/>
         <mu-float-button icon="cached" v-if="Save_Able" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
     </mu-flexbox>
@@ -188,6 +188,9 @@ export default {
     goClose () {
       this.Activing = false
       this.Inactiving = false
+    },
+    goCall () {
+      this.mobile.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.mobile
     },
     goActive () {
       this.$http.get(

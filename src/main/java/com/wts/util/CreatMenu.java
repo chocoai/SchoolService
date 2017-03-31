@@ -40,9 +40,12 @@ public class CreatMenu {
     Button managerButtonB = new Button("基础设定", manager_4, manager_5, manager_6);
     Button managerButtonC = new Button("消息管理", manager_7);
     List<Button> managers = new ArrayList<Button>();
-    managers.add(managerButtonA);
-    managers.add(managerButtonB);
-    managers.add(managerButtonC);
+    Button manager_g = new Button("消息管理", TEACHERMESSAGE, ButtonType.view);
+
+    managers.add(manager_g);
+//    managers.add(managerButtonA);
+//    managers.add(managerButtonB);
+//    managers.add(managerButtonC);
     try {
       ApiResult ret = new WeixinProxy().createMenu(ParamesAPI.managerId, managers);
       System.out.printf("创建菜单返回结果："+ret.getReturnMsg());
@@ -69,7 +72,9 @@ public class CreatMenu {
 //    Button managerButtonC = new Button("基础管理C", teacher_1, teacher_2);
 
     List<Button> managers = new ArrayList<Button>();
-    managers.add(managerButtonA);
+    Button teacher_t = new Button("我的消息", TEACHERMESSAGE, ButtonType.view);
+    managers.add(teacher_t);
+//    managers.add(managerButtonA);
 //    managers.add(managerButtonB);
 //    managers.add(managerButtonC);
     try {
@@ -113,7 +118,7 @@ public class CreatMenu {
   public static void main(String[] args) {
     CreateManager();
     CreateTeacher();
-    CreateParent();
+//    CreateParent();
 //    try{
 //      Button School = new Button("管理系统", All, ButtonType.view);
 //      // 学校的相关功能
