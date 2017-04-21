@@ -3,7 +3,4 @@ log/
 target/
 src/main/webapp/node_modules/
 src/main/webapp/dist/
-/src/main/webapp/static/
-.idea/dataSources.local.xml
-.idea/dataSources/
-src/main/java/com/wts/entity/base/BaseCoursestudent.java
+src/main/webapp/static/
