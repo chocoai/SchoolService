@@ -25,6 +25,9 @@ public class MainController extends Controller {
     public void mobile() {
         render("/static/html/mobile/Mobile_Login.html");
     }
+    public void pc() {
+        render("/static/html/pc/PC_Login.html");
+    }
     /**
      * 登录跳转
      * */
