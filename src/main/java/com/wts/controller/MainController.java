@@ -116,6 +116,12 @@ public class MainController extends Controller {
         render("/static/html/mobile/parent/Mobile_Parent_Home.html");
     }
     /**
+     * 验证码
+     * */
+    public void img() {
+        renderCaptcha();
+    }
+    /**
      * 登出
      * */
     public void exit() {
