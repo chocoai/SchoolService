@@ -2,11 +2,11 @@
   <div class="layout">
     <div class="layout-ceiling">
       <div class="layout-ceiling-left">
-        <h4>济南市育明小学欢迎您！</h4>
+        <h2>济南市育明小学欢迎您！</h2>
       </div>
       <div class="layout-ceiling-main">
         <a href="http://www.yumingxx.com/">学校官网</a> |
-        <a href="http://ymxx.kccs.online:9092/ymxx/">课程管理</a> |
+        <a href="http://ymxx.kccs.online:9092/ymxx/">课程管理</a>
       </div>
     </div>
     <div align="center" style="height: 700px">
@@ -29,17 +29,19 @@
         </Col>
         <Col span="8">
           <div align="center"><img :src="schoolIcon" width="250px" height="250px"/></div>
-          <div align="center"><p>育明小学</p></div>
+          <div align="center"><h1>明德尚美&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h1></div>
+          <div align="center"><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和雅共进</h1></div>
           <br>
-          <Input type="text" v-model="user" placeholder="用户名" style="width:320px;"><span slot="prepend">用户名</span></Input>
+          <Input size="large" type="text" v-model="user" placeholder="请输入用户名" style="width:320px;"><span slot="prepend">用户名</span></Input>
           <br>
-          <Input type="password" v-model="password" placeholder="密码" style="width:320px;"><span slot="prepend">密码</span></Input>
+          <Input size="large" type="password" v-model="password" placeholder="请输入密码" style="width:320px;"><span slot="prepend">密码</span></Input>
           <br>
-          <Input type="text" v-model="verifyCode" placeholder="验证码" style="width:320px;"><span slot="prepend">验证码</span></Input>
+          <Input size="large" type="text" v-model="verifyCode" placeholder="请输入验证码" style="width:320px;"><span slot="prepend">验证码</span></Input>
           <br>
-          <img :src="verifyPic" @click="getImg"/><br>
+          <img :src="verifyPic" @click="getImg" style="width:200px; height:50px"/><br>
           <br>
-          <Button type="primary">登录</Button>
+          <Button type="primary" size="large">登录</Button>
+          <Button type="ghost" size="large">重置</Button>
         </Col>
       </Row>
     </div>
@@ -53,7 +55,7 @@
   import pic2 from '../../assets/2.jpg'
   import pic3 from '../../assets/3.jpg'
   import pic4 from '../../assets/4.jpg'
-  import schoolIcon from '../../assets/schoolIcon.jpg'
+  import schoolIcon from '../../assets/newIcon.png'
   export default {
     data () {
       return {
@@ -70,7 +72,7 @@
       }
     },
     created () {
-      this.verifyPic = '/img'
+      this.getImg()
     },
     methods: {
       getImg () {
@@ -99,17 +101,18 @@
     }
     .layout-ceiling-main{
         float: right;
-        margin-right: 15px;
+        margin-right: 35px;
     }
     .layout-ceiling-main a{
         color: #9ba7b5;
+        font-size: 16px;
     }
     .layout-ceiling-left{
         float: left;
         margin-left: 15px;
     }
-    .layout-ceiling-left h4{
-        color: #9ba7b5;
+    .layout-ceiling-left h2{
+        color: #887c64;
     }
 </style>
 
