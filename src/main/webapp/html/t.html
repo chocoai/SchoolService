@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <script type="text/javascript">
+    //点击切换验证码
+    function changeVerifyCode() {
+      $("#yzmImg").attr("src", "${contextPath}/img?" + Math.floor(Math.random() * 100));
+    }
+  </script>
+</head>
+<body>
+<label style="font-size:13px;font-family:'华文楷体'">点图切换：</label>
+<img src="/img" onclick="changeVerifyCode()" id="yzmImg" style="cursor: pointer;">
+
+</body>
+</html>

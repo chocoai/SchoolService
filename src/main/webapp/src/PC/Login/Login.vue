@@ -49,7 +49,6 @@
   </div>
 </template>
 <script>
-  import * as API from './API.js'
   import pic1 from '../../assets/1.jpg'
   import pic2 from '../../assets/2.jpg'
   import pic3 from '../../assets/3.jpg'
@@ -71,21 +70,11 @@
       }
     },
     created () {
-      this.getImg()
+      this.verifyPic = '/img'
     },
     methods: {
       getImg () {
-        this.$http.get(
-          API.img,
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          console.log(response)
-          console.log(response.body['url'])
-          this.verifyPic = response.body['url'] + '?' + Math.floor(Math.random() * 100)
-          console.log(this.verifyPic)
-        }, (response) => {
-          console.log('错误')
-        })
+        this.verifyPic = '/img?' + Math.floor(Math.random() * 100)
       }
     }
   }

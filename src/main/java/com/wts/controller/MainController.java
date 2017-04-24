@@ -3,6 +3,7 @@ package com.wts.controller;
 import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
+import com.jfinal.captcha.CaptchaRender;
 import com.jfinal.core.Controller;
 import com.jfinal.kit.JMap;
 import com.jfinal.plugin.activerecord.Db;
@@ -114,6 +115,12 @@ public class MainController extends Controller {
     @Before(LoginParent.class)
     public void Mobile_Parent_Home() {
         render("/static/html/mobile/parent/Mobile_Parent_Home.html");
+    }
+    /**
+     * 验证码
+     * */
+    public void t() {
+        render("/html/t.html");
     }
     /**
      * 验证码
