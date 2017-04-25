@@ -2,6 +2,7 @@
   <div class="layout">
     <MenuList active="course" :name="name" three="列表"></MenuList>
     <div class="layout-content">
+      <Search></Search>
       内容区域
     </div>
     <Copy></Copy>
