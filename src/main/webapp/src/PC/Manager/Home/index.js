@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import iView from 'iview'
 import VueResource from 'vue-resource'
-import Login from './login.vue'
+import Home from './home.vue'
 import 'iview/dist/styles/iview.css'   // 使用 CSS
 
 Vue.use(VueResource)
@@ -10,6 +10,6 @@ Vue.use(iView)
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  template: '<Login/>',
-  components: { Login }
+  template: '<Home/>',
+  components: { Home }
 })

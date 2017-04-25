@@ -24,7 +24,9 @@ module.exports = {
     // Mobile_Teacher_Student: './src/Mobile/Teacher/Student/Index.js',
     // Mobile_Parent_Home: './src/Mobile/Parent/Home/Index.js',
     // Mobile_Parent_Student: './src/Mobile/Parent/Student/Index.js',
-    PC_Login: './src/PC/Login/Index.js'
+    PC_Login: './src/PC/Login/Index.js',
+    PC_Manager_Home: './src/PC/Manager/Home/Index.js',
+    PC_Manager_Course: './src/PC/Manager/Course/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

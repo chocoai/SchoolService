@@ -61,6 +61,38 @@ var webpackConfig = merge(baseWebpackConfig, {
       // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
+    new HtmlWebpackPlugin({
+      title: '电脑_管理_主页',
+      filename: '../dist/static/html/pc/manager/PC_Manager_Home.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'PC_Manager_Home'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      title: '电脑_管理_课程',
+      filename: '../dist/static/html/pc/manager/PC_Manager_Course.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'PC_Manager_Course'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      chunksSortMode: 'dependency'
+    }),
     // split vendor js into its own file
     new webpack.optimize.CommonsChunkPlugin({
       name: 'vendor',

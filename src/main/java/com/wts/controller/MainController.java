@@ -116,12 +116,11 @@ public class MainController extends Controller {
     public void Mobile_Parent_Home() {
         render("/static/html/mobile/parent/Mobile_Parent_Home.html");
     }
-    /**
-     * 验证码
-     * */
-    public void t() {
-        render("/html/t.html");
+
+    public void PC_Manager_Home() {
+        render("/static/html/pc/manager/PC_Manager_Home.html");
     }
+
     /**
      * 验证码
      * */

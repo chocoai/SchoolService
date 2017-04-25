@@ -45,18 +45,19 @@
         </Col>
       </Row>
     </div>
-    <div class="layout-copy">
-      2016-11-10 15:27:00 &copy; WangYiXin
-    </div>
+    <Copy></Copy>
   </div>
 </template>
 <script>
+  import Copy from '../Common/copy.vue'
   import pic1 from '../../assets/1.jpg'
   import pic2 from '../../assets/2.jpg'
   import pic3 from '../../assets/3.jpg'
   import pic4 from '../../assets/4.jpg'
   import schoolIcon from '../../assets/newIcon.png'
   export default {
+    name: 'login',
+    components: { Copy },
     data () {
       return {
         pic1,
@@ -88,11 +89,6 @@
         position: relative;
         border-radius: 4px;
         overflow: hidden;
-    }
-    .layout-copy{
-        text-align: center;
-        padding: 10px 0 20px;
-        color: #9ea7b4;
     }
     .layout-ceiling{
         background: #464c5b;

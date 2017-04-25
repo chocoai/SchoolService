@@ -82,6 +82,28 @@ public class CourseController extends Controller {
     }
 
     /**
+     * 登录电脑_管理_课程
+     */
+    public void PC_Manager_Course() {
+        render("/static/html/pc/manager/PC_Manager_Course.html");
+//        // 未登录
+//        if (getSessionAttr("teacher") == null) {
+//            // cookie过期
+//            if (getCookie("dim").equals("")) {
+//                redirect("/pc");
+//            } else {
+//                Teacher teacher = Teacher.dao.findById(getCookie("dim"));
+//                setSessionAttr("teacher", teacher);
+//                render("/static/html/pc/manager/PC_Manager_Course.html");
+//            }
+//        } else {
+//            render("/static/html/pc/manager/PC_Manager_Course.html");
+//        }
+    }
+
+
+
+    /**
      * 列表
      */
     @Before(AjaxManager.class)
