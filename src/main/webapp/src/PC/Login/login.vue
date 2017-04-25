@@ -83,32 +83,32 @@
   }
 </script>
 <style scoped>
-    .layout{
-        border: 1px solid #d7dde4;
-        background: #f5f7f9;
-        position: relative;
-        border-radius: 4px;
-        overflow: hidden;
-    }
-    .layout-ceiling{
-        background: #464c5b;
-        padding: 10px 0;
-        overflow: hidden;
-    }
-    .layout-ceiling-main{
-        float: right;
-        margin-right: 35px;
-    }
-    .layout-ceiling-main a{
-        color: #9ba7b5;
-        font-size: 16px;
-    }
-    .layout-ceiling-left{
-        float: left;
-        margin-left: 15px;
-    }
-    .layout-ceiling-left h2{
-        color: #887c64;
-    }
+  .layout{
+    border: 1px solid #d7dde4;
+    background: #f5f7f9;
+    position: relative;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .layout-ceiling{
+    background: #464c5b;
+    padding: 10px 0;
+    overflow: hidden;
+  }
+  .layout-ceiling-main{
+    float: right;
+    margin-right: 35px;
+  }
+  .layout-ceiling-main a{
+    color: #9ba7b5;
+    font-size: 16px;
+  }
+  .layout-ceiling-left{
+    float: left;
+    margin-left: 15px;
+  }
+  .layout-ceiling-left h2{
+    color: #887c64;
+  }
 </style>
 

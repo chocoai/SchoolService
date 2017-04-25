@@ -1,9 +1,6 @@
 <template>
-  <div class="query">
-    <Input type="text" v-model="keyword" placeholder="请输入关键词" style="width:300px;">
-      <span slot="prepend">关键词</span>
-      <Button slot="append" icon="search">搜索</Button>
-    </Input>
+  <div>
+    <Page :total="pageTotal" :current="pageCurrent" show-sizer show-elevator show-total :page-size="pageSize" :on-page-size-change="sizeChange()" on-change="pageChange()"></Page>
   </div>
 </template>
 <script>

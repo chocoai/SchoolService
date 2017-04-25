@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="layout-logo">当前登录人员：{{name}}</div>
     <Menu mode="horizontal" theme="dark" :active-name="active" @on-select="onSelect">
+      <div class="layout-logo">当前登录人员：{{name}}</div>
       <div class="layout-nav">
         <Menu-item name="home">
           <Icon type="settings"></Icon>
@@ -70,7 +70,8 @@
     props: ['active', 'name', 'three'],
     data () {
       return {
-        active: ''
+        active: '',
+        name: ''
       }
     },
     computed: {
@@ -163,18 +164,19 @@
 </script>
 <style scoped>
   .layout-nav{
-    width: 1000px;
+    width: 1400px;
     margin: 0 auto;
+  }
+  .layout-breadcrumb{
+    padding: 10px 15px 0;
   }
   .layout-logo{
     width: 200px;
     border-radius: 3px;
     float: left;
     position: relative;
-    top: 15px;
+    top: 1px;
     left: 20px;
-  }
-  .layout-breadcrumb{
-    padding: 10px 15px 0;
+    font-size: 20px;
   }
 </style>
