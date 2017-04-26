@@ -114,22 +114,26 @@ public class CourseController extends Controller {
     /**
      * 查询
      */
-    @Before(AjaxManager.class)
+
     public void query() {
-        renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%" + getPara("queryString") + "%' OR detail LIKE '%" + getPara("queryString") + "%' ORDER BY id ASC").getList());
+        renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
+//        renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%" + getPara("queryString") + "%' OR detail LIKE '%" + getPara("queryString") + "%' ORDER BY id ASC").getList());
+
     }
 
     /**
      * 计数
      */
-    @Before(AjaxManager.class)
+
     public void total() {
-        Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("queryString") + "%' OR detail LIKE '%" + getPara("queryString") + "%'");
-        if (count % getParaToInt("pageSize") == 0) {
-            renderText((count / getParaToInt("pageSize")) + "");
-        } else {
-            renderText((count / getParaToInt("pageSize") + 1) + "");
-        }
+        Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%'");
+        renderText(count.toString());
+//        Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("queryString") + "%' OR detail LIKE '%" + getPara("queryString") + "%'");
+//        if (count % getParaToInt("pageSize") == 0) {
+//            renderText((count / getParaToInt("pageSize")) + "");
+//        } else {
+//            renderText((count / getParaToInt("pageSize") + 1) + "");
+//        }
     }
 
     /**

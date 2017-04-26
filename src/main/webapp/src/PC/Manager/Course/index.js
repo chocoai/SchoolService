@@ -26,16 +26,12 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
   state: {
-    queryName: '',
-    queryNumber: '',
-    queryCategory: '',
+    keyword: '',
     pageCurrent: '1'
   },
   mutations: {
     save (state, page) {
-      state.queryName = page.queryName
-      state.queryNumber = page.queryNumber
-      state.queryCategory = page.queryCategory
+      state.keyword = page.keyword
       state.pageCurrent = page.pageCurrent
     }
   }
