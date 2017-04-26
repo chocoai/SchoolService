@@ -13,40 +13,35 @@
       }
     },
     created: function () {
-      console.log(this.queryURL)
-      console.log(this.totalURL)
-      this.getLists(this.queryURL, this.keyword, this.pageCurrent, this.pageSize)
-      this.getTotal(this.totalURL, this.keyword)
+      this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
     },
     methods: {
-      getLists (queryURL, keyword, pageCurrent, pageSize) {
+      getLists (queryURL, totalURL, keyword, pageCurrent, pageSize) {
         this.$http.get(
-          'query',
+          queryURL,
           { params: {
             keyword: keyword,
             pageCurrent: pageCurrent,
             pageSize: pageSize
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
-        ).then((response) => {
-          this.pageList = response.body
-          this.$emit('goList', this.pageList)
-        }, (response) => {
-          this.$Notice.error({
-            title: '服务器内部错误!'
+        ).then((res) => {
+          this.$http.get(
+            totalURL,
+            { params: {
+              keyword: keyword
+            } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+          ).then((response) => {
+            this.pageList = res.body
+            this.$emit('goList', this.pageList)
+            this.pageTotal = response.body
+          }, (response) => {
+            this.$Notice.error({
+              title: '服务器内部错误!'
+            })
           })
-        })
-      },
-      getTotal (totalURL, keyword) {
-        this.$http.get(
-          'total',
-          { params: {
-            keyword: keyword
-          } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          this.pageTotal = response.body
-        }, (response) => {
+        }, (res) => {
           this.$Notice.error({
             title: '服务器内部错误!'
           })
@@ -54,25 +49,24 @@
       },
       sizeChange (value) {
         this.pageSize = value
-        this.pageCurrent = '1'
+        this.pageCurrent = 1
         this.$store.commit('save', {
           pageCurrent: this.pageCurrent
         })
-        this.getLists(this.queryURL, this.keyword, this.pageCurrent, this.pageSize)
+        this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       },
       pageChange (value) {
         this.pageCurrent = value
-        this.getLists(this.queryURL, this.keyword, this.pageCurrent, this.pageSize)
+        this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       },
       query (keyword) {
         this.keyword = keyword
-        this.pageCurrent = '1'
+        this.pageCurrent = 1
         this.$store.commit('save', {
           keyword: this.keyword,
           pageCurrent: this.pageCurrent
         })
-        this.getLists(this.queryURL, this.keyword, this.pageCurrent, this.pageSize)
-        this.getTotal(this.totalURL, this.keyword)
+        this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       }
     }
   }

@@ -122,6 +122,14 @@ public class MainController extends Controller {
     }
 
     /**
+     * 登录电脑_管理_课程
+     */
+    public void PC_Manager_Course() {
+        render("/static/html/pc/manager/PC_Manager_Course.html");
+    }
+
+
+    /**
      * 验证码
      * */
     public void img() {

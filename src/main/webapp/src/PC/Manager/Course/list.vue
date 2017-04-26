@@ -19,7 +19,7 @@
         </div>
       </Col>
     </Row>
-    <Row>
+    <Row type="flex" justify="end">
       <Col>
         <Page
           ref="pages"
@@ -41,7 +41,7 @@
   import Page from '../../Common/page.vue'
   import * as API from './API.js'
   export default {
-    name: 'course',
+    name: 'list',
     components: { Copy, MenuList, Search, Page },
     data () {
       return {
@@ -55,9 +55,7 @@
     methods: {
       getQuery (keyword) {
         this.keyword = keyword
-        this.$store.commit('save', {
-          keyword: this.keyword
-        })
+        this.$refs.pages.query(keyword)
       },
       getList (pageList) {
         this.pageList = pageList
