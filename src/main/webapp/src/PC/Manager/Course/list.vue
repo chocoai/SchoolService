@@ -3,15 +3,18 @@
     <Row>
       <Col><MenuList active="course" :name="name" three="列表"></MenuList></Col>
     </Row>
-    <Row>
+    <Row v-if="showLoad">
+      <Col><Loading></Loading></Col>
+    </Row>
+    <Row v-show="!showLoad">
       <Col>
         <div>
-          <div class="left"><Button type="info" shape="circle"><Icon type="plus-round"></Icon>新增</Button></div>
+          <div class="left"><Button type="info" size="large" @click="goAdd">新增</Button></div>
           <div class="right"><Search @goQuery="getQuery"></Search></div>
         </div>
       </Col>
     </Row>
-    <Row>
+    <Row v-show="!showLoad">
       <Col>
         <div class="layout-content">
           <Table
@@ -27,7 +30,7 @@
         </div>
       </Col>
     </Row>
-    <Row>
+    <Row v-show="!showLoad">
       <Col>
       <div>
         <div class="left">
@@ -40,17 +43,44 @@
         </div>
         <div class="right">
           <Page
-          ref="pages"
-          @goList="getList"
-          :queryURL="query"
-          :totalURL="total"
-          :keyword="keyword"
-        >
-        </Page></div>
+            ref="pages"
+            @goList="getList"
+            :queryURL="query"
+            :totalURL="total"
+            :keyword="keyword"
+          >
+          </Page>
+        </div>
       </div>
       </Col>
     </Row>
     <Row><Col><Copy></Copy></Col></Row>
+    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="information-circled"></Icon>
+        <span>注销确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>课程：{{names}}注销后，关联信息会一并失效。</p>
+        <p>是否继续注销？</p>
+      </div>
+      <div slot="footer">
+        <Button type="warning" size="large" long @click="goInactive">注销</Button>
+      </div>
+    </Modal>
+    <Modal v-model="active" width="360" :styles="{top: '40px'}">
+      <p slot="header" style="color:#66CDAA;text-align:center">
+        <Icon type="information-circled"></Icon>
+        <span>激活确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>课程：{{names}}激活后，请重新设置关联信息。</p>
+        <p>是否继续激活？</p>
+      </div>
+      <div slot="footer">
+        <Button type="success" size="large" long @click="goActive">激活</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -59,10 +89,11 @@
   import Search from '../../Common/search.vue'
   import Page from '../../Common/page.vue'
   import Options from '../../Common/options.vue'
+  import Loading from '../../Common/loading.vue'
   import * as API from './API.js'
   export default {
     name: 'list',
-    components: { Copy, MenuList, Search, Page, Options },
+    components: { Copy, MenuList, Search, Page, Options, Loading },
     data () {
       return {
         name: 'xxx',
@@ -70,6 +101,10 @@
         total: API.total,
         keyword: '',
         pageList: [],
+        inactive: false,
+        active: false,
+        index: '',
+        names: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -108,23 +143,44 @@
           },
           {
             title: '操作',
-            key: 'id',
+            key: 'state',
             align: 'center',
             render (row, column, index) {
+              const states1 = row.state.toString() === '1'
+              const states2 = row.state.toString() === '0'
               return `
-              <i-button type="primary" size="small" @click="show(${row.id})">查看</i-button>
-              <i-button type="error" size="small" @click="remove(${index})">删除</i-button>
-              <i-button type="error" size="small" @click="r(${index})">注销/i-button>
+              <i-button type="primary" @click="goEdit(${index})">修改</i-button>
+              <i-button type="warning" v-if="${states1}" @click="showInactive(${index})">注销</i-button>
+              <i-button type="success" v-if="${states2}" @click="showActive(${index})">激活</i-button>
               `
             }
           }
         ]
       }
     },
+    computed: {
+      showLoad: function () {
+        if (this.pageList.length.toString() === '0') {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
     methods: {
+      showInactive (index) {
+        this.inactive = true
+        this.index = index
+        this.names = this.pageList[index].name
+      },
+      showActive (index) {
+        this.active = true
+        this.index = index
+        this.names = this.pageList[index].name
+      },
       getQuery (keyword) {
         this.keyword = keyword
-        this.$refs.pages.query(keyword)
+        this.$refs.pages.query(keyword, this.$store.state.pageCurrent)
       },
       getBorder (border) {
         this.border = border
@@ -134,7 +190,7 @@
       },
       getSize (tableSize) {
         if (tableSize.toString() === 'true') {
-          this.height = 664
+          this.height = 665
           this.size = 'large'
         } else {
           this.height = 440
@@ -144,14 +200,83 @@
       getList (pageList) {
         this.pageList = pageList
       },
-      show (row) {
-        console.log('row: ' + row)
+      goAdd () {
+        this.$router.push({ path: '/add' })
       },
-      remove (column) {
-        console.log('column: ' + column)
+      gpEdit (index) {
+        this.$router.push({ path: '/edit/' + this.pageList[index].id })
       },
-      r (index) {
-        console.log('index: ' + index)
+      goInactive () {
+        this.$Loading.start()
+        this.$Message.info('正在进行注销操作，请稍后...')
+        this.inactive = false
+        this.$http.get(
+          API.inactive,
+          { params: {
+            id: this.pageList[this.index].id
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body.toString() === 'OK') {
+            this.getQuery(this.keyword)
+            this.$Notice.success({
+              title: '操作完成!',
+              desc: '课程：' + this.pageList[this.index].name + '已注销！'
+            })
+            this.$Loading.finish()
+          } else if (response.body.toString() === 'error') {
+            this.$Notice.error({
+              title: '权限异常，请重新登录!'
+            })
+            this.$Loading.error()
+          } else {
+            this.$Notice.error({
+              title: response.body
+            })
+            this.$Loading.error()
+          }
+        }, (response) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+          this.$Loading.error()
+        })
+      },
+      goActive () {
+        this.$Loading.start()
+        this.$Message.info('正在进行激活操作，请稍后...')
+        this.active = false
+        this.$http.get(
+          API.active,
+          { params: {
+            id: this.pageList[this.index].id
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body.toString() === 'OK') {
+            this.getQuery(this.keyword)
+            this.$Notice.success({
+              title: '操作完成!',
+              desc: '课程：' + this.pageList[this.index].name + '已激活！'
+            })
+            this.$Loading.finish()
+          } else if (response.body.toString() === 'error') {
+            this.$Notice.error({
+              title: '权限异常，请重新登录!'
+            })
+            this.$Loading.error()
+          } else {
+            this.$Notice.error({
+              title: response.body
+            })
+            this.$Loading.error()
+          }
+        }, (response) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+          this.$Loading.error()
+        })
       }
     }
   }

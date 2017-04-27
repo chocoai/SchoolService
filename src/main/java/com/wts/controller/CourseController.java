@@ -153,7 +153,7 @@ public class CourseController extends Controller {
     /**
      * 激活
      */
-    @Before({Tx.class, AjaxManager.class})
+//    @Before({Tx.class, AjaxManager.class})
     public void active() {
         Course course = Course.dao.findById(getPara("id"));
         if (course == null) {
@@ -169,7 +169,7 @@ public class CourseController extends Controller {
     /**
      * 注销
      */
-    @Before({Tx.class, AjaxManager.class})
+//    @Before({Tx.class, AjaxManager.class})
     public void inactive() {
         Course course = Course.dao.findById(getPara("id"));
         if (course == null) {

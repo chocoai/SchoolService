@@ -59,11 +59,14 @@
       },
       pageChange (value) {
         this.pageCurrent = value
+        this.$store.commit('save', {
+          pageCurrent: this.pageCurrent
+        })
         this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       },
-      query (keyword) {
+      query (keyword, pageCurrent) {
         this.keyword = keyword
-        this.pageCurrent = 1
+        this.pageCurrent = pageCurrent
         this.$store.commit('save', {
           keyword: this.keyword,
           pageCurrent: this.pageCurrent
