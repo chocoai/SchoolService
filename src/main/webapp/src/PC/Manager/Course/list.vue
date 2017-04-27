@@ -15,14 +15,15 @@
       <Col>
         <div class="layout-content">
           <Table
-            :height="height"
             highlight-row
+            :height="height"
+            :context="self"
             :border="border"
             :stripe="stripe"
             :size="size"
-            :context="self"
             :columns="columns"
-            :data="pageList"></Table>
+            :data="pageList">
+          </Table>
         </div>
       </Col>
     </Row>
@@ -71,36 +72,50 @@
         pageList: [],
         border: false,
         stripe: false,
-        size: 'default',
-        height: 520,
+        size: 'small',
+        height: 440,
         self: this,
         columns: [
           {
             title: '序号',
-            key: 'id'
+            key: 'id',
+            sortable: true
           },
           {
             title: '课程名称',
-            key: 'name'
+            key: 'name',
+            sortable: true
           },
           {
             title: '课程描述',
-            key: 'detail'
+            key: 'detail',
+            sortable: true
           },
           {
             title: '课程类型',
-            key: 'tname'
+            key: 'tname',
+            sortable: true
           },
           {
             title: '课程状态',
-            key: 'sname'
+            key: 'state',
+            sortable: true,
+            render (row) {
+              const color = row.state === '1' ? 'green' : row.state === '0' ? 'yellow' : 'red'
+              const text = row.state === '1' ? '可用' : row.state === '0' ? '停用' : '错误'
+              return `<tag type="dot" color="${color}">${text}</tag>`
+            }
           },
           {
             title: '操作',
-            key: 'action',
+            key: 'id',
             align: 'center',
             render (row, column, index) {
-              return `<i-button type="primary" size="small" @click="show(${index})">查看</i-button> <i-button type="error" size="small" @click="remove(${index})">删除</i-button>`
+              return `
+              <i-button type="primary" size="small" @click="show(${row.id})">查看</i-button>
+              <i-button type="error" size="small" @click="remove(${index})">删除</i-button>
+              <i-button type="error" size="small" @click="r(${index})">注销/i-button>
+              `
             }
           }
         ]
@@ -118,17 +133,25 @@
         this.stripe = stripe
       },
       getSize (tableSize) {
-        this.size = tableSize
-        if (tableSize.toString() === 'large') {
-          this.height = 660
-        } else if (tableSize.toString() === 'small') {
-          this.height = 440
+        if (tableSize.toString() === 'true') {
+          this.height = 664
+          this.size = 'large'
         } else {
-          this.height = 520
+          this.height = 440
+          this.size = 'small'
         }
       },
       getList (pageList) {
         this.pageList = pageList
+      },
+      show (row) {
+        console.log('row: ' + row)
+      },
+      remove (column) {
+        console.log('column: ' + column)
+      },
+      r (index) {
+        console.log('index: ' + index)
       }
     }
   }
@@ -144,7 +167,6 @@
     height: inherit;
   }
   .layout-content{
-    min-height: 400px;
     margin:0px 15px 0px 15px;
     overflow: hidden;
     background: #fff;

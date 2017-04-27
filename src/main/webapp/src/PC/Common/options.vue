@@ -1,13 +1,20 @@
 <template>
   <div>
-    显示边框 <i-switch v-model="showBorder" style="margin-right: 5px"></i-switch>
-    显示斑马纹 <i-switch v-model="showStripe" style="margin-right: 5px"></i-switch>
-    表格尺寸
-    <Radio-group v-model="tableSize" type="button">
-      <Radio label="large">大</Radio>
-      <Radio label="default">中</Radio>
-      <Radio label="small">小</Radio>
-    </Radio-group>
+    尺寸：
+    <i-switch v-model="tableSize" style="margin-right: 5px">
+      <span slot="open">大</span>
+      <span slot="close">小</span>
+    </i-switch>
+    边框：
+    <i-switch size="large" v-model="showBorder" style="margin-right: 5px">
+      <span slot="open">有</span>
+      <span slot="close">无</span>
+    </i-switch>
+    斑马纹：
+    <i-switch v-model="showStripe" style="margin-right: 5px">
+      <span slot="open">有</span>
+      <span slot="close">无</span>
+    </i-switch>
   </div>
 </template>
 <script>
@@ -17,7 +24,7 @@
       return {
         showBorder: false,
         showStripe: false,
-        tableSize: 'default'
+        tableSize: false
       }
     },
     watch: {
