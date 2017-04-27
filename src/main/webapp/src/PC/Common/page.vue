@@ -1,5 +1,7 @@
 <template>
-  <Page :total="pageTotal" :current="pageCurrent" :page-size="pageSize" @on-page-size-change="sizeChange" @on-change="pageChange" show-sizer show-elevator show-total></Page>
+  <div class="page">
+    <Page :total="pageTotal" :current="pageCurrent" :page-size="pageSize" @on-page-size-change="sizeChange" @on-change="pageChange" show-sizer show-elevator show-total></Page>
+  </div>
 </template>
 <script>
   export default {
@@ -72,7 +74,8 @@
   }
 </script>
 <style>
-  .query{
+  .page{
     float:right ;
+    margin: 15px;
   }
 </style>

@@ -11,7 +11,7 @@
 <style scoped>
   .layout-copy{
     text-align: center;
-    padding: 10px 0 20px;
+    padding: 5px 0 5px;
     color: #9ea7b4;
   }
 </style>

@@ -116,7 +116,13 @@ public class CourseController extends Controller {
      */
 
     public void query() {
-        renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
+        renderJson(Course.dao.paginate(
+                getParaToInt("pageCurrent"),
+                getParaToInt("pageSize"),
+                "SELECT *,\n" +
+                "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) as tname,\n" +
+                "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) as sname",
+                "FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
 //        renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%" + getPara("queryString") + "%' OR detail LIKE '%" + getPara("queryString") + "%' ORDER BY id ASC").getList());
 
     }
