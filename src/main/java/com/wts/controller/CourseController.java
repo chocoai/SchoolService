@@ -1,8 +1,5 @@
 package com.wts.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
@@ -15,14 +12,8 @@ import com.wts.entity.model.Teacher;
 import com.wts.interceptor.Ajax;
 import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.Login;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-
-import javax.servlet.http.HttpServletResponse;
+import com.wts.util.ExportUtil;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 import static com.wts.util.Util.getString;
@@ -122,36 +113,49 @@ public class CourseController extends Controller {
     }
 
     /**
-     * 查询
+     * 电脑_查询
      */
 
-    public void query() {
+    public void PC_Query() {
         renderJson(Course.dao.paginate(
                 getParaToInt("pageCurrent"),
                 getParaToInt("pageSize"),
-                "SELECT *,\n" +
-                "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) as tname,\n" +
-                "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) as sname",
+                "SELECT *, " +
+                "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) as tname, " +
+                "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) as sname ",
                 "FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
-//        renderJson(Course.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT *", "FROM course WHERE name LIKE '%" + getPara("queryString") + "%' OR detail LIKE '%" + getPara("queryString") + "%' ORDER BY id ASC").getList());
-
+    }
+    /**
+     * 手机_查询
+     */
+    public void Mobile_Query() {
+        renderJson(Course.dao.paginate(
+                getParaToInt("pageCurrent"),
+                getParaToInt("pageSize"),
+                "SELECT *, " +
+                        "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) as tname, " +
+                        "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) as sname ",
+                "FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
+    }
+    /**
+     * 电脑_计数
+     */
+    public void PC_Total() {
+        Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%'");
+        renderText(count.toString());
     }
 
     /**
-     * 计数
+     * 手机_计数
      */
-
-    public void total() {
-        Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%'");
-        renderText(count.toString());
-//        Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("queryString") + "%' OR detail LIKE '%" + getPara("queryString") + "%'");
-//        if (count % getParaToInt("pageSize") == 0) {
-//            renderText((count / getParaToInt("pageSize")) + "");
-//        } else {
-//            renderText((count / getParaToInt("pageSize") + 1) + "");
-//        }
+    public void Mobile_Total() {
+        Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("queryString") + "%' OR detail LIKE '%" + getPara("queryString") + "%'");
+        if (count % getParaToInt("pageSize") == 0) {
+            renderText((count / getParaToInt("pageSize")) + "");
+        } else {
+            renderText((count / getParaToInt("pageSize") + 1) + "");
+        }
     }
-
     /**
      * 获取
      */
@@ -286,33 +290,6 @@ public class CourseController extends Controller {
                 "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 课程状态 " +
                 "from course where name like '%"+getPara("keyword")+"%' OR detail LIKE '%" + getPara("keyword") + "%' " +
                 "ORDER BY id ASC";
-
-        XSSFWorkbook workbook = new XSSFWorkbook();
-        XSSFSheet sheet = workbook.createSheet();
-        XSSFRow row =sheet.createRow(0);
-        for(int i=0;i<title.length;i++){
-            XSSFCell cell=row.createCell(i);
-            cell.setCellValue(title[i]);
-        }
-        for (int i = 0; i < Course.dao.find(SQL).size(); i++) {
-            XSSFRow nextRow = sheet.createRow(i + 1);
-            for (int k = 0; k < title.length; k++) {
-                XSSFCell nextCell = nextRow.createCell(k);
-                if (Course.dao.find(SQL).get(i).get(title[k]) == null) {
-                    nextCell.setCellValue("");
-                } else {
-                    nextCell.setCellValue(Course.dao.find(SQL).get(i).get(title[k]).toString());
-                }
-            }
-        }
-        HttpServletResponse response = getResponse();
-        response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment;filename="+fileName+"Export.xlsx");
-        OutputStream out = response.getOutputStream();
-        workbook.write(out);
-        out.flush();
-        out.close();
-        workbook.close();
-        renderNull() ;
+        ExportUtil.export(title,fileName,SQL,getResponse());
     }
 }
