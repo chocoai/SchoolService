@@ -10,7 +10,7 @@
       <Col>
         <div>
           <div class="left"><Button type="info" size="large" @click="goAdd">新增</Button></div>
-          <div class="right"><Search @goQuery="getQuery"></Search></div>
+          <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload"></Search></div>
         </div>
       </Col>
     </Row>
@@ -180,7 +180,14 @@
       },
       getQuery (keyword) {
         this.keyword = keyword
-        this.$refs.pages.query(keyword, this.$store.state.pageCurrent)
+        this.$refs.pages.query(keyword)
+      },
+      getDownload (keyword) {
+        this.keyword = keyword
+        this.$Loading.start()
+        this.$Message.info('正在进行导出操作，请稍后...')
+        this.inactive = false
+        window.location.href = API.download + '?keyword=' + keyword
       },
       getBorder (border) {
         this.border = border

@@ -15,6 +15,10 @@
           <Icon type="refresh"></Icon>
           重置
         </Button>
+        <Button type="ghost" @click="goDownload">
+          <Icon type="android-download"></Icon>
+          下载
+        </Button>
       </Button-group>
     </div>
   </div>
@@ -33,6 +37,9 @@
       goRefresh () {
         this.keyword = ''
         this.$emit('goQuery', this.keyword)
+      },
+      goDownload () {
+        this.$emit('goDownload', this.keyword)
       }
     }
   }

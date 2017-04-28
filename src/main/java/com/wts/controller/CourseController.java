@@ -1,5 +1,8 @@
 package com.wts.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
@@ -12,7 +15,14 @@ import com.wts.entity.model.Teacher;
 import com.wts.interceptor.Ajax;
 import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.Login;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 import static com.wts.util.Util.getString;
@@ -263,5 +273,46 @@ public class CourseController extends Controller {
         } else {
             renderJson("[]");
         }
+    }
+
+    /**
+     * 导出
+     */
+    public void download() throws IOException {
+        String[] title={"序号","课程名称","课程详情","课程类型","课程状态"};
+        String fileName = "Course";
+        String SQL = "select id AS 序号,name AS 课程名称, detail AS 课程详情, " +
+                "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) AS 课程类型, " +
+                "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 课程状态 " +
+                "from course where name like '%"+getPara("keyword")+"%' OR detail LIKE '%" + getPara("keyword") + "%' " +
+                "ORDER BY id ASC";
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet();
+        XSSFRow row =sheet.createRow(0);
+        for(int i=0;i<title.length;i++){
+            XSSFCell cell=row.createCell(i);
+            cell.setCellValue(title[i]);
+        }
+        for (int i = 0; i < Course.dao.find(SQL).size(); i++) {
+            XSSFRow nextRow = sheet.createRow(i + 1);
+            for (int k = 0; k < title.length; k++) {
+                XSSFCell nextCell = nextRow.createCell(k);
+                if (Course.dao.find(SQL).get(i).get(title[k]) == null) {
+                    nextCell.setCellValue("");
+                } else {
+                    nextCell.setCellValue(Course.dao.find(SQL).get(i).get(title[k]).toString());
+                }
+            }
+        }
+        HttpServletResponse response = getResponse();
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment;filename="+fileName+"Export.xlsx");
+        OutputStream out = response.getOutputStream();
+        workbook.write(out);
+        out.flush();
+        out.close();
+        workbook.close();
+        renderNull() ;
     }
 }
