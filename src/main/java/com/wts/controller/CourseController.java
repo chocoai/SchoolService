@@ -159,7 +159,6 @@ public class CourseController extends Controller {
     /**
      * 获取
      */
-    @Before({Login.class, Ajax.class})
     public void get() {
         renderJson(Course.dao.findById(getPara("id")));
     }
@@ -199,7 +198,7 @@ public class CourseController extends Controller {
     /**
      * 检测名称_新增
      */
-    @Before(AjaxManager.class)
+
     public void checkNameForAdd() {
         if (Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
             renderText("该课程名称已存在!");
@@ -211,7 +210,6 @@ public class CourseController extends Controller {
     /**
      * 检测名称_修改
      */
-    @Before(AjaxManager.class)
     public void checkNameForEdit() {
         if (!Course.dao.findById(getPara("id")).get("name").equals(getPara("name"))
                 && Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
@@ -238,12 +236,27 @@ public class CourseController extends Controller {
             renderText("OK");
         }
     }
+    /**
+     * 保存
+     */
 
+    public void PC_save() {
+        if (Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
+            renderText("该名称已存在!");
+        } else {
+            Course course = new Course();
+            course.set("name", getPara("name"))
+                    .set("detail", getPara("detail"))
+                    .set("type", getPara("type"))
+                    .set("state", getPara("state"))
+                    .save();
+            renderText("OK");
+        }
+    }
     /**
      * 修改
      */
-    @Before({Tx.class, AjaxManager.class})
-    public void edit() {
+    public void PC_edit() {
         Course course = Course.dao.findById(getPara("id"));
         if (course == null) {
             renderText("要修改的课程不存在!");
@@ -255,6 +268,7 @@ public class CourseController extends Controller {
                 course.set("name", getPara("name"))
                         .set("detail", getPara("detail"))
                         .set("type", getPara("type"))
+                        .set("state", getPara("state"))
                         .update();
                 renderText("OK");
             }

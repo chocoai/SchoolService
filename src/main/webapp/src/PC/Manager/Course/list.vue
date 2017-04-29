@@ -91,6 +91,7 @@
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
   import * as API from './API.js'
+  import { setCookie } from '../../../cookieUtil.js'
   export default {
     name: 'list',
     components: { Copy, MenuList, Search, Page, Options, Loading },
@@ -158,6 +159,9 @@
         ]
       }
     },
+    created: function () {
+      setCookie('name', 'aaaa', 1)
+    },
     computed: {
       showLoad: function () {
         if (this.pageList.length.toString() === '0') {
@@ -181,6 +185,10 @@
       getQuery (keyword) {
         this.keyword = keyword
         this.$refs.pages.query(keyword)
+      },
+      getQueryNoChange (keyword) {
+        this.keyword = keyword
+        this.$refs.pages.queryNoChange(keyword)
       },
       getDownload (keyword) {
         this.keyword = keyword
@@ -210,7 +218,7 @@
       goAdd () {
         this.$router.push({ path: '/add' })
       },
-      gpEdit (index) {
+      goEdit (index) {
         this.$router.push({ path: '/edit/' + this.pageList[index].id })
       },
       goInactive () {
@@ -225,7 +233,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQuery(this.keyword)
+            this.getQueryNoChange(this.keyword)
             this.$Notice.success({
               title: '操作完成!',
               desc: '课程：' + this.pageList[this.index].name + '已注销！'
@@ -261,7 +269,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQuery(this.keyword)
+            this.getQueryNoChange(this.keyword)
             this.$Notice.success({
               title: '操作完成!',
               desc: '课程：' + this.pageList[this.index].name + '已激活！'

@@ -72,6 +72,14 @@
           pageCurrent: this.pageCurrent
         })
         this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
+      },
+      queryNoChange (keyword) {
+        this.keyword = keyword
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent
+        })
+        this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       }
     }
   }
