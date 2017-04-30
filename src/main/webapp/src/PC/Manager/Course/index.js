@@ -7,7 +7,7 @@ import Add from './add.vue'
 import List from './list.vue'
 import Edit from './edit.vue'
 import 'iview/dist/styles/iview.css'   // 使用 CSS
-
+import { getCookie } from '../../../cookieUtil.js'
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -15,7 +15,16 @@ Vue.use(iView)
 
 const routes = [
   { path: '/list', component: List },
-  { path: '/add', component: Add },
+  { path: '/add',
+    component: Add,
+    beforeEnter: (to, from, next) => {
+      if (getCookie('power').split('')[3] === '0') {
+        next({ path: '/' })
+      } else {
+        next()
+      }
+    }
+  },
   { path: '/edit/:id', component: Edit },
   { path: '/', redirect: '/list' }
 ]

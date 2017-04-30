@@ -7,23 +7,23 @@
           <Icon type="settings"></Icon>
           首页
         </Menu-item>
-        <Submenu name="basic">
+        <Submenu name="basic" v-if="power[0] === '1' || power[1] === '1' || power[2] === '1'">
           <template slot="title">
             <Icon type="stats-bars"></Icon>
             基础管理
           </template>
-          <Menu-item name="semester">学期</Menu-item>
-          <Menu-item name="course">课程</Menu-item>
-          <Menu-item name="room">班级</Menu-item>
+          <Menu-item name="semester" v-if="power[0] === '1'">学期</Menu-item>
+          <Menu-item name="course" v-if="power[1] === '1'">课程</Menu-item>
+          <Menu-item name="room" v-if="power[2] === '1'">班级</Menu-item>
         </Submenu>
-        <Submenu name="person">
+        <Submenu name="person" v-if="power[3] === '1' || power[4] === '1' || power[5] === '1'">
           <template slot="title">
             <Icon type="stats-bars"></Icon>
             人员管理
           </template>
-          <Menu-item name="teacher">教师</Menu-item>
-          <Menu-item name="student">学生</Menu-item>
-          <Menu-item name="parent">家长</Menu-item>
+          <Menu-item name="teacher" v-if="power[3] === '1'">教师</Menu-item>
+          <Menu-item name="student" v-if="power[4] === '1'">学生</Menu-item>
+          <Menu-item name="parent" v-if="power[5] === '1'">家长</Menu-item>
         </Submenu>
         <Submenu name="information">
           <template slot="title">
@@ -65,14 +65,19 @@
   </div>
 </template>
 <script>
+  import { getCookie } from '../../../cookieUtil.js'
   export default {
     name: 'menu',
     props: ['active', 'name', 'three'],
     data () {
       return {
         active: '',
-        name: ''
+        name: '',
+        power: []
       }
+    },
+    created: function () {
+      this.power = getCookie('power').split('')
     },
     computed: {
       one: function () {

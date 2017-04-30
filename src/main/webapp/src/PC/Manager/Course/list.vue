@@ -9,7 +9,7 @@
     <Row v-show="!showLoad">
       <Col>
         <div>
-          <div class="left"><Button type="info" size="large" @click="goAdd">新增</Button></div>
+          <div class="left"><Button type="info" size="large" @click="goAdd" v-if="power[3] === '1'">新增</Button></div>
           <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload"></Search></div>
         </div>
       </Col>
@@ -91,13 +91,14 @@
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
   import * as API from './API.js'
-  import { setCookie } from '../../../cookieUtil.js'
+  import { setCookie, getCookie } from '../../../cookieUtil.js'
   export default {
     name: 'list',
     components: { Copy, MenuList, Search, Page, Options, Loading },
     data () {
       return {
         name: 'xxx',
+        power: [],
         query: API.query,
         total: API.total,
         keyword: '',
@@ -150,9 +151,9 @@
               const states1 = row.state.toString() === '1'
               const states2 = row.state.toString() === '0'
               return `
-              <i-button type="primary" @click="goEdit(${index})">修改</i-button>
-              <i-button type="warning" v-if="${states1}" @click="showInactive(${index})">注销</i-button>
-              <i-button type="success" v-if="${states2}" @click="showActive(${index})">激活</i-button>
+              <i-button type="primary" @click="goEdit(${index})" v-if="power[4] === '1'">修改</i-button>
+              <i-button type="warning" v-if="${states1}" @click="showInactive(${index})" v-if="power[3] === '1'">注销</i-button>
+              <i-button type="success" v-if="${states2}" @click="showActive(${index})" v-if="power[3] === '1'">激活</i-button>
               `
             }
           }
@@ -160,7 +161,8 @@
       }
     },
     created: function () {
-      setCookie('name', 'aaaa', 1)
+      setCookie('power', '011000', 1)
+      this.power = getCookie('power').split('')
     },
     computed: {
       showLoad: function () {
