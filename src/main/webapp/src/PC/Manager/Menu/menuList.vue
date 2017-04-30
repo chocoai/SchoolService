@@ -65,7 +65,6 @@
   </div>
 </template>
 <script>
-  import { getCookie } from '../../../cookieUtil.js'
   export default {
     name: 'menu',
     props: ['active', 'name', 'three'],
@@ -77,7 +76,7 @@
       }
     },
     created: function () {
-      this.power = getCookie('power').split('')
+      this.power = window.power.split('')
     },
     computed: {
       one: function () {

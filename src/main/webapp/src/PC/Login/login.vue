@@ -40,8 +40,8 @@
           <br>
           <img :src="verifyPic" @click="getImg" style="width:200px; height:50px"/><br>
           <br>
-          <Button type="primary" size="large">登录</Button>
-          <Button type="ghost" size="large">重置</Button>
+          <Button type="primary" size="large" @click="goLogin">登录</Button>
+          <Button type="ghost" size="large" @click="goReset">重置</Button>
         </Col>
       </Row>
     </div>
@@ -55,6 +55,8 @@
   import pic3 from '../../assets/3.jpg'
   import pic4 from '../../assets/4.jpg'
   import schoolIcon from '../../assets/newIcon.png'
+  import * as API from './API.js'
+  import { setCookie } from '../../cookieUtil.js'
   export default {
     name: 'login',
     components: { Copy },
@@ -78,6 +80,49 @@
     methods: {
       getImg () {
         this.verifyPic = '/img?' + Math.floor(Math.random() * 100)
+      },
+      goReset () {
+        this.user = ''
+        this.password = ''
+        this.verifyCode = ''
+      },
+      goLogin () {
+        this.$Loading.start()
+        this.$Message.info('正在进行登录操作，请稍后...')
+        this.$http.get(
+          API.login,
+          { params: {
+            user: this.user,
+            password: this.password,
+            verifyCode: this.verifyCode
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body === 'OK') {
+            this.$http.get(
+              API.power
+            ).then((res) => {
+              this.$Loading.finish()
+              setCookie('power', res.body, 1)
+              window.location.href = '/course/PC_Manager_Course'
+            }, (res) => {
+              this.$Loading.error()
+              this.$Notice.error({
+                title: '权限异常，请重新登录!'
+              })
+            })
+          } else {
+            this.$Loading.error()
+            this.$Notice.error({
+              title: response.body
+            })
+          }
+        }, (response) => {
+          this.$Loading.error()
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
       }
     }
   }

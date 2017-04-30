@@ -77,6 +77,23 @@ public class MainController extends Controller {
             }
         }
     }
+    /**
+     * 登录跳转
+     * */
+    public void PC_login() {
+        if (getPara("user").equals("") && getPara("password").equals("")) {
+            renderText("OK");
+        } else {
+            renderText("error");
+        }
+    }
+    /**
+     * 登录跳转
+     * */
+    public void PC_power() {
+        renderText("111011");
+
+    }
 //    render("/static/Home.html");
 
 

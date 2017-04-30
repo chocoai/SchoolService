@@ -18,7 +18,7 @@ const routes = [
   { path: '/add',
     component: Add,
     beforeEnter: (to, from, next) => {
-      if (getCookie('power').split('')[3] === '0') {
+      if (window.power.split('')[3] === '0') {
         next({ path: '/' })
       } else {
         next()
