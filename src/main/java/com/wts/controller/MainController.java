@@ -1,5 +1,6 @@
 package com.wts.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
@@ -12,6 +13,8 @@ import com.jfinal.plugin.activerecord.SqlPara;
 import com.wts.entity.*;
 import com.wts.entity.model.Parent;
 import com.wts.entity.model.Teacher;
+import com.wts.entity.model.Teacherpermission;
+import com.wts.interceptor.AjaxTeacher;
 import com.wts.interceptor.LoginManager;
 import com.wts.interceptor.LoginParent;
 import com.wts.interceptor.LoginTeacher;
@@ -82,6 +85,8 @@ public class MainController extends Controller {
      * */
     public void PC_login() {
         if (getPara("user").equals("") && getPara("password").equals("")) {
+            Teacher teacher = Teacher.dao.findById("1");
+            setSessionAttr("teacher", teacher);
             renderText("OK");
         } else {
             renderText("error");
@@ -90,9 +95,14 @@ public class MainController extends Controller {
     /**
      * 登录跳转
      * */
-    public void PC_power() {
-        renderText("111011");
-
+    public void PC_permission() {
+        List<Teacherpermission> teacherpermissions = Teacherpermission.dao.find("SELECT permission_url, state FROM teacherpermission WHERE teacher_id=?",((Teacher) getSessionAttr("teacher")).getId().toString());
+        String permission = "";
+        for (int i=0;i<teacherpermissions.size();i++){
+            permission = permission + "'"+teacherpermissions.get(i).getPermissionUrl()+"': '"+teacherpermissions.get(i).getState()+"', ";
+        }
+        JSONObject jsStr = JSONObject.parseObject("{"+permission.replace("/","_")+"}");
+        renderJson(jsStr);
     }
 //    render("/static/Home.html");
 
@@ -141,8 +151,8 @@ public class MainController extends Controller {
     /**
      * 登录电脑_管理_课程
      */
-    public void PC_Manager_Course() {
-        render("/static/html/pc/manager/PC_Manager_Course.html");
+    public void PC_Course() {
+        render("/static/html/pc/teacher/PC_Course.html");
     }
 
 

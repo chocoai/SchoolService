@@ -33,6 +33,14 @@ public abstract class BaseCourse<M extends BaseCourse<M>> extends Model<M> imple
 		return get("detail");
 	}
 
+	public void setAmount(java.lang.Integer amount) {
+		set("amount", amount);
+	}
+
+	public java.lang.Integer getAmount() {
+		return get("amount");
+	}
+
 	public void setType(java.lang.String type) {
 		set("type", type);
 	}

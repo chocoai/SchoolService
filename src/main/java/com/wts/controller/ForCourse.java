@@ -11,6 +11,7 @@ import com.wts.entity.model.Course;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.Ajax;
 import com.wts.interceptor.AjaxManager;
+import com.wts.interceptor.AjaxTeacher;
 import com.wts.interceptor.Login;
 import com.wts.util.ExportUtil;
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.util.List;
 
 import static com.wts.util.Util.getString;
 
-public class CourseController extends Controller {
+public class ForCourse extends Controller {
     /**
      * 登录移动_管理_课程
      */
@@ -83,10 +84,10 @@ public class CourseController extends Controller {
     }
 
     /**
-     * 登录电脑_管理_课程
+     * 电脑_教师_课程
      */
-    public void PC_Manager_Course() {
-        render("/static/html/pc/manager/PC_Manager_Course.html");
+    public void PC_Teacher_Course() {
+        render("/static/html/pc/teacher/PC_Teacher_Course.html");
 //        // 未登录
 //        if (getSessionAttr("teacher") == null) {
 //            // cookie过期
@@ -166,6 +167,7 @@ public class CourseController extends Controller {
     /**
      * 激活
      */
+    @Before(AjaxTeacher.class)
 //    @Before({Tx.class, AjaxManager.class})
     public void active() {
         Course course = Course.dao.findById(getPara("id"));
@@ -240,7 +242,7 @@ public class CourseController extends Controller {
      * 保存
      */
 
-    public void PC_save() {
+    public void PC_Save() {
         if (Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
             renderText("该名称已存在!");
         } else {
@@ -256,7 +258,7 @@ public class CourseController extends Controller {
     /**
      * 修改
      */
-    public void PC_edit() {
+    public void PC_Edit() {
         Course course = Course.dao.findById(getPara("id"));
         if (course == null) {
             renderText("要修改的课程不存在!");
@@ -296,7 +298,7 @@ public class CourseController extends Controller {
     /**
      * 导出
      */
-    public void download() throws IOException {
+    public void PC_Download() throws IOException {
         String[] title={"序号","课程名称","课程详情","课程类型","课程状态"};
         String fileName = "Course";
         String SQL = "select id AS 序号,name AS 课程名称, detail AS 课程详情, " +

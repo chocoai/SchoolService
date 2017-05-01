@@ -6,8 +6,8 @@ import Vuex from 'vuex'
 import Add from './add.vue'
 import List from './list.vue'
 import Edit from './edit.vue'
-import 'iview/dist/styles/iview.css'   // 使用 CSS
 import { getCookie } from '../../../cookieUtil.js'
+import 'iview/dist/styles/iview.css'   // 使用 CSS
 Vue.use(VueRouter)
 Vue.use(VueResource)
 Vue.use(Vuex)
@@ -18,7 +18,7 @@ const routes = [
   { path: '/add',
     component: Add,
     beforeEnter: (to, from, next) => {
-      if (window.power.split('')[3] === '0') {
+      if (JSON.parse(getCookie('permission')).ForCourse_PC_Save !== '1') {
         next({ path: '/' })
       } else {
         next()

@@ -54,5 +54,17 @@ INSERT INTO `school_service`.`teacher` (`id`, `type`, `email`, `weixinId`, `qq`,
 INSERT INTO `school_service`.`teacher` (`id`, `type`, `email`, `weixinId`, `qq`, `address`, `userId`, `name`, `mobile`, `state`, `isManager`, `picUrl`) VALUES ('4', '1', '', '', '', '', 'WangQun', '王群', '15949700280', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVPTvhDrfQHA4ZZNG4UC6UDe9ibekzyomiam7r9Bk9HEhbw/');
 INSERT INTO `school_service`.`teacher` (`id`, `type`, `email`, `weixinId`, `qq`, `address`, `userId`, `name`, `mobile`, `state`, `isManager`, `picUrl`) VALUES ('5', '1', '', '', '', '', 'DuJunPeng', '杜君鹏', '15288868587', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVf2EDiaJNQjiaNY8QGx2D6wNRuqUgoZIricL3Riasn4ANFibg/');
 INSERT INTO `school_service`.`teacher` (`id`, `type`, `email`, `weixinId`, `qq`, `address`, `userId`, `name`, `mobile`, `state`, `isManager`, `picUrl`) VALUES ('6', '1', '', '', '', '', 'LanLiJian', '兰立建', '13791111219', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVJ1qjjm4pjd9x0HsicunLvh55UnTOL5opR9xsyQCKBl2g/');
+INSERT INTO `school_service`.`permission` (`url`, `name`) VALUES ('ForCourse/PC_Course', '列表');
+INSERT INTO `school_service`.`permission` (`url`, `name`) VALUES ('ForCourse/PC_Save', '新增');
+INSERT INTO `school_service`.`permission` (`url`, `name`) VALUES ('ForCourse/active', '激活');
+INSERT INTO `school_service`.`permission` (`url`, `name`) VALUES ('ForCourse/inactive', '注销');
+INSERT INTO `school_service`.`permission` (`url`, `name`) VALUES ('ForCourse/PC_Edit', '修改');
+INSERT INTO `school_service`.`permission` (`url`, `name`) VALUES ('ForCourse/PC_Download', '下载');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_url`, `state`) VALUES ('1', 'ForCourse/PC_Course', '6');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_url`, `state`) VALUES ('1', 'ForCourse/PC_Save', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_url`, `state`) VALUES ('1', 'ForCourse/active', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_url`, `state`) VALUES ('1', 'ForCourse/inactive', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_url`, `state`) VALUES ('1', 'ForCourse/PC_Edit', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_url`, `state`) VALUES ('1', 'ForCourse/PC_Download', '1');
 
 

@@ -26,9 +26,8 @@ public class _MappingKit {
 		arp.addMapping("coursemessageread", "id", Coursemessageread.class);
 		// Composite Primary Key order: course_id,room_id,semester_id
 		arp.addMapping("courseroom", "course_id,room_id,semester_id", Courseroom.class);
-		arp.addMapping("courseroomteacher", "id", Courseroomteacher.class);
-		// Composite Primary Key order: course_id,semester_id,student_id
-		arp.addMapping("coursestudent", "course_id,semester_id,student_id", Coursestudent.class);
+		// Composite Primary Key order: course_id,room_id,semester_id,teacher_id
+		arp.addMapping("courseroomteacher", "course_id,room_id,semester_id,teacher_id", Courseroomteacher.class);
 		arp.addMapping("exam", "id", Exam.class);
 		// Composite Primary Key order: exam_id,student_id
 		arp.addMapping("grade", "exam_id,student_id", Grade.class);
@@ -40,6 +39,7 @@ public class _MappingKit {
 		arp.addMapping("leave", "id", Leave.class);
 		arp.addMapping("notice", "id", Notice.class);
 		arp.addMapping("parent", "id", Parent.class);
+		arp.addMapping("permission", "url", Permission.class);
 		arp.addMapping("relation", "id", Relation.class);
 		arp.addMapping("room", "id", Room.class);
 		// Composite Primary Key order: room_id,student_id
@@ -53,6 +53,8 @@ public class _MappingKit {
 		arp.addMapping("teacher", "id", Teacher.class);
 		arp.addMapping("teachermessage", "id", Teachermessage.class);
 		arp.addMapping("teachermessageread", "id", Teachermessageread.class);
+		// Composite Primary Key order: permission_url,teacher_id
+		arp.addMapping("teacherpermission", "permission_url,teacher_id", Teacherpermission.class);
 	}
 }
 

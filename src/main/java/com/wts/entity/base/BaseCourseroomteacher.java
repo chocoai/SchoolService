@@ -9,14 +9,6 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BaseCourseroomteacher<M extends BaseCourseroomteacher<M>> extends Model<M> implements IBean {
 
-	public void setId(java.lang.Integer id) {
-		set("id", id);
-	}
-
-	public java.lang.Integer getId() {
-		return get("id");
-	}
-
 	public void setCourseId(java.lang.Integer courseId) {
 		set("course_id", courseId);
 	}

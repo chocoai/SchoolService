@@ -33,6 +33,7 @@ Table: course
  id     | INT(10)      | NO   | PRI |         | 课程序号    
  name   | VARCHAR(255) | YES  |     |         | 课程名称    
  detail | VARCHAR(255) | YES  |     |         | 课程描述    
+ amount | INT(10)      | YES  |     |         | 选课人数，0为不限制
  type   | VARCHAR(255) | YES  |     |         | 课程类型1必修课2选修课
  state  | VARCHAR(255) | YES  |     |         | 课程状态0停用1可用
 --------+--------------+------+-----+---------+---------
@@ -103,19 +104,9 @@ Table: courseroomteacher
 -------------+---------+------+-----+---------+---------
  Field       | Type    | Null | Key | Default | Remarks 
 -------------+---------+------+-----+---------+---------
- id          | INT(10) | NO   | PRI |         | 序号      
- course_id   | INT(10) | NO   |     |         | 课程序号    
- room_id     | INT(10) | NO   |     |         | 班级序号    
- teacher_id  | INT(10) | NO   |     |         | 教师序号    
- semester_id | INT(10) | NO   |     |         | 学期序号    
--------------+---------+------+-----+---------+---------
-
-Table: coursestudent
--------------+---------+------+-----+---------+---------
- Field       | Type    | Null | Key | Default | Remarks 
--------------+---------+------+-----+---------+---------
  course_id   | INT(10) | NO   | PRI |         | 课程序号    
- student_id  | INT(10) | NO   | PRI |         | 学生序号    
+ room_id     | INT(10) | NO   | PRI |         | 班级序号    
+ teacher_id  | INT(10) | NO   | PRI |         | 教师序号    
  semester_id | INT(10) | NO   | PRI |         | 学期序号    
 -------------+---------+------+-----+---------+---------
 
@@ -245,6 +236,14 @@ Table: parent
  bind     | INT(10)      | YES  |     |         | 是否绑定学生0否1是
 ----------+--------------+------+-----+---------+---------
 
+Table: permission
+-------+--------------+------+-----+---------+---------
+ Field | Type         | Null | Key | Default | Remarks 
+-------+--------------+------+-----+---------+---------
+ url   | VARCHAR(255) | NO   | PRI |         | 访问路径    
+ name  | VARCHAR(255) | YES  |     |         | 权限名称    
+-------+--------------+------+-----+---------+---------
+
 Table: relation
 -------------+---------+------+-----+---------+---------
  Field       | Type    | Null | Key | Default | Remarks 
@@ -365,4 +364,13 @@ Table: teachermessageread
  time       | DATETIME(19) | YES  |     |         | 阅读时间    
  state      | INT(10)      | YES  |     |         | 是否阅读0未读1已读
 ------------+--------------+------+-----+---------+---------
+
+Table: teacherpermission
+----------------+--------------+------+-----+---------+---------
+ Field          | Type         | Null | Key | Default | Remarks 
+----------------+--------------+------+-----+---------+---------
+ teacher_id     | INT(10)      | NO   | PRI |         | 教师序号    
+ permission_url | VARCHAR(255) | NO   | PRI |         | 访问路径    
+ state          | INT(10)      | YES  |     |         | 权限状态0无1有
+----------------+--------------+------+-----+---------+---------
 

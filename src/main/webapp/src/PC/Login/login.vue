@@ -40,6 +40,15 @@
           <br>
           <img :src="verifyPic" @click="getImg" style="width:200px; height:50px"/><br>
           <br>
+          <Radio-group v-model="type" type="button">
+            <Radio label="1">
+              <span>我是教师</span>
+            </Radio>
+            <Radio label="2">
+              <span>我是家长</span>
+            </Radio>
+          </Radio-group>
+          <br>
           <Button type="primary" size="large" @click="goLogin">登录</Button>
           <Button type="ghost" size="large" @click="goReset">重置</Button>
         </Col>
@@ -70,6 +79,7 @@
         verifyPic: '',
         user: '',
         password: '',
+        type: '1',
         verifyCode: '',
         value1: 0
       }
@@ -100,11 +110,11 @@
         ).then((response) => {
           if (response.body === 'OK') {
             this.$http.get(
-              API.power
+              API.permission
             ).then((res) => {
               this.$Loading.finish()
-              setCookie('power', res.body, 1)
-              window.location.href = '/course/PC_Manager_Course'
+              setCookie('permission', JSON.stringify(res.body), 1)
+              window.location.href = '/ForCourse/PC_Teacher_Course'
             }, (res) => {
               this.$Loading.error()
               this.$Notice.error({

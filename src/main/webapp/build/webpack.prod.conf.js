@@ -62,11 +62,11 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      title: '电脑_管理_主页',
-      filename: '../dist/static/html/pc/manager/PC_Manager_Home.html',
+      title: '电脑_教师_主页',
+      filename: '../dist/static/html/pc/teacher/PC_Teacher_Home.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'PC_Manager_Home'],
+      chunks: ['vendor', 'manifest', 'PC_Teacher_Home'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -78,11 +78,11 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      title: '电脑_管理_课程',
-      filename: '../dist/static/html/pc/manager/PC_Manager_Course.html',
+      title: '电脑_教师_课程',
+      filename: '../dist/static/html/pc/teacher/PC_Teacher_Course.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'PC_Manager_Course'],
+      chunks: ['vendor', 'manifest', 'PC_Teacher_Course'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

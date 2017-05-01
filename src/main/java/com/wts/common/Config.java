@@ -36,7 +36,7 @@ public class Config extends JFinalConfig {
     public void configRoute(Routes me) {
         me.add("/", MainController.class);
         me.add("/semester", SemesterController.class);
-        me.add("/course", CourseController.class);
+        me.add("/ForCourse", ForCourse.class);
         me.add("/courseRoom", CourseRoomController.class);
         me.add("/teacher", TeacherController.class);
         me.add("/teacherMessage", TeacherMessageController.class);
