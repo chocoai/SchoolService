@@ -8,8 +8,6 @@ import com.foxinmy.weixin4j.tuple.Text;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Page;
-import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
@@ -17,7 +15,6 @@ import com.wts.interceptor.*;
 import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -102,7 +99,7 @@ public class ParentController extends Controller {
     /**
      * 获取
      */
-    @Before({Login.class, Ajax.class})
+    @Before({Login.class, OverdueCheck.class})
     public void get() {
         renderJson(Parent.dao.findById(getPara("id")));
     }

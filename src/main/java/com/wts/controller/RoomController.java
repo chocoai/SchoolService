@@ -1,21 +1,16 @@
 package com.wts.controller;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
-import com.foxinmy.weixin4j.qy.message.NotifyMessage;
-import com.foxinmy.weixin4j.qy.model.IdParameter;
 import com.foxinmy.weixin4j.qy.model.Tag;
 import com.foxinmy.weixin4j.qy.model.User;
-import com.foxinmy.weixin4j.tuple.Text;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
 import com.wts.interceptor.*;
-import com.wts.util.ParamesAPI;
 import com.wts.util.Util;
 
 import java.util.List;
@@ -343,7 +338,7 @@ public class RoomController extends Controller {
         }
     }
 
-    @Before({Login.class, Ajax.class})
+    @Before({Login.class, OverdueCheck.class})
     public void getName() {
         renderText(Room.dao.findById(getPara("id")).get("name").toString());
     }
@@ -389,7 +384,7 @@ public class RoomController extends Controller {
     /**
      * 班级课程页面初始化时的字符串
      */
-    @Before({Login.class, Ajax.class})
+    @Before({Login.class, OverdueCheck.class})
     public void getString() {
         String semesterName, roomName,roomState, courseA, courseB, courseAbleA, courseAbleB;
         Room room = Room.dao.findById(getPara("id"));

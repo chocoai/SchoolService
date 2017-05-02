@@ -6,7 +6,8 @@
       </div>
       <div class="layout-ceiling-main">
         <a href="http://www.yumingxx.com/">学校官网</a> |
-        <a href="http://ymxx.kccs.online:9092/ymxx/">课程管理</a>
+        <a href="http://ymxx.kccs.online:9092/ymxx/">课程管理</a> |
+        <a href="#">切换到移动版</a> |
       </div>
     </div>
     <div align="center" style="height: 700px">
@@ -49,6 +50,7 @@
             </Radio>
           </Radio-group>
           <br>
+          <br>
           <Button type="primary" size="large" @click="goLogin">登录</Button>
           <Button type="ghost" size="large" @click="goReset">重置</Button>
         </Col>
@@ -65,7 +67,7 @@
   import pic4 from '../../assets/4.jpg'
   import schoolIcon from '../../assets/newIcon.png'
   import * as API from './API.js'
-  import { setCookie } from '../../cookieUtil.js'
+  import { getCookie } from '../../cookieUtil.js'
   export default {
     name: 'login',
     components: { Copy },
@@ -86,6 +88,8 @@
     },
     created () {
       this.getImg()
+      this.user = getCookie('user')
+      this.password = getCookie('password')
     },
     methods: {
       getImg () {
@@ -104,23 +108,14 @@
           { params: {
             user: this.user,
             password: this.password,
-            verifyCode: this.verifyCode
+            verifyCode: this.verifyCode,
+            type: this.type
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body === 'OK') {
-            this.$http.get(
-              API.permission
-            ).then((res) => {
-              this.$Loading.finish()
-              setCookie('permission', JSON.stringify(res.body), 1)
-              window.location.href = '/ForCourse/PC_Teacher_Course'
-            }, (res) => {
-              this.$Loading.error()
-              this.$Notice.error({
-                title: '权限异常，请重新登录!'
-              })
-            })
+            this.$Loading.finish()
+            window.location.href = '/MainDesktop/Teacher_Home'
           } else {
             this.$Loading.error()
             this.$Notice.error({

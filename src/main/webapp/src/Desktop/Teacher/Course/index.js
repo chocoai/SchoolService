@@ -18,14 +18,23 @@ const routes = [
   { path: '/add',
     component: Add,
     beforeEnter: (to, from, next) => {
-      if (JSON.parse(getCookie('permission')).ForCourse_PC_Save !== '1') {
-        next({ path: '/' })
-      } else {
+      if (JSON.parse(JSON.parse(getCookie('permission'))).CourseDesktop_Save) {
         next()
+      } else {
+        next({ path: '/' })
       }
     }
   },
-  { path: '/edit/:id', component: Edit },
+  { path: '/edit/:id',
+    component: Edit,
+    beforeEnter: (to, from, next) => {
+      if (JSON.parse(JSON.parse(getCookie('permission'))).CourseDesktop_Edit) {
+        next()
+      } else {
+        next({ path: '/' })
+      }
+    }
+  },
   { path: '/', redirect: '/list' }
 ]
 

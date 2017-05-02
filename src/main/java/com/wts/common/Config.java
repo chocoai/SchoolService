@@ -35,16 +35,18 @@ public class Config extends JFinalConfig {
      */
     public void configRoute(Routes me) {
         me.add("/", MainController.class);
-        me.add("/semester", SemesterController.class);
-        me.add("/ForCourse", ForCourse.class);
-        me.add("/courseRoom", CourseRoomController.class);
-        me.add("/teacher", TeacherController.class);
-        me.add("/teacherMessage", TeacherMessageController.class);
-        me.add("/teacherMessageRead", TeacherMessageReadController.class);
-        me.add("/room", RoomController.class);
-        me.add("/student", StudentController.class);
-        me.add("/parent", ParentController.class);
-        me.add("/relation", RelationController.class);
+        me.add("/MainDesktop", MainDesktop.class);
+        me.add("/CourseDesktop", CourseDesktop.class);
+//        me.add("/semester", SemesterController.class);
+//        me.add("/ForCourse", ForCourse.class);
+//        me.add("/courseRoom", CourseRoomController.class);
+//        me.add("/teacher", TeacherController.class);
+//        me.add("/teacherMessage", TeacherMessageController.class);
+//        me.add("/teacherMessageRead", TeacherMessageReadController.class);
+//        me.add("/room", RoomController.class);
+//        me.add("/student", StudentController.class);
+//        me.add("/parent", ParentController.class);
+//        me.add("/relation", RelationController.class);
         me.add("/callBack", CallBack.class);
 
 //        me.add("/roomwork", RoomworkController.class);

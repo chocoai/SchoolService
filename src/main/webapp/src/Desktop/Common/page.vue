@@ -28,21 +28,31 @@
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((res) => {
-          this.$http.get(
-            totalURL,
-            { params: {
-              keyword: keyword
-            } },
-            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-          ).then((response) => {
-            this.pageList = res.body
-            this.$emit('goList', this.pageList)
-            this.pageTotal = response.body
-          }, (response) => {
-            this.$Notice.error({
-              title: '服务器内部错误!'
+          if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
+          } else {
+            this.$http.get(
+              totalURL,
+              { params: {
+                keyword: keyword
+              } },
+              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+            ).then((response) => {
+              if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+                this.$Notice.error({
+                  title: '登录过期或非法操作!'
+                })
+                window.location.href = '/MainDesktop'
+              } else {
+                this.pageList = res.body
+                this.$emit('goList', this.pageList)
+                this.pageTotal = response.body
+              }
+            }, (response) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
             })
-          })
+          }
         }, (res) => {
           this.$Notice.error({
             title: '服务器内部错误!'

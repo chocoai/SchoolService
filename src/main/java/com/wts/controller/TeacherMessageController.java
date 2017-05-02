@@ -15,7 +15,7 @@ import com.wts.entity.model.Teacher;
 import com.wts.entity.model.Teachermessage;
 import com.wts.entity.model.Teachermessageread;
 import com.foxinmy.weixin4j.tuple.Text;
-import com.wts.interceptor.Ajax;
+import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.Login;
 import com.wts.util.ParamesAPI;
@@ -122,7 +122,7 @@ public class TeacherMessageController extends Controller {
     /**
      * 获取
      */
-    @Before({Login.class, Ajax.class})
+    @Before({Login.class, OverdueCheck.class})
     public void get() {
         String teacheres,teacherez,messages;
         String sql= "SELECT teacher.*, teachermessageread.time "+

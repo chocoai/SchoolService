@@ -9,7 +9,7 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.Parent;
 import com.wts.entity.model.Teacher;
-import com.wts.interceptor.Ajax;
+import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.AjaxTeacher;
 import com.wts.interceptor.Login;
@@ -98,7 +98,7 @@ public class TeacherController extends Controller {
     /**
      * 获取
      */
-    @Before({Login.class, Ajax.class})
+    @Before({Login.class, OverdueCheck.class})
     public void get() {
         renderJson(Teacher.dao.findById(getPara("id")));
     }
@@ -158,7 +158,7 @@ public class TeacherController extends Controller {
         }
     }
 
-    @Before({Ajax.class,Login.class})
+    @Before({OverdueCheck.class,Login.class})
     public  void all() {
         List<Teacher> teachers = Teacher.dao.find("SELECT id FROM teacher WHERE state=1");
         String tt = "";

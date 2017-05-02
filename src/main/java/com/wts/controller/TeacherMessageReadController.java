@@ -8,7 +8,7 @@ import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.*;
-import com.wts.interceptor.Ajax;
+import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.AjaxTeacher;
 import com.wts.interceptor.Login;
 
@@ -83,7 +83,7 @@ public class TeacherMessageReadController extends Controller {
     /**
      * 获取
      */
-    @Before({Login.class, Ajax.class})
+    @Before({Login.class, OverdueCheck.class})
     public void get() {
         Teachermessageread tmr = Teachermessageread.dao.findById(getPara("id"));
         Teachermessage tm = Teachermessage.dao.findById(tmr.getMessageId());

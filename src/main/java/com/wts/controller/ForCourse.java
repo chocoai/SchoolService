@@ -9,15 +9,10 @@ import com.jfinal.plugin.activerecord.tx.Tx;
 import com.wts.entity.WP;
 import com.wts.entity.model.Course;
 import com.wts.entity.model.Teacher;
-import com.wts.interceptor.Ajax;
 import com.wts.interceptor.AjaxManager;
 import com.wts.interceptor.AjaxTeacher;
-import com.wts.interceptor.Login;
-import com.wts.util.ExportUtil;
-import java.io.IOException;
-import java.util.List;
 
-import static com.wts.util.Util.getString;
+import java.util.List;
 
 public class ForCourse extends Controller {
     /**
@@ -83,25 +78,6 @@ public class ForCourse extends Controller {
         }
     }
 
-    /**
-     * 电脑_教师_课程
-     */
-    public void PC_Teacher_Course() {
-        render("/static/html/pc/teacher/PC_Teacher_Course.html");
-//        // 未登录
-//        if (getSessionAttr("teacher") == null) {
-//            // cookie过期
-//            if (getCookie("dim").equals("")) {
-//                redirect("/pc");
-//            } else {
-//                Teacher teacher = Teacher.dao.findById(getCookie("dim"));
-//                setSessionAttr("teacher", teacher);
-//                render("/static/html/pc/manager/PC_Manager_Course.html");
-//            }
-//        } else {
-//            render("/static/html/pc/manager/PC_Manager_Course.html");
-//        }
-    }
 
 
 
@@ -113,19 +89,7 @@ public class ForCourse extends Controller {
         renderJson(Course.dao.find("SELECT * FROM course WHERE state = ? AND type= ? ",getPara("state"),getPara("type")));
     }
 
-    /**
-     * 电脑_查询
-     */
 
-    public void PC_Query() {
-        renderJson(Course.dao.paginate(
-                getParaToInt("pageCurrent"),
-                getParaToInt("pageSize"),
-                "SELECT *, " +
-                "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) as tname, " +
-                "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) as sname ",
-                "FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
-    }
     /**
      * 手机_查询
      */
@@ -138,13 +102,7 @@ public class ForCourse extends Controller {
                         "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) as sname ",
                 "FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
     }
-    /**
-     * 电脑_计数
-     */
-    public void PC_Total() {
-        Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%'");
-        renderText(count.toString());
-    }
+
 
     /**
      * 手机_计数
@@ -238,44 +196,8 @@ public class ForCourse extends Controller {
             renderText("OK");
         }
     }
-    /**
-     * 保存
-     */
 
-    public void PC_Save() {
-        if (Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
-            renderText("该名称已存在!");
-        } else {
-            Course course = new Course();
-            course.set("name", getPara("name"))
-                    .set("detail", getPara("detail"))
-                    .set("type", getPara("type"))
-                    .set("state", getPara("state"))
-                    .save();
-            renderText("OK");
-        }
-    }
-    /**
-     * 修改
-     */
-    public void PC_Edit() {
-        Course course = Course.dao.findById(getPara("id"));
-        if (course == null) {
-            renderText("要修改的课程不存在!");
-        } else {
-            if (!getString(course.getStr("name")).equals(getPara("name"))
-                    && Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
-                renderText("该名称已存在!");
-            } else {
-                course.set("name", getPara("name"))
-                        .set("detail", getPara("detail"))
-                        .set("type", getPara("type"))
-                        .set("state", getPara("state"))
-                        .update();
-                renderText("OK");
-            }
-        }
-    }
+
 
 
     /**
@@ -295,17 +217,4 @@ public class ForCourse extends Controller {
         }
     }
 
-    /**
-     * 导出
-     */
-    public void PC_Download() throws IOException {
-        String[] title={"序号","课程名称","课程详情","课程类型","课程状态"};
-        String fileName = "Course";
-        String SQL = "select id AS 序号,name AS 课程名称, detail AS 课程详情, " +
-                "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) AS 课程类型, " +
-                "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 课程状态 " +
-                "from course where name like '%"+getPara("keyword")+"%' OR detail LIKE '%" + getPara("keyword") + "%' " +
-                "ORDER BY id ASC";
-        ExportUtil.export(title,fileName,SQL,getResponse());
-    }
 }

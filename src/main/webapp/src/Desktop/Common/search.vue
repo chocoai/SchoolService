@@ -15,7 +15,7 @@
           <Icon type="refresh"></Icon>
           重置
         </Button>
-        <Button type="ghost" @click="goDownload">
+        <Button type="ghost" @click="goDownload" v-if="download">
           <Icon type="android-download"></Icon>
           下载
         </Button>
@@ -25,9 +25,11 @@
 </template>
 <script>
   export default {
+    props: ['download'],
     data () {
       return {
-        keyword: ''
+        keyword: '',
+        download: false
       }
     },
     methods: {

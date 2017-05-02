@@ -46,11 +46,10 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      title: '电脑_登录',
-      filename: '../dist/static/html/pc/PC_Login.html',
+      filename: '../dist/static/html/desktop/Desktop_Login.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'PC_Login'],
+      chunks: ['vendor', 'manifest', 'Desktop_Login'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
@@ -62,35 +61,27 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      title: '电脑_教师_主页',
-      filename: '../dist/static/html/pc/teacher/PC_Teacher_Home.html',
+      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Home.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'PC_Teacher_Home'],
+      chunks: ['vendor', 'manifest', 'Desktop_Teacher_Home'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      title: '电脑_教师_课程',
-      filename: '../dist/static/html/pc/teacher/PC_Teacher_Course.html',
+      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Course.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'PC_Teacher_Course'],
+      chunks: ['vendor', 'manifest', 'Desktop_Teacher_Course'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: true
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
       chunksSortMode: 'dependency'
     }),
     // split vendor js into its own file

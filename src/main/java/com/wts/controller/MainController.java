@@ -80,30 +80,7 @@ public class MainController extends Controller {
             }
         }
     }
-    /**
-     * 登录跳转
-     * */
-    public void PC_login() {
-        if (getPara("user").equals("") && getPara("password").equals("")) {
-            Teacher teacher = Teacher.dao.findById("1");
-            setSessionAttr("teacher", teacher);
-            renderText("OK");
-        } else {
-            renderText("error");
-        }
-    }
-    /**
-     * 登录跳转
-     * */
-    public void PC_permission() {
-        List<Teacherpermission> teacherpermissions = Teacherpermission.dao.find("SELECT permission_url, state FROM teacherpermission WHERE teacher_id=?",((Teacher) getSessionAttr("teacher")).getId().toString());
-        String permission = "";
-        for (int i=0;i<teacherpermissions.size();i++){
-            permission = permission + "'"+teacherpermissions.get(i).getPermissionUrl()+"': '"+teacherpermissions.get(i).getState()+"', ";
-        }
-        JSONObject jsStr = JSONObject.parseObject("{"+permission.replace("/","_")+"}");
-        renderJson(jsStr);
-    }
+
 //    render("/static/Home.html");
 
 

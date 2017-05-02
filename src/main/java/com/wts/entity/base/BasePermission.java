@@ -9,6 +9,14 @@ import com.jfinal.plugin.activerecord.IBean;
 @SuppressWarnings("serial")
 public abstract class BasePermission<M extends BasePermission<M>> extends Model<M> implements IBean {
 
+	public void setId(java.lang.Integer id) {
+		set("id", id);
+	}
+
+	public java.lang.Integer getId() {
+		return get("id");
+	}
+
 	public void setUrl(java.lang.String url) {
 		set("url", url);
 	}

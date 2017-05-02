@@ -17,12 +17,12 @@ public abstract class BaseTeacherpermission<M extends BaseTeacherpermission<M>> 
 		return get("teacher_id");
 	}
 
-	public void setPermissionUrl(java.lang.String permissionUrl) {
-		set("permission_url", permissionUrl);
+	public void setPermissionId(java.lang.Integer permissionId) {
+		set("permission_id", permissionId);
 	}
 
-	public java.lang.String getPermissionUrl() {
-		return get("permission_url");
+	public java.lang.Integer getPermissionId() {
+		return get("permission_id");
 	}
 
 	public void setState(java.lang.Integer state) {

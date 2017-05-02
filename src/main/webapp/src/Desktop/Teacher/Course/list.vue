@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="course" :name="name" three="列表"></MenuList></Col>
+      <Col><MenuList active="course" :name="name" three="列表" :permission="permission"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
@@ -9,8 +9,8 @@
     <Row v-show="!showLoad">
       <Col>
         <div>
-          <div class="left"><Button type="info" size="large" @click="goAdd">新增</Button></div>
-          <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload"></Search></div>
+          <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.CourseDesktop_Save">新增</Button></div>
+          <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload" :download="download"></Search></div>
         </div>
       </Col>
     </Row>
@@ -55,6 +55,20 @@
       </Col>
     </Row>
     <Row><Col><Copy></Copy></Col></Row>
+    <Modal v-model="del" width="360" :styles="{top: '40px'}">
+      <p slot="header" style="color:#FF0000;text-align:center">
+        <Icon type="information-circled"></Icon>
+        <span>删除确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>课程：{{names}}删除后，关联信息会一并删除。</p>
+        <p>该功能必须慎用！</p>
+        <p>是否继续删除？</p>
+      </div>
+      <div slot="footer">
+        <Button type="error" size="large" long @click="goDelete">删除</Button>
+      </div>
+    </Modal>
     <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
       <p slot="header" style="color:#f60;text-align:center">
         <Icon type="information-circled"></Icon>
@@ -97,12 +111,14 @@
     components: { Copy, MenuList, Search, Page, Options, Loading },
     data () {
       return {
-        name: 'xxx',
+        name: '',
         permission: [],
+        download: false,
         query: API.query,
         total: API.total,
         keyword: '',
         pageList: [],
+        del: false,
         inactive: false,
         active: false,
         index: '',
@@ -110,13 +126,16 @@
         border: false,
         stripe: false,
         size: 'small',
-        height: 440,
+        height: 450,
         self: this,
         columns: [
           {
             title: '序号',
             key: 'id',
-            sortable: true
+            sortable: true,
+            render (row, column, index) {
+              return `${index + 1}`
+            }
           },
           {
             title: '课程名称',
@@ -127,6 +146,15 @@
             title: '课程描述',
             key: 'detail',
             sortable: true
+          },
+          {
+            title: '课程人数',
+            key: 'amount',
+            sortable: true,
+            render (row) {
+              const num = row.amount.toString() === '0' ? '不限' : row.amount + '人'
+              return `${num}`
+            }
           },
           {
             title: '课程类型',
@@ -147,13 +175,15 @@
             title: '操作',
             key: 'state',
             align: 'center',
+            width: 400,
             render (row, column, index) {
               const states1 = row.state.toString() === '1'
               const states2 = row.state.toString() === '0'
               return `
-              <i-button type="primary" @click="goEdit(${index})">修改</i-button>
-              <i-button type="warning" v-if="${states1}" @click="showInactive(${index})">注销</i-button>
-              <i-button type="success" v-if="${states2}" @click="showActive(${index})">激活</i-button>
+              <i-button type="primary" @click="goEdit(${index})" v-if="permission.CourseDesktop_Edit">修改</i-button>
+              <i-button type="warning" v-if="${states1} && permission.CourseDesktop_Inactive" @click="showInactive(${index})">注销</i-button>
+              <i-button type="success" v-if="${states2} && permission.CourseDesktop_Active" @click="showActive(${index})">激活</i-button>
+              <i-button type="error" @click="showDelete(${index})" v-if="permission.CourseDesktop_Delete">删除</i-button>
               `
             }
           }
@@ -162,9 +192,27 @@
     },
     created: function () {
       if (getCookie('permission') === null || getCookie('permission') === undefined || getCookie('permission') === '') {
-        this.permission = []
+        this.$http.get(
+          API.permission
+        ).then((response) => {
+          if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+            this.$Notice.error({
+              title: '登录过期或非法操作!'
+            })
+          } else {
+            this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+            this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+            this.download = this.permission.CourseDesktop_Download
+          }
+        }, (response) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
       } else {
-        this.permission = JSON.parse(getCookie('permission'))
+        this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+        this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+        this.download = this.permission.CourseDesktop_Download
       }
     },
     computed: {
@@ -177,6 +225,11 @@
       }
     },
     methods: {
+      showDelete (index) {
+        this.del = true
+        this.index = index
+        this.names = this.pageList[index].name
+      },
       showInactive (index) {
         this.inactive = true
         this.index = index
@@ -213,7 +266,7 @@
           this.height = 665
           this.size = 'large'
         } else {
-          this.height = 440
+          this.height = 450
           this.size = 'small'
         }
       },
@@ -225,6 +278,42 @@
       },
       goEdit (index) {
         this.$router.push({ path: '/edit/' + this.pageList[index].id })
+      },
+      goDelete () {
+        this.$Loading.start()
+        this.$Message.info('正在进行删除操作，请稍后...')
+        this.del = false
+        this.$http.get(
+          API.del,
+          { params: {
+            id: this.pageList[this.index].id
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body.toString() === 'OK') {
+            this.getQueryNoChange(this.keyword)
+            this.$Notice.success({
+              title: '操作完成!',
+              desc: '课程：' + this.pageList[this.index].name + '已删除！'
+            })
+            this.$Loading.finish()
+          } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+            this.$Notice.error({
+              title: '登录过期或非法操作!'
+            })
+            this.$Loading.error()
+          } else {
+            this.$Notice.error({
+              title: response.body
+            })
+            this.$Loading.error()
+          }
+        }, (response) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+          this.$Loading.error()
+        })
       },
       goInactive () {
         this.$Loading.start()
@@ -244,9 +333,9 @@
               desc: '课程：' + this.pageList[this.index].name + '已注销！'
             })
             this.$Loading.finish()
-          } else if (response.body.toString() === 'error') {
+          } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
             this.$Notice.error({
-              title: '权限异常，请重新登录!'
+              title: '登录过期或非法操作!'
             })
             this.$Loading.error()
           } else {
@@ -280,9 +369,9 @@
               desc: '课程：' + this.pageList[this.index].name + '已激活！'
             })
             this.$Loading.finish()
-          } else if (response.body.toString() === 'error') {
+          } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
             this.$Notice.error({
-              title: '权限异常，请重新登录!'
+              title: '登录过期或非法操作!'
             })
             this.$Loading.error()
           } else {

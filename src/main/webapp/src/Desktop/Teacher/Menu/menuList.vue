@@ -13,7 +13,7 @@
             基础管理
           </template>
           <Menu-item name="semester">学期</Menu-item>
-          <Menu-item name="course">课程</Menu-item>
+          <Menu-item name="course" v-if="permission.CourseDesktop_Page">课程</Menu-item>
           <Menu-item name="room">班级</Menu-item>
         </Submenu>
         <Submenu name="person">
@@ -65,22 +65,14 @@
   </div>
 </template>
 <script>
-  import { getCookie } from '../../../cookieUtil.js'
   export default {
     name: 'menu',
-    props: ['active', 'name', 'three'],
+    props: ['active', 'name', 'three', 'permission'],
     data () {
       return {
         active: '',
         name: '',
         permission: []
-      }
-    },
-    created: function () {
-      if (getCookie('permission') === null || getCookie('permission') === undefined || getCookie('permission') === '') {
-        this.permission = []
-      } else {
-        this.permission = JSON.parse(getCookie('permission'))
       }
     },
     computed: {
@@ -153,19 +145,19 @@
       onSelect (name) {
         switch (name) {
           case 'home':
-            window.location.href = '/PC_Manager_Home'
+            window.location.href = '../MainDesktop/Teacher_Home'
             break
           case 'semester':
             console.log(name)
             break
           case 'course':
-            window.location.href = '/course/PC_Manager_Course'
+            window.location.href = '/CourseDesktop/Page'
             break
           case 'room':
             console.log(name)
             break
           default:
-            window.location.href = '/'
+            window.location.href = '/MainDesktop'
         }
       }
     }
@@ -186,6 +178,6 @@
     position: relative;
     top: 1px;
     left: 20px;
-    font-size: 20px;
+    font-size: 16px;
   }
 </style>

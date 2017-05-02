@@ -1,4 +1,4 @@
-package com.wts.controller;
+package com.wts.unused;
 
 import com.foxinmy.weixin4j.exception.WeixinException;
 import com.foxinmy.weixin4j.jssdk.JSSDKAPI;

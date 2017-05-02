@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="course" :name="name" three="修改"></MenuList></Col>
+      <Col><MenuList active="course" :name="name" three="修改" :permission="permission"></MenuList></Col>
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
@@ -12,6 +12,9 @@
         </Form-item>
         <Form-item label="课程描述" prop="detail" required>
           <Input size="large" v-model="course.detail" type="textarea" :autosize="{minRows: 3,maxRows: 5}" placeholder="请输入对该课程的描述" style="width: 400px"></Input>
+        </Form-item>
+        <Form-item label="选课人数" prop="amount" required>
+          <Input-number size="large" :max="60" :min="0" v-model="course.amount" style="width: 400px"></Input-number>
         </Form-item>
         <Form-item size="large" label="课程类型" required>
           <Radio-group v-model="course.type" type="button">
@@ -41,6 +44,7 @@
   import Copy from '../../Common/copy.vue'
   import MenuList from '../Menu/menuList.vue'
   import * as API from './API.js'
+  import { getCookie } from '../../../cookieUtil.js'
   export default {
     name: 'edit',
     components: { Copy, MenuList },
@@ -54,8 +58,8 @@
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
-          if (response.body === 'error') {
-            callback(new Error('请重新登录!'))
+          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
+            callback(new Error('登录过期或非法操作!'))
           } else if (response.body === 'OK') {
           } else {
             callback(new Error(response.body))
@@ -79,13 +83,35 @@
         course: {
           name: '',
           detail: '',
+          amount: 0,
           type: '',
           state: ''
         }
       }
     },
-    created () {
+    created: function () {
       this.fetchData(this.$route.params.id)
+      if (getCookie('permission') === null || getCookie('permission') === undefined || getCookie('permission') === '') {
+        this.$http.get(
+          API.permission
+        ).then((response) => {
+          if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+            this.$Notice.error({
+              title: '登录过期或非法操作!'
+            })
+          } else {
+            this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+            this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+          }
+        }, (response) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
+      } else {
+        this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+        this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+      }
     },
     watch: {
       // 如果路由有变化，会再次执行该方法
@@ -101,11 +127,19 @@
           { params: { id: id } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
-          this.course = response.body
-          this.name = this.course.name
-          this.detail = this.course.detail
-          this.type = this.course.type
-          this.state = this.course.state
+          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
+            this.$Notice.error({
+              title: '登录过期或非法操作!'
+            })
+            window.location.href = '/MainDesktop'
+          } else {
+            this.course = response.body
+            this.name = this.course.name
+            this.detail = this.course.detail
+            this.amount = this.course.amount
+            this.type = this.course.type
+            this.state = this.course.state
+          }
         }, (response) => {
           this.$Notice.error({
             title: '服务器内部错误!'
@@ -124,17 +158,18 @@
             id: this.$route.params.id,
             name: this.course.name,
             detail: this.course.detail,
+            amount: this.course.amount,
             type: this.course.type,
             state: this.course.state
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
-          if (response.body === 'error') {
+          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
             this.$Loading.error()
             this.$Notice.error({
-              title: '权限异常，请重新登录!'
+              title: '登录过期或非法操作!'
             })
-            window.location.href = '/'
+            window.location.href = '/MainDesktop'
           } else if (response.body === 'OK') {
             this.$Loading.finish()
             this.$Notice.success({
