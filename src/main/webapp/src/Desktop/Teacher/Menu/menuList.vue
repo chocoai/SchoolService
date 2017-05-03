@@ -154,7 +154,7 @@
             window.location.href = '/CourseDesktop/Page'
             break
           case 'room':
-            console.log(name)
+            window.location.href = '/RoomDesktop/Page'
             break
           default:
             window.location.href = '/MainDesktop'

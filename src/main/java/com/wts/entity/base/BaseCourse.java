@@ -41,19 +41,19 @@ public abstract class BaseCourse<M extends BaseCourse<M>> extends Model<M> imple
 		return get("amount");
 	}
 
-	public void setType(java.lang.String type) {
+	public void setType(java.lang.Integer type) {
 		set("type", type);
 	}
 
-	public java.lang.String getType() {
+	public java.lang.Integer getType() {
 		return get("type");
 	}
 
-	public void setState(java.lang.String state) {
+	public void setState(java.lang.Integer state) {
 		set("state", state);
 	}
 
-	public java.lang.String getState() {
+	public java.lang.Integer getState() {
 		return get("state");
 	}
 

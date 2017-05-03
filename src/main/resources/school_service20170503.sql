@@ -3,17 +3,16 @@ CREATE TABLE `Course` (
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程名称',
 `detail` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程描述',
 `amount` int NULL COMMENT '选课人数，0为不限制',
-`type` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程类型1必修课2选修课',
-`state` varchar(255) CHARACTER SET utf8 NULL COMMENT '课程状态0停用1可用',
+`type` int NULL COMMENT '课程类型1必修课2选修课',
+`state` int NULL COMMENT '课程状态0停用1可用',
 PRIMARY KEY (`id`) 
 );
 
 CREATE TABLE `Room` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '班级序号',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级名称(标签)',
-`year` varchar(255) CHARACTER SET utf8 NULL COMMENT '入学年份',
-`order` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级次序',
-`slogan` varchar(255) CHARACTER SET utf8 NULL COMMENT '班级口号',
+`year` int NULL COMMENT '入学年份',
+`order` int NULL COMMENT '班级次序',
 `state` int NULL COMMENT '班级状态0停用1可用',
 PRIMARY KEY (`id`) 
 );
