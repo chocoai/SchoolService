@@ -62,6 +62,7 @@
       sizeChange (value) {
         this.pageSize = value
         this.pageCurrent = 1
+        this.$emit('savePageCurrent', this.pageCurrent)
         this.$store.commit('save', {
           pageCurrent: this.pageCurrent
         })
@@ -69,26 +70,18 @@
       },
       pageChange (value) {
         this.pageCurrent = value
-        this.$store.commit('save', {
-          pageCurrent: this.pageCurrent
-        })
+        this.$emit('savePageCurrent', this.pageCurrent)
         this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       },
       query (keyword) {
         this.keyword = keyword
         this.pageCurrent = 1
-        this.$store.commit('save', {
-          keyword: this.keyword,
-          pageCurrent: this.pageCurrent
-        })
+        this.$emit('savePageCurrentAndKeyword', this.keyword, this.pageCurrent)
         this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       },
       queryNoChange (keyword) {
         this.keyword = keyword
-        this.$store.commit('save', {
-          keyword: this.keyword,
-          pageCurrent: this.pageCurrent
-        })
+        this.$emit('savePageCurrentAndKeyword', this.keyword, this.pageCurrent)
         this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       }
     }

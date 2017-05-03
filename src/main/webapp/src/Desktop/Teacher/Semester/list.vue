@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="course" :name="name" three="列表" :permission="permission"></MenuList></Col>
+      <Col><MenuList active="semester" :name="name" three="列表" :permission="permission"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
@@ -9,7 +9,7 @@
     <Row v-show="!showLoad">
       <Col>
         <div>
-          <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.CourseDesktop_Save">新增</Button></div>
+          <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.SemesterDesktop_Save">新增</Button></div>
           <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload" :download="download"></Search></div>
         </div>
       </Col>
@@ -63,25 +63,12 @@
         <span>删除确认</span>
       </p>
       <div style="text-align:center">
-        <p>课程：{{names}}删除后，关联信息会一并删除。</p>
+        <p>学期：{{names}}删除后，关联信息会一并删除。</p>
         <p>该功能必须慎用！</p>
         <p>是否继续删除？</p>
       </div>
       <div slot="footer">
         <Button type="error" size="large" long @click="goDelete">删除</Button>
-      </div>
-    </Modal>
-    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
-      <p slot="header" style="color:#f60;text-align:center">
-        <Icon type="information-circled"></Icon>
-        <span>注销确认</span>
-      </p>
-      <div style="text-align:center">
-        <p>课程：{{names}}注销后，关联信息会一并失效。</p>
-        <p>是否继续注销？</p>
-      </div>
-      <div slot="footer">
-        <Button type="warning" size="large" long @click="goInactive">注销</Button>
       </div>
     </Modal>
     <Modal v-model="active" width="360" :styles="{top: '40px'}">
@@ -90,11 +77,23 @@
         <span>激活确认</span>
       </p>
       <div style="text-align:center">
-        <p>课程：{{names}}激活后，请重新设置关联信息。</p>
+        <p>学期：{{names}}激活后，原激活学期将注销。</p>
         <p>是否继续激活？</p>
       </div>
       <div slot="footer">
         <Button type="success" size="large" long @click="goActive">激活</Button>
+      </div>
+    </Modal>
+    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
+      <p slot="header" style="color:#66CDAA;text-align:center">
+        <Icon type="information-circled"></Icon>
+        <span>注销确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>是否继续注销？</p>
+      </div>
+      <div slot="footer">
+        <Button type="success" size="large" long @click="goInactive">注销</Button>
       </div>
     </Modal>
   </div>
@@ -121,8 +120,8 @@
         keyword: '',
         pageList: [],
         del: false,
-        inactive: false,
         active: false,
+        inactive: false,
         index: '',
         names: '',
         border: false,
@@ -140,27 +139,18 @@
             }
           },
           {
-            title: '课程名称',
+            title: '学期名称',
             key: 'name',
             sortable: true
           },
           {
-            title: '课程描述',
-            key: 'detail',
+            title: '开始时间',
+            key: 'time_start',
             sortable: true
           },
           {
-            title: '课程人数',
-            key: 'amount',
-            sortable: true,
-            render (row) {
-              const num = row.amount.toString() === '0' ? '不限' : row.amount + '人'
-              return `${num}`
-            }
-          },
-          {
-            title: '课程类型',
-            key: 'tname',
+            title: '终止时间',
+            key: 'time_end',
             sortable: true
           },
           {
@@ -169,7 +159,7 @@
             sortable: true,
             render (row) {
               const color = row.state.toString() === '1' ? 'green' : row.state.toString() === '0' ? 'yellow' : 'red'
-              const text = row.state.toString() === '1' ? '可用' : row.state.toString() === '0' ? '停用' : '错误'
+              const text = row.state.toString() === '1' ? '当前学期' : row.state.toString() === '0' ? '非当前学期' : '错误'
               return `<tag type="dot" color="${color}">${text}</tag>`
             }
           },
@@ -177,15 +167,15 @@
             title: '操作',
             key: 'state',
             align: 'center',
-            width: 400,
+            width: 200,
             render (row, column, index) {
               const states1 = row.state.toString() === '1'
               const states2 = row.state.toString() === '0'
               return `
-              <i-button type="primary" @click="goEdit(${index})" v-if="permission.CourseDesktop_Edit">修改</i-button>
-              <i-button type="warning" v-if="${states1} && permission.CourseDesktop_Inactive" @click="showInactive(${index})">注销</i-button>
-              <i-button type="success" v-if="${states2} && permission.CourseDesktop_Active" @click="showActive(${index})">激活</i-button>
-              <i-button type="error" @click="showDelete(${index})" v-if="permission.CourseDesktop_Delete">删除</i-button>
+              <i-button type="primary" @click="goEdit(${index})" v-if="permission.SemesterDesktop_Edit">修改</i-button>
+              <i-button type="warning" v-if="${states1} && permission.SemesterDesktop_Inactive" @click="showInactive(${index})">注销</i-button>
+              <i-button type="success" v-if="${states2} && permission.SemesterDesktop_Active" @click="showActive(${index})">激活</i-button>
+              <i-button type="error" @click="showDelete(${index})" v-if="permission.SemesterDesktop_Delete">删除</i-button>
               `
             }
           }
@@ -204,7 +194,7 @@
           } else {
             this.permission = JSON.parse(JSON.parse(getCookie('permission')))
             this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
-            this.download = this.permission.CourseDesktop_Download
+            this.download = this.permission.SemesterDesktop_Download
           }
         }, (response) => {
           this.$Notice.error({
@@ -214,7 +204,7 @@
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie('permission')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
-        this.download = this.permission.CourseDesktop_Download
+        this.download = this.permission.SemesterDesktop_Download
       }
     },
     computed: {
@@ -307,7 +297,7 @@
             this.getQueryNoChange(this.keyword)
             this.$Notice.success({
               title: '操作完成!',
-              desc: '课程：' + this.pageList[this.index].name + '已删除！'
+              desc: '学期：' + this.pageList[this.index].name + '已删除！'
             })
             this.$Loading.finish()
           } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
@@ -343,7 +333,7 @@
             this.getQueryNoChange(this.keyword)
             this.$Notice.success({
               title: '操作完成!',
-              desc: '课程：' + this.pageList[this.index].name + '已注销！'
+              desc: '学期：' + this.pageList[this.index].name + '已注销！'
             })
             this.$Loading.finish()
           } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
@@ -379,7 +369,7 @@
             this.getQueryNoChange(this.keyword)
             this.$Notice.success({
               title: '操作完成!',
-              desc: '课程：' + this.pageList[this.index].name + '已激活！'
+              desc: '学期：' + this.pageList[this.index].name + '已激活！'
             })
             this.$Loading.finish()
           } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {

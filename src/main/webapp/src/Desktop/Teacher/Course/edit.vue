@@ -6,7 +6,7 @@
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
-      <Form :label-width="100" :rules="course_validate" ref="editForm" :model="course">
+      <Form :label-width="100" :rules="validate" ref="editForm" :model="course">
         <Form-item label="课程名称" prop="name" required>
           <Input size="large" v-model="course.name" placeholder="请输入课程名称" style="width: 400px"></Input>
         </Form-item>
@@ -69,7 +69,7 @@
         })
       }
       return {
-        course_validate: {
+        validate: {
           name: [
             { required: true, message: '课程名称不能为空!', trigger: 'change' },
             { validator: nameCheck, trigger: 'change' }
@@ -78,7 +78,7 @@
             { required: true, message: '课程详情不能为空!', trigger: 'change' }
           ]
         },
-        name: 'xxx',
+        name: '',
         showLoad: true,
         course: {
           name: '',
@@ -131,14 +131,9 @@
             this.$Notice.error({
               title: '登录过期或非法操作!'
             })
-            window.location.href = '/MainDesktop'
+            window.location.href = '../MainDesktop'
           } else {
             this.course = response.body
-            this.name = this.course.name
-            this.detail = this.course.detail
-            this.amount = this.course.amount
-            this.type = this.course.type
-            this.state = this.course.state
           }
         }, (response) => {
           this.$Notice.error({
@@ -169,7 +164,7 @@
             this.$Notice.error({
               title: '登录过期或非法操作!'
             })
-            window.location.href = '/MainDesktop'
+            window.location.href = '../MainDesktop'
           } else if (response.body === 'OK') {
             this.$Loading.finish()
             this.$Notice.success({

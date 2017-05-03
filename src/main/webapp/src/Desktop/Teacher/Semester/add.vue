@@ -6,27 +6,15 @@
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
-        <Form :label-width="100" :rules="validate" ref="addForm" :model="course">
-          <Form-item label="课程名称" prop="name" required>
-            <Input size="large" v-model="course.name" placeholder="请输入课程名称" style="width: 400px"></Input>
+        <Form :label-width="100" :rules="validate" ref="addForm" :model="semester">
+          <Form-item label="学期名称" prop="name" required>
+            <Input size="large" v-model="semester.name" placeholder="请输入学期名称" style="width: 400px"></Input>
           </Form-item>
-          <Form-item label="课程描述" prop="detail" required>
-            <Input size="large" v-model="course.detail" type="textarea" :autosize="{minRows: 3,maxRows: 5}" placeholder="请输入对该课程的描述" style="width: 400px"></Input>
+          <Form-item label="开始日期" prop="time_start" required>
+            <Date-picker type="date" v-model="semester.time_start" placement="bottom-end" placeholder="选择开始日期" style="width: 400px"></Date-picker>
           </Form-item>
-          <Form-item label="选课人数" prop="amount" required>
-            <Input-number size="large" :max="60" :min="0" v-model="course.amount" style="width: 400px"></Input-number>
-          </Form-item>
-          <Form-item size="large" label="课程类型" required>
-            <Radio-group v-model="course.type" type="button">
-              <Radio label="1">必修课</Radio>
-              <Radio label="2">选修课</Radio>
-            </Radio-group>
-          </Form-item>
-          <Form-item size="large" label="课程状态" required>
-            <Radio-group v-model="course.state" type="button">
-              <Radio label="1">激活</Radio>
-              <Radio label="0">注销</Radio>
-            </Radio-group>
+          <Form-item label="终止日期" prop="time_end" required>
+            <Date-picker type="date" v-model="semester.time_end" placement="bottom-end" placeholder="选择终止日期" style="width: 400px"></Date-picker>
           </Form-item>
           <Form-item>
             <Button size="large" type="primary" @click="goSave">保存</Button>
@@ -68,21 +56,22 @@
       return {
         validate: {
           name: [
-            { required: true, message: '课程名称不能为空!', trigger: 'change' },
+            { required: true, message: '学期名称不能为空!', trigger: 'change' },
             { validator: nameCheck, trigger: 'change' }
           ],
-          detail: [
-            { required: true, message: '课程详情不能为空!', trigger: 'change' }
+          time_start: [
+            { required: true, type: 'date', message: '开始日期不能为空!', trigger: 'change' }
+          ],
+          time_end: [
+            { required: true, type: 'date', message: '终止日期不能为空!', trigger: 'change' }
           ]
         },
         name: '',
         showLoad: true,
-        course: {
+        semester: {
           name: '',
-          detail: '',
-          amount: 0,
-          type: '1',
-          state: '1'
+          time_start: '',
+          time_end: ''
         }
       }
     },
@@ -112,9 +101,9 @@
     methods: {
       goReset () {
         this.$refs.addForm.resetFields()
-        this.course.amount = 0
-        this.course.type = '1'
-        this.course.state = '1'
+        this.semester.name = ''
+        this.semester.time_start = ''
+        this.semester.time_end = ''
       },
       goSave () {
         this.$Loading.start()
@@ -122,11 +111,9 @@
         this.$http.get(
           API.save,
           { params: {
-            name: this.course.name,
-            detail: this.course.detail,
-            amount: this.course.amount,
-            type: this.course.type,
-            state: this.course.state
+            name: this.semester.name,
+            time_start: this.semester.time_start.getTime(),
+            time_end: this.semester.time_end.getTime()
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -140,7 +127,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '课程：' + this.course.name + '已保存！'
+              desc: '学期：' + this.semester.name + '已保存！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

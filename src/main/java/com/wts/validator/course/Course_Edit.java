@@ -1,4 +1,4 @@
-package com.wts.validator;
+package com.wts.validator.course;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
@@ -21,7 +21,7 @@ public class Course_Edit implements Interceptor {
       String state = inv.getController().getPara("state");
       String id = inv.getController().getPara("id");
       Course course = Course.dao.findById(id);
-      if (course.getStr("name").equals(name)
+      if (!course.getStr("name").equals(name)
               && Course.dao.find("SELECT * FROM course WHERE name = ?", name).size() != 0) {
         inv.getController().renderText("该名称已存在!");
       } else if(course.getStr("name").equals(name)

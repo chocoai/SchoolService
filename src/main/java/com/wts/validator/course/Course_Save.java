@@ -1,4 +1,4 @@
-package com.wts.validator;
+package com.wts.validator.course;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;

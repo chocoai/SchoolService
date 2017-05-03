@@ -148,7 +148,7 @@
             window.location.href = '../MainDesktop/Teacher_Home'
             break
           case 'semester':
-            console.log(name)
+            window.location.href = '/SemesterDesktop/Page'
             break
           case 'course':
             window.location.href = '/CourseDesktop/Page'
