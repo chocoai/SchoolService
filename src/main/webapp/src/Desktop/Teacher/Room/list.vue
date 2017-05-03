@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="room" :name="name" three="列表" :permission="permission"></MenuList></Col>
+      <Col><MenuList active="room" :name="name" three="列表" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
@@ -9,7 +9,7 @@
     <Row v-show="!showLoad">
       <Col>
         <div>
-          <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.RoomDesktop_Save">新增</Button></div>
+          <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.Save">新增</Button></div>
           <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload" :download="download"></Search></div>
         </div>
       </Col>
@@ -115,11 +115,13 @@
       return {
         name: '',
         permission: [],
+        menu: [],
         download: false,
         query: API.query,
         total: API.total,
         keyword: '',
         pageList: [],
+        showLoad: true,
         del: false,
         inactive: false,
         active: false,
@@ -168,15 +170,15 @@
             title: '操作',
             key: 'state',
             align: 'center',
-            width: 400,
+            width: 300,
             render (row, column, index) {
               const states1 = row.state.toString() === '1'
               const states2 = row.state.toString() === '0'
               return `
-              <i-button type="primary" @click="goEdit(${index})" v-if="permission.RoomDesktop_Edit">修改</i-button>
-              <i-button type="warning" v-if="${states1} && permission.RoomDesktop_Inactive" @click="showInactive(${index})">注销</i-button>
-              <i-button type="success" v-if="${states2} && permission.RoomDesktop_Active" @click="showActive(${index})">激活</i-button>
-              <i-button type="error" @click="showDelete(${index})" v-if="permission.RoomDesktop_Delete">删除</i-button>
+              <i-button type="primary" @click="goEdit(${index})" v-if="permission.Edit">修改</i-button>
+              <i-button type="warning" v-if="${states1} && permission.Inactive" @click="showInactive(${index})">注销</i-button>
+              <i-button type="success" v-if="${states2} && permission.Active" @click="showActive(${index})">激活</i-button>
+              <i-button type="error" @click="showDelete(${index})" v-if="permission.Delete">删除</i-button>
               `
             }
           }
@@ -184,18 +186,28 @@
       }
     },
     created: function () {
-      if (getCookie('permission') === null || getCookie('permission') === undefined || getCookie('permission') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('RoomDesktop') === null || getCookie('RoomDesktop') === undefined || getCookie('RoomDesktop') === '') {
         this.$http.get(
-          API.permission
+          API.menu
         ).then((response) => {
           if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
             this.$Notice.error({
               title: '登录过期或非法操作!'
             })
           } else {
-            this.permission = JSON.parse(JSON.parse(getCookie('permission')))
-            this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
-            this.download = this.permission.RoomDesktop_Download
+            this.$http.get(
+              API.permission
+            ).then((res) => {
+              this.permission = JSON.parse(JSON.parse(getCookie('RoomDesktop')))
+              this.download = this.permission.Download
+              this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+              this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+              this.showLoad = false
+            }, (res) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
           }
         }, (response) => {
           this.$Notice.error({
@@ -203,9 +215,11 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+        this.permission = JSON.parse(JSON.parse(getCookie('RoomDesktop')))
+        this.download = this.permission.Download
+        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
-        this.download = this.permission.RoomDesktop_Download
+        this.showLoad = false
       }
     },
     computed: {

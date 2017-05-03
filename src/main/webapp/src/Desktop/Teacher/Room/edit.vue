@@ -1,15 +1,12 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="room" :name="name" three="修改" :permission="permission"></MenuList></Col>
+      <Col><MenuList active="room" :name="name" three="修改" :menu="menu"></MenuList></Col>
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
       <Form :label-width="100" :rules="validate" ref="editForm" :model="room">
-        <Form-item label="班级名称" prop="name" required disabled >
-          <Input size="large" v-model="course.name" style="width: 400px"></Input>
-        </Form-item>
         <Form-item label="入学年份" prop="year" required>
           <Input-number size="large" v-model="room.year" :max="2050" :min="2000" style="width: 400px"></Input-number>
         </Form-item>
@@ -43,35 +40,18 @@
     name: 'edit',
     components: { Copy, MenuList },
     data () {
-      const nameCheck = (rule, value, callback) => {
-        this.$http.get(
-          API.checkNameForEdit,
-          { params: {
-            id: this.$route.params.id,
-            name: value
-          } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
-            callback(new Error('登录过期或非法操作!'))
-          } else if (response.body === 'OK') {
-          } else {
-            callback(new Error(response.body))
-          }
-        }, (response) => {
-          callback(new Error('服务器内部错误!'))
-        })
-      }
       return {
         validate: {
           year: [
-            { required: true, message: '入学年份不能为空!', trigger: 'change' }
+            { required: true, type: 'number', message: '入学年份不能为空!', trigger: 'change' }
           ],
           order: [
-            { required: true, message: '班序不能为空!', trigger: 'change' }
+            { required: true, type: 'number', message: '班序不能为空!', trigger: 'change' }
           ]
         },
         name: '',
+        permission: [],
+        menu: [],
         showLoad: true,
         room: {
           name: '',
@@ -83,17 +63,26 @@
     },
     created: function () {
       this.fetchData(this.$route.params.id)
-      if (getCookie('permission') === null || getCookie('permission') === undefined || getCookie('permission') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('RoomDesktop') === null || getCookie('RoomDesktop') === undefined || getCookie('RoomDesktop') === '') {
         this.$http.get(
-          API.permission
+          API.menu
         ).then((response) => {
           if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
             this.$Notice.error({
               title: '登录过期或非法操作!'
             })
           } else {
-            this.permission = JSON.parse(JSON.parse(getCookie('permission')))
-            this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+            this.$http.get(
+              API.permission
+            ).then((res) => {
+              this.permission = JSON.parse(JSON.parse(getCookie('RoomDesktop')))
+              this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+              this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+            }, (res) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
           }
         }, (response) => {
           this.$Notice.error({
@@ -101,18 +90,14 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+        this.permission = JSON.parse(JSON.parse(getCookie('RoomDesktop')))
+        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
     },
     watch: {
       // 如果路由有变化，会再次执行该方法
       '$route': 'fetchData'
-    },
-    computed: {
-      room.name: function () {
-        return room.year + '级' + room.order + '班'
-      }
     },
     methods: {
       goBack () {
@@ -130,7 +115,7 @@
             })
             window.location.href = '../MainDesktop'
           } else {
-            this.course = response.body
+            this.room = response.body
           }
         }, (response) => {
           this.$Notice.error({
@@ -164,7 +149,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '班级：' + this.course.name + '已修改！'
+              desc: '班级：' + this.room.name + '已修改！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

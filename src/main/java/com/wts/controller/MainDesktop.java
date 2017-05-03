@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.List;
 
+import static com.wts.util.Util.PermissionString;
+
 
 public class MainDesktop extends Controller {
   public void index() {
@@ -35,7 +37,7 @@ public class MainDesktop extends Controller {
               "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
                       " LEFT JOIN permission" +
                       " ON teacherpermission.permission_id = permission.id" +
-                      " WHERE teacher_id=?"
+                      " WHERE teacher_id=? AND permission.url LIKE '%Page%'"
               ,((Teacher) getSessionAttr("teacher")).getId().toString());
       String permission = "";
       for (int i=0;i<lists.size();i++){
@@ -45,8 +47,11 @@ public class MainDesktop extends Controller {
           permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
         }
       }
-      setCookie("permission", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
+      setCookie("menu", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
       setCookie("name",URLEncoder.encode(teacher.getName(), "UTF-8"),60 * 6 * 10);
+      setCookie("SemesterDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("CourseDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("RoomDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
       renderText("OK");
     } else {
       renderText("error");
@@ -54,7 +59,7 @@ public class MainDesktop extends Controller {
   }
 
   /**
-   * 权限
+   * 桌面权限
    * */
   public void Permission() {
     List<Record> lists = Db.find(
@@ -71,7 +76,29 @@ public class MainDesktop extends Controller {
         permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
       }
     }
-    setCookie("permission", "'{"+permission.substring(0,permission.length()-2).replace("/","_")+"}'", 60 * 6 * 10);
+    setCookie("permission", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
+    setCookie("name",((Teacher) getSessionAttr("teacher")).getName(),60 * 6 * 10);
+  }
+
+  /**
+   * 菜单权限
+   * */
+  public void Menu() {
+    List<Record> lists = Db.find(
+            "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
+                    " LEFT JOIN permission" +
+                    " ON teacherpermission.permission_id = permission.id" +
+                    " WHERE teacher_id=? AND permission.url LIKE '%Page%'"
+            ,((Teacher) getSessionAttr("teacher")).getId().toString());
+    String permission = "";
+    for (int i=0;i<lists.size();i++){
+      if (lists.get(i).get("state").toString().equals("1")){
+        permission = permission + "\""+lists.get(i).get("url")+"\": true, ";
+      } else {
+        permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
+      }
+    }
+    setCookie("menu", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
     setCookie("name",((Teacher) getSessionAttr("teacher")).getName(),60 * 6 * 10);
   }
 

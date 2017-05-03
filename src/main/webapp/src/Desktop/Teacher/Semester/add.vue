@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="course" :name="name" three="新增" :permission="permission"></MenuList></Col>
+      <Col><MenuList active="course" :name="name" three="新增" :menu="menu"></MenuList></Col>
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
@@ -67,6 +67,8 @@
           ]
         },
         name: '',
+        permission: [],
+        menu: [],
         showLoad: true,
         semester: {
           name: '',
@@ -76,17 +78,26 @@
       }
     },
     created: function () {
-      if (getCookie('permission') === null || getCookie('permission') === undefined || getCookie('permission') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('SemesterDesktop') === null || getCookie('SemesterDesktop') === undefined || getCookie('SemesterDesktop') === '') {
         this.$http.get(
-          API.permission
+          API.menu
         ).then((response) => {
           if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
             this.$Notice.error({
               title: '登录过期或非法操作!'
             })
           } else {
-            this.permission = JSON.parse(JSON.parse(getCookie('permission')))
-            this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+            this.$http.get(
+              API.permission
+            ).then((res) => {
+              this.permission = JSON.parse(JSON.parse(getCookie('SemesterDesktop')))
+              this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+              this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+            }, (res) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
           }
         }, (response) => {
           this.$Notice.error({
@@ -94,7 +105,8 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+        this.permission = JSON.parse(JSON.parse(getCookie('SemesterDesktop')))
+        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
     },

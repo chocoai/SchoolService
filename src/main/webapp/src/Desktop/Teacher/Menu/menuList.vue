@@ -12,9 +12,9 @@
             <Icon type="stats-bars"></Icon>
             基础管理
           </template>
-          <Menu-item name="semester">学期</Menu-item>
-          <Menu-item name="course" v-if="permission.CourseDesktop_Page">课程</Menu-item>
-          <Menu-item name="room">班级</Menu-item>
+          <Menu-item name="semester" v-if="menu.SemesterDesktop_Page">学期</Menu-item>
+          <Menu-item name="course" v-if="menu.CourseDesktop_Page">课程</Menu-item>
+          <Menu-item name="room" v-if="menu.RoomDesktop_Page">班级</Menu-item>
         </Submenu>
         <Submenu name="person">
           <template slot="title">
@@ -67,12 +67,12 @@
 <script>
   export default {
     name: 'menu',
-    props: ['active', 'name', 'three', 'permission'],
+    props: ['active', 'name', 'three', 'menu'],
     data () {
       return {
         active: '',
         name: '',
-        permission: []
+        menu: []
       }
     },
     computed: {

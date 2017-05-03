@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <MenuList active="home" :name="name" three="blank" :permission="permission"></MenuList>
+    <MenuList active="home" :name="name" three="blank" :menu="menu"></MenuList>
     <div class="layout-content">
       你好!
     </div>
@@ -18,20 +18,20 @@
     data () {
       return {
         name: '',
-        permission: []
+        menu: []
       }
     },
     created: function () {
-      if (getCookie('permission') === null || getCookie('permission') === undefined || getCookie('permission') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '') {
         this.$http.get(
-          API.permission
+          API.menu
         ).then((response) => {
           if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
             this.$Notice.error({
               title: '登录过期或非法操作!'
             })
           } else {
-            this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+            this.menu = JSON.parse(JSON.parse(getCookie('menu')))
             this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
           }
         }, (response) => {
@@ -40,7 +40,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('permission')))
+        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
     }

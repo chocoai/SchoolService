@@ -61,7 +61,7 @@ public class CourseRoomController extends Controller {
             for (Room i : rooms) {
                 ro = ro + "{\"id\": \""+i.getId()+"\", " +
                         "\"name\": \""+i.getName()+"\", " +
-                        "\"slogan\": \""+i.getSlogan()+"\", " +
+                        "\"slogan\": \""+i+"\", " +
                         "\"state\": \""+i.getState()+"\"}, ";
             }
             roomString = "\"rooms\": [" + ro.substring(0, ro.length() - 1) + "]";

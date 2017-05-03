@@ -233,7 +233,7 @@ public class StudentController extends Controller {
         if (rooms.size() != 0) {
             String ro = "";
             for (Room i : rooms) {
-                ro = ro + "{\"id\": \""+i.getId()+"\", \"name\": \""+i.getName()+"\", \"slogan\": \""+i.getSlogan()+"\", \"state\": \""+i.getState()+"\"}"+ ",";
+                ro = ro + "{\"id\": \""+i.getId()+"\", \"name\": \""+i.getName()+"\", \"slogan\": \""+i+"\", \"state\": \""+i.getState()+"\"}"+ ",";
             }
             roomString = "\"rooms\": [" + ro.substring(0, ro.length() - 1) + "]";
         } else {

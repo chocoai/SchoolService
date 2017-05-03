@@ -1,8 +1,12 @@
 package com.wts.util;
 
 
+import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.Record;
 import com.wts.entity.model.Parent;
 import com.wts.entity.model.Teacher;
+
+import java.util.List;
 
 public class Util {
 
@@ -14,6 +18,24 @@ public class Util {
     } else {
       return str.trim();
     }
+  }
+
+  public static String PermissionString(String sqlString, String teacherId) {
+    List<Record> lists = Db.find(
+            "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
+                    " LEFT JOIN permission" +
+                    " ON teacherpermission.permission_id = permission.id" +
+                    " WHERE teacher_id=? AND permission.url LIKE '%"+sqlString+"%'"
+            ,teacherId);
+    String permission = "";
+    for (int i=0;i<lists.size();i++){
+      if (lists.get(i).get("state").toString().equals("1")){
+        permission = permission + "\""+lists.get(i).get("url")+"\": true, ";
+      } else {
+        permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
+      }
+    }
+    return "{"+permission.substring(0,permission.length()-2).replace(sqlString+"/","")+"}";
   }
 
   public static void main(String[] args) {

@@ -18,7 +18,7 @@ const routes = [
   { path: '/add',
     component: Add,
     beforeEnter: (to, from, next) => {
-      if (JSON.parse(JSON.parse(getCookie('permission'))).RoomDesktop_Save) {
+      if (JSON.parse(JSON.parse(getCookie('RoomDesktop'))).Save) {
         next()
       } else {
         next({ path: '/' })
@@ -28,7 +28,7 @@ const routes = [
   { path: '/edit/:id',
     component: Edit,
     beforeEnter: (to, from, next) => {
-      if (JSON.parse(JSON.parse(getCookie('permission'))).RoomDesktop_Edit) {
+      if (JSON.parse(JSON.parse(getCookie('RoomDesktop'))).Edit) {
         next()
       } else {
         next({ path: '/' })

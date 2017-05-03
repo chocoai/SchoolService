@@ -175,7 +175,7 @@ public class RoomController extends Controller {
      */
     @Before(AjaxManager.class)
     public void checkSloganForEdit() {
-        if (!Room.dao.findById(getPara("id")).getSlogan().equals(getPara("slogan"))
+        if (!Room.dao.findById(getPara("id")).equals(getPara("slogan"))
                 && Room.dao.find("SELECT * FROM room WHERE slogan = ?", getPara("slogan")).size() != 0) {
             renderText("该班级标语已存在!");
         } else {

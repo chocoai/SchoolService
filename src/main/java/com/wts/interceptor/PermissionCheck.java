@@ -11,9 +11,8 @@ import javax.servlet.http.HttpSession;
 public class PermissionCheck implements Interceptor {
 
   public void intercept(Invocation inv) {
-
-    if (inv.getController().getCookie("permission") == null ||
-            inv.getController().getCookie("permission").equals("")){
+    if (inv.getController().getCookie(inv.getTarget().getClass().getSimpleName()) == null ||
+            inv.getController().getCookie(inv.getTarget().getClass().getSimpleName()).equals("")){
       inv.getController().renderText("illegal");
     }else{
       HttpSession session = inv.getController().getSession();

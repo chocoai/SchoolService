@@ -11,4 +11,5 @@ export const save = `${Desktop.Prefix}/${base}/Save`
 export const edit = `${Desktop.Prefix}/${base}/Edit`
 export const get = `${Desktop.Prefix}/${base}/Get`
 export const del = `${Desktop.Prefix}/${base}/Delete`
-export const permission = `${Desktop.Prefix}/MainDesktop/Permission`
+export const permission = `${Desktop.Prefix}/${base}/Permission`
+export const menu = `${Desktop.Prefix}/MainDesktop/Menu`
