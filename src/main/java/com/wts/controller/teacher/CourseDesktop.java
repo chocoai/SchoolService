@@ -66,7 +66,8 @@ public class CourseDesktop extends Controller {
             "SELECT *, " +
                     "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) as tname, " +
                     "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) as sname ",
-            "FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
+            "FROM course WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
+                    "OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
   }
 
   /**
@@ -74,7 +75,7 @@ public class CourseDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%'");
+    Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%'");
     renderText(count.toString());
   }
 
@@ -119,8 +120,13 @@ public class CourseDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class})
   public void Delete() {
-    Course.dao.deleteById(getPara("id"));
-    renderText("OK");
+    Course object = Course.dao.findById(getPara("id"));
+    if (object.get("del").toString().equals("1")) {
+      renderText("该课程已删除!");
+    } else {
+      object.set("del", 1).update();
+      renderText("OK");
+    }
   }
 
   /**
@@ -134,6 +140,7 @@ public class CourseDesktop extends Controller {
             .set("amount", getPara("amount"))
             .set("type", getPara("type"))
             .set("state", getPara("state"))
+            .set("del", 0)
             .save();
     renderText("OK");
   }
@@ -159,11 +166,11 @@ public class CourseDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
     String[] title={"序号","课程名称","课程详情","课程类型","课程状态"};
-    String fileName = "Course";
+    String fileName = "course";
     String SQL = "select id AS 序号,name AS 课程名称, detail AS 课程详情, " +
             "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) AS 课程类型, " +
             "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 课程状态 " +
-            "from course where name like '%"+getPara("keyword")+"%' OR detail LIKE '%" + getPara("keyword") + "%' " +
+            "from course where del = 0 AND name like '%"+getPara("keyword")+"%' OR detail LIKE '%" + getPara("keyword") + "%' " +
             "ORDER BY id ASC";
     ExportUtil.export(title,fileName,SQL,getResponse());
   }

@@ -5,6 +5,7 @@ CREATE TABLE `Course` (
 `amount` int NULL COMMENT '选课人数，0为不限制',
 `type` int NULL COMMENT '课程类型1必修课2选修课',
 `state` int NULL COMMENT '课程状态0停用1可用',
+`del` int NULL COMMENT '删除标识0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -14,6 +15,7 @@ CREATE TABLE `Room` (
 `year` int NULL COMMENT '入学年份',
 `order` int NULL COMMENT '班级次序',
 `state` int NULL COMMENT '班级状态0停用1可用',
+`del` int NULL COMMENT '删除标识0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -41,6 +43,7 @@ CREATE TABLE `Teacher` (
 `isManager` int NULL COMMENT '是否管理0否1是',
 `picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
 `type` int NULL COMMENT '1在编2聘用3校外',
+`del` int NULL COMMENT '删除标识0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -54,6 +57,7 @@ CREATE TABLE `Student` (
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '家庭地址',
 `state` int NULL COMMENT '学生状态0停用1可用',
 `bind` int NULL COMMENT '是否绑定家长0否1是',
+`del` int NULL COMMENT '删除标识0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -261,6 +265,7 @@ CREATE TABLE `Semester` (
 `time_start` datetime NULL COMMENT '开始时间',
 `time_end` datetime NULL COMMENT '终止时间',
 `state` int NULL COMMENT '状态0非当前学期1当前学期',
+`del` int NULL COMMENT '删除标识0否1是',
 PRIMARY KEY (`id`) 
 );
 
@@ -279,6 +284,7 @@ CREATE TABLE `Parent` (
 `state` int NULL COMMENT '账号状态1关注2已冻结3取消关注4未关注',
 `picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
 `bind` int NULL COMMENT '是否绑定学生0否1是',
+`del` int NULL COMMENT '删除标识0否1是',
 PRIMARY KEY (`id`) 
 );
 

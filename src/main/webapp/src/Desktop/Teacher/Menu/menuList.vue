@@ -21,7 +21,7 @@
             <Icon type="stats-bars"></Icon>
             人员管理
           </template>
-          <Menu-item name="teacher">教师</Menu-item>
+          <Menu-item name="teacher" v-if="menu.TeacherDesktop_Page">教师</Menu-item>
           <Menu-item name="student" v-if="menu.StudentDesktop_Page">学生</Menu-item>
           <Menu-item name="parent">家长</Menu-item>
         </Submenu>
@@ -155,6 +155,9 @@
             break
           case 'room':
             window.location.href = '/RoomDesktop/Page'
+            break
+          case 'teacher':
+            window.location.href = '/TeacherDesktop/Page'
             break
           case 'student':
             window.location.href = '/StudentDesktop/Page'

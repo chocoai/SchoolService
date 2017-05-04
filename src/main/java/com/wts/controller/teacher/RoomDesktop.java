@@ -68,7 +68,7 @@ public class RoomDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM room WHERE name LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
+            "FROM room WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
   }
 
   /**
@@ -76,7 +76,7 @@ public class RoomDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM room WHERE name LIKE '%" + getPara("keyword") + "%'");
+    Long count = Db.queryLong("SELECT COUNT(*) FROM room WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%'");
     renderText(count.toString());
   }
 
@@ -121,8 +121,13 @@ public class RoomDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Room_Exist.class})
   public void Delete() {
-    Room.dao.deleteById(getPara("id"));
-    renderText("OK");
+    Room object = Room.dao.findById(getPara("id"));
+    if (object.get("del").toString().equals("1")) {
+      renderText("该班级已删除!");
+    } else {
+      object.set("del", 1).update();
+      renderText("OK");
+    }
   }
   /**
    * 保存
@@ -134,6 +139,7 @@ public class RoomDesktop extends Controller {
             .set("year", getPara("year"))
             .set("order", getPara("order"))
             .set("state", getPara("state"))
+            .set("del", 0)
             .save();
     renderText("OK");
   }
@@ -161,7 +167,7 @@ public class RoomDesktop extends Controller {
     String fileName = "Room";
     String SQL = "select id AS 序号,name AS 班级名称, `year` AS 入学年份, `order` AS 班序, " +
             "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 班级状态 " +
-            "from course where name like '%"+getPara("keyword")+"%'" +
+            "from room where del = 0 AND name like '%"+getPara("keyword")+"%'" +
             "ORDER BY id ASC";
     ExportUtil.export(title,fileName,SQL,getResponse());
   }

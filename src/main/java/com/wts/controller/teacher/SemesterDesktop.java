@@ -63,7 +63,7 @@ public class SemesterDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM semester WHERE name LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
+            "FROM semester WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
   }
 
   /**
@@ -71,7 +71,7 @@ public class SemesterDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM semester WHERE name LIKE '%" + getPara("keyword") + "%'");
+    Long count = Db.queryLong("SELECT COUNT(*) FROM semester WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%'");
     renderText(count.toString());
   }
 
@@ -116,8 +116,13 @@ public class SemesterDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Semester_Exist.class})
   public void Delete() {
-    Semester.dao.deleteById(getPara("id"));
-    renderText("OK");
+    Semester object = Semester.dao.findById(getPara("id"));
+    if (object.get("del").toString().equals("1")) {
+      renderText("该学期已删除!");
+    } else {
+      object.set("del", 1).update();
+      renderText("OK");
+    }
   }
   /**
    * 保存
@@ -129,6 +134,7 @@ public class SemesterDesktop extends Controller {
             .set("time_start", new Date(getParaToLong("time_start")))
             .set("time_end", new Date(getParaToLong("time_end")))
             .set("state", 0)
+            .set("del", 0)
             .save();
     renderText("OK");
   }
@@ -152,10 +158,10 @@ public class SemesterDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
     String[] title={"序号","学期名称","开始日期","终止日期","学期状态"};
-    String fileName = "semester";
+    String fileName = "Semester";
     String SQL = "select id AS 序号,name AS 学期名称, " +
             "(case state when 1 then '当前学期' when 2 then '非当前学期' else '错误' end ) AS 学期状态 " +
-            "from semester where name like '%"+getPara("keyword")+"%'" +
+            "from semester where del = 0 AND name like '%"+getPara("keyword")+"%'" +
             "ORDER BY id ASC";
     ExportUtil.export(title,fileName,SQL,getResponse());
   }

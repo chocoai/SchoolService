@@ -49,4 +49,12 @@ public abstract class BaseSemester<M extends BaseSemester<M>> extends Model<M> i
 		return get("state");
 	}
 
+	public void setDel(java.lang.Integer del) {
+		set("del", del);
+	}
+
+	public java.lang.Integer getDel() {
+		return get("del");
+	}
+
 }

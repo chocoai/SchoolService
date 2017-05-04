@@ -66,7 +66,7 @@ public class TeacherDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM teacher WHERE name LIKE '%" + getPara("keyword") + "%' " +
+            "FROM teacher WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
                     "OR userId LIKE '%" + getPara("keyword") + "%' " +
                     "OR mobile LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
   }
@@ -76,7 +76,7 @@ public class TeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM teacher WHERE name LIKE '%" + getPara("keyword") + "%' " +
+    Long count = Db.queryLong("SELECT COUNT(*) FROM teacher WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
             "OR userId LIKE '%" + getPara("keyword") + "%' " +
             "OR mobile LIKE '%" + getPara("keyword") + "%'");
     renderText(count.toString());
@@ -91,29 +91,29 @@ public class TeacherDesktop extends Controller {
   }
 
   /**
-   * 激活
+   * 邀请关注
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Exist.class})
   public void Active() {
     Teacher object = Teacher.dao.findById(getPara("id"));
-    if (object.get("state").toString().equals("3")) {
-      renderText("该教师已激活!");
+    if (object.get("state").toString().equals("4")) {
+      renderText("该教师已处于未关注状态!");
     } else {
-      object.set("state", 1).update();
+      object.set("state", 4).update();
       renderText("OK");
     }
   }
 
   /**
-   * 注销
+   * 取消关注
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Exist.class})
   public void Inactive() {
     Teacher object = Teacher.dao.findById(getPara("id"));
-    if (object.get("state").toString().equals("0")) {
-      renderText("该学生已注销!");
+    if (object.get("state").toString().equals("3")) {
+      renderText("该教师已处于取消关注状态!");
     } else {
-      object.set("state", 0).update();
+      object.set("state", 3).update();
       renderText("OK");
     }
   }
@@ -123,8 +123,13 @@ public class TeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Exist.class})
   public void Delete() {
-    Teacher.dao.deleteById(getPara("id"));
-    renderText("OK");
+    Teacher object = Teacher.dao.findById(getPara("id"));
+    if (object.get("del").toString().equals("1")) {
+      renderText("该教师已删除!");
+    } else {
+      object.set("del", 1).update();
+      renderText("OK");
+    }
   }
 
   /**
@@ -134,13 +139,10 @@ public class TeacherDesktop extends Controller {
   public void Save() {
     Teacher object = new Teacher();
     object.set("name", getPara("name"))
-            .set("number", getPara("number"))
-            .set("code", getPara("code"))
-            .set("sex", getSex(getPara("number")))
-            .set("birth", getBirthDate(getPara("number")))
-            .set("address", getPara("address"))
-            .set("state", getPara("state"))
-            .set("bind", 0)
+            .set("mobile", getPara("mobile"))
+            .set("type", getPara("type"))
+            .set("state", 4)
+            .set("del", 0)
             .save();
     renderText("OK");
   }
@@ -152,13 +154,8 @@ public class TeacherDesktop extends Controller {
   public void Edit() {
     Teacher object = Teacher.dao.findById(getPara("id"));
     object.set("name", getPara("name"))
-            .set("number", getPara("number"))
-            .set("code", getPara("code"))
-            .set("sex", getSex(getPara("number")))
-            .set("birth", getBirthDate(getPara("number")))
-            .set("address", getPara("type"))
-            .set("state", getPara("state"))
-            .set("bind", 0)
+            .set("mobile", getPara("mobile"))
+            .set("type", getPara("type"))
             .update();
     renderText("OK");
   }
@@ -168,13 +165,12 @@ public class TeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
-    String[] title={"序号","学生姓名","身份证号码","学籍号码","家庭地址","性别","家长绑定情况","状态"};
-    String fileName = "Student";
-    String SQL = "select id AS 序号,name AS 学生姓名, number AS 身份证号码, code AS 学籍号码, address AS 家庭地址, " +
-            "(case sex when 1 then '男' when 2 then '女' else '未知' end ) AS 性别, " +
-            "(case bind when 1 then '已绑定' when 2 then '未绑定' else '错误' end ) AS 家长绑定, " +
-            "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 状态 " +
-            "from student where name like '%"+getPara("keyword")+"%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%' " +
+    String[] title={"序号","教师姓名","联系电话","教师类型","关注状态"};
+    String fileName = "Teacher";
+    String SQL = "select id AS 序号,name AS 教师姓名, mobile AS 联系电话, " +
+            "(case type when 1 then '在编' when 2 then '聘用' when 3 then '校外' else '未知' end ) AS 教师类型, " +
+            "(case state when 1 then '关注' when 2 then '已冻结' when 3 then '取消关注' when 4 then '未关注' else '错误' end ) AS 关注状态 " +
+            "from teacher where del = 0 AND name like '%"+getPara("keyword")+"%' OR mobile LIKE '%" + getPara("keyword") + "%' " +
             "ORDER BY id ASC";
     ExportUtil.export(title,fileName,SQL,getResponse());
   }

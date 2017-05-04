@@ -49,4 +49,12 @@ public abstract class BaseRoom<M extends BaseRoom<M>> extends Model<M> implement
 		return get("state");
 	}
 
+	public void setDel(java.lang.Integer del) {
+		set("del", del);
+	}
+
+	public java.lang.Integer getDel() {
+		return get("del");
+	}
+
 }

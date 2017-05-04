@@ -8,6 +8,7 @@ import com.wts.entity.model.Teacher;
 public class Teacher_Edit implements Interceptor {
   public void intercept(Invocation inv) {
     if (!StrKit.isBlank(inv.getController().getPara("name"))
+            && !StrKit.isBlank(inv.getController().getPara("mobile"))
             && !StrKit.isBlank(inv.getController().getPara("type"))
             ) {
       String name = inv.getController().getPara("name");
@@ -16,8 +17,8 @@ public class Teacher_Edit implements Interceptor {
       String id = inv.getController().getPara("id");
       Teacher object = Teacher.dao.findById(id);
       if(object.getStr("name").equals(name)
-              && object.getStr("type").equals(type)
               && object.getStr("mobile").equals(mobile)
+              && object.get("type").toString().equals(type)
               ){
         inv.getController().renderText("未发现修改内容!");
       }else {

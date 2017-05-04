@@ -13,6 +13,8 @@ import com.jfinal.template.Engine;
 import com.wts.controller.*;
 import com.wts.controller.teacher.*;
 import com.wts.entity.model._MappingKit;
+import me.chanjar.weixin.cp.api.WxCpInMemoryConfigStorage;
+import me.chanjar.weixin.cp.api.WxCpServiceImpl;
 
 /**
  * API引导式配置
@@ -41,6 +43,7 @@ public class Config extends JFinalConfig {
         me.add("/SemesterDesktop", SemesterDesktop.class);
         me.add("/RoomDesktop", RoomDesktop.class);
         me.add("/StudentDesktop", StudentDesktop.class);
+        me.add("/TeacherDesktop", TeacherDesktop.class);
 //        me.add("/ForCourse", ForCourse.class);
 //        me.add("/courseRoom", CourseRoomController.class);
 //        me.add("/teacher", TeacherController.class);
@@ -94,6 +97,21 @@ public class Config extends JFinalConfig {
     public void configHandler(Handlers me) {
         me.add(new ContextPathHandler("contextPath"));//设置上下文路径
     }
+
+//    public void afterJFinalStart(){
+//        WxCpInMemoryConfigStorage config = new WxCpInMemoryConfigStorage();
+//        config.setCorpId("wx947e7da41f395af7");      // 设置微信企业号的appid
+//        config.setCorpSecret("thcMcEeJdhuSDw7S_9314ILJ2hqPRCCxhupksDvPDQkUgfqfjDxVx16jPR_ztzzK");  // 设置微信企业号的app corpSecret
+//        config.setAgentId(26);     // 设置微信企业号应用ID
+//        config.setToken("weixin4j");       // 设置微信企业号应用的token
+//        config.setAesKey("vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT");      // 设置微信企业号应用的EncodingAESKey
+//
+//        WxCpServiceImpl wxCpService = new WxCpServiceImpl();
+//        wxCpService.setWxCpConfigStorage(config);
+//        JFinal.me().getServletContext().setAttribute("xx",wxCpService);
+//        System.out.println(wxCpService.toString());
+//    }
+
 
     /**
      * 建议使用 JFinal 手册推荐的方式启动项目

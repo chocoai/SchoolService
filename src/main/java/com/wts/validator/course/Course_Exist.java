@@ -11,7 +11,11 @@ public class Course_Exist implements Interceptor {
       if (Course.dao.findById(inv.getController().getPara("id")) == null) {
         inv.getController().renderText("指定课程不存在!");
       } else {
-        inv.invoke();
+        if (Course.dao.findById(inv.getController().getPara("id")).getDel()==0){
+          inv.invoke();
+        } else {
+          inv.getController().renderText("指定课程已删除!");
+        }
       }
     } else {
       inv.getController().renderText("缺少参数!");

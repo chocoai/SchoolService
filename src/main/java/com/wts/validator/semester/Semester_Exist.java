@@ -11,7 +11,11 @@ public class Semester_Exist implements Interceptor {
       if (Semester.dao.findById(inv.getController().getPara("id")) == null) {
         inv.getController().renderText("指定学期不存在!");
       } else {
-        inv.invoke();
+        if (Semester.dao.findById(inv.getController().getPara("id")).getDel()==0){
+          inv.invoke();
+        } else {
+          inv.getController().renderText("指定学期已删除!");
+        }
       }
     } else {
       inv.getController().renderText("缺少参数!");

@@ -11,7 +11,11 @@ public class Student_Exist implements Interceptor {
       if (Student.dao.findById(inv.getController().getPara("id")) == null) {
         inv.getController().renderText("指定学生不存在!");
       } else {
-        inv.invoke();
+        if (Student.dao.findById(inv.getController().getPara("id")).getDel()==0){
+          inv.invoke();
+        } else {
+          inv.getController().renderText("指定学生已删除!");
+        }
       }
     } else {
       inv.getController().renderText("缺少参数!");

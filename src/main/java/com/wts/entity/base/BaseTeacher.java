@@ -129,4 +129,12 @@ public abstract class BaseTeacher<M extends BaseTeacher<M>> extends Model<M> imp
 		return get("type");
 	}
 
+	public void setDel(java.lang.Integer del) {
+		set("del", del);
+	}
+
+	public java.lang.Integer getDel() {
+		return get("del");
+	}
+
 }

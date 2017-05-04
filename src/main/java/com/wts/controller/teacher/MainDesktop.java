@@ -2,10 +2,13 @@ package com.wts.controller.teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
+import com.jfinal.core.JFinal;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.wts.entity.WxService;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
+import me.chanjar.weixin.cp.api.WxCpService;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -16,6 +19,9 @@ import static com.wts.util.Util.PermissionString;
 
 public class MainDesktop extends Controller {
   public void index() {
+    System.out.println(WxService.getMe().toString());
+
+//    System.out.println(JFinal.me().getServletContext().getAttribute("xx").toString());
     render("/static/html/desktop/Desktop_Login.html");
   }
 

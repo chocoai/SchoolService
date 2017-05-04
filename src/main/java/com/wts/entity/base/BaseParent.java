@@ -121,4 +121,12 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 		return get("bind");
 	}
 
+	public void setDel(java.lang.Integer del) {
+		set("del", del);
+	}
+
+	public java.lang.Integer getDel() {
+		return get("del");
+	}
+
 }

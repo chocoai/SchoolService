@@ -9,9 +9,13 @@ public class Teacher_Exist implements Interceptor {
   public void intercept(Invocation inv) {
     if (!StrKit.isBlank(inv.getController().getPara("id"))) {
       if (Teacher.dao.findById(inv.getController().getPara("id")) == null) {
-        inv.getController().renderText("指定学生不存在!");
+        inv.getController().renderText("指定教师不存在!");
       } else {
-        inv.invoke();
+        if (Teacher.dao.findById(inv.getController().getPara("id")).getDel()==0){
+          inv.invoke();
+        } else {
+          inv.getController().renderText("指定教师已删除!");
+        }
       }
     } else {
       inv.getController().renderText("缺少参数!");

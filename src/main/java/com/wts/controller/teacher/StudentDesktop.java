@@ -63,7 +63,7 @@ public class StudentDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM student WHERE name LIKE '%" + getPara("keyword") + "%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
+            "FROM student WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
   }
 
   /**
@@ -71,7 +71,7 @@ public class StudentDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM student WHERE name LIKE '%" + getPara("keyword") + "%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%'");
+    Long count = Db.queryLong("SELECT COUNT(*) FROM student WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%'");
     renderText(count.toString());
   }
 
@@ -116,8 +116,13 @@ public class StudentDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Student_Exist.class})
   public void Delete() {
-    Student.dao.deleteById(getPara("id"));
-    renderText("OK");
+    Student object = Student.dao.findById(getPara("id"));
+    if (object.get("del").toString().equals("1")) {
+      renderText("该学生已删除!");
+    } else {
+      object.set("del", 1).update();
+      renderText("OK");
+    }
   }
 
   /**
@@ -134,6 +139,7 @@ public class StudentDesktop extends Controller {
             .set("address", getPara("address"))
             .set("state", getPara("state"))
             .set("bind", 0)
+            .set("del", 0)
             .save();
     renderText("OK");
   }
@@ -167,7 +173,7 @@ public class StudentDesktop extends Controller {
             "(case sex when 1 then '男' when 2 then '女' else '未知' end ) AS 性别, " +
             "(case bind when 1 then '已绑定' when 2 then '未绑定' else '错误' end ) AS 家长绑定, " +
             "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 状态 " +
-            "from student where name like '%"+getPara("keyword")+"%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%' " +
+            "from student where del = 0 AND name like '%"+getPara("keyword")+"%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%' " +
             "ORDER BY id ASC";
     ExportUtil.export(title,fileName,SQL,getResponse());
   }

@@ -36,6 +36,7 @@ Table: course
  amount | INT(10)      | YES  |     |         | 选课人数，0为不限制
  type   | INT(10)      | YES  |     |         | 课程类型1必修课2选修课
  state  | INT(10)      | YES  |     |         | 课程状态0停用1可用
+ del    | INT(10)      | YES  |     |         |         
 --------+--------------+------+-----+---------+---------
 
 Table: coursechoose
@@ -234,6 +235,7 @@ Table: parent
  state    | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
  picUrl   | VARCHAR(255) | YES  |     |         | 头像地址    
  bind     | INT(10)      | YES  |     |         | 是否绑定学生0否1是
+ del      | INT(10)      | YES  |     |         |         
 ----------+--------------+------+-----+---------+---------
 
 Table: permission
@@ -264,6 +266,7 @@ Table: room
  year  | INT(10)      | YES  |     |         | 入学年份    
  order | INT(10)      | YES  |     |         | 班级次序    
  state | INT(10)      | YES  |     |         | 班级状态0停用1可用
+ del   | INT(10)      | YES  |     |         |         
 -------+--------------+------+-----+---------+---------
 
 Table: roomstudent
@@ -294,6 +297,7 @@ Table: semester
  time_start | DATETIME(19) | YES  |     |         | 开始时间    
  time_end   | DATETIME(19) | YES  |     |         | 终止时间    
  state      | INT(10)      | YES  |     |         | 状态0非当前学期1当前学期
+ del        | INT(10)      | YES  |     |         |         
 ------------+--------------+------+-----+---------+---------
 
 Table: student
@@ -309,6 +313,7 @@ Table: student
  address | VARCHAR(255) | YES  |     |         | 家庭地址    
  state   | INT(10)      | YES  |     |         | 学生状态0停用1可用
  bind    | INT(10)      | YES  |     |         | 是否绑定家长0否1是
+ del     | INT(10)      | YES  |     |         |         
 ---------+--------------+------+-----+---------+---------
 
 Table: studentcourse
@@ -339,6 +344,7 @@ Table: teacher
  isManager | INT(10)      | YES  |     |         | 是否管理0否1是
  picUrl    | VARCHAR(255) | YES  |     |         | 头像地址    
  type      | INT(10)      | YES  |     |         | 1在编2聘用3校外
+ del       | INT(10)      | YES  |     |         |         
 -----------+--------------+------+-----+---------+---------
 
 Table: teachermessage
