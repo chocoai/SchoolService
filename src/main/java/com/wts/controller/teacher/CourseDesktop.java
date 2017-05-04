@@ -1,4 +1,4 @@
-package com.wts.controller;
+package com.wts.controller.teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -60,7 +60,7 @@ public class CourseDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Query.class})
   public void Query() {
-    renderJson(Course.dao.paginate(
+    renderJson(Db.paginate(
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *, " +
@@ -91,11 +91,11 @@ public class CourseDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class})
   public void Active() {
-    Course course = Course.dao.findById(getPara("id"));
-    if (course.get("state").toString().equals("1")) {
+    Course object = Course.dao.findById(getPara("id"));
+    if (object.get("state").toString().equals("1")) {
       renderText("该课程已激活!");
     } else {
-      course.set("state", 1).update();
+      object.set("state", 1).update();
       renderText("OK");
     }
   }
@@ -105,11 +105,11 @@ public class CourseDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class})
   public void Inactive() {
-    Course course = Course.dao.findById(getPara("id"));
-    if (course.get("state").toString().equals("0")) {
+    Course object = Course.dao.findById(getPara("id"));
+    if (object.get("state").toString().equals("0")) {
       renderText("该课程已注销!");
     } else {
-      course.set("state", 0).update();
+      object.set("state", 0).update();
       renderText("OK");
     }
   }
@@ -128,8 +128,8 @@ public class CourseDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Course_Save.class})
   public void Save() {
-    Course course = new Course();
-    course.set("name", getPara("name"))
+    Course object = new Course();
+    object.set("name", getPara("name"))
             .set("detail", getPara("detail"))
             .set("amount", getPara("amount"))
             .set("type", getPara("type"))
@@ -143,8 +143,8 @@ public class CourseDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class, Course_Edit.class})
   public void Edit() {
-    Course course = Course.dao.findById(getPara("id"));
-    course.set("name", getPara("name"))
+    Course object = Course.dao.findById(getPara("id"));
+    object.set("name", getPara("name"))
             .set("detail", getPara("detail"))
             .set("amount", getPara("amount"))
             .set("type", getPara("type"))
@@ -173,7 +173,7 @@ public class CourseDesktop extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkNameForAdd() {
-    if (Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
+    if (Db.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该课程名称已存在!");
     } else {
       renderText("OK");
@@ -186,7 +186,7 @@ public class CourseDesktop extends Controller {
   @Before(OverdueCheck.class)
   public void checkNameForEdit() {
     if (!Course.dao.findById(getPara("id")).get("name").equals(getPara("name"))
-            && Course.dao.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
+            && Db.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该课程名称已存在!");
     } else {
       renderText("OK");

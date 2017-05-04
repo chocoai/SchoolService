@@ -3,6 +3,7 @@ package com.wts.validator.course;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
 import com.wts.entity.model.Course;
 
 public class Course_Edit implements Interceptor {
@@ -20,15 +21,15 @@ public class Course_Edit implements Interceptor {
       String type = inv.getController().getPara("type");
       String state = inv.getController().getPara("state");
       String id = inv.getController().getPara("id");
-      Course course = Course.dao.findById(id);
-      if (!course.getStr("name").equals(name)
-              && Course.dao.find("SELECT * FROM course WHERE name = ?", name).size() != 0) {
+      Course object = Course.dao.findById(id);
+      if (!object.getStr("name").equals(name)
+              && Db.find("SELECT * FROM course WHERE name = ?", name).size() != 0) {
         inv.getController().renderText("该名称已存在!");
-      } else if(course.getStr("name").equals(name)
-              && course.getStr("detail").equals(detail)
-              && course.getStr("amount").equals(amount)
-              && course.getStr("type").equals(type)
-              && course.getStr("state").equals(state)
+      } else if(object.getStr("name").equals(name)
+              && object.getStr("detail").equals(detail)
+              && object.getStr("amount").equals(amount)
+              && object.getStr("type").equals(type)
+              && object.getStr("state").equals(state)
               ){
         inv.getController().renderText("未发现修改内容!");
       }else {

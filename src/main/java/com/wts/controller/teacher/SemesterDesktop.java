@@ -1,4 +1,4 @@
-package com.wts.controller;
+package com.wts.controller.teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -59,7 +59,7 @@ public class SemesterDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Query.class})
   public void Query() {
-    renderJson(Semester.dao.paginate(
+    renderJson(Db.paginate(
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
@@ -88,11 +88,11 @@ public class SemesterDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Semester_Exist.class})
   public void Active() {
-    Semester semester = Semester.dao.findById(getPara("id"));
-    if (semester.get("state").toString().equals("1")) {
+    Semester object = Semester.dao.findById(getPara("id"));
+    if (object.get("state").toString().equals("1")) {
       renderText("该学期已为当前学期!");
     } else {
-      semester.set("state", 1).update();
+      object.set("state", 1).update();
       Db.update("UPDATE semester SET state = 0 WHERE id <> ?", getPara("id"));
       renderText("OK");
     }
@@ -102,11 +102,11 @@ public class SemesterDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Semester_Exist.class})
   public void Inactive() {
-    Semester semester = Semester.dao.findById(getPara("id"));
-    if (semester.get("state").toString().equals("0")) {
+    Semester object = Semester.dao.findById(getPara("id"));
+    if (object.get("state").toString().equals("0")) {
       renderText("该学期已非当前学期!");
     } else {
-      semester.set("state", 0).update();
+      object.set("state", 0).update();
       renderText("OK");
     }
   }
@@ -124,8 +124,8 @@ public class SemesterDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Semester_Save.class})
   public void Save() {
-    Semester semester = new Semester();
-    semester.set("name", getPara("name"))
+    Semester object = new Semester();
+    object.set("name", getPara("name"))
             .set("time_start", new Date(getParaToLong("time_start")))
             .set("time_end", new Date(getParaToLong("time_end")))
             .set("state", 0)
@@ -138,8 +138,8 @@ public class SemesterDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Semester_Exist.class, Semester_Edit.class})
   public void Edit() {
-    Semester semester = Semester.dao.findById(getPara("id"));
-    semester.set("name", getPara("name"))
+    Semester object = Semester.dao.findById(getPara("id"));
+    object.set("name", getPara("name"))
             .set("time_start", new Date(getParaToLong("time_start")))
             .set("time_end", new Date(getParaToLong("time_end")))
             .update();
@@ -165,7 +165,7 @@ public class SemesterDesktop extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkNameForAdd() {
-    if (Semester.dao.find("SELECT * FROM semester WHERE name = ?", getPara("name")).size() != 0) {
+    if (Db.find("SELECT * FROM semester WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该学期名称已存在!");
     } else {
       renderText("OK");
@@ -178,7 +178,7 @@ public class SemesterDesktop extends Controller {
   @Before(OverdueCheck.class)
   public void checkNameForEdit() {
     if (!Semester.dao.findById(getPara("id")).get("name").equals(getPara("name"))
-            && Semester.dao.find("SELECT * FROM semester WHERE name = ?", getPara("name")).size() != 0) {
+            && Db.find("SELECT * FROM semester WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该学期名称已存在!");
     } else {
       renderText("OK");

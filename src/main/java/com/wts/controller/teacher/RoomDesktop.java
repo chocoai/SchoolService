@@ -1,4 +1,4 @@
-package com.wts.controller;
+package com.wts.controller.teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -64,7 +64,7 @@ public class RoomDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Query.class})
   public void Query() {
-    renderJson(Room.dao.paginate(
+    renderJson(Db.paginate(
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
@@ -93,11 +93,11 @@ public class RoomDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class})
   public void Active() {
-    Room room = Room.dao.findById(getPara("id"));
-    if (room.get("state").toString().equals("1")) {
+    Room object = Room.dao.findById(getPara("id"));
+    if (object.get("state").toString().equals("1")) {
       renderText("该班级已激活!");
     } else {
-      room.set("state", 1).update();
+      object.set("state", 1).update();
       renderText("OK");
     }
   }
@@ -107,11 +107,11 @@ public class RoomDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Room_Exist.class})
   public void Inactive() {
-    Room room = Room.dao.findById(getPara("id"));
-    if (room.get("state").toString().equals("0")) {
+    Room object = Room.dao.findById(getPara("id"));
+    if (object.get("state").toString().equals("0")) {
       renderText("该班级已注销!");
     } else {
-      room.set("state", 0).update();
+      object.set("state", 0).update();
       renderText("OK");
     }
   }
@@ -129,8 +129,8 @@ public class RoomDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Room_Save.class})
   public void Save() {
-    Room room = new Room();
-    room.set("name", getPara("year")+"级"+getPara("order")+"班")
+    Room object = new Room();
+    object.set("name", getPara("year")+"级"+getPara("order")+"班")
             .set("year", getPara("year"))
             .set("order", getPara("order"))
             .set("state", getPara("state"))
@@ -143,8 +143,8 @@ public class RoomDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Room_Exist.class, Room_Edit.class})
   public void Edit() {
-    Room room = Room.dao.findById(getPara("id"));
-    room.set("name", getPara("year")+"级"+getPara("order")+"班")
+    Room object = Room.dao.findById(getPara("id"));
+    object.set("name", getPara("year")+"级"+getPara("order")+"班")
             .set("year", getPara("year"))
             .set("order", getPara("order"))
             .set("state", getPara("state"))
@@ -171,7 +171,7 @@ public class RoomDesktop extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkNameForAdd() {
-    if (Room.dao.find("SELECT * FROM room WHERE name = ?", getPara("name")).size() != 0) {
+    if (Db.find("SELECT * FROM room WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该班级名称已存在!");
     } else {
       renderText("OK");
@@ -184,7 +184,7 @@ public class RoomDesktop extends Controller {
   @Before(OverdueCheck.class)
   public void checkNameForEdit() {
     if (!Room.dao.findById(getPara("id")).get("name").equals(getPara("name"))
-            && Room.dao.find("SELECT * FROM room WHERE name = ?", getPara("name")).size() != 0) {
+            && Db.find("SELECT * FROM room WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该班级名称已存在!");
     } else {
       renderText("OK");

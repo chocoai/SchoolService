@@ -3,6 +3,7 @@ package com.wts.validator.room;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.kit.StrKit;
+import com.jfinal.plugin.activerecord.Db;
 import com.wts.entity.model.Room;
 
 public class Room_Save implements Interceptor {
@@ -13,9 +14,9 @@ public class Room_Save implements Interceptor {
             ) {
       String year = inv.getController().getPara("year");
       String order = inv.getController().getPara("order");
-      if (Room.dao.find("SELECT * FROM room WHERE `year` = ? AND `order` = ?", year, order).size() != 0) {
+      if (Db.find("SELECT * FROM room WHERE `year` = ? AND `order` = ?", year, order).size() != 0) {
         inv.getController().renderText("该班级已存在!");
-      } else if(Room.dao.find("SELECT * FROM room WHERE `name` = ?", year+"级"+order+"班").size() != 0){
+      } else if(Db.find("SELECT * FROM room WHERE `name` = ?", year+"级"+order+"班").size() != 0){
         inv.getController().renderText("该班级名称已存在!");
       } else {
         inv.invoke();

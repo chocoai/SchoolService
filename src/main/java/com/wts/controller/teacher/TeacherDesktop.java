@@ -1,4 +1,4 @@
-package com.wts.controller;
+package com.wts.controller.teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -13,6 +13,9 @@ import com.wts.validator.Query;
 import com.wts.validator.student.Student_Edit;
 import com.wts.validator.student.Student_Exist;
 import com.wts.validator.student.Student_Save;
+import com.wts.validator.teacher.Teacher_Edit;
+import com.wts.validator.teacher.Teacher_Exist;
+import com.wts.validator.teacher.Teacher_Save;
 
 import java.io.IOException;
 
@@ -20,7 +23,7 @@ import static com.wts.util.IDNumber.*;
 import static com.wts.util.Util.PermissionString;
 
 
-public class StudentDesktop extends Controller {
+public class TeacherDesktop extends Controller {
   /**
    * 页面
    */
@@ -36,12 +39,12 @@ public class StudentDesktop extends Controller {
         setSessionAttr("teacher", teacher);
         setCookie("dit", teacher.getId().toString(), 60 * 60 * 3);
         setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(),teacher.getId().toString()), 60 * 6 * 10);
-        render("/static/html/desktop/teacher/Desktop_Teacher_Student.html");
+        render("/static/html/desktop/teacher/Desktop_Teacher_Teacher.html");
       }
     } else {
       String teacherId = ((Teacher) getSessionAttr("teacher")).getId().toString();
       setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(),teacherId), 60 * 6 * 10);
-      render("/static/html/desktop/teacher/Desktop_Teacher_Student.html");
+      render("/static/html/desktop/teacher/Desktop_Teacher_Teacher.html");
     }
   }
 
@@ -59,11 +62,13 @@ public class StudentDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Query.class})
   public void Query() {
-    renderJson(Student.dao.paginate(
+    renderJson(Teacher.dao.paginate(
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM student WHERE name LIKE '%" + getPara("keyword") + "%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
+            "FROM teacher WHERE name LIKE '%" + getPara("keyword") + "%' " +
+                    "OR userId LIKE '%" + getPara("keyword") + "%' " +
+                    "OR mobile LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
   }
 
   /**
@@ -71,28 +76,30 @@ public class StudentDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM student WHERE name LIKE '%" + getPara("keyword") + "%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%'");
+    Long count = Db.queryLong("SELECT COUNT(*) FROM teacher WHERE name LIKE '%" + getPara("keyword") + "%' " +
+            "OR userId LIKE '%" + getPara("keyword") + "%' " +
+            "OR mobile LIKE '%" + getPara("keyword") + "%'");
     renderText(count.toString());
   }
 
   /**
    * 读取
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, Student_Exist.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Exist.class})
   public void Get() {
-    renderJson(Student.dao.findById(getPara("id")));
+    renderJson(Teacher.dao.findById(getPara("id")));
   }
 
   /**
    * 激活
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, Student_Exist.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Exist.class})
   public void Active() {
-    Student student = Student.dao.findById(getPara("id"));
-    if (student.get("state").toString().equals("1")) {
-      renderText("该学生已激活!");
+    Teacher object = Teacher.dao.findById(getPara("id"));
+    if (object.get("state").toString().equals("3")) {
+      renderText("该教师已激活!");
     } else {
-      student.set("state", 1).update();
+      object.set("state", 1).update();
       renderText("OK");
     }
   }
@@ -100,13 +107,13 @@ public class StudentDesktop extends Controller {
   /**
    * 注销
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, Student_Exist.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Exist.class})
   public void Inactive() {
-    Student student = Student.dao.findById(getPara("id"));
-    if (student.get("state").toString().equals("0")) {
+    Teacher object = Teacher.dao.findById(getPara("id"));
+    if (object.get("state").toString().equals("0")) {
       renderText("该学生已注销!");
     } else {
-      student.set("state", 0).update();
+      object.set("state", 0).update();
       renderText("OK");
     }
   }
@@ -114,19 +121,19 @@ public class StudentDesktop extends Controller {
   /**
    * 删除
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, Student_Exist.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Exist.class})
   public void Delete() {
-    Student.dao.deleteById(getPara("id"));
+    Teacher.dao.deleteById(getPara("id"));
     renderText("OK");
   }
 
   /**
    * 保存
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, Student_Save.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Save.class})
   public void Save() {
-    Student student = new Student();
-    student.set("name", getPara("name"))
+    Teacher object = new Teacher();
+    object.set("name", getPara("name"))
             .set("number", getPara("number"))
             .set("code", getPara("code"))
             .set("sex", getSex(getPara("number")))
@@ -141,10 +148,10 @@ public class StudentDesktop extends Controller {
   /**
    * 修改
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, Student_Exist.class, Student_Edit.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Exist.class, Teacher_Edit.class})
   public void Edit() {
-    Student student = Student.dao.findById(getPara("id"));
-    student.set("name", getPara("name"))
+    Teacher object = Teacher.dao.findById(getPara("id"));
+    object.set("name", getPara("name"))
             .set("number", getPara("number"))
             .set("code", getPara("code"))
             .set("sex", getSex(getPara("number")))
@@ -161,7 +168,7 @@ public class StudentDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
-    String[] title={"序号","课程名称","课程详情","课程类型","课程状态"};
+    String[] title={"序号","学生姓名","身份证号码","学籍号码","家庭地址","性别","家长绑定情况","状态"};
     String fileName = "Student";
     String SQL = "select id AS 序号,name AS 学生姓名, number AS 身份证号码, code AS 学籍号码, address AS 家庭地址, " +
             "(case sex when 1 then '男' when 2 then '女' else '未知' end ) AS 性别, " +
@@ -173,53 +180,25 @@ public class StudentDesktop extends Controller {
   }
 
   /**
-   * 检测身份证号码_新增
+   * 检测联系电话_新增
    */
   @Before(OverdueCheck.class)
-  public void checkNumberForAdd() {
-    if (!checkIDNumberDetailB(getPara("number"))){
-      renderText(checkIDNumberDetail(getPara("number")));
-    } else if (Student.dao.find("SELECT * FROM student WHERE number = ?", getPara("number")).size() != 0) {
-      renderText("该学生身份证号码已存在!");
+  public void checkMobileForAdd() {
+    if (Teacher.dao.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+      renderText("该教师的联系电话已存在!");
     } else {
       renderText("OK");
     }
   }
 
   /**
-   * 检测身份证号码_修改
+   * 检测联系电话_修改
    */
   @Before(OverdueCheck.class)
-  public void checkNumberForEdit() {
-    if (!checkIDNumberDetailB(getPara("number"))){
-      renderText(checkIDNumberDetail(getPara("number")));
-    } else if (!Student.dao.findById(getPara("id")).get("number").equals(getPara("number"))
-            && Student.dao.find("SELECT * FROM student WHERE number = ?", getPara("number")).size() != 0) {
-      renderText("该学生身份证号码已存在!");
-    } else {
-      renderText("OK");
-    }
-  }
-  /**
-   * 检测学籍号码_新增
-   */
-  @Before(OverdueCheck.class)
-  public void checkCodeForAdd() {
-    if (Student.dao.find("SELECT * FROM student WHERE code = ?", getPara("code")).size() != 0) {
-      renderText("该学生学籍号码已存在!");
-    } else {
-      renderText("OK");
-    }
-  }
-
-  /**
-   * 检测学籍号码_修改
-   */
-  @Before(OverdueCheck.class)
-  public void checkCodeForEdit() {
-    if (!Student.dao.findById(getPara("id")).get("code").equals(getPara("code"))
-            && Student.dao.find("SELECT * FROM student WHERE code = ?", getPara("code")).size() != 0) {
-      renderText("该学生学籍号码已存在!");
+  public void checkMobileForEdit() {
+    if (!Teacher.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
+            && Db.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+      renderText("该教师的联系电话已存在!");
     } else {
       renderText("OK");
     }

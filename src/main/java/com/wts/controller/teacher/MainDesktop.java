@@ -1,4 +1,4 @@
-package com.wts.controller;
+package com.wts.controller.teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;

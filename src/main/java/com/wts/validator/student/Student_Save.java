@@ -3,7 +3,7 @@ package com.wts.validator.student;
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.kit.StrKit;
-import com.wts.entity.model.Student;
+import com.jfinal.plugin.activerecord.Db;
 
 public class Student_Save implements Interceptor {
   public void intercept(Invocation inv) {
@@ -15,9 +15,9 @@ public class Student_Save implements Interceptor {
             ) {
       String number = inv.getController().getPara("number");
       String code = inv.getController().getPara("code");
-      if (Student.dao.find("SELECT * FROM student WHERE number = ?", number).size() != 0) {
+      if (Db.find("SELECT * FROM student WHERE number = ?", number).size() != 0) {
         inv.getController().renderText("该学生身份证号码已存在!");
-      } else if (Student.dao.find("SELECT * FROM student WHERE code = ?", code).size() != 0) {
+      } else if (Db.find("SELECT * FROM student WHERE code = ?", code).size() != 0) {
         inv.getController().renderText("该学生学籍号码已存在!");
       } else {
         inv.invoke();
