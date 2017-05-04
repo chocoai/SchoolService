@@ -97,7 +97,6 @@ public class Config extends JFinalConfig {
     public void configHandler(Handlers me) {
         me.add(new ContextPathHandler("contextPath"));//设置上下文路径
     }
-
 //    public void afterJFinalStart(){
 //        WxCpInMemoryConfigStorage config = new WxCpInMemoryConfigStorage();
 //        config.setCorpId("wx947e7da41f395af7");      // 设置微信企业号的appid
@@ -111,6 +110,7 @@ public class Config extends JFinalConfig {
 //        JFinal.me().getServletContext().setAttribute("xx",wxCpService);
 //        System.out.println(wxCpService.toString());
 //    }
+//
 
 
     /**
