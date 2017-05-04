@@ -3,7 +3,6 @@ package com.wts.controller;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
-import com.jfinal.plugin.activerecord.Record;
 import com.wts.entity.model.Semester;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
@@ -11,13 +10,12 @@ import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
-import com.wts.validator.Semester.Semester_Edit;
-import com.wts.validator.Semester.Semester_Exist;
-import com.wts.validator.Semester.Semester_Save;
+import com.wts.validator.semester.Semester_Edit;
+import com.wts.validator.semester.Semester_Exist;
+import com.wts.validator.semester.Semester_Save;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 
 import static com.wts.util.Util.PermissionString;
 
@@ -154,7 +152,7 @@ public class SemesterDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
     String[] title={"序号","学期名称","开始日期","终止日期","学期状态"};
-    String fileName = "Semester";
+    String fileName = "semester";
     String SQL = "select id AS 序号,name AS 学期名称, " +
             "(case state when 1 then '当前学期' when 2 then '非当前学期' else '错误' end ) AS 学期状态 " +
             "from semester where name like '%"+getPara("keyword")+"%'" +

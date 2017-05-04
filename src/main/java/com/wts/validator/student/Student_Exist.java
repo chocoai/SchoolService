@@ -1,15 +1,15 @@
-package com.wts.validator.Semester;
+package com.wts.validator.student;
 
 import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.kit.StrKit;
-import com.wts.entity.model.Semester;
+import com.wts.entity.model.Student;
 
-public class Semester_Exist implements Interceptor {
+public class Student_Exist implements Interceptor {
   public void intercept(Invocation inv) {
     if (!StrKit.isBlank(inv.getController().getPara("id"))) {
-      if (Semester.dao.findById(inv.getController().getPara("id")) == null) {
-        inv.getController().renderText("指定学期不存在!");
+      if (Student.dao.findById(inv.getController().getPara("id")) == null) {
+        inv.getController().renderText("指定学生不存在!");
       } else {
         inv.invoke();
       }

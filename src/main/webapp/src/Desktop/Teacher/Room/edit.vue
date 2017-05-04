@@ -6,15 +6,15 @@
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
-      <Form :label-width="100" :rules="validate" ref="editForm" :model="room">
+      <Form :label-width="100" :rules="validate" ref="editForm" :model="object">
         <Form-item label="入学年份" prop="year" required>
-          <Input-number size="large" v-model="room.year" :max="2050" :min="2000" style="width: 400px"></Input-number>
+          <Input-number size="large" v-model="object.year" :max="2050" :min="2000" style="width: 400px"></Input-number>
         </Form-item>
         <Form-item label="班序" prop="order" required>
-          <Input-number size="large" v-model="room.order" :max="30" :min="1" style="width: 400px"></Input-number>
+          <Input-number size="large" v-model="object.order" :max="30" :min="1" style="width: 400px"></Input-number>
         </Form-item>
         <Form-item size="large" label="班级状态" required>
-          <Radio-group v-model="room.state" type="button">
+          <Radio-group v-model="object.state" type="button">
             <Radio label="1">激活</Radio>
             <Radio label="0">注销</Radio>
           </Radio-group>
@@ -53,7 +53,7 @@
         permission: [],
         menu: [],
         showLoad: true,
-        room: {
+        object: {
           name: '',
           year: '',
           order: '',
@@ -115,7 +115,7 @@
             })
             window.location.href = '../MainDesktop'
           } else {
-            this.room = response.body
+            this.object = response.body
           }
         }, (response) => {
           this.$Notice.error({
@@ -133,9 +133,9 @@
           API.edit,
           { params: {
             id: this.$route.params.id,
-            year: this.room.year,
-            order: this.room.order,
-            state: this.room.state
+            year: this.object.year,
+            order: this.object.order,
+            state: this.object.state
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -149,7 +149,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '班级：' + this.room.name + '已修改！'
+              desc: '班级：' + this.object.name + '已修改！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

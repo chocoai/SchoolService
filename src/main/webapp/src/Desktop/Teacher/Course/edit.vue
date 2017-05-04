@@ -6,24 +6,24 @@
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
-      <Form :label-width="100" :rules="validate" ref="editForm" :model="course">
+      <Form :label-width="100" :rules="validate" ref="editForm" :model="object">
         <Form-item label="课程名称" prop="name" required>
-          <Input size="large" v-model="course.name" placeholder="请输入课程名称" style="width: 400px"></Input>
+          <Input size="large" v-model="object.name" placeholder="请输入课程名称" style="width: 400px"></Input>
         </Form-item>
         <Form-item label="课程描述" prop="detail" required>
-          <Input size="large" v-model="course.detail" type="textarea" :autosize="{minRows: 3,maxRows: 5}" placeholder="请输入对该课程的描述" style="width: 400px"></Input>
+          <Input size="large" v-model="object.detail" type="textarea" :autosize="{minRows: 3,maxRows: 5}" placeholder="请输入对该课程的描述" style="width: 400px"></Input>
         </Form-item>
         <Form-item label="选课人数" prop="amount" required>
-          <Input-number size="large" :max="60" :min="0" v-model="course.amount" style="width: 400px"></Input-number>
+          <Input-number size="large" :max="60" :min="0" v-model="object.amount" style="width: 400px"></Input-number>
         </Form-item>
         <Form-item size="large" label="课程类型" required>
-          <Radio-group v-model="course.type" type="button">
+          <Radio-group v-model="object.type" type="button">
             <Radio label="1">必修课</Radio>
             <Radio label="2">选修课</Radio>
           </Radio-group>
         </Form-item>
         <Form-item size="large" label="课程状态" required>
-          <Radio-group v-model="course.state" type="button">
+          <Radio-group v-model="object.state" type="button">
             <Radio label="1">激活</Radio>
             <Radio label="0">注销</Radio>
           </Radio-group>
@@ -61,6 +61,7 @@
           if (response.body === 'illegal' || response.body.toString() === 'overdue') {
             callback(new Error('登录过期或非法操作!'))
           } else if (response.body === 'OK') {
+            callback()
           } else {
             callback(new Error(response.body))
           }
@@ -82,7 +83,7 @@
         permission: [],
         menu: [],
         showLoad: true,
-        course: {
+        object: {
           name: '',
           detail: '',
           amount: 0,
@@ -145,7 +146,7 @@
             })
             window.location.href = '../MainDesktop'
           } else {
-            this.course = response.body
+            this.object = response.body
           }
         }, (response) => {
           this.$Notice.error({
@@ -163,11 +164,11 @@
           API.edit,
           { params: {
             id: this.$route.params.id,
-            name: this.course.name,
-            detail: this.course.detail,
-            amount: this.course.amount,
-            type: this.course.type,
-            state: this.course.state
+            name: this.object.name,
+            detail: this.object.detail,
+            amount: this.object.amount,
+            type: this.object.type,
+            state: this.object.state
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -181,7 +182,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '课程：' + this.course.name + '已修改！'
+              desc: '课程：' + this.object.name + '已修改！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

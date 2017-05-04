@@ -6,15 +6,15 @@
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
-        <Form :label-width="100" :rules="validate" ref="addForm" :model="semester">
+        <Form :label-width="100" :rules="validate" ref="addForm" :model="object">
           <Form-item label="学期名称" prop="name" required>
-            <Input size="large" v-model="semester.name" placeholder="请输入学期名称" style="width: 400px"></Input>
+            <Input size="large" v-model="object.name" placeholder="请输入学期名称" style="width: 400px"></Input>
           </Form-item>
           <Form-item label="开始日期" prop="time_start" required>
-            <Date-picker type="date" v-model="semester.time_start" placement="bottom-end" placeholder="选择开始日期" style="width: 400px"></Date-picker>
+            <Date-picker type="date" v-model="object.time_start" placement="bottom-end" placeholder="选择开始日期" style="width: 400px"></Date-picker>
           </Form-item>
           <Form-item label="终止日期" prop="time_end" required>
-            <Date-picker type="date" v-model="semester.time_end" placement="bottom-end" placeholder="选择终止日期" style="width: 400px"></Date-picker>
+            <Date-picker type="date" v-model="object.time_end" placement="bottom-end" placeholder="选择终止日期" style="width: 400px"></Date-picker>
           </Form-item>
           <Form-item>
             <Button size="large" type="primary" @click="goSave">保存</Button>
@@ -46,6 +46,7 @@
           if (response.body === 'illegal' || response.body.toString() === 'overdue') {
             callback(new Error('登录过期或非法操作!'))
           } else if (response.body === 'OK') {
+            callback()
           } else {
             callback(new Error(response.body))
           }
@@ -70,7 +71,7 @@
         permission: [],
         menu: [],
         showLoad: true,
-        semester: {
+        object: {
           name: '',
           time_start: '',
           time_end: ''
@@ -113,9 +114,9 @@
     methods: {
       goReset () {
         this.$refs.addForm.resetFields()
-        this.semester.name = ''
-        this.semester.time_start = ''
-        this.semester.time_end = ''
+        this.object.name = ''
+        this.object.time_start = ''
+        this.object.time_end = ''
       },
       goSave () {
         this.$Loading.start()
@@ -123,9 +124,9 @@
         this.$http.get(
           API.save,
           { params: {
-            name: this.semester.name,
-            time_start: this.semester.time_start.getTime(),
-            time_end: this.semester.time_end.getTime()
+            name: this.object.name,
+            time_start: this.object.time_start.getTime(),
+            time_end: this.object.time_end.getTime()
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -139,7 +140,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '学期：' + this.semester.name + '已保存！'
+              desc: '学期：' + this.object.name + '已保存！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

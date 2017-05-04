@@ -1,20 +1,29 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="semester" :name="name" three="修改" :menu="menu"></MenuList></Col>
+      <Col><MenuList active="student" :name="name" three="修改" :menu="menu"></MenuList></Col>
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
       <Form :label-width="100" :rules="validate" ref="editForm" :model="object">
-        <Form-item label="学期名称" prop="name" required>
-          <Input size="large" v-model="object.name" placeholder="请输入学期名称" style="width: 400px"></Input>
+        <Form-item label="姓名" prop="name" required>
+          <Input size="large" v-model="object.name" placeholder="请输入学生的姓名" style="width: 400px"></Input>
         </Form-item>
-        <Form-item label="开始日期" prop="time_start" required>
-          <Date-picker type="date" v-model="object.time_start" placement="bottom-end" placeholder="选择开始日期" style="width: 400px"></Date-picker>
+        <Form-item label="身份证号码" prop="number" required>
+          <Input size="large" v-model="object.number" placeholder="请输入学生的身份证号码" style="width: 400px"></Input>
         </Form-item>
-        <Form-item label="终止日期" prop="time_end" required>
-          <Date-picker type="date" v-model="object.time_end" placement="bottom-end" placeholder="选择终止日期" style="width: 400px"></Date-picker>
+        <Form-item label="学籍号码" prop="code" required>
+          <Input size="large" v-model="object.code" placeholder="请输入学生的学籍号码" style="width: 400px"></Input>
+        </Form-item>
+        <Form-item label="家庭住址" prop="address" required>
+          <Input size="large" v-model="object.address" placeholder="请输入学生的家庭住址" style="width: 400px"></Input>
+        </Form-item>
+        <Form-item size="large" label="学生状态" required>
+          <Radio-group v-model="object.state" type="button">
+            <Radio label="1">激活</Radio>
+            <Radio label="0">注销</Radio>
+          </Radio-group>
         </Form-item>
         <Form-item>
           <Button size="large" type="primary" @click="goEdit">修改</Button>
@@ -32,17 +41,41 @@
   import Copy from '../../Common/copy.vue'
   import MenuList from '../Menu/menuList.vue'
   import * as API from './API.js'
-  import { getCookie } from '../../../cookieUtil.js'
+  import { getCookie, checkNumber } from '../../../cookieUtil.js'
   export default {
     name: 'edit',
     components: { Copy, MenuList },
     data () {
-      const nameCheck = (rule, value, callback) => {
+      const numberCheck = (rule, value, callback) => {
+        if (checkNumber(value)) {
+          this.$http.get(
+            API.checkNumberForEdit,
+            { params: {
+              id: this.$route.params.id,
+              number: value
+            } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+          ).then((response) => {
+            if (response.body === 'illegal' || response.body.toString() === 'overdue') {
+              callback(new Error('登录过期或非法操作!'))
+            } else if (response.body === 'OK') {
+              callback()
+            } else {
+              callback(new Error(response.body))
+            }
+          }, (response) => {
+            callback(new Error('服务器内部错误!'))
+          })
+        } else {
+          callback(new Error('身份证号码错误!'))
+        }
+      }
+      const codeCheck = (rule, value, callback) => {
         this.$http.get(
-          API.checkNameForEdit,
+          API.checkCodeForEdit,
           { params: {
             id: this.$route.params.id,
-            name: value
+            code: value
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -60,14 +93,18 @@
       return {
         validate: {
           name: [
-            { required: true, message: '学期名称不能为空!', trigger: 'change' },
-            { validator: nameCheck, trigger: 'change' }
+            { required: true, message: '学生姓名不能为空!', trigger: 'change' }
           ],
-          time_start: [
-            { required: true, type: 'date', message: '开始日期不能为空!', trigger: 'change' }
+          number: [
+            { required: true, message: '学生的身份证号码不能为空!', trigger: 'change' },
+            { validator: numberCheck, trigger: 'change' }
           ],
-          time_end: [
-            { required: true, type: 'date', message: '终止日期不能为空!', trigger: 'change' }
+          code: [
+            { required: true, message: '学生的学籍编号不能为空!', trigger: 'change' },
+            { validator: codeCheck, trigger: 'change' }
+          ],
+          address: [
+            { required: true, message: '学生的家庭住址不能为空!', trigger: 'change' }
           ]
         },
         name: '',
@@ -76,14 +113,16 @@
         showLoad: true,
         object: {
           name: '',
-          time_start: '',
-          time_end: ''
+          number: '',
+          code: '',
+          address: '',
+          state: '1'
         }
       }
     },
     created: function () {
       this.fetchData(this.$route.params.id)
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('SemesterDesktop') === null || getCookie('SemesterDesktop') === undefined || getCookie('SemesterDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentDesktop') === null || getCookie('StudentDesktop') === undefined || getCookie('StudentDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -95,7 +134,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('SemesterDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie('StudentDesktop')))
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
             }, (res) => {
@@ -110,7 +149,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('SemesterDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie('StudentDesktop')))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
@@ -154,8 +193,10 @@
           { params: {
             id: this.$route.params.id,
             name: this.object.name,
-            time_start: new Date(this.object.time_start).getTime(),
-            time_end: new Date(this.object.time_end).getTime()
+            number: this.object.number,
+            code: this.object.code,
+            address: this.object.address,
+            state: this.object.state
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -169,7 +210,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '学期：' + this.object.name + '已修改！'
+              desc: '学生：' + this.object.name + '已修改！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

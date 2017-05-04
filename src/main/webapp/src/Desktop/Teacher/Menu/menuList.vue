@@ -22,7 +22,7 @@
             人员管理
           </template>
           <Menu-item name="teacher">教师</Menu-item>
-          <Menu-item name="student">学生</Menu-item>
+          <Menu-item name="student" v-if="menu.StudentDesktop_Page">学生</Menu-item>
           <Menu-item name="parent">家长</Menu-item>
         </Submenu>
         <Submenu name="information">
@@ -156,6 +156,9 @@
           case 'room':
             window.location.href = '/RoomDesktop/Page'
             break
+          case 'student':
+            window.location.href = '/StudentDesktop/Page'
+            break
           default:
             window.location.href = '/MainDesktop'
         }
@@ -179,5 +182,6 @@
     top: 1px;
     left: 20px;
     font-size: 16px;
+    color: #887c64;
   }
 </style>
