@@ -2,13 +2,14 @@ package com.wts.controller.teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
-import com.jfinal.core.JFinal;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.wts.entity.WxService;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
-import me.chanjar.weixin.cp.api.WxCpService;
+import me.chanjar.weixin.cp.api.WxCpInMemoryConfigStorage;
+import me.chanjar.weixin.cp.api.WxCpServiceImpl;
+import me.chanjar.weixin.cp.bean.WxCpMessage;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -18,8 +19,25 @@ import static com.wts.util.Util.PermissionString;
 
 
 public class MainDesktop extends Controller {
-  public void index() {
+  public void index() throws Exception{
     System.out.println(WxService.getMe().toString());
+    String userId = "WangTianShuo";
+    WxCpMessage message = WxCpMessage.TEXT().agentId(26).toUser(userId).content("Hello World").build();
+    try{
+      WxCpInMemoryConfigStorage config = new WxCpInMemoryConfigStorage();
+      config.setCorpId("wx947e7da41f395af7");      // 设置微信企业号的appid
+      config.setCorpSecret("thcMcEeJdhuSDw7S_9314ILJ2hqPRCCxhupksDvPDQkUgfqfjDxVx16jPR_ztzzK");  // 设置微信企业号的app corpSecret
+      config.setAgentId(26);     // 设置微信企业号应用ID
+      config.setToken("weixin4j");       // 设置微信企业号应用的token
+      config.setAesKey("vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT");      // 设置微信企业号应用的EncodingAESKey
+
+      WxCpServiceImpl wxCpService = new WxCpServiceImpl();
+      wxCpService.setWxCpConfigStorage(config);
+
+      WxService.getMe().messageSend(message);
+    }catch (Exception e){
+      System.out.println(e.toString());
+    }
 
 //    System.out.println(JFinal.me().getServletContext().getAttribute("xx").toString());
     render("/static/html/desktop/Desktop_Login.html");
