@@ -6,34 +6,26 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.wts.entity.WP;
-import com.wts.entity.WxService;
-import com.wts.entity.model.Student;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.util.ParamesAPI;
-import com.wts.util.Util;
 import com.wts.validator.Query;
-import com.wts.validator.student.Student_Edit;
-import com.wts.validator.student.Student_Exist;
-import com.wts.validator.student.Student_Save;
 import com.wts.validator.teacher.Teacher_Edit;
 import com.wts.validator.teacher.Teacher_Exist;
 import com.wts.validator.teacher.Teacher_Save;
-import me.chanjar.weixin.cp.bean.WxCpUser;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.wts.controller.MainController.getUserId;
-import static com.wts.util.IDNumber.*;
 import static com.wts.util.Util.PermissionString;
 
 
-public class TeacherDesktop extends Controller {
+public class ParentDesktop extends Controller {
   /**
    * 页面
    */

@@ -44,6 +44,7 @@ public class Config extends JFinalConfig {
         me.add("/RoomDesktop", RoomDesktop.class);
         me.add("/StudentDesktop", StudentDesktop.class);
         me.add("/TeacherDesktop", TeacherDesktop.class);
+        me.add("/ParentDesktop", TeacherDesktop.class);
 //        me.add("/ForCourse", ForCourse.class);
 //        me.add("/courseRoom", CourseRoomController.class);
 //        me.add("/teacher", TeacherController.class);
@@ -105,12 +106,9 @@ public class Config extends JFinalConfig {
 //        config.setToken("weixin4j");       // 设置微信企业号应用的token
 //        config.setAesKey("vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT");      // 设置微信企业号应用的EncodingAESKey
 //
-//        WxCpServiceImpl wxCpService = new WxCpServiceImpl();
-//        wxCpService.setWxCpConfigStorage(config);
-//        JFinal.me().getServletContext().setAttribute("xx",wxCpService);
-//        System.out.println(wxCpService.toString());
+//        JFinal.me().getServletContext().setAttribute("xx",config);
 //    }
-//
+
 
 
     /**

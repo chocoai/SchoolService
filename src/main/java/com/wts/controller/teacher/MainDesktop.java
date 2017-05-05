@@ -20,26 +20,9 @@ import static com.wts.util.Util.PermissionString;
 
 public class MainDesktop extends Controller {
   public void index() throws Exception{
-    System.out.println(WxService.getMe().toString());
-    String userId = "WangTianShuo";
-    WxCpMessage message = WxCpMessage.TEXT().agentId(26).toUser(userId).content("Hello World").build();
-    try{
-      WxCpInMemoryConfigStorage config = new WxCpInMemoryConfigStorage();
-      config.setCorpId("wx947e7da41f395af7");      // 设置微信企业号的appid
-      config.setCorpSecret("thcMcEeJdhuSDw7S_9314ILJ2hqPRCCxhupksDvPDQkUgfqfjDxVx16jPR_ztzzK");  // 设置微信企业号的app corpSecret
-      config.setAgentId(26);     // 设置微信企业号应用ID
-      config.setToken("weixin4j");       // 设置微信企业号应用的token
-      config.setAesKey("vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT");      // 设置微信企业号应用的EncodingAESKey
-
-      WxCpServiceImpl wxCpService = new WxCpServiceImpl();
-      wxCpService.setWxCpConfigStorage(config);
-
-      WxService.getMe().messageSend(message);
-    }catch (Exception e){
-      System.out.println(e.toString());
-    }
-
-//    System.out.println(JFinal.me().getServletContext().getAttribute("xx").toString());
+//    String userId = "WangTianShuo";
+//    WxCpMessage message = WxCpMessage.TEXT().agentId(26).toUser(userId).content("Hello").build();
+//    WxService.getMe().messageSend(message);
     render("/static/html/desktop/Desktop_Login.html");
   }
 
@@ -51,6 +34,15 @@ public class MainDesktop extends Controller {
    * 登录
    * */
   public void Login() throws IOException{
+//    String userId = "WangTianShuo";
+//    WxCpMessage message = WxCpMessage.TEXT().agentId(26).toUser(userId).content("Hello World").build();
+//    System.out.println("000");
+//    try{
+//    WxService.getMe().messageSend(message);
+//    }catch (Exception e){
+//      System.out.println(e.toString());
+//    }
+//    System.out.println("111");
     if (getPara("user").equals("") && getPara("password").equals("")) {
       setCookie("user", "", 60 * 60 * 24 * 7);
       setCookie("password", "", 60 * 60 * 24 * 7);
@@ -76,6 +68,9 @@ public class MainDesktop extends Controller {
       setCookie("SemesterDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("CourseDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("RoomDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("StudentDesktop", PermissionString("StudentDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("TeacherDesktop", PermissionString("TeacherDesktop",teacher.getId().toString()), 60 * 6 * 10);
+
       renderText("OK");
     } else {
       renderText("error");
