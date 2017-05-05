@@ -23,7 +23,14 @@
           </template>
           <Menu-item name="teacher" v-if="menu.TeacherDesktop_Page">教师</Menu-item>
           <Menu-item name="student" v-if="menu.StudentDesktop_Page">学生</Menu-item>
-          <Menu-item name="parent">家长</Menu-item>
+          <Menu-item name="parent" v-if="menu.ParentDesktop_Page">家长</Menu-item>
+        </Submenu>
+        <Submenu name="relation">
+          <template slot="title">
+            <Icon type="stats-bars"></Icon>
+            关系管理
+          </template>
+          <Menu-item name="studentParent" v-if="menu.StudentParentDesktop_Page">学生家长</Menu-item>
         </Submenu>
         <Submenu name="information">
           <template slot="title">
@@ -92,6 +99,8 @@
             return '人员管理'
           case 'parent':
             return '人员管理'
+          case 'studentParent':
+            return '关系管理'
           case 'notice':
             return '信息管理'
           case 'attendance':
@@ -124,6 +133,8 @@
             return '学生'
           case 'parent':
             return '家长'
+          case 'studentParent':
+            return '学生家长'
           case 'notice':
             return '公告'
           case 'attendance':
@@ -161,6 +172,12 @@
             break
           case 'student':
             window.location.href = '/StudentDesktop/Page'
+            break
+          case 'parent':
+            window.location.href = '/ParentDesktop/Page'
+            break
+          case 'studentParent':
+            window.location.href = '/StudentParentDesktop/Page'
             break
           default:
             window.location.href = '/MainDesktop'

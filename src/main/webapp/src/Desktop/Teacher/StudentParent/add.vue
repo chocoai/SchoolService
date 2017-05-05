@@ -1,34 +1,55 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="teacher" :name="name" three="新增" :menu="menu"></MenuList></Col>
+      <Col><MenuList active="studentParent" :name="name" three="新增" :menu="menu"></MenuList></Col>
+    </Row>
+    <div class="layout-content">
+    <Row>
+      <Col span="12">
+        <div class="right"><Search @goQuery="getQuery" :download="download"></Search></div>
+        <br>
+        <div>
+          <Table
+            highlight-row
+            height="450"
+            size="small"
+            :columns="columns"
+            :data="pageList">
+          </Table>
+        </div>
+        <br>
+        <div>
+          <Page
+            ref="studentPages"
+            @goList="getList"
+            @savePageCurrent="saveCurrent"
+            @savePageCurrentAndKeyword="CurrentAndKeyword"
+            :queryURL="studentQuery"
+            :totalURL="studentTotal"
+            :keyword="studentKeyword"
+          >
+          </Page>
+        </div>
+      </Col>
+      <Col span="12">
+
+      </Col>
+
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
-        <Form :label-width="100" :rules="validate" ref="addForm" :model="object">
-          <Form-item label="教师姓名" prop="name" required>
-            <Input size="large" v-model="object.name" placeholder="请输入教师姓名" style="width: 400px"></Input>
-          </Form-item>
-          <Form-item label="联系电话" prop="mobile" required>
-            <Input size="large" v-model="object.mobile" placeholder="请输入联系电话" style="width: 400px"></Input>
-          </Form-item>
-          <Form-item size="large" label="教师类型" required>
-            <Radio-group v-model="object.type" type="button">
-              <Radio label="1">在编</Radio>
-              <Radio label="2">聘用</Radio>
-              <Radio label="3">校外</Radio>
-            </Radio-group>
-          </Form-item>
-          <Form-item>
-            <Button size="large" type="primary" @click="goSave">保存</Button>
-            <Button size="large" type="ghost" style="margin-left: 8px" @click="goReset">重置</Button>
-            <Button size="large" style="margin-left: 8px" @click="goBack">返回</Button>
-          </Form-item>
-        </Form>
+      <Form :label-width="100" ref="addForm" :model="object">
+        <Form-item>
+          <Button size="large" type="primary" @click="goSave">保存</Button>
+          <Button size="large" type="ghost" style="margin-left: 8px" @click="goReset">重置</Button>
+          <Button size="large" style="margin-left: 8px" @click="goBack">返回</Button>
+        </Form-item>
+      </Form>
       </Col>
       <Col span="8">&nbsp;</Col>
     </Row>
+    </div>
     <Row><Col><Copy></Copy></Col></Row>
   </div>
 </template>
@@ -36,52 +57,49 @@
   import Copy from '../../Common/copy.vue'
   import MenuList from '../Menu/menuList.vue'
   import * as API from './API.js'
-  import { getCookie } from '../../../cookieUtil.js'
+  import { getCookie, checkNumber } from '../../../cookieUtil.js'
   export default {
     name: 'add',
     components: { Copy, MenuList },
     data () {
-      const mobileCheck = (rule, value, callback) => {
-        this.$http.get(
-          API.checkMobileForAdd,
-          { params: { mobile: value } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
-            callback(new Error('登录过期或非法操作!'))
-          } else if (response.body === 'OK') {
-            callback()
-          } else {
-            callback(new Error(response.body))
-          }
-        }, (response) => {
-          callback(new Error('服务器内部错误!'))
-        })
-      }
       return {
-        validate: {
-          name: [
-            { required: true, message: '教师姓名不能为空!', trigger: 'change' }
-          ],
-          mobile: [
-            { required: true, message: '联系电话不能为空!', trigger: 'change' },
-            { message: '请输入11位手机号码', trigger: 'change', pattern: /^1(3|4|5|7|8)\d{9}$/ },
-            { validator: mobileCheck, trigger: 'change' }
-          ]
-        },
         name: '',
         permission: [],
         menu: [],
+        query: API.query,
+        total: API.total,
+        keyword: '',
+        pageList: [],
         showLoad: true,
-        object: {
-          name: '',
-          mobile: '',
-          type: '1'
-        }
+        download: false,
+        del: false,
+        index: '',
+        names: '',
+        self: this,
+        columns: [
+          {
+            title: '序号',
+            key: 'id',
+            sortable: true,
+            render (row, column, index) {
+              return `${index + 1}`
+            }
+          },
+          {
+            title: '学生姓名',
+            key: 'name',
+            sortable: true
+          },
+          {
+            title: '身份证号码',
+            key: 'number',
+            sortable: true
+          }
+        ]
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('TeacherDesktop') === null || getCookie('TeacherDesktop') === undefined || getCookie('TeacherDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentParentDesktop') === null || getCookie('StudentParentDesktop') === undefined || getCookie('StudentParentDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -93,7 +111,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('TeacherDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie('StudentParentDesktop')))
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
             }, (res) => {
@@ -108,7 +126,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('TeacherDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie('StudentParentDesktop')))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
@@ -117,8 +135,10 @@
       goReset () {
         this.$refs.addForm.resetFields()
         this.object.name = ''
-        this.object.mobile = ''
-        this.object.type = '1'
+        this.object.number = ''
+        this.object.code = ''
+        this.object.address = ''
+        this.object.state = '1'
       },
       goSave () {
         this.$Loading.start()
@@ -127,8 +147,10 @@
           API.save,
           { params: {
             name: this.object.name,
-            mobile: this.object.mobile,
-            type: this.object.type
+            number: this.object.number,
+            code: this.object.code,
+            address: this.object.address,
+            state: this.object.state
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -142,7 +164,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '教师：' + this.object.name + '已保存！'
+              desc: '学生：' + this.object.name + '已保存！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

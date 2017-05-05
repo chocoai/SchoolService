@@ -1,24 +1,17 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="teacher" :name="name" three="新增" :menu="menu"></MenuList></Col>
+      <Col><MenuList active="parent" :name="name" three="新增" :menu="menu"></MenuList></Col>
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
       <Col span="8">
         <Form :label-width="100" :rules="validate" ref="addForm" :model="object">
-          <Form-item label="教师姓名" prop="name" required>
+          <Form-item label="家长姓名" prop="name" required>
             <Input size="large" v-model="object.name" placeholder="请输入教师姓名" style="width: 400px"></Input>
           </Form-item>
           <Form-item label="联系电话" prop="mobile" required>
             <Input size="large" v-model="object.mobile" placeholder="请输入联系电话" style="width: 400px"></Input>
-          </Form-item>
-          <Form-item size="large" label="教师类型" required>
-            <Radio-group v-model="object.type" type="button">
-              <Radio label="1">在编</Radio>
-              <Radio label="2">聘用</Radio>
-              <Radio label="3">校外</Radio>
-            </Radio-group>
           </Form-item>
           <Form-item>
             <Button size="large" type="primary" @click="goSave">保存</Button>
@@ -61,7 +54,7 @@
       return {
         validate: {
           name: [
-            { required: true, message: '教师姓名不能为空!', trigger: 'change' }
+            { required: true, message: '家长姓名不能为空!', trigger: 'change' }
           ],
           mobile: [
             { required: true, message: '联系电话不能为空!', trigger: 'change' },
@@ -75,13 +68,12 @@
         showLoad: true,
         object: {
           name: '',
-          mobile: '',
-          type: '1'
+          mobile: ''
         }
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('TeacherDesktop') === null || getCookie('TeacherDesktop') === undefined || getCookie('TeacherDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('ParentDesktop') === null || getCookie('ParentDesktop') === undefined || getCookie('ParentDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -93,7 +85,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('TeacherDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie('ParentDesktop')))
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
             }, (res) => {
@@ -108,7 +100,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('TeacherDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie('ParentDesktop')))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
@@ -118,7 +110,6 @@
         this.$refs.addForm.resetFields()
         this.object.name = ''
         this.object.mobile = ''
-        this.object.type = '1'
       },
       goSave () {
         this.$Loading.start()
@@ -127,8 +118,7 @@
           API.save,
           { params: {
             name: this.object.name,
-            mobile: this.object.mobile,
-            type: this.object.type
+            mobile: this.object.mobile
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -142,7 +132,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '教师：' + this.object.name + '已保存！'
+              desc: '家长：' + this.object.name + '已保存！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

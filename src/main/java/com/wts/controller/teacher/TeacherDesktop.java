@@ -7,6 +7,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.wts.entity.WP;
 import com.wts.entity.WxService;
+import com.wts.entity.model.Parent;
 import com.wts.entity.model.Student;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
@@ -72,7 +73,7 @@ public class TeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Query.class})
   public void Query() {
-    renderJson(Teacher.dao.paginate(
+    renderJson(Db.paginate(
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
@@ -232,6 +233,8 @@ public class TeacherDesktop extends Controller {
   public void checkMobileForAdd() {
     if (Teacher.dao.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该教师的联系电话已存在!");
+    } else if (Parent.dao.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+      renderText("该教师的联系电话已存在!");
     } else {
       renderText("OK");
     }
@@ -244,6 +247,8 @@ public class TeacherDesktop extends Controller {
   public void checkMobileForEdit() {
     if (!Teacher.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
             && Db.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+      renderText("该教师的联系电话已存在!");
+    } else if (Db.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该教师的联系电话已存在!");
     } else {
       renderText("OK");

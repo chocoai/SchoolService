@@ -54,7 +54,7 @@
           API.checkMobileForEdit,
           { params: {
             id: this.$route.params.id,
-            name: value
+            mobile: value
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -76,6 +76,7 @@
           ],
           mobile: [
             { required: true, message: '联系电话不能为空!', trigger: 'change' },
+            { message: '请输入11位手机号码', trigger: 'change', pattern: /^1(3|4|5|7|8)\d{9}$/ },
             { validator: mobileCheck, trigger: 'change' }
           ]
         },

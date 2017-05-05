@@ -45,6 +45,7 @@ public class Config extends JFinalConfig {
         me.add("/StudentDesktop", StudentDesktop.class);
         me.add("/TeacherDesktop", TeacherDesktop.class);
         me.add("/ParentDesktop", ParentDesktop.class);
+        me.add("/StudentParentDesktop", StudentParentDesktop.class);
 //        me.add("/ForCourse", ForCourse.class);
 //        me.add("/courseRoom", CourseRoomController.class);
 //        me.add("/teacher", TeacherController.class);
