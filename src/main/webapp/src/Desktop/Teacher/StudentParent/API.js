@@ -1,17 +1,16 @@
 import * as Desktop from '../../Desktop.js'
 export const base = 'StudentParentDesktop'
-export const query = `${Desktop.Prefix}/${base}/Query`
-export const total = `${Desktop.Prefix}/${base}/Total`
-export const inactive = `${Desktop.Prefix}/${base}/Inactive`
-export const active = `${Desktop.Prefix}/${base}/Active`
+export const base1 = 'StudentDesktop'
+export const base2 = 'ParentDesktop'
+export const base3 = 'IdentityDesktop'
+export const queryStudent = `${Desktop.Prefix}/${base1}/Query`
+export const totalStudent = `${Desktop.Prefix}/${base1}/Total`
+export const queryParent = `${Desktop.Prefix}/${base2}/Query`
+export const totalParent = `${Desktop.Prefix}/${base2}/Total`
+export const queryIdentity = `${Desktop.Prefix}/${base3}/Query`
+export const totalIdentity = `${Desktop.Prefix}/${base3}/Total`
 export const download = `${Desktop.Prefix}/${base}/Download`
-export const checkNumberForAdd = `${Desktop.Prefix}/${base}/checkNumberForAdd`
-export const checkNumberForEdit = `${Desktop.Prefix}/${base}/checkNumberForEdit`
-export const checkCodeForAdd = `${Desktop.Prefix}/${base}/checkCodeForAdd`
-export const checkCodeForEdit = `${Desktop.Prefix}/${base}/checkCodeForEdit`
 export const save = `${Desktop.Prefix}/${base}/Save`
-export const edit = `${Desktop.Prefix}/${base}/Edit`
-export const get = `${Desktop.Prefix}/${base}/Get`
 export const del = `${Desktop.Prefix}/${base}/Delete`
 export const permission = `${Desktop.Prefix}/${base}/Permission`
 export const menu = `${Desktop.Prefix}/MainDesktop/Menu`

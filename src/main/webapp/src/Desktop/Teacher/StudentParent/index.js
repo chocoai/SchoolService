@@ -44,19 +44,23 @@ const store = new Vuex.Store({
   state: {
     keyword: '',
     pageCurrent: '1',
-    studentKeyword: '',
-    studentPageCurrent: '1',
-    parentKeyword: '',
-    parentPageCurrent: '1'
+    keyword1: '',
+    pageCurrent1: '1',
+    keyword2: '',
+    pageCurrent2: '1',
+    keyword3: '',
+    pageCurrent3: '1'
   },
   mutations: {
     save (state, page) {
       state.keyword = page.keyword
       state.pageCurrent = page.pageCurrent
-      state.studentKeyword = page.studentKeyword
-      state.studentPageCurrent = page.studentPageCurrent
-      state.parentKeyword = page.parentKeyword
-      state.parentPageCurrent = page.parentPageCurrent
+      state.keyword1 = page.keyword1
+      state.pageCurrent1 = page.pageCurrent1
+      state.keyword2 = page.keyword2
+      state.pageCurrent2 = page.pageCurrent2
+      state.keyword3 = page.keyword3
+      state.pageCurrent3 = page.pageCurrent3
     }
   }
 })

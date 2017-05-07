@@ -64,7 +64,7 @@ public class StudentParentDesktop extends Controller {
             "SELECT *, " +
                     "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) as tname, " +
                     "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) as sname ",
-            "FROM course WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
+            "FROM relation WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
                     "OR detail LIKE '%" + getPara("keyword") + "%' ORDER BY id ASC").getList());
   }
 
@@ -77,41 +77,6 @@ public class StudentParentDesktop extends Controller {
     renderText(count.toString());
   }
 
-  /**
-   * 读取
-   */
-  @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class})
-  public void Get() {
-    renderJson(Course.dao.findById(getPara("id")));
-  }
-
-  /**
-   * 激活
-   */
-  @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class})
-  public void Active() {
-    Course object = Course.dao.findById(getPara("id"));
-    if (object.get("state").toString().equals("1")) {
-      renderText("该课程已激活!");
-    } else {
-      object.set("state", 1).update();
-      renderText("OK");
-    }
-  }
-
-  /**
-   * 注销
-   */
-  @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class})
-  public void Inactive() {
-    Course object = Course.dao.findById(getPara("id"));
-    if (object.get("state").toString().equals("0")) {
-      renderText("该课程已注销!");
-    } else {
-      object.set("state", 0).update();
-      renderText("OK");
-    }
-  }
 
   /**
    * 删除
@@ -143,20 +108,6 @@ public class StudentParentDesktop extends Controller {
     renderText("OK");
   }
 
-  /**
-   * 修改
-   */
-  @Before({OverdueCheck.class, PermissionCheck.class, Course_Exist.class, Course_Edit.class})
-  public void Edit() {
-    Course object = Course.dao.findById(getPara("id"));
-    object.set("name", getPara("name"))
-            .set("detail", getPara("detail"))
-            .set("amount", getPara("amount"))
-            .set("type", getPara("type"))
-            .set("state", getPara("state"))
-            .update();
-    renderText("OK");
-  }
 
   /**
    * 导出
@@ -173,28 +124,4 @@ public class StudentParentDesktop extends Controller {
     ExportUtil.export(title,fileName,SQL,getResponse());
   }
 
-  /**
-   * 检测名称_新增
-   */
-  @Before(OverdueCheck.class)
-  public void checkNameForAdd() {
-    if (Db.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
-      renderText("该课程名称已存在!");
-    } else {
-      renderText("OK");
-    }
-  }
-
-  /**
-   * 检测名称_修改
-   */
-  @Before(OverdueCheck.class)
-  public void checkNameForEdit() {
-    if (!Course.dao.findById(getPara("id")).get("name").equals(getPara("name"))
-            && Db.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
-      renderText("该课程名称已存在!");
-    } else {
-      renderText("OK");
-    }
-  }
 }

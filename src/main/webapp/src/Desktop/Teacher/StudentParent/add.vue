@@ -5,36 +5,84 @@
     </Row>
     <div class="layout-content">
     <Row>
-      <Col span="12">
-        <div class="right"><Search @goQuery="getQuery" :download="download"></Search></div>
+      <Col span="8">
+        <div class="right"><Search @goQuery="getQuery1" :download="download"></Search></div>
         <br>
         <div>
           <Table
             highlight-row
             height="450"
             size="small"
-            :columns="columns"
-            :data="pageList">
+            :columns="columns1"
+            :data="pageList1">
           </Table>
         </div>
         <br>
         <div>
           <Page
-            ref="studentPages"
-            @goList="getList"
-            @savePageCurrent="saveCurrent"
-            @savePageCurrentAndKeyword="CurrentAndKeyword"
-            :queryURL="studentQuery"
-            :totalURL="studentTotal"
-            :keyword="studentKeyword"
+            ref="pages1"
+            @goList="getList1"
+            @savePageCurrent="saveCurrent1"
+            @savePageCurrentAndKeyword="CurrentAndKeyword1"
+            :queryURL="query1"
+            :totalURL="total1"
+            :keyword="keyword1"
           >
           </Page>
         </div>
       </Col>
-      <Col span="12">
-
+      <Col span="8">
+        <div class="right"><Search @goQuery="getQuery2" :download="download"></Search></div>
+        <br>
+        <div>
+          <Table
+            highlight-row
+            height="450"
+            size="small"
+            :columns="columns2"
+            :data="pageList2">
+          </Table>
+        </div>
+        <br>
+        <div>
+          <Page
+            ref="pages2"
+            @goList="getList2"
+            @savePageCurrent="saveCurrent2"
+            @savePageCurrentAndKeyword="CurrentAndKeyword2"
+            :queryURL="query2"
+            :totalURL="total2"
+            :keyword="keyword2"
+          >
+          </Page>
+        </div>
       </Col>
-
+      <Col span="8">
+        <div class="right"><Search @goQuery="getQuery3" :download="download"></Search></div>
+        <br>
+        <div>
+          <Table
+            highlight-row
+            height="450"
+            size="small"
+            :columns="columns3"
+            :data="pageList3">
+          </Table>
+        </div>
+        <br>
+        <div>
+          <Page
+            ref="pages3"
+            @goList="getList3"
+            @savePageCurrent="saveCurrent3"
+            @savePageCurrentAndKeyword="CurrentAndKeyword3"
+            :queryURL="query3"
+            :totalURL="total3"
+            :keyword="keyword3"
+          >
+          </Page>
+        </div>
+      </Col>
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
@@ -66,17 +114,23 @@
         name: '',
         permission: [],
         menu: [],
-        query: API.query,
-        total: API.total,
-        keyword: '',
-        pageList: [],
+        query1: API.queryStudent,
+        total1: API.totalStudent,
+        query2: API.queryParent,
+        total2: API.totalParent,
+        query3: API.queryIdentity,
+        total3: API.totalIdentity,
+        keyword1: '',
+        pageList1: [],
+        keyword2: '',
+        pageList2: [],
+        keyword3: '',
+        pageList3: [],
         showLoad: true,
         download: false,
-        del: false,
         index: '',
         names: '',
-        self: this,
-        columns: [
+        columns1: [
           {
             title: '序号',
             key: 'id',
@@ -93,6 +147,41 @@
           {
             title: '身份证号码',
             key: 'number',
+            sortable: true
+          }
+        ],
+        columns2: [
+          {
+            title: '序号',
+            key: 'id',
+            sortable: true,
+            render (row, column, index) {
+              return `${index + 1}`
+            }
+          },
+          {
+            title: '家长姓名',
+            key: 'name',
+            sortable: true
+          },
+          {
+            title: '联系电话',
+            key: 'mobile',
+            sortable: true
+          }
+        ],
+        columns3: [
+          {
+            title: '序号',
+            key: 'id',
+            sortable: true,
+            render (row, column, index) {
+              return `${index + 1}`
+            }
+          },
+          {
+            title: '身份',
+            key: 'name',
             sortable: true
           }
         ]
@@ -131,14 +220,89 @@
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
     },
+    computed: {
+      showLoad: function () {
+        if (this.pageList1.length.toString() === '0' || this.pageList2.length.toString() === '0' || this.pageList3.length.toString() === '0') {
+          return true
+        } else {
+          return false
+        }
+      }
+    },
     methods: {
+      getQuery1 (keyword) {
+        this.keyword1 = keyword
+        this.$refs.pages1.query(keyword)
+      },
+      getQueryNoChange1 (keyword) {
+        this.keyword1 = keyword
+        this.$refs.pages1.queryNoChange(keyword)
+      },
+      getQuery2 (keyword) {
+        this.keyword2 = keyword
+        this.$refs.pages2.query(keyword)
+      },
+      getQueryNoChange2 (keyword) {
+        this.keyword2 = keyword
+        this.$refs.pages2.queryNoChange(keyword)
+      },
+      getQuery3 (keyword) {
+        this.keyword3 = keyword
+        this.$refs.pages3.query(keyword)
+      },
+      getQueryNoChange3 (keyword) {
+        this.keyword3 = keyword
+        this.$refs.pages3.queryNoChange(keyword)
+      },
+      getList1 (pageList) {
+        this.pageList1 = pageList
+      },
+      saveCurrent1 (pageCurrent) {
+        this.$store.commit('save', {
+          pageCurrent1: pageCurrent
+        })
+      },
+      CurrentAndKeyword1 (keyword, pageCurrent) {
+        this.$store.commit('save', {
+          keyword1: keyword,
+          pageCurrent1: pageCurrent
+        })
+      },
+      getList2 (pageList) {
+        this.pageList2 = pageList
+      },
+      saveCurrent2 (pageCurrent) {
+        this.$store.commit('save', {
+          pageCurrent2: pageCurrent
+        })
+      },
+      CurrentAndKeyword2 (keyword, pageCurrent) {
+        this.$store.commit('save', {
+          keyword2: keyword,
+          pageCurrent2: pageCurrent
+        })
+      },
+      getList3 (pageList) {
+        this.pageList3 = pageList
+      },
+      saveCurrent3 (pageCurrent) {
+        this.$store.commit('save', {
+          pageCurrent3: pageCurrent
+        })
+      },
+      CurrentAndKeyword3 (keyword, pageCurrent) {
+        this.$store.commit('save', {
+          keyword3: keyword,
+          pageCurrent3: pageCurrent
+        })
+      },
       goReset () {
-        this.$refs.addForm.resetFields()
-        this.object.name = ''
-        this.object.number = ''
-        this.object.code = ''
-        this.object.address = ''
-        this.object.state = '1'
+        this.keyword1 = ''
+        this.$refs.pages1.query(this.keyword1)
+        this.keyword2 = ''
+        this.$refs.pages1.query(this.keyword2)
+        this.keyword3 = ''
+        this.$refs.pages1.query(this.keyword3)
       },
       goSave () {
         this.$Loading.start()
@@ -146,11 +310,9 @@
         this.$http.get(
           API.save,
           { params: {
-            name: this.object.name,
-            number: this.object.number,
-            code: this.object.code,
-            address: this.object.address,
-            state: this.object.state
+            student_id: this.student_id,
+            parent_id: this.parent_id,
+            identity_id: this.identity_id
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -164,7 +326,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '学生：' + this.object.name + '已保存！'
+              desc: '关系已保存！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {
