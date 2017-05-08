@@ -96,6 +96,7 @@
         total: API.total,
         keyword: '',
         pageList: [],
+        pageTotal: -1,
         showLoad: true,
         del: false,
         index: '',
@@ -184,7 +185,7 @@
     },
     computed: {
       showLoad: function () {
-        if (this.pageList.length.toString() === '0') {
+        if (this.pageTotal.toString() === '-1') {
           return true
         } else {
           return false

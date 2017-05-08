@@ -143,19 +143,17 @@
         pageList1: [],
         pageList2: [],
         pageList3: [],
-        pageTotal1: -1,
-        pageTotal2: -1,
-        pageTotal3: -1,
+        pageTotal1: '',
+        pageTotal2: '',
+        pageTotal3: '',
         name1: '未知',
         name2: '未知',
         name3: '未知',
         id1: '',
         id2: '',
         id3: '',
-        showLoad: false,
+        showLoad: true,
         download: false,
-        ifSave: false,
-        index: '',
         columns1: [
           {
             title: '学生姓名',
@@ -220,6 +218,15 @@
         this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
+      }
+    },
+    computed: {
+      showLoad: function () {
+        if (this.name1.toString() === '') {
+          return true
+        } else {
+          return false
+        }
       }
     },
     methods: {
@@ -319,9 +326,6 @@
         this.id3 = ''
       },
       goSave () {
-        console.log('id1:' + this.id1)
-        console.log('id2:' + this.id2)
-        console.log('id3:' + this.id3)
         this.$Loading.start()
         this.$Message.info('正在进行保存操作，请稍后...')
         this.$http.get(
