@@ -1,18 +1,17 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="StudentParentIdentity" :name="name" three="新增" :menu="menu"></MenuList></Col>
+      <Col><MenuList active="RoomStudent" :name="name" three="新增" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="8"><div class="right"><Search @goQuery="getQuery1" :download="download"></Search></div></Col>
-      <Col span="8"><div class="right"><Search @goQuery="getQuery2" :download="download"></Search></div></Col>
-      <Col span="8"><div class="right"><Search @goQuery="getQuery3" :download="download"></Search></div></Col>
+      <Col span="12"><div class="right"><Search @goQuery="getQuery1" :download="download"></Search></div></Col>
+      <Col span="12"><div class="right"><Search @goQuery="getQuery2" :download="download"></Search></div></Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="8">
+      <Col span="12">
         <div class="layout-content">
           <Table
             highlight-row
@@ -24,7 +23,7 @@
           </Table>
         </div>
       </Col>
-      <Col span="8">
+      <Col span="12">
         <div class="layout-content">
           <Table
             highlight-row
@@ -36,21 +35,9 @@
           </Table>
         </div>
       </Col>
-      <Col span="8">
-        <div class="layout-content">
-          <Table
-            highlight-row
-            @on-row-dblclick="getData3"
-            height="450"
-            size="small"
-            :columns="columns3"
-            :data="pageList3">
-          </Table>
-        </div>
-      </Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="8">
+      <Col span="12">
         <div class="right">
           <Page
             ref="pages1"
@@ -64,7 +51,7 @@
           </Page>
         </div>
       </Col>
-      <Col span="8">
+      <Col span="12">
         <div class="right">
           <Page
             ref="pages2"
@@ -78,28 +65,13 @@
           </Page>
         </div>
       </Col>
-      <Col span="8">
-        <div class="right">
-          <Page
-            ref="pages3"
-            @goList="getList3"
-            @savePageCurrent="saveCurrent3"
-            @savePageCurrentAndKeyword="CurrentAndKeyword3"
-            :queryURL="query3"
-            :totalURL="total3"
-            :keyword="keyword3"
-            >
-          </Page>
-        </div>
-      </Col>
     </Row>
     <Row v-show="!showLoad">
       <Col span="16">
         <div class="rights">
           <Button size="large" type="info">请双击行选择相关信息</Button>
-          <Tag type="dot" color="blue">学生：{{name1}}</Tag>
-          <Tag type="dot" color="green">家长：{{name2}}</Tag>
-          <Tag type="dot" color="yellow">身份：{{name3}}</Tag>
+          <Tag type="dot" color="blue">班级：{{name1}}</Tag>
+          <Tag type="dot" color="green">学生：{{name2}}</Tag>
         </div>
       </Col>
       <Col span="8">
@@ -131,30 +103,30 @@
         name: '',
         permission: [],
         menu: [],
-        query1: API.queryStudent,
-        total1: API.totalStudent,
-        query2: API.queryParent,
-        total2: API.totalParent,
-        query3: API.queryIdentity,
-        total3: API.totalIdentity,
+        query1: API.queryRoom,
+        total1: API.totalRoom,
+        query2: API.queryStudent,
+        total2: API.totalStudent,
         keyword1: '',
         keyword2: '',
-        keyword3: '',
         pageList1: [],
         pageList2: [],
-        pageList3: [],
         pageTotal1: '',
         pageTotal2: '',
-        pageTotal3: '',
         name1: '未知',
         name2: '未知',
-        name3: '未知',
         id1: '',
         id2: '',
-        id3: '',
         showLoad: true,
         download: false,
         columns1: [
+          {
+            title: '班级名称',
+            key: 'name',
+            align: 'center'
+          }
+        ],
+        columns2: [
           {
             title: '学生姓名',
             key: 'name',
@@ -165,30 +137,11 @@
             key: 'number',
             align: 'center'
           }
-        ],
-        columns2: [
-          {
-            title: '家长姓名',
-            key: 'name',
-            align: 'center'
-          },
-          {
-            title: '联系电话',
-            key: 'mobile',
-            align: 'center'
-          }
-        ],
-        columns3: [
-          {
-            title: '身份',
-            key: 'name',
-            align: 'center'
-          }
         ]
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentParentIdentityDesktop') === null || getCookie('StudentParentIdentityDesktop') === undefined || getCookie('StudentParentIdentityDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('RoomStudentDesktop') === null || getCookie('RoomStudentDesktop') === undefined || getCookie('RoomStudentDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -200,7 +153,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie('RoomStudentDesktop')))
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
               this.showLoad = false
@@ -216,7 +169,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie('RoomStudentDesktop')))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
@@ -277,33 +230,6 @@
           pageCurrent2: pageCurrent
         })
       },
-      getQuery3 (keyword) {
-        this.keyword3 = keyword
-        this.$refs.pages3.query(keyword)
-      },
-      getQueryNoChange3 (keyword) {
-        this.keyword3 = keyword
-        this.$refs.pages3.queryNoChange(keyword)
-      },
-      getData3 (value) {
-        this.id3 = value.id
-        this.name3 = value.name
-      },
-      getList3 (pageList, pageTotal) {
-        this.pageList3 = pageList
-        this.pageTotal3 = pageTotal
-      },
-      saveCurrent3 (pageCurrent) {
-        this.$store.commit('save', {
-          pageCurrent3: pageCurrent
-        })
-      },
-      CurrentAndKeyword3 (keyword, pageCurrent) {
-        this.$store.commit('save', {
-          keyword3: keyword,
-          pageCurrent3: pageCurrent
-        })
-      },
       goReset () {
         this.keyword1 = ''
         this.$refs.pages1.query(this.keyword1)
@@ -313,10 +239,6 @@
         this.$refs.pages2.query(this.keyword2)
         this.name2 = '未知'
         this.id2 = ''
-        this.keyword3 = ''
-        this.$refs.pages3.query(this.keyword3)
-        this.name3 = '未知'
-        this.id3 = ''
       },
       goSave () {
         this.$Loading.start()
@@ -324,9 +246,8 @@
         this.$http.get(
           API.save,
           { params: {
-            sid: this.id1,
-            pid: this.id2,
-            iid: this.id3
+            rid: this.id1,
+            sid: this.id2
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

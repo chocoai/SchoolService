@@ -7,6 +7,7 @@ import com.jfinal.kit.PathKit;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.activerecord.tx.TxByMethods;
+import com.jfinal.plugin.cron4j.Cron4jPlugin;
 import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
@@ -45,6 +46,7 @@ public class Config extends JFinalConfig {
         me.add("/ParentDesktop", ParentDesktop.class);
         me.add("/StudentParentIdentityDesktop", StudentParentIdentityDesktop.class);
         me.add("/IdentityDesktop", IdentityDesktop.class);
+        me.add("/RoomStudentDesktop", RoomStudentDesktop.class);
 //        me.add("/ForCourse", ForCourse.class);
 //        me.add("/courseRoom", CourseRoomController.class);
 //        me.add("/teacher", TeacherController.class);
@@ -75,6 +77,11 @@ public class Config extends JFinalConfig {
         arp.addSqlTemplate("run.sql");
         _MappingKit.mapping(arp);
         me.add(arp);
+
+        //配置任务调度插件
+        Cron4jPlugin cp = new Cron4jPlugin();
+        cp.addTask("*/1 * * * *", new MyTask());
+        me.add(cp);
     }
     public static DruidPlugin createDruidPlugin() {
         return new DruidPlugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim());

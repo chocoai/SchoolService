@@ -69,9 +69,9 @@ public class ParentDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM parent WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
+            "FROM parent WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%' " +
                     "OR userId LIKE '%" + getPara("keyword") + "%' " +
-                    "OR mobile LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
+                    "OR mobile LIKE '%" + getPara("keyword") + "%') ORDER BY id DESC").getList());
   }
 
   /**
@@ -79,9 +79,9 @@ public class ParentDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM parent WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
+    Long count = Db.queryLong("SELECT COUNT(*) FROM parent WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%' " +
             "OR userId LIKE '%" + getPara("keyword") + "%' " +
-            "OR mobile LIKE '%" + getPara("keyword") + "%'");
+            "OR mobile LIKE '%" + getPara("keyword") + "%')");
     renderText(count.toString());
   }
 
@@ -170,8 +170,9 @@ public class ParentDesktop extends Controller {
       List<String> userIds = new ArrayList<String>();
       userIds.add(getUserId(getPara("name")));
       WP.me.addTagUsers(ParamesAPI.parentTagId, userIds, new ArrayList<Integer>());
-      Teacher object = new Teacher();
+      Parent object = new Parent();
       object.set("name", getPara("name"))
+              .set("userId", getUserId(getPara("name")))
               .set("mobile", getPara("mobile"))
               .set("state", 4)
               .set("del", 0)

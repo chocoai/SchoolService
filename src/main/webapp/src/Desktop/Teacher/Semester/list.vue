@@ -222,15 +222,6 @@
         this.showLoad = false
       }
     },
-    computed: {
-      showLoad: function () {
-        if (this.pageTotal.toString() === '' || this.pageTotal.toString() === undefined || this.pageTotal.toString() === null) {
-          return true
-        } else {
-          return false
-        }
-      }
-    },
     methods: {
       showDelete (index) {
         this.del = true

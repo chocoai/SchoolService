@@ -68,7 +68,7 @@ public class RoomDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM room WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
+            "FROM room WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%') ORDER BY id DESC").getList());
   }
 
   /**
@@ -76,7 +76,7 @@ public class RoomDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM room WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%'");
+    Long count = Db.queryLong("SELECT COUNT(*) FROM room WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%')");
     renderText(count.toString());
   }
 

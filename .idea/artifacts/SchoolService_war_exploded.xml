@@ -50,6 +50,7 @@
           <element id="library" level="project" name="Maven: xpp3:xpp3_min:1.1.4c" />
           <element id="library" level="project" name="Maven: com.belerweb:pinyin4j:2.5.0" />
           <element id="library" level="project" name="Maven: com.alibaba:druid:1.0.27" />
+          <element id="library" level="project" name="Maven: it.sauronsoftware.cron4j:cron4j:2.2.5" />
           <element id="library" level="project" name="Maven: com.github.binarywang:weixin-java-cp:2.6.0" />
           <element id="library" level="project" name="Maven: com.github.binarywang:weixin-java-common:2.6.0" />
           <element id="library" level="project" name="Maven: redis.clients:jedis:2.9.0" />

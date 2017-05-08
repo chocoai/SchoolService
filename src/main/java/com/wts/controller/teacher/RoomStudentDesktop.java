@@ -3,22 +3,22 @@ package com.wts.controller.teacher;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
-import com.wts.entity.model.Studentparentidentity;
+import com.wts.entity.model.Roomstudent;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
-import com.wts.validator.studentParentIdentity.StudentParentIdentity_Exist;
-import com.wts.validator.studentParentIdentity.StudentParentIdentity_Save;
+import com.wts.validator.roomStudent.RoomStudent_Exist;
+import com.wts.validator.roomStudent.RoomStudent_Save;
 
 import java.io.IOException;
 
 import static com.wts.util.Util.PermissionString;
 
 
-public class StudentParentIdentityDesktop extends Controller {
+public class RoomStudentDesktop extends Controller {
   /**
    * 页面
    */
@@ -34,12 +34,12 @@ public class StudentParentIdentityDesktop extends Controller {
         setSessionAttr("teacher", teacher);
         setCookie("dit", teacher.getId().toString(), 60 * 60 * 3);
         setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(), teacher.getId().toString()), 60 * 6 * 10);
-        render("/static/html/desktop/teacher/Desktop_Teacher_StudentParentIdentity.html");
+        render("/static/html/desktop/teacher/Desktop_Teacher_RoomStudent.html");
       }
     } else {
       String teacherId = ((Teacher) getSessionAttr("teacher")).getId().toString();
       setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(), teacherId), 60 * 6 * 10);
-      render("/static/html/desktop/teacher/Desktop_Teacher_StudentParentIdentity.html");
+      render("/static/html/desktop/teacher/Desktop_Teacher_RoomStudent.html");
     }
   }
 
@@ -61,25 +61,19 @@ public class StudentParentIdentityDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT " +
-                    "parent.id AS pid," +
+                    "room.id AS rid," +
                     "student.id AS sid," +
-                    "identity.id AS iid," +
-                    "parent.name AS pname," +
+                    "room.name AS rname," +
                     "student.name AS sname," +
-                    "identity.name AS iname," +
-                    "parent.mobile AS pmobile," +
                     "student.number AS snumber," +
                     "student.code AS scode",
-            "FROM (((studentparentidentity " +
-                    "LEFT JOIN parent ON studentparentidentity.parent_id = parent.id) " +
-                    "LEFT JOIN student ON studentparentidentity.student_id = student.id) " +
-                    "LEFT JOIN identity ON studentparentidentity.identity_id = identity.id) " +
-                    "WHERE parent.del = 0 " +
+            "FROM ((roomstudent " +
+                    "LEFT JOIN room ON roomstudent.room_id = room.id) " +
+                    "LEFT JOIN student ON roomstudent.student_id = student.id) " +
+                    "WHERE room.del = 0 " +
                     "AND student.del = 0 " +
-                    "AND (parent.name LIKE '%" + getPara("keyword") + "%' " +
+                    "AND (room.name LIKE '%" + getPara("keyword") + "%' " +
                     "OR student.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR identity.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR parent.mobile LIKE '%" + getPara("keyword") + "%' " +
                     "OR student.number LIKE '%" + getPara("keyword") + "%' " +
                     "OR student.code LIKE '%" + getPara("keyword") + "%')").getList());
   }
@@ -89,16 +83,13 @@ public class StudentParentIdentityDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM (((studentparentidentity " +
-            "LEFT JOIN parent ON studentparentidentity.parent_id = parent.id) " +
-            "LEFT JOIN student ON studentparentidentity.student_id = student.id) " +
-            "LEFT JOIN identity ON studentparentidentity.identity_id = identity.id) " +
-            "WHERE parent.del = 0 " +
+    Long count = Db.queryLong("SELECT COUNT(*) FROM ((roomstudent " +
+            "LEFT JOIN room ON roomstudent.room_id = room.id) " +
+            "LEFT JOIN student ON roomstudent.student_id = student.id) " +
+            "WHERE room.del = 0 " +
             "AND student.del = 0 " +
-            "AND (parent.name LIKE '%" + getPara("keyword") + "%' " +
+            "AND (room.name LIKE '%" + getPara("keyword") + "%' " +
             "OR student.name LIKE '%" + getPara("keyword") + "%' " +
-            "OR identity.name LIKE '%" + getPara("keyword") + "%' " +
-            "OR parent.mobile LIKE '%" + getPara("keyword") + "%' " +
             "OR student.number LIKE '%" + getPara("keyword") + "%' " +
             "OR student.code LIKE '%" + getPara("keyword") + "%')");
     renderText(count.toString());
@@ -108,21 +99,20 @@ public class StudentParentIdentityDesktop extends Controller {
   /**
    * 删除
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, StudentParentIdentity_Exist.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, RoomStudent_Exist.class})
   public void Delete() {
-    Studentparentidentity.dao.deleteById(getPara("iid"), getPara("pid"), getPara("sid"));
+    Roomstudent.dao.deleteById(getPara("rid"),  getPara("sid"));
     renderText("OK");
   }
 
   /**
    * 保存
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, StudentParentIdentity_Save.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, RoomStudent_Save.class})
   public void Save() {
-    Studentparentidentity object = new Studentparentidentity();
+    Roomstudent object = new Roomstudent();
     object.set("student_id", getPara("sid"))
-            .set("parent_id", getPara("pid"))
-            .set("identity_id", getPara("iid"))
+            .set("room_id", getPara("rid"))
             .save();
     renderText("OK");
   }
@@ -133,24 +123,20 @@ public class StudentParentIdentityDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
-    String[] title = {"家长姓名", "学生姓名", "身份", "家长电话", "学生身份证号码", "学生学籍号码"};
-    String fileName = "studentparentidentity";
-    String SQL = "SELECT parent.name AS pname," +
+    String[] title = {"班级名称", "学生姓名", "学生身份证号码", "学生学籍编号"};
+    String fileName = "roomstudent";
+    String SQL = "SELECT " +
+            "room.name AS rname," +
             "student.name AS sname," +
-            "identity.name AS iname," +
-            "parent.mobile AS pmobile," +
             "student.number AS snumber," +
             "student.code AS scode" +
-            "FROM (((studentparentidentity" +
-            "LEFT JOIN parent ON studentparentidentity.parent_id = parent.id)" +
-            "LEFT JOIN student ON studentparentidentity.student_id = student.id)" +
-            "LEFT JOIN identity ON studentparentidentity.identity_id = identity.id)" +
-            "WHERE parent.del = 0 " +
+            "FROM ((roomstudent" +
+            "LEFT JOIN room ON roomstudent.room_id = room.id)" +
+            "LEFT JOIN student ON roomstudent.student_id = student.id)" +
+            "WHERE room.del = 0 " +
             "AND student.del = 0 " +
-            "AND (parent.name LIKE '%" + getPara("keyword") + "%' " +
+            "AND (room.name LIKE '%" + getPara("keyword") + "%' " +
             "OR student.name LIKE '%" + getPara("keyword") + "%' " +
-            "OR identity.name LIKE '%" + getPara("keyword") + "%' " +
-            "OR  parent.mobile LIKE '%" + getPara("keyword") + "%' " +
             "OR student.number LIKE '%" + getPara("keyword") + "%' " +
             "OR student.code LIKE '%" + getPara("keyword") + "%')";
     ExportUtil.export(title, fileName, SQL, getResponse());

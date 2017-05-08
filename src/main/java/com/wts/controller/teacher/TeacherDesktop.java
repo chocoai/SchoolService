@@ -77,9 +77,9 @@ public class TeacherDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM teacher WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
+            "FROM teacher WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%' " +
                     "OR userId LIKE '%" + getPara("keyword") + "%' " +
-                    "OR mobile LIKE '%" + getPara("keyword") + "%' ORDER BY id DESC").getList());
+                    "OR mobile LIKE '%" + getPara("keyword") + "%') ORDER BY id DESC").getList());
   }
 
   /**
@@ -87,9 +87,9 @@ public class TeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM teacher WHERE del = 0 AND name LIKE '%" + getPara("keyword") + "%' " +
+    Long count = Db.queryLong("SELECT COUNT(*) FROM teacher WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%' " +
             "OR userId LIKE '%" + getPara("keyword") + "%' " +
-            "OR mobile LIKE '%" + getPara("keyword") + "%'");
+            "OR mobile LIKE '%" + getPara("keyword") + "%')");
     renderText(count.toString());
   }
 
@@ -180,6 +180,7 @@ public class TeacherDesktop extends Controller {
       WP.me.addTagUsers(ParamesAPI.teacherTagId, userIds, new ArrayList<Integer>());
       Teacher object = new Teacher();
       object.set("name", getPara("name"))
+              .set("userId", getUserId(getPara("name")))
               .set("mobile", getPara("mobile"))
               .set("type", getPara("type"))
               .set("state", 4)

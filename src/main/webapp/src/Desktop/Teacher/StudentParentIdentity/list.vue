@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="studentParentIdentity" :name="name" three="列表" :menu="menu"></MenuList></Col>
+      <Col><MenuList active="StudentParentIdentity" :name="name" three="列表" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
@@ -96,7 +96,7 @@
         total: API.total,
         keyword: '',
         pageList: [],
-        pageTotal: -1,
+        pageTotal: '',
         showLoad: true,
         del: false,
         index: '',
@@ -136,7 +136,7 @@
             title: '操作',
             key: 'state',
             align: 'center',
-            width: 100,
+            width: 200,
             render (row, column, index) {
               return `
               <i-button type="error" @click="showDelete(${index})" v-if="permission.Delete">删除</i-button>
@@ -181,15 +181,6 @@
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
-      }
-    },
-    computed: {
-      showLoad: function () {
-        if (this.pageTotal.toString() === '-1') {
-          return true
-        } else {
-          return false
-        }
       }
     },
     methods: {

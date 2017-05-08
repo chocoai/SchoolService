@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="student" :name="name" three="列表" :menu="menu"></MenuList></Col>
+      <Col><MenuList active=CourseRoomTeacher" :name="name" three="列表" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
@@ -63,38 +63,13 @@
         <span>删除确认</span>
       </p>
       <div style="text-align:center">
-        <p>学生：{{names}}删除后，关联信息会一并删除。</p>
+        <p>即将要删除教师（{{tname}}）在班级（{{rname}}）的课程（{{cname}}）</p>
+        <p>关系删除后需要重新绑定。</p>
         <p>该功能必须慎用！</p>
         <p>是否继续删除？</p>
       </div>
       <div slot="footer">
         <Button type="error" size="large" long @click="goDelete">删除</Button>
-      </div>
-    </Modal>
-    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
-      <p slot="header" style="color:#f60;text-align:center">
-        <Icon type="information-circled"></Icon>
-        <span>注销确认</span>
-      </p>
-      <div style="text-align:center">
-        <p>学生：{{names}}注销后，关联信息会一并失效。</p>
-        <p>是否继续注销？</p>
-      </div>
-      <div slot="footer">
-        <Button type="warning" size="large" long @click="goInactive">注销</Button>
-      </div>
-    </Modal>
-    <Modal v-model="active" width="360" :styles="{top: '40px'}">
-      <p slot="header" style="color:#66CDAA;text-align:center">
-        <Icon type="information-circled"></Icon>
-        <span>激活确认</span>
-      </p>
-      <div style="text-align:center">
-        <p>学生：{{names}}激活后，请重新设置关联信息。</p>
-        <p>是否继续激活？</p>
-      </div>
-      <div slot="footer">
-        <Button type="success" size="large" long @click="goActive">激活</Button>
       </div>
     </Modal>
   </div>
@@ -124,10 +99,10 @@
         pageTotal: '',
         showLoad: true,
         del: false,
-        inactive: false,
-        active: false,
         index: '',
-        names: '',
+        cname: '',
+        tname: '',
+        rname: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -144,63 +119,26 @@
           },
           {
             title: '学生姓名',
-            key: 'name',
+            key: 'sname',
             sortable: true
           },
           {
-            title: '身份证号码',
-            key: 'number',
-            sortable: true,
-            width: 200
-          },
-          {
-            title: '学籍号码',
-            key: 'code',
+            title: '家长姓名',
+            key: 'pname',
             sortable: true
           },
           {
-            title: '性别',
-            key: 'sex',
-            sortable: true,
-            render (row) {
-              const sexes = row.sex.toString() === '1' ? 'male' : row.sex.toString() === '2' ? 'female' : 'person'
-              const color = row.sex.toString() === '1' ? '#0099CC' : row.sex.toString() === '2' ? '#CC6699' : 'red'
-              const text = row.sex.toString() === '1' ? '男生' : row.sex.toString() === '2' ? '女生' : '错误'
-              return `<Icon type="${sexes}" color="${color}" size="16"></Icon> ${text}`
-            }
-          },
-          {
-            title: '学生状态',
-            key: 'state',
-            sortable: true,
-            render (row) {
-              const color = row.state.toString() === '1' ? 'green' : row.state.toString() === '0' ? 'yellow' : 'red'
-              const text = row.state.toString() === '1' ? '可用' : row.state.toString() === '0' ? '停用' : '错误'
-              return `<tag type="dot" color="${color}">${text}</tag>`
-            }
-          },
-          {
-            title: '家长绑定',
-            key: 'bind',
-            sortable: true,
-            render (row) {
-              const color = row.bind.toString() === '1' ? 'green' : row.bind.toString() === '0' ? 'yellow' : 'red'
-              const text = row.bind.toString() === '1' ? '已绑定' : row.bind.toString() === '0' ? '未绑定' : '错误'
-              return `<tag type="dot" color="${color}">${text}</tag>`
-            }
+            title: '关系',
+            key: 'iname',
+            sortable: true
           },
           {
             title: '操作',
             key: 'state',
             align: 'center',
-            width: 300,
+            width: 200,
             render (row, column, index) {
-              const states1 = row.state.toString() === '1'
-              const states2 = row.state.toString() === '0'
               return `
-              <i-button type="primary" @click="goEdit(${index})" v-if="permission.Edit">修改</i-button>
-              <i-button type="warning" v-if="${states1} && permission.Inactive" @click="showInactive(${index})">注销</i-button>
-              <i-button type="success" v-if="${states2} && permission.Active" @click="showActive(${index})">激活</i-button>
               <i-button type="error" @click="showDelete(${index})" v-if="permission.Delete">删除</i-button>
               `
             }
@@ -209,7 +147,7 @@
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentDesktop') === null || getCookie('StudentDesktop') === undefined || getCookie('StudentDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentParentIdentityDesktop') === null || getCookie('StudentParentIdentityDesktop') === undefined || getCookie('StudentParentIdentityDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -221,7 +159,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('StudentDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
               this.download = this.permission.Download
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
@@ -238,7 +176,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('StudentDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
         this.download = this.permission.Download
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
@@ -249,17 +187,9 @@
       showDelete (index) {
         this.del = true
         this.index = index
-        this.names = this.pageList[index].name
-      },
-      showInactive (index) {
-        this.inactive = true
-        this.index = index
-        this.names = this.pageList[index].name
-      },
-      showActive (index) {
-        this.active = true
-        this.index = index
-        this.names = this.pageList[index].name
+        this.sname = this.pageList[index].sname
+        this.dname = this.pageList[index].dname
+        this.iname = this.pageList[index].iname
       },
       getQuery (keyword) {
         this.keyword = keyword
@@ -291,9 +221,8 @@
           this.size = 'small'
         }
       },
-      getList (pageList, pageTotal) {
+      getList (pageList) {
         this.pageList = pageList
-        this.pageTotal = pageTotal
       },
       saveCurrent (pageCurrent) {
         this.$store.commit('save', {
@@ -309,9 +238,6 @@
       goAdd () {
         this.$router.push({ path: '/add' })
       },
-      goEdit (index) {
-        this.$router.push({ path: '/edit/' + this.pageList[index].id })
-      },
       goDelete () {
         this.$Loading.start()
         this.$Message.info('正在进行删除操作，请稍后...')
@@ -319,7 +245,9 @@
         this.$http.get(
           API.del,
           { params: {
-            id: this.pageList[this.index].id
+            iid: this.pageList[this.index].iid,
+            pid: this.pageList[this.index].pid,
+            sid: this.pageList[this.index].sid
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -327,79 +255,7 @@
             this.getQueryNoChange(this.keyword)
             this.$Notice.success({
               title: '操作完成!',
-              desc: '学生：' + this.pageList[this.index].name + '已删除！'
-            })
-            this.$Loading.finish()
-          } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
-            this.$Notice.error({
-              title: '登录过期或非法操作!'
-            })
-            this.$Loading.error()
-          } else {
-            this.$Notice.error({
-              title: response.body
-            })
-            this.$Loading.error()
-          }
-        }, (response) => {
-          this.$Notice.error({
-            title: '服务器内部错误!'
-          })
-          this.$Loading.error()
-        })
-      },
-      goInactive () {
-        this.$Loading.start()
-        this.$Message.info('正在进行注销操作，请稍后...')
-        this.inactive = false
-        this.$http.get(
-          API.inactive,
-          { params: {
-            id: this.pageList[this.index].id
-          } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
-            this.$Notice.success({
-              title: '操作完成!',
-              desc: '学生：' + this.pageList[this.index].name + '已注销！'
-            })
-            this.$Loading.finish()
-          } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
-            this.$Notice.error({
-              title: '登录过期或非法操作!'
-            })
-            this.$Loading.error()
-          } else {
-            this.$Notice.error({
-              title: response.body
-            })
-            this.$Loading.error()
-          }
-        }, (response) => {
-          this.$Notice.error({
-            title: '服务器内部错误!'
-          })
-          this.$Loading.error()
-        })
-      },
-      goActive () {
-        this.$Loading.start()
-        this.$Message.info('正在进行激活操作，请稍后...')
-        this.active = false
-        this.$http.get(
-          API.active,
-          { params: {
-            id: this.pageList[this.index].id
-          } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
-            this.$Notice.success({
-              title: '操作完成!',
-              desc: '学生：' + this.pageList[this.index].name + '已激活！'
+              desc: '关系已删除！'
             })
             this.$Loading.finish()
           } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {

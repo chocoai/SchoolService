@@ -32,7 +32,8 @@ module.exports = {
     Desktop_Teacher_Student: './src/Desktop/Teacher/Student/Index.js',
     Desktop_Teacher_Teacher: './src/Desktop/Teacher/Teacher/Index.js',
     Desktop_Teacher_Parent: './src/Desktop/Teacher/Parent/Index.js',
-    Desktop_Teacher_StudentParentIdentity: './src/Desktop/Teacher/StudentParentIdentity/Index.js'
+    Desktop_Teacher_StudentParentIdentity: './src/Desktop/Teacher/StudentParentIdentity/Index.js',
+    Desktop_Teacher_RoomStudent: './src/Desktop/Teacher/RoomStudent/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

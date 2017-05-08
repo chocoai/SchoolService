@@ -72,6 +72,7 @@ public class MainDesktop extends Controller {
       setCookie("TeacherDesktop", PermissionString("TeacherDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("ParentDesktop", PermissionString("ParentDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("StudentParentIdentityDesktop", PermissionString("StudentParentIdentityDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("RoomStudentDesktop", PermissionString("RoomStudentDesktop",teacher.getId().toString()), 60 * 6 * 10);
 
       renderText("OK");
     } else {
