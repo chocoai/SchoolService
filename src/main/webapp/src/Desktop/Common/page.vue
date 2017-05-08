@@ -44,8 +44,8 @@
                 window.location.href = '/MainDesktop'
               } else {
                 this.pageList = res.body
-                this.$emit('goList', this.pageList)
                 this.pageTotal = response.body
+                this.$emit('goList', this.pageList, this.pageTotal)
               }
             }, (response) => {
               this.$Notice.error({
@@ -63,9 +63,6 @@
         this.pageSize = value
         this.pageCurrent = 1
         this.$emit('savePageCurrent', this.pageCurrent)
-        this.$store.commit('save', {
-          pageCurrent: this.pageCurrent
-        })
         this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       },
       pageChange (value) {

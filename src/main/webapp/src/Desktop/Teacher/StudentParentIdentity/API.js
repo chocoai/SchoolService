@@ -1,8 +1,10 @@
 import * as Desktop from '../../Desktop.js'
-export const base = 'StudentParentDesktop'
+export const base = 'StudentParentIdentityDesktop'
 export const base1 = 'StudentDesktop'
 export const base2 = 'ParentDesktop'
 export const base3 = 'IdentityDesktop'
+export const query = `${Desktop.Prefix}/${base}/Query`
+export const total = `${Desktop.Prefix}/${base}/Total`
 export const queryStudent = `${Desktop.Prefix}/${base1}/Query`
 export const totalStudent = `${Desktop.Prefix}/${base1}/Total`
 export const queryParent = `${Desktop.Prefix}/${base2}/Query`

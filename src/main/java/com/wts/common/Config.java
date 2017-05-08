@@ -13,8 +13,6 @@ import com.jfinal.template.Engine;
 import com.wts.controller.*;
 import com.wts.controller.teacher.*;
 import com.wts.entity.model._MappingKit;
-import me.chanjar.weixin.cp.api.WxCpInMemoryConfigStorage;
-import me.chanjar.weixin.cp.api.WxCpServiceImpl;
 
 /**
  * API引导式配置
@@ -45,7 +43,7 @@ public class Config extends JFinalConfig {
         me.add("/StudentDesktop", StudentDesktop.class);
         me.add("/TeacherDesktop", TeacherDesktop.class);
         me.add("/ParentDesktop", ParentDesktop.class);
-        me.add("/StudentParentDesktop", StudentParentDesktop.class);
+        me.add("/StudentParentIdentityDesktop", StudentParentIdentityDesktop.class);
         me.add("/IdentityDesktop", IdentityDesktop.class);
 //        me.add("/ForCourse", ForCourse.class);
 //        me.add("/courseRoom", CourseRoomController.class);

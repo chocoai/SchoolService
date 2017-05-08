@@ -1,7 +1,7 @@
 <template>
   <div class="query">
     <div class="left">
-      <Input type="text" v-model="keyword" placeholder="请输入关键词" style="width:300px;">
+      <Input type="text" v-model="keyword" placeholder="请输入关键词" style="width:270px;">
       <span slot="prepend">关键词</span>
       </Input>
     </div>

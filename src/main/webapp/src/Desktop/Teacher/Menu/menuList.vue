@@ -30,7 +30,7 @@
             <Icon type="stats-bars"></Icon>
             关系管理
           </template>
-          <Menu-item name="studentParent" v-if="menu.StudentParentDesktop_Page">学生家长</Menu-item>
+          <Menu-item name="studentParentIdentity" v-if="menu.StudentParentIdentityDesktop_Page">学生家长身份</Menu-item>
         </Submenu>
         <Submenu name="information">
           <template slot="title">
@@ -99,7 +99,7 @@
             return '人员管理'
           case 'parent':
             return '人员管理'
-          case 'studentParent':
+          case 'studentParentIdentity':
             return '关系管理'
           case 'notice':
             return '信息管理'
@@ -133,8 +133,8 @@
             return '学生'
           case 'parent':
             return '家长'
-          case 'studentParent':
-            return '学生家长'
+          case 'studentParentIdentity':
+            return '学生家长身份'
           case 'notice':
             return '公告'
           case 'attendance':
@@ -176,8 +176,8 @@
           case 'parent':
             window.location.href = '/ParentDesktop/Page'
             break
-          case 'studentParent':
-            window.location.href = '/StudentParentDesktop/Page'
+          case 'studentParentIdentity':
+            window.location.href = '/StudentParentIdentityDesktop/Page'
             break
           default:
             window.location.href = '/MainDesktop'

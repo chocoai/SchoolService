@@ -67,12 +67,11 @@ CREATE TABLE `Identity` (
 PRIMARY KEY (`id`) 
 );
 
-CREATE TABLE `Relation` (
-`id` int NOT NULL AUTO_INCREMENT COMMENT '序号',
-`parent_id` int NULL COMMENT '家长序号',
-`student_id` int NULL COMMENT '学生序号',
-`identity_id` int NULL COMMENT '身份序号',
-PRIMARY KEY (`id`) 
+CREATE TABLE `StudentParentIdentity` (
+`parent_id` int NOT NULL COMMENT '家长序号',
+`student_id` int NOT NULL COMMENT '学生序号',
+`identity_id` int NOT NULL COMMENT '身份序号',
+PRIMARY KEY (`parent_id`, `student_id`, `identity_id`) 
 );
 
 CREATE TABLE `Notice` (
@@ -324,9 +323,9 @@ PRIMARY KEY (`teacher_id`, `permission_id`)
 ALTER TABLE `CourseRoomTeacher` ADD CONSTRAINT `teacherPlan_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `CourseRoomTeacher` ADD CONSTRAINT `teacherPlan_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
 ALTER TABLE `CourseRoomTeacher` ADD CONSTRAINT `teacherPlan_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
-ALTER TABLE `Relation` ADD CONSTRAINT `relation_parent` FOREIGN KEY (`parent_id`) REFERENCES `Teacher` (`id`);
-ALTER TABLE `Relation` ADD CONSTRAINT `relation_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
-ALTER TABLE `Relation` ADD CONSTRAINT `relation_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
+ALTER TABLE `StudentParentIdentity` ADD CONSTRAINT `relation_parent` FOREIGN KEY (`parent_id`) REFERENCES `Teacher` (`id`);
+ALTER TABLE `StudentParentIdentity` ADD CONSTRAINT `relation_student` FOREIGN KEY (`student_id`) REFERENCES `Student` (`id`);
+ALTER TABLE `StudentParentIdentity` ADD CONSTRAINT `relation_identity` FOREIGN KEY (`identity_id`) REFERENCES `Identity` (`id`);
 ALTER TABLE `Notice` ADD CONSTRAINT `notice_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);
 ALTER TABLE `CourseMessageRead` ADD CONSTRAINT `check_courseMessage` FOREIGN KEY (`message_id`) REFERENCES `CourseMessage` (`id`);
 ALTER TABLE `CourseMessageRead` ADD CONSTRAINT `check_courseMessage_parent` FOREIGN KEY (`parent_id`) REFERENCES `Parent` (`id`);

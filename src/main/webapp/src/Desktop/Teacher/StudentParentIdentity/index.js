@@ -17,7 +17,7 @@ const routes = [
   { path: '/add',
     component: Add,
     beforeEnter: (to, from, next) => {
-      if (JSON.parse(JSON.parse(getCookie('StudentParentDesktop'))).Save) {
+      if (JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop'))).Save) {
         next()
       } else {
         next({ path: '/' })

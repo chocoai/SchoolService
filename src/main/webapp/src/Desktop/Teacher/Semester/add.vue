@@ -17,9 +17,9 @@
             <Date-picker type="date" v-model="object.time_end" placement="bottom-end" placeholder="选择终止日期" style="width: 400px"></Date-picker>
           </Form-item>
           <Form-item>
-            <Button size="large" type="primary" @click="goSave">保存</Button>
-            <Button size="large" type="ghost" style="margin-left: 8px" @click="goReset">重置</Button>
-            <Button size="large" style="margin-left: 8px" @click="goBack">返回</Button>
+            <Button size="large" type="success" @click="goSave">保存</Button>
+            <Button size="large" type="warning" style="margin-left: 8px" @click="goReset">重置</Button>
+            <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack">返回</Button>
           </Form-item>
         </Form>
       </Col>

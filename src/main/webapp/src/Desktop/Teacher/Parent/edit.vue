@@ -22,9 +22,9 @@
           <Input size="large" v-model="object.mobile" placeholder="请输入联系电话" style="width: 400px"></Input>
         </Form-item>
         <Form-item>
-          <Button size="large" type="primary" @click="goEdit">修改</Button>
-          <Button size="large" type="ghost" style="margin-left: 8px" @click="goReset">重置</Button>
-          <Button size="large" style="margin-left: 8px" @click="goBack">返回</Button>
+          <Button size="large" type="success" @click="goEdit">保存</Button>
+          <Button size="large" type="warning" style="margin-left: 8px" @click="goReset">重置</Button>
+          <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack">返回</Button>
         </Form-item>
       </Form>
       </Col>

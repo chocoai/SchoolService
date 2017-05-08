@@ -30,6 +30,9 @@ var webpackConfig = merge(baseWebpackConfig, {
       'process.env': env
     }),
     new webpack.optimize.UglifyJsPlugin({
+      output: {
+        comments: false,  // remove all comments
+      },
       compress: {
         warnings: false
       },
@@ -137,6 +140,18 @@ var webpackConfig = merge(baseWebpackConfig, {
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_Parent'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_StudentParentIdentity.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Desktop_Teacher_StudentParentIdentity'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

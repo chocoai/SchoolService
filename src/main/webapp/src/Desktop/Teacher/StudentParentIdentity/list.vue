@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="studentParent" :name="name" three="列表" :menu="menu"></MenuList></Col>
+      <Col><MenuList active="studentParentIdentity" :name="name" three="列表" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
@@ -63,6 +63,7 @@
         <span>删除确认</span>
       </p>
       <div style="text-align:center">
+        <p>即将要删除学生（{{sname}}）与家长（{{pname}}）的身份（{{iname}}）</p>
         <p>关系删除后需要重新绑定。</p>
         <p>该功能必须慎用！</p>
         <p>是否继续删除？</p>
@@ -98,7 +99,9 @@
         showLoad: true,
         del: false,
         index: '',
-        names: '',
+        sname: '',
+        dname: '',
+        iname: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -132,6 +135,7 @@
             title: '操作',
             key: 'state',
             align: 'center',
+            width: 100,
             render (row, column, index) {
               return `
               <i-button type="error" @click="showDelete(${index})" v-if="permission.Delete">删除</i-button>
@@ -142,7 +146,7 @@
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentParentDesktop') === null || getCookie('StudentParentDesktop') === undefined || getCookie('StudentParentDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentParentIdentityDesktop') === null || getCookie('StudentParentIdentityDesktop') === undefined || getCookie('StudentParentIdentityDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -154,7 +158,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('StudentParentDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
               this.download = this.permission.Download
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
@@ -171,7 +175,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('StudentParentDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
         this.download = this.permission.Download
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
@@ -191,7 +195,9 @@
       showDelete (index) {
         this.del = true
         this.index = index
-        this.names = this.pageList[index].name
+        this.sname = this.pageList[index].sname
+        this.dname = this.pageList[index].dname
+        this.iname = this.pageList[index].iname
       },
       getQuery (keyword) {
         this.keyword = keyword
@@ -247,7 +253,9 @@
         this.$http.get(
           API.del,
           { params: {
-            id: this.pageList[this.index].id
+            iid: this.pageList[this.index].iid,
+            pid: this.pageList[this.index].pid,
+            sid: this.pageList[this.index].sid
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -255,7 +263,7 @@
             this.getQueryNoChange(this.keyword)
             this.$Notice.success({
               title: '操作完成!',
-              desc: '学生：' + this.pageList[this.index].sname + '已删除！'
+              desc: '关系已删除！'
             })
             this.$Loading.finish()
           } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
