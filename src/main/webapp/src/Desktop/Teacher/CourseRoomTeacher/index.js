@@ -49,7 +49,9 @@ const store = new Vuex.Store({
     keyword2: '',
     pageCurrent2: '1',
     keyword3: '',
-    pageCurrent3: '1'
+    pageCurrent3: '1',
+    keyword4: '',
+    pageCurrent4: '1'
   },
   mutations: {
     save (state, page) {
@@ -61,6 +63,8 @@ const store = new Vuex.Store({
       state.pageCurrent2 = page.pageCurrent2
       state.keyword3 = page.keyword3
       state.pageCurrent3 = page.pageCurrent3
+      state.keyword4 = page.keyword4
+      state.pageCurrent4 = page.pageCurrent4
     }
   }
 })

@@ -30,7 +30,6 @@ PRIMARY KEY (`course_id`, `room_id`, `teacher_id`, `semester_id`)
 CREATE TABLE `Teacher` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '企业号用户序号',
 `userId` varchar(255) NULL COMMENT '微信号',
-`login` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录名',
 `pass` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录密码',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '姓名',
 `sex` int NULL COMMENT '性别0未知1男2女',
@@ -40,7 +39,6 @@ CREATE TABLE `Teacher` (
 `qq` varchar(255) CHARACTER SET utf8 NULL COMMENT 'QQ号',
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系地址',
 `state` int NULL COMMENT '账号状态1关注2已冻结3取消关注4未关注',
-`isManager` int NULL COMMENT '是否管理0否1是',
 `picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
 `type` int NULL COMMENT '1在编2聘用3校外',
 `del` int NULL COMMENT '删除标识0否1是',
@@ -56,7 +54,6 @@ CREATE TABLE `Student` (
 `birth` datetime NULL COMMENT '出生日期',
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '家庭地址',
 `state` int NULL COMMENT '学生状态0停用1可用',
-`bind` int NULL COMMENT '是否绑定家长0否1是',
 `del` int NULL COMMENT '删除标识0否1是',
 PRIMARY KEY (`id`) 
 );
@@ -271,7 +268,6 @@ PRIMARY KEY (`id`)
 CREATE TABLE `Parent` (
 `id` int NOT NULL AUTO_INCREMENT COMMENT '企业号用户序号',
 `userId` varchar(255) NULL COMMENT '微信号',
-`login` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录名',
 `pass` varchar(255) CHARACTER SET utf8 NULL COMMENT '登录密码',
 `name` varchar(255) CHARACTER SET utf8 NULL COMMENT '姓名',
 `sex` int NULL COMMENT '性别0未知1男2女',
@@ -282,16 +278,8 @@ CREATE TABLE `Parent` (
 `address` varchar(255) CHARACTER SET utf8 NULL COMMENT '联系地址',
 `state` int NULL COMMENT '账号状态1关注2已冻结3取消关注4未关注',
 `picUrl` varchar(255) CHARACTER SET utf8 NULL COMMENT '头像地址',
-`bind` int NULL COMMENT '是否绑定学生0否1是',
 `del` int NULL COMMENT '删除标识0否1是',
 PRIMARY KEY (`id`) 
-);
-
-CREATE TABLE `CourseRoom` (
-`course_id` int NOT NULL,
-`room_id` int NOT NULL,
-`semester_id` int NOT NULL,
-PRIMARY KEY (`course_id`, `room_id`, `semester_id`) 
 );
 
 CREATE TABLE `CourseChoose` (
@@ -372,9 +360,6 @@ ALTER TABLE `Assessment` ADD CONSTRAINT `assessment_semester` FOREIGN KEY (`seme
 ALTER TABLE `Leave` ADD CONSTRAINT `leave_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `CourseMessage` ADD CONSTRAINT `courseMessage_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `Notice` ADD CONSTRAINT `notice_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
-ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
-ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_room` FOREIGN KEY (`room_id`) REFERENCES `Room` (`id`);
-ALTER TABLE `CourseRoom` ADD CONSTRAINT `courseRoom_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_course` FOREIGN KEY (`course_id`) REFERENCES `Course` (`id`);
 ALTER TABLE `CourseChoose` ADD CONSTRAINT `courseChoose_semester` FOREIGN KEY (`semester_id`) REFERENCES `Semester` (`id`);
 ALTER TABLE `TeacherPermission` ADD CONSTRAINT `teacherPermission_teacher` FOREIGN KEY (`teacher_id`) REFERENCES `Teacher` (`id`);

@@ -16,7 +16,7 @@ public class PermissionCheck implements Interceptor {
       inv.getController().renderText("illegal");
     }else{
       HttpSession session = inv.getController().getSession();
-      Teacher teacher = (Teacher)session.getAttribute("teacher");
+      Teacher teacher = (Teacher)session.getAttribute("Teacher");
       String url = inv.getTarget().getClass().getSimpleName()+"/"+inv.getMethodName();
       Permission permission = Permission.dao.findFirst("SELECT * FROM permission WHERE url=?",url);
       if (permission == null){

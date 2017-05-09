@@ -24,13 +24,13 @@ import java.util.List;
 
 public class MainController extends Controller {
     public void index() {
-        render("/static/html/mobile/Mobile_Login.html");
+        render("/static/html/desktop/Desktop_Login.html");
     }
     public void mobile() {
         render("/static/html/mobile/Mobile_Login.html");
     }
-    public void pc() {
-        render("/static/html/pc/PC_Login.html");
+    public void desktop() {
+        render("/static/html/desktop/Desktop_Login.html");
     }
     /**
      * 登录跳转
@@ -46,7 +46,7 @@ public class MainController extends Controller {
             Teacher teacher = new Teacher();
             teacher.setIsManager(0);
             teacher.setId(1);
-            setSessionAttr("teacher", teacher);
+            setSessionAttr("Teacher", teacher);
             renderText("Mobile_Teacher_Home");
         } else if (getPara("lmewuq").equals("3") && getPara("pass").equals("3")) {
             Parent parent = new Parent();
@@ -57,12 +57,12 @@ public class MainController extends Controller {
             JMap cond = JMap.create("lmewuq", getPara("lme"))
                     .set("pass", getPara("pass"))
                     .set("state", 1);
-            SqlPara findTeacher = Db.getSqlPara("teacher.login_teacher",cond);
-            SqlPara findManager = Db.getSqlPara("teacher.login_manager",cond);
+            SqlPara findTeacher = Db.getSqlPara("Teacher.login_teacher",cond);
+            SqlPara findManager = Db.getSqlPara("Teacher.login_manager",cond);
             SqlPara findParent = Db.getSqlPara("parent.login_parent",cond);
-            if (getPara("type").equals("teacher") && Teacher.dao.findFirst(findTeacher) != null) {
+            if (getPara("type").equals("Teacher") && Teacher.dao.findFirst(findTeacher) != null) {
                 Teacher teacher = Teacher.dao.findFirst(findTeacher);
-                setSessionAttr("teacher", teacher);
+                setSessionAttr("Teacher", teacher);
                 setCookie("die", teacher.getId().toString(), 60 * 30 * 30);
                 renderText("Mobile_Teacher_Home");
             } else if (getPara("type").equals("manager") && Teacher.dao.findFirst(findManager) != null) {
@@ -113,7 +113,7 @@ public class MainController extends Controller {
 
     @Before(LoginTeacher.class)
     public void Mobile_Teacher_Home() {
-        render("/static/html/mobile/teacher/Mobile_Teacher_Home.html");
+        render("/static/html/mobile/Teacher/Mobile_Teacher_Home.html");
     }
 
     @Before(LoginParent.class)
@@ -129,7 +129,7 @@ public class MainController extends Controller {
      * 登录电脑_管理_课程
      */
     public void PC_Course() {
-        render("/static/html/pc/teacher/PC_Course.html");
+        render("/static/html/pc/Teacher/PC_Course.html");
     }
 
 
@@ -144,7 +144,7 @@ public class MainController extends Controller {
      * */
     public void exit() {
         setSessionAttr("manager", "");
-        setSessionAttr("teacher", "");
+        setSessionAttr("Teacher", "");
         setSessionAttr("parent", "");
         redirect("/");
     }
@@ -158,7 +158,7 @@ public class MainController extends Controller {
         try {
             String UserId = new PinyinTool().toPinYin(personName, "", PinyinTool.Type.FIRSTUPPER);
             String UserIds;
-            if (Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ?", UserId) == null
+            if (Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ?", UserId) == null
                     && Parent.dao.findFirst("SELECT * FROM parent WHERE userId = ?", UserId) == null) {
                 return UserId.replaceAll("u:","v");
             } else {
@@ -167,7 +167,7 @@ public class MainController extends Controller {
                     UserIds = UserId + i;
                     i++;
                 }
-                while (Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ?", UserId) != null && Parent.dao.findFirst("SELECT * FROM parent WHERE userId = ?", UserId) != null);
+                while (Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ?", UserId) != null && Parent.dao.findFirst("SELECT * FROM parent WHERE userId = ?", UserId) != null);
                 return UserIds.replaceAll("u:","v");
             }
         } catch (Exception e) {

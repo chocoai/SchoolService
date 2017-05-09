@@ -7,7 +7,7 @@
       <div class="layout-ceiling-main">
         <a href="http://www.yumingxx.com/">学校官网</a> |
         <a href="http://ymxx.kccs.online:9092/ymxx/">课程管理</a> |
-        <a href="#">切换到移动版</a> |
+        <a href="/MainMobile">切换到移动版</a> |
       </div>
     </div>
     <div align="center" style="height: 700px">
@@ -33,11 +33,11 @@
           <div align="center"><h1>明德尚美&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h1></div>
           <div align="center"><h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;和雅共进</h1></div>
           <br>
-          <Input size="large" type="text" v-model="user" placeholder="请输入用户名" style="width:320px;"><span slot="prepend">用户名</span></Input>
+          <Input size="large" type="text" v-model="mobile" placeholder="请输入手机号码" style="width:320px;"><span slot="prepend">手机</span></Input>
           <br>
           <Input size="large" type="password" v-model="password" placeholder="请输入密码" style="width:320px;"><span slot="prepend">密码</span></Input>
           <br>
-          <Input size="large" type="text" v-model="verifyCode" placeholder="请输入验证码" style="width:320px;"><span slot="prepend">验证码</span></Input>
+          <Input size="large" type="text" v-model="verifyCode" placeholder="请输入验证码" style="width:320px;"><span slot="prepend">验证</span></Input>
           <br>
           <img :src="verifyPic" @click="getImg" style="width:200px; height:50px"/><br>
           <br>
@@ -79,7 +79,7 @@
         pic4,
         schoolIcon,
         verifyPic: '',
-        user: '',
+        mobile: '',
         password: '',
         type: '1',
         verifyCode: '',
@@ -88,7 +88,7 @@
     },
     created () {
       this.getImg()
-      this.user = getCookie('user')
+      this.mobile = getCookie('mobile')
       this.password = getCookie('password')
     },
     methods: {
@@ -96,7 +96,7 @@
         this.verifyPic = '/img?' + Math.floor(Math.random() * 100)
       },
       goReset () {
-        this.user = ''
+        this.mobile = ''
         this.password = ''
         this.verifyCode = ''
       },
@@ -106,7 +106,7 @@
         this.$http.get(
           API.login,
           { params: {
-            user: this.user,
+            mobile: this.mobile,
             password: this.password,
             verifyCode: this.verifyCode,
             type: this.type

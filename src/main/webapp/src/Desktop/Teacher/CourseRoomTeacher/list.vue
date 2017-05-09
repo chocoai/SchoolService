@@ -103,6 +103,7 @@
         cname: '',
         tname: '',
         rname: '',
+        sname: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -118,18 +119,23 @@
             }
           },
           {
-            title: '学生姓名',
+            title: '班级名称',
+            key: 'rname',
+            sortable: true
+          },
+          {
+            title: '课程名称',
+            key: 'cname',
+            sortable: true
+          },
+          {
+            title: '教师姓名',
+            key: 'tname',
+            sortable: true
+          },
+          {
+            title: '学期名称',
             key: 'sname',
-            sortable: true
-          },
-          {
-            title: '家长姓名',
-            key: 'pname',
-            sortable: true
-          },
-          {
-            title: '关系',
-            key: 'iname',
             sortable: true
           },
           {
@@ -147,7 +153,7 @@
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentParentIdentityDesktop') === null || getCookie('StudentParentIdentityDesktop') === undefined || getCookie('StudentParentIdentityDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('CourseRoomTeacherDesktop') === null || getCookie('CourseRoomTeacherDesktop') === undefined || getCookie('CourseRoomTeacherDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -159,7 +165,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie('CourseRoomTeacherDesktop')))
               this.download = this.permission.Download
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
@@ -176,7 +182,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie('CourseRoomTeacherDesktop')))
         this.download = this.permission.Download
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
@@ -187,9 +193,10 @@
       showDelete (index) {
         this.del = true
         this.index = index
+        this.cname = this.pageList[index].cname
+        this.rname = this.pageList[index].rname
+        this.tname = this.pageList[index].tname
         this.sname = this.pageList[index].sname
-        this.dname = this.pageList[index].dname
-        this.iname = this.pageList[index].iname
       },
       getQuery (keyword) {
         this.keyword = keyword
@@ -203,7 +210,6 @@
         this.keyword = keyword
         this.$Loading.start()
         this.$Message.info('正在进行导出操作，请稍后...')
-        this.inactive = false
         window.location.href = API.download + '?keyword=' + keyword
       },
       getBorder (border) {
@@ -245,8 +251,9 @@
         this.$http.get(
           API.del,
           { params: {
-            iid: this.pageList[this.index].iid,
-            pid: this.pageList[this.index].pid,
+            cid: this.pageList[this.index].cid,
+            rid: this.pageList[this.index].rid,
+            tid: this.pageList[this.index].tid,
             sid: this.pageList[this.index].sid
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }

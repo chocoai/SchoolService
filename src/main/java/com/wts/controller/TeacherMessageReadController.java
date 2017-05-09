@@ -18,10 +18,10 @@ public class TeacherMessageReadController extends Controller {
     private String getSQL(String sql) {
         return " FROM ((teachermessageread " +
                 " LEFT JOIN teachermessage ON teachermessageread.message_id = teachermessage.id) " +
-                " LEFT JOIN teacher ON teachermessage.teacher_id = teacher.id) " +
+                " LEFT JOIN Teacher ON teachermessage.teacher_id = Teacher.id) " +
                 " WHERE (teachermessage.title LIKE '%" + sql +
                 "%' OR teachermessage.content LIKE '%" + sql +
-                "%') AND teachermessageread.teacher_id = " + ((Teacher) getSessionAttr("teacher")).getId().toString() +
+                "%') AND teachermessageread.teacher_id = " + ((Teacher) getSessionAttr("Teacher")).getId().toString() +
                 " ORDER BY teachermessageread.id DESC";
     }
 
@@ -29,18 +29,18 @@ public class TeacherMessageReadController extends Controller {
      * 登录移动_教师_教师消息
      */
     public void Mobile_Teacher_TeacherMessage() throws WeixinException {
-        if (getSessionAttr("teacher") == null) {
+        if (getSessionAttr("Teacher") == null) {
             if (getCookie("dit") == null || getCookie("dim").equals("")) {
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher teacher = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? ", user.getUserId(), 1);
+                    Teacher teacher = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ? AND state = ? ", user.getUserId(), 1);
                     if (teacher != null) {
-                        setSessionAttr("teacher", teacher);
+                        setSessionAttr("Teacher", teacher);
                         setCookie("dit", teacher.getId().toString(), 60 * 30);
                         if (user.getAvatar().equals(teacher.getPicUrl())) {
                             teacher.set("picUrl", user.getAvatar()).update();
                         }
-                        render("/static/html/mobile/teacher/Mobile_Teacher_TeacherMessage.html");
+                        render("/static/html/mobile/Teacher/Mobile_Teacher_TeacherMessage.html");
                     } else {
                         redirect("/");
                     }
@@ -49,11 +49,11 @@ public class TeacherMessageReadController extends Controller {
                 }
             } else {
                 Teacher teacher = Teacher.dao.findById(getCookie("dit"));
-                setSessionAttr("teacher", teacher);
-                render("/static/html/mobile/teacher/Mobile_Teacher_TeacherMessage.html");
+                setSessionAttr("Teacher", teacher);
+                render("/static/html/mobile/Teacher/Mobile_Teacher_TeacherMessage.html");
             }
         } else {
-            render("/static/html/mobile/teacher/Mobile_Teacher_TeacherMessage.html");
+            render("/static/html/mobile/Teacher/Mobile_Teacher_TeacherMessage.html");
         }
     }
 
@@ -63,7 +63,7 @@ public class TeacherMessageReadController extends Controller {
     @Before(AjaxTeacher.class)
     public void query() {
         renderJson(Courseroomteacher.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"),
-                "SELECT DISTINCT teachermessageread.*, teachermessage.title, teachermessage.content, teacher.name AS tname, teachermessage.time AS ttime, teachermessage.state AS tstate, teachermessage.reply AS treply, teachermessage.id AS tid",
+                "SELECT DISTINCT teachermessageread.*, teachermessage.title, teachermessage.content, Teacher.name AS tname, teachermessage.time AS ttime, teachermessage.state AS tstate, teachermessage.reply AS treply, teachermessage.id AS tid",
                 getSQL(getPara("queryString"))).getList());
     }
 
@@ -114,7 +114,7 @@ public class TeacherMessageReadController extends Controller {
     @Before(Tx.class)
     public void read() throws WeixinException {
         User user = WP.me.getUserByCode(getPara("code"));
-        Teacher teacher = Teacher.dao.findFirst("SELECT * FROM teacher WHERE state=1 AND userId=?", user.getUserId());
+        Teacher teacher = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE state=1 AND userId=?", user.getUserId());
         Teachermessageread teacherMessageRead = Teachermessageread.dao.findFirst("select * from teachermessageread where message_id=? and teacher_id=?", getPara("messageId"), teacher.getId());
         if (teacherMessageRead != null) {
             if (Teachermessage.dao.findById(teacherMessageRead.getMessageId()).getState() == 1) {

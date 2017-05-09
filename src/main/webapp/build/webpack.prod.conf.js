@@ -49,6 +49,18 @@ var webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      filename: '../dist/static/html/mobile/Mobile_Login.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Mobile_Login'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
       filename: '../dist/static/html/desktop/Desktop_Login.html',
       template: 'html/template.html',
       inject: true,
@@ -64,7 +76,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Home.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_Home.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_Home'],
@@ -76,7 +88,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Course.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_Course.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_Course'],
@@ -88,7 +100,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Semester.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_Semester.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_Semester'],
@@ -100,7 +112,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Room.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_Room.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_Room'],
@@ -112,7 +124,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Student.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_Student.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_Student'],
@@ -124,7 +136,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Teacher.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_Teacher.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_Teacher'],
@@ -136,7 +148,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_Parent.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_Parent.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_Parent'],
@@ -148,7 +160,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_StudentParentIdentity.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_StudentParentIdentity.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_StudentParentIdentity'],
@@ -160,10 +172,22 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/teacher/Desktop_Teacher_RoomStudent.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_RoomStudent.html',
       template: 'html/template.html',
       inject: true,
       chunks: ['vendor', 'manifest', 'Desktop_Teacher_RoomStudent'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_CourseRoomTeacher.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Desktop_Teacher_CourseRoomTeacher'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

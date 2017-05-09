@@ -1,5 +1,5 @@
 ### 操作数据表teacher
-#namespace("teacher")
+#namespace("Teacher")
   #sql("login_teacher")
     SELECT * FROM teacher
     WHERE (login = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))

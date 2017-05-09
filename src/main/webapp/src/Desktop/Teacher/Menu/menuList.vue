@@ -15,12 +15,6 @@
           <Menu-item name="semester" v-if="menu.SemesterDesktop_Page">学期</Menu-item>
           <Menu-item name="course" v-if="menu.CourseDesktop_Page">课程</Menu-item>
           <Menu-item name="room" v-if="menu.RoomDesktop_Page">班级</Menu-item>
-        </Submenu>
-        <Submenu name="person">
-          <template slot="title">
-            <Icon type="stats-bars"></Icon>
-            人员管理
-          </template>
           <Menu-item name="teacher" v-if="menu.TeacherDesktop_Page">教师</Menu-item>
           <Menu-item name="student" v-if="menu.StudentDesktop_Page">学生</Menu-item>
           <Menu-item name="parent" v-if="menu.ParentDesktop_Page">家长</Menu-item>
@@ -30,8 +24,9 @@
             <Icon type="stats-bars"></Icon>
             关系管理
           </template>
-          <Menu-item name="StudentParentIdentity" v-if="menu.StudentParentIdentityDesktop_Page">学生家长身份</Menu-item>
-          <Menu-item name="RoomStudent" v-if="menu.RoomStudentDesktop_Page">班级学生</Menu-item>
+          <Menu-item name="StudentParentIdentity" v-if="menu.StudentParentIdentityDesktop_Page">学生_家长_身份</Menu-item>
+          <Menu-item name="RoomStudent" v-if="menu.RoomStudentDesktop_Page">班级_学生</Menu-item>
+          <Menu-item name="CourseRoomTeacher" v-if="menu.CourseRoomTeacherDesktop_Page">课程_班级_教师</Menu-item>
         </Submenu>
         <Submenu name="information">
           <template slot="title">
@@ -95,14 +90,16 @@
           case 'room':
             return '基础管理'
           case 'teacher':
-            return '人员管理'
+            return '基础管理'
           case 'student':
-            return '人员管理'
+            return '基础管理'
           case 'parent':
-            return '人员管理'
+            return '基础管理'
           case 'StudentParentIdentity':
             return '关系管理'
           case 'RoomStudent':
+            return '关系管理'
+          case 'CourseRoomTeacher':
             return '关系管理'
           case 'notice':
             return '信息管理'
@@ -137,9 +134,11 @@
           case 'parent':
             return '家长'
           case 'StudentParentIdentity':
-            return '学生家长身份'
+            return '学生_家长_身份'
           case 'RoomStudent':
-            return '班级学生'
+            return '班级_学生'
+          case 'CourseRoomTeacher':
+            return '课程_班级_教师'
           case 'notice':
             return '公告'
           case 'attendance':
@@ -186,6 +185,9 @@
             break
           case 'RoomStudent':
             window.location.href = '/RoomStudentDesktop/Page'
+            break
+          case 'CourseRoomTeacher':
+            window.location.href = '/CourseRoomTeacherDesktop/Page'
             break
           default:
             window.location.href = '/MainDesktop'

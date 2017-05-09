@@ -22,7 +22,7 @@ public class SemesterController extends Controller {
             if (getCookie("dim") == null || getCookie("dim").equals("")) {
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
+                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
                     if (manager != null) {
                         setSessionAttr("manager", manager);
                         setCookie("dim", manager.getId().toString(), 60 * 30);

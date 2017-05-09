@@ -81,7 +81,7 @@
 //  public void checkMobileForEditForTeacher() {
 ////    if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
 ////      renderText("手机号码格式错误!");
-//    if (!Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).get("mobile").equals(getPara("mobile"))
+//    if (!Enterprise.dao.findById(((Enterprise) getSessionAttr("Teacher")).getId()).get("mobile").equals(getPara("mobile"))
 //            && Enterprise.dao.find("select * from enterprise where mobile=?", getPara("mobile")).size()!=0) {
 //      renderText("该手机号码已存在!");
 //    } else {
@@ -109,7 +109,7 @@
 //  }
 //  @Before(AjaxTeacher.class)
 //  public void getTeacher() {
-//    Enterprise enterprise = Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId());
+//    Enterprise enterprise = Enterprise.dao.findById(((Enterprise) getSessionAttr("Teacher")).getId());
 //    renderJson(enterprise);
 //  }
 //  @Before(AjaxParent.class)

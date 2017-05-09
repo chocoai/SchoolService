@@ -66,12 +66,12 @@
 //  }
 //  @Before(AjaxTeacher.class)
 //  public void teacherTeamList() {
-//    List<Record> teams = Db.find("select DISTINCT team_id as id,team.name,team.state from teamplan left join team on team.id=teamplan.team_id where teacher_id=?",((Enterprise) getSessionAttr("teacher")).getId());
+//    List<Record> teams = Db.find("select DISTINCT team_id as id,team.name,team.state from teamplan left join team on team.id=teamplan.team_id where teacher_id=?",((Enterprise) getSessionAttr("Teacher")).getId());
 //    renderJson(teams);
 //  }
 //  @Before(AjaxTeacher.class)
 //  public void teacherTeamFirst() {
-//    Teamplan teamplan = Teamplan.dao.findFirst("select DISTINCT team_id as id from teamplan where teacher_id=?",((Enterprise) getSessionAttr("teacher")).get("id").toString());
+//    Teamplan teamplan = Teamplan.dao.findFirst("select DISTINCT team_id as id from teamplan where teacher_id=?",((Enterprise) getSessionAttr("Teacher")).get("id").toString());
 //    if (teamplan!=null){
 //      renderText(teamplan.get("id").toString());
 //    }else{
@@ -182,10 +182,10 @@
 //        for (String i : teamTeacher){
 //          Teamplan teamplan = new Teamplan();
 //          teamplan.set("team_id",team.get("id")).set("teacher_id",i).save();
-//          Enterprise teacher = Enterprise.dao.findById(i);
-//          if (teacher.getState()==1){
+//          Enterprise Teacher = Enterprise.dao.findById(i);
+//          if (Teacher.getState()==1){
 //            try {
-//              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+team.getName()+"的管理老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+//              WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+team.getName()+"的管理老师"), new IdParameter().putUserIds(Teacher.getUserId()), false));
 //            } catch (Exception e) {
 //              renderText(e.getMessage());
 //            }
@@ -212,10 +212,10 @@
 //          for (String i : teamTeacher){
 //            Teamplan teamplan = new Teamplan();
 //            teamplan.set("team_id",team.get("id")).set("teacher_id",i).save();
-//            Enterprise teacher = Enterprise.dao.findById(i);
-//            if (teacher.getState()==1){
+//            Enterprise Teacher = Enterprise.dao.findById(i);
+//            if (Teacher.getState()==1){
 //              try {
-//                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+team.getName()+"的管理老师"), new IdParameter().putUserIds(teacher.getUserId()), false));
+//                WP.me.sendNotifyMessage(new NotifyMessage(ParamesAPI.teacherId, new Text("您已被设为"+team.getName()+"的管理老师"), new IdParameter().putUserIds(Teacher.getUserId()), false));
 //              } catch (Exception e) {
 //                renderText(e.getMessage());
 //              }

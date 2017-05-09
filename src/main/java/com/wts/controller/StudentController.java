@@ -42,7 +42,7 @@ public class StudentController extends Controller {
             if (getCookie("dim") == null || getCookie("dim").equals("")) {
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
+                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
                     if (manager != null) {
                         setSessionAttr("manager", manager);
                         setCookie("dim", manager.getId().toString(), 60 * 30);
@@ -69,13 +69,13 @@ public class StudentController extends Controller {
      * 登录移动_教师_学生
      */
     public void Mobile_Teacher_Student() throws WeixinException {
-        if (getSessionAttr("teacher") == null) {
+        if (getSessionAttr("Teacher") == null) {
             if (getCookie("dit") == null || getCookie("dit").equals("")) {
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher teacher = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ?", user.getUserId(), 1);
+                    Teacher teacher = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ? AND state = ?", user.getUserId(), 1);
                     if (teacher != null) {
-                        setSessionAttr("teacher", teacher);
+                        setSessionAttr("Teacher", teacher);
                         setCookie("dit", teacher.getId().toString(), 60 * 30);
                         if (user.getAvatar().equals(teacher.getPicUrl())) {
                             teacher.set("picUrl", user.getAvatar()).update();
@@ -89,7 +89,7 @@ public class StudentController extends Controller {
                 }
             } else {
                 Teacher teacher = Teacher.dao.findById(getCookie("dit"));
-                setSessionAttr("teacher", teacher);
+                setSessionAttr("Teacher", teacher);
                 render("/static/html/mobile/manager/Mobile_Teacher_Student.html");
             }
         } else {

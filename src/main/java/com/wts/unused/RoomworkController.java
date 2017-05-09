@@ -29,7 +29,7 @@
 //
 //    public void forTeacher() throws WeixinException {
 //        // 检测session中是否存在teacher
-//        if (getSessionAttr("teacher") == null || ((Enterprise) getSessionAttr("teacher")).getIsTeacher() != 1) {
+//        if (getSessionAttr("Teacher") == null || ((Enterprise) getSessionAttr("Teacher")).getIsTeacher() != 1) {
 //            // 检测cookie中是否存在EnterpriseId
 //            if (getCookie("die") == null || getCookie("die").equals("")) {
 //                // 检测是否来自微信请求
@@ -38,7 +38,7 @@
 //                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
 //                    // 检测是否有权限
 //                    if (enterprise != null) {
-//                        setSessionAttr("teacher", enterprise);
+//                        setSessionAttr("Teacher", enterprise);
 //                        setCookie("die", enterprise.getId().toString(), 60 * 30);
 //                        render("/static/RoomworkForTeacher.html");
 //                    } else {
@@ -49,7 +49,7 @@
 //                }
 //            } else {
 //                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-//                setSessionAttr("teacher", enterprise);
+//                setSessionAttr("Teacher", enterprise);
 //                render("/static/RoomworkForTeacher.html");
 //            }
 //        } else {
@@ -123,12 +123,12 @@
 //    }
 //    @Before(AjaxTeacher.class)
 //    public void queryForTeacher() {
-//        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name as cname,enterprise.name as ename", "FROM ((roomwork left join course on roomwork.course_id=course.id ) left join enterprise on roomwork.teacher_id = enterprise.id) WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY roomwork.id DESC");
+//        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name as cname,enterprise.name as ename", "FROM ((roomwork left join course on roomwork.course_id=course.id ) left join enterprise on roomwork.teacher_id = enterprise.id) WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("Teacher")).getId() +" ORDER BY roomwork.id DESC");
 //        renderJson(roomworks.getList());
 //    }
 //    @Before(AjaxTeacher.class)
 //    public void totalForTeacher() {
-//        Long count = Db.queryLong("select count(*) from roomwork where room_id = "+ getPara("roomId") + " and content like '%"+ getPara("queryString") +"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId());
+//        Long count = Db.queryLong("select count(*) from roomwork where room_id = "+ getPara("roomId") + " and content like '%"+ getPara("queryString") +"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("Teacher")).getId());
 //        if (count%getParaToInt("pageSize")==0) {
 //            renderText((count/getParaToInt("pageSize"))+"");
 //        } else {
@@ -163,7 +163,7 @@
 //                    .set("course_id",getPara("course_id"))
 //                    .set("state",1)
 //                    .set("time",new Date())
-//                    .set("teacher_id",((Enterprise) getSessionAttr("teacher")).getId())
+//                    .set("teacher_id",((Enterprise) getSessionAttr("Teacher")).getId())
 //                    .save();
 //            String[] studentId = getParaValues("student_id[]");
 //            List<Relation> relations = Relation.dao.find("select * from relation where identity_id=999");
@@ -194,7 +194,7 @@
 //            StringBuffer buffer = new StringBuffer();
 //            buffer.append("班级："+Room.dao.findById(getPara("room_id")).getName()).append("\n");
 //            buffer.append("类型："+Course.dao.findById(getPara("course_id")).getName()).append("\n");
-//            buffer.append("教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).getName()).append("\n");
+//            buffer.append("教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("Teacher")).getId()).getName()).append("\n");
 //            buffer.append("时间："+dateFm.format(roomwork.get("time"))).append("\n");
 //            buffer.append("内容："+getPara("content")).append("\n");
 //            buffer.append("<a href=\""+roomworkRead+"\">确认已读点击这里</a>");

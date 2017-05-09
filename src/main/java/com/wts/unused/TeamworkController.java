@@ -28,7 +28,7 @@
 //
 //  public void forTeacher() throws WeixinException {
 //    // 检测session中是否存在teacher
-//    if (getSessionAttr("teacher") == null || ((Enterprise) getSessionAttr("teacher")).getIsTeacher() != 1) {
+//    if (getSessionAttr("Teacher") == null || ((Enterprise) getSessionAttr("Teacher")).getIsTeacher() != 1) {
 //      // 检测cookie中是否存在EnterpriseId
 //      if (getCookie("die") == null || getCookie("die").equals("")) {
 //        // 检测是否来自微信请求
@@ -37,7 +37,7 @@
 //          Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
 //          // 检测是否有权限
 //          if (enterprise != null) {
-//            setSessionAttr("teacher", enterprise);
+//            setSessionAttr("Teacher", enterprise);
 //            setCookie("die", enterprise.getId().toString(), 60 * 30);
 //            render("/static/TeamworkForTeacher.html");
 //          } else {
@@ -48,7 +48,7 @@
 //        }
 //      } else {
 //        Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-//        setSessionAttr("teacher", enterprise);
+//        setSessionAttr("Teacher", enterprise);
 //        render("/static/TeamworkForTeacher.html");
 //      }
 //    } else {
@@ -121,12 +121,12 @@
 //  }
 //  @Before(AjaxTeacher.class)
 //  public void queryForTeacher() {
-//    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*,team.name as tname,enterprise.name as ename", "FROM ((teamwork left join team on teamwork.team_id=team.id ) left join enterprise on teamwork.teacher_id = enterprise.id) WHERE teamwork.team_id = "+ getPara("teamId") +" and teamwork.content LIKE '%"+getPara("queryString")+"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId() +" ORDER BY teamwork.id DESC");
+//    Page<Record> teamworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teamwork.*,team.name as tname,enterprise.name as ename", "FROM ((teamwork left join team on teamwork.team_id=team.id ) left join enterprise on teamwork.teacher_id = enterprise.id) WHERE teamwork.team_id = "+ getPara("teamId") +" and teamwork.content LIKE '%"+getPara("queryString")+"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("Teacher")).getId() +" ORDER BY teamwork.id DESC");
 //    renderJson(teamworks.getList());
 //  }
 //  @Before(AjaxTeacher.class)
 //  public void totalForTeacher() {
-//    Long count = Db.queryLong("select count(*) from teamwork where team_id = "+ getPara("teamId") + " and content like '%"+ getPara("queryString") +"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("teacher")).getId());
+//    Long count = Db.queryLong("select count(*) from teamwork where team_id = "+ getPara("teamId") + " and content like '%"+ getPara("queryString") +"%' and teamwork.teacher_id = "+ ((Enterprise) getSessionAttr("Teacher")).getId());
 //    if (count%getParaToInt("pageSize")==0) {
 //      renderText((count/getParaToInt("pageSize"))+"");
 //    } else {
@@ -160,7 +160,7 @@
 //              .set("team_id",getPara("team_id"))
 //              .set("state",1)
 //              .set("time",new Date())
-//              .set("teacher_id",((Enterprise) getSessionAttr("teacher")).getId())
+//              .set("teacher_id",((Enterprise) getSessionAttr("Teacher")).getId())
 //              .save();
 //      String[] studentId = getParaValues("student_id[]");
 //      List<Relation> relations = Relation.dao.find("select * from relation where identity_id=999");
@@ -190,7 +190,7 @@
 //      String teamworkRead = BASIC.replaceAll("XXXXX","teamworkread%2freadTeamwork%3fteamworkId%3d"+teamwork.getId().toString());
 //      StringBuffer buffer = new StringBuffer();
 //      buffer.append("社团："+Team.dao.findById(getPara("team_id")).getName()).append("\n");
-//      buffer.append("教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("teacher")).getId()).getName()).append("\n");
+//      buffer.append("教师："+Enterprise.dao.findById(((Enterprise) getSessionAttr("Teacher")).getId()).getName()).append("\n");
 //      buffer.append("时间："+dateFm.format(teamwork.get("time"))).append("\n");
 //      buffer.append("内容："+getPara("content")).append("\n");
 //      buffer.append("<a href=\""+teamworkRead+"\">确认已读点击这里</a>");

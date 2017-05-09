@@ -1,6 +1,6 @@
 import * as Mobile from '../../Mobile.js'
 const base = 'parent'
-const base2 = 'teacher'
+const base2 = 'Teacher'
 export const checkName = `${Mobile.Prefix}/${base2}/checkName`
 export const checkMobileForAdd = `${Mobile.Prefix}/${base2}/checkMobileForAdd`
 export const checkMobileForEdit = `${Mobile.Prefix}/${base}/checkMobileForEdit`

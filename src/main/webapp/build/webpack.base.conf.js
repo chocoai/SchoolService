@@ -9,7 +9,7 @@ function resolve (dir) {
 
 module.exports = {
   entry: {
-    // Mobile_Login: './src/Mobile/Login/Index.js',
+    Mobile_Login: './src/Mobile/Login/Index.js',
     // Mobile_Manager_Home: './src/Mobile/Manager/Home/Index.js',
     // Mobile_Manager_Semester: './src/Mobile/Manager/semester/Index.js',
     // Mobile_Manager_Course: './src/Mobile/Manager/Course/Index.js',
@@ -33,7 +33,8 @@ module.exports = {
     Desktop_Teacher_Teacher: './src/Desktop/Teacher/Teacher/Index.js',
     Desktop_Teacher_Parent: './src/Desktop/Teacher/Parent/Index.js',
     Desktop_Teacher_StudentParentIdentity: './src/Desktop/Teacher/StudentParentIdentity/Index.js',
-    Desktop_Teacher_RoomStudent: './src/Desktop/Teacher/RoomStudent/Index.js'
+    Desktop_Teacher_RoomStudent: './src/Desktop/Teacher/RoomStudent/Index.js',
+    Desktop_Teacher_CourseRoomTeacher: './src/Desktop/Teacher/courseRoomTeacher/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

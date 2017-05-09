@@ -23,7 +23,7 @@ import static com.wts.controller.MainController.getUserId;
 
 public class TeacherController extends Controller {
     private String getSQL(String sql) {
-        return "FROM teacher WHERE name LIKE '%" + sql +
+        return "FROM Teacher WHERE name LIKE '%" + sql +
                 "%' OR userId LIKE '%" + sql +
                 "%' OR mobile LIKE '%" + sql +
                 "%' OR weixinId LIKE '%" + sql +
@@ -42,7 +42,7 @@ public class TeacherController extends Controller {
             if (getCookie("dim") == null || getCookie("dim").equals("")) {
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
+                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
                     if (manager != null) {
                         setSessionAttr("manager", manager);
                         setCookie("dim", manager.getId().toString(), 60 * 30);
@@ -71,7 +71,7 @@ public class TeacherController extends Controller {
      */
     @Before(AjaxManager.class)
     public void list() {
-        renderJson(Teacher.dao.find("SELECT * FROM teacher WHERE state = 1 ORDER BY name ASC"));
+        renderJson(Teacher.dao.find("SELECT * FROM Teacher WHERE state = 1 ORDER BY name ASC"));
     }
 
     /**
@@ -160,7 +160,7 @@ public class TeacherController extends Controller {
 
     @Before({OverdueCheck.class,Login.class})
     public  void all() {
-        List<Teacher> teachers = Teacher.dao.find("SELECT id FROM teacher WHERE state=1");
+        List<Teacher> teachers = Teacher.dao.find("SELECT id FROM Teacher WHERE state=1");
         String tt = "";
         if (teachers.size() > 0) {
             for (Teacher t : teachers) {
@@ -190,7 +190,7 @@ public class TeacherController extends Controller {
     public void checkMobileForAdd() {
         if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
             renderText("手机号码格式错误!");
-        } else if (Teacher.dao.find("select * from teacher where mobile=?", getPara("mobile")).size() != 0
+        } else if (Teacher.dao.find("select * from Teacher where mobile=?", getPara("mobile")).size() != 0
                 && Parent.dao.find("select * from parent where mobile=?", getPara("mobile")).size() != 0
                 ) {
             renderText("该手机号码已存在!");
@@ -207,7 +207,7 @@ public class TeacherController extends Controller {
         if (!Util.getString(getPara("mobile")).matches("^1(3|4|5|7|8)\\d{9}$")) {
             renderText("手机号码格式错误!");
         } else if (!Teacher.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
-                && Teacher.dao.find("select * from teacher where mobile=?", getPara("mobile")).size() != 0
+                && Teacher.dao.find("select * from Teacher where mobile=?", getPara("mobile")).size() != 0
                 && Parent.dao.find("select * from parent where mobile=?", getPara("mobile")).size() != 0
                 ) {
             renderText("该手机号码已存在!");
@@ -223,7 +223,7 @@ public class TeacherController extends Controller {
     public void checkEmailForAdd() {
         if (!Util.getString(getPara("email")).matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\\\.[a-zA-Z0-9_-]{2,3}){1,2})$")) {
             renderText("电子邮箱格式错误!");
-        } else if (Teacher.dao.find("select * from teacher where email=?", getPara("email")).size() != 0
+        } else if (Teacher.dao.find("select * from Teacher where email=?", getPara("email")).size() != 0
                 && Parent.dao.find("select * from parent where email=?", getPara("email")).size() != 0
                 ) {
             renderText("该电子邮箱已存在!");
@@ -240,7 +240,7 @@ public class TeacherController extends Controller {
         if (!Util.getString(getPara("email")).matches("^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+((\\\\.[a-zA-Z0-9_-]{2,3}){1,2})$")) {
             renderText("电子邮箱格式错误!");
         } else if (!Teacher.dao.findById(getPara("id")).get("email").equals(getPara("email"))
-                && Teacher.dao.find("select * from teacher where email=?", getPara("email")).size() != 0
+                && Teacher.dao.find("select * from Teacher where email=?", getPara("email")).size() != 0
                 && Parent.dao.find("select * from parent where email=?", getPara("email")).size() != 0
                 ) {
             renderText("该电子邮箱已存在!");
@@ -256,7 +256,7 @@ public class TeacherController extends Controller {
     public void checkQQForAdd() {
         if (!Util.getString(getPara("qq")).matches("^\\d{5,12}$")) {
             renderText("QQ号格式错误!");
-        } else if (Teacher.dao.find("select * from teacher where qq=?", getPara("qq")).size() != 0
+        } else if (Teacher.dao.find("select * from Teacher where qq=?", getPara("qq")).size() != 0
                 && Parent.dao.find("select * from parent where qq=?", getPara("qq")).size() != 0
                 ) {
             renderText("该QQ号已存在!");
@@ -273,7 +273,7 @@ public class TeacherController extends Controller {
         if (!Util.getString(getPara("qq")).matches("^\\d{5,12}$")) {
             renderText("QQ号格式错误!");
         } else if (!Teacher.dao.findById(getPara("id")).get("qq").equals(getPara("qq"))
-                && Teacher.dao.find("select * from teacher where qq=?", getPara("qq")).size() != 0
+                && Teacher.dao.find("select * from Teacher where qq=?", getPara("qq")).size() != 0
                 && Parent.dao.find("select * from parent where qq=?", getPara("qq")).size() != 0
                 ) {
             renderText("该QQ号已存在!");
@@ -289,7 +289,7 @@ public class TeacherController extends Controller {
     public void checkWeixinIdForAdd() {
         if (!Util.getString(getPara("weixinId")).matches("^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}+$")) {
             renderText("微信号格式错误!");
-        } else if (Teacher.dao.find("select * from teacher where weixinId=?", getPara("weixinId")).size() != 0
+        } else if (Teacher.dao.find("select * from Teacher where weixinId=?", getPara("weixinId")).size() != 0
                 && Parent.dao.find("select * from parent where weixinId=?", getPara("weixinId")).size() != 0
                 ) {
             renderText("该微信号已存在!");
@@ -306,7 +306,7 @@ public class TeacherController extends Controller {
         if (!Util.getString(getPara("weixinId")).matches("^[a-zA-Z]{1}[-_a-zA-Z0-9]{5,19}+$")) {
             renderText("微信号格式错误!");
         } else if (!Teacher.dao.findById(getPara("id")).get("weixinId").equals(getPara("weixinId"))
-                && Teacher.dao.find("select * from teacher where weixinId=?", getPara("weixinId")).size() != 0
+                && Teacher.dao.find("select * from Teacher where weixinId=?", getPara("weixinId")).size() != 0
                 && Parent.dao.find("select * from parent where weixinId=?", getPara("weixinId")).size() != 0
                 ) {
             renderText("该微信号已存在!");
@@ -322,7 +322,7 @@ public class TeacherController extends Controller {
     public void checkUserId() {
         if (!Util.getString(getPara("userId")).matches("^[A-Za-z0-9]+$")) {
             renderText("账号名应为字母或数字的组合!");
-        } else if (Teacher.dao.find("select * from teacher where userId=?", getPara("userId")).size() != 0
+        } else if (Teacher.dao.find("select * from Teacher where userId=?", getPara("userId")).size() != 0
                 && Parent.dao.find("select * from parent where userId=?", getPara("userId")).size() != 0
                 ) {
             renderText("该账号已存在");
@@ -340,23 +340,23 @@ public class TeacherController extends Controller {
             renderText("教师姓名应为两个以上汉字!");
         } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
             renderText("手机号码格式错误!");
-        } else if (Teacher.dao.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+        } else if (Teacher.dao.find("SELECT * FROM Teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
             renderText("已有教师使用该手机号码!");
         } else if (Parent.dao.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
             renderText("已有家长使用该手机号码!");
-        } else if (getPara("email") != null && !getPara("email").equals("") && Teacher.dao.find("SELECT * FROM teacher WHERE email = ?", getPara("email")).size() != 0) {
+        } else if (getPara("email") != null && !getPara("email").equals("") && Teacher.dao.find("SELECT * FROM Teacher WHERE email = ?", getPara("email")).size() != 0) {
             renderText("已有教师使用该电子邮箱!");
         } else if (getPara("email") != null && !getPara("email").equals("") && Parent.dao.find("SELECT * FROM parent WHERE email = ?", getPara("email")).size() != 0) {
             renderText("已有家长使用该电子邮箱!");
-        } else if (getPara("qq") != null && !getPara("qq").equals("") && Teacher.dao.find("SELECT * FROM teacher WHERE qq = ?", getPara("qq")).size() != 0) {
+        } else if (getPara("qq") != null && !getPara("qq").equals("") && Teacher.dao.find("SELECT * FROM Teacher WHERE qq = ?", getPara("qq")).size() != 0) {
             renderText("已有教师使用该QQ号!");
         } else if (getPara("qq") != null && !getPara("qq").equals("") && Parent.dao.find("SELECT * FROM parent WHERE qq = ?", getPara("qq")).size() != 0) {
             renderText("已有家长使用该QQ号!");
-        } else if (getPara("weixinId") != null && !getPara("weixinId").equals("") && Teacher.dao.find("SELECT * FROM teacher WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
+        } else if (getPara("weixinId") != null && !getPara("weixinId").equals("") && Teacher.dao.find("SELECT * FROM Teacher WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
             renderText("已有教师使用该微信号!");
         } else if (getPara("weixinId") != null && !getPara("weixinId").equals("") && Parent.dao.find("SELECT * FROM parent WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
             renderText("已有家长使用该微信号!");
-        } else if (Teacher.dao.find("SELECT * FROM teacher WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
+        } else if (Teacher.dao.find("SELECT * FROM Teacher WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
             renderText("已有教师使用该userID!");
         } else if (Parent.dao.find("SELECT * FROM parent WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
             renderText("已有家长使用该userID!");
@@ -418,14 +418,14 @@ public class TeacherController extends Controller {
             } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
                 renderText("手机号码格式错误!");
             } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
-                    && Teacher.dao.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+                    && Teacher.dao.find("SELECT * FROM Teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
                 renderText("已有教师使用该手机号码!");
             } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
                     && Parent.dao.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
                 renderText("已有家长使用该手机号码!");
             } else if (!Util.getString(teacher.getStr("email")).equals(getPara("email"))
                     && !getPara("email").equals("")
-                    && Teacher.dao.find("SELECT * FROM teacher WHERE email = ?", getPara("email")).size() != 0) {
+                    && Teacher.dao.find("SELECT * FROM Teacher WHERE email = ?", getPara("email")).size() != 0) {
                 renderText("已有教师使用该电子邮箱!");
             } else if (!Util.getString(teacher.getStr("email")).equals(getPara("email"))
                     && !getPara("email").equals("")
@@ -433,7 +433,7 @@ public class TeacherController extends Controller {
                 renderText("已有家长使用该电子邮箱!");
             } else if (!Util.getString(teacher.getStr("qq")).equals(getPara("qq"))
                     && !getPara("qq").equals("")
-                    && Teacher.dao.find("SELECT * FROM teacher WHERE qq = ?", getPara("qq")).size() != 0) {
+                    && Teacher.dao.find("SELECT * FROM Teacher WHERE qq = ?", getPara("qq")).size() != 0) {
                 renderText("已有教师使用该QQ号!");
             } else if (!Util.getString(teacher.getStr("qq")).equals(getPara("qq"))
                     && !getPara("qq").equals("")
@@ -441,14 +441,14 @@ public class TeacherController extends Controller {
                 renderText("已有家长使用该QQ号!");
             } else if (!Util.getString(teacher.getStr("weixinId")).equals(getPara("weixinId"))
                     && !getPara("weixinId").equals("")
-                    && Teacher.dao.find("SELECT * FROM teacher WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
+                    && Teacher.dao.find("SELECT * FROM Teacher WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
                 renderText("已有教师使用该微信号!");
             } else if (!Util.getString(teacher.getStr("weixinId")).equals(getPara("weixinId"))
                     && !getPara("weixinId").equals("")
                     && Parent.dao.find("SELECT * FROM parent WHERE weixinId = ?", getPara("weixinId")).size() != 0) {
                 renderText("已有家长使用该微信号!");
             } else if (!Util.getString(teacher.getStr("userId")).equals(getUserId(getPara("name")))
-                    && Teacher.dao.find("SELECT * FROM teacher WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
+                    && Teacher.dao.find("SELECT * FROM Teacher WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
                 renderText("已有教师使用该userId!");
             } else if (!Util.getString(teacher.getStr("userId")).equals(getUserId(getPara("name")))
                     && Parent.dao.find("SELECT * FROM parent WHERE userId = ?", getUserId(getPara("name"))).size() != 0) {
@@ -497,13 +497,13 @@ public class TeacherController extends Controller {
      */
     @Before({Tx.class, AjaxTeacher.class})
     public void editSelf() {
-        Teacher teacher = Teacher.dao.findById(((Teacher) getSessionAttr("teacher")).getId());
+        Teacher teacher = Teacher.dao.findById(((Teacher) getSessionAttr("Teacher")).getId());
         if (!getPara("name").matches("^[\\u4e00-\\u9fa5]{2,}$")) {
             renderText("教师姓名应为两个以上汉字!");
         } else if (!getPara("mobile").matches("^1(3|4|5|7|8)\\d{9}$")) {
             renderText("手机号码格式错误!");
         } else if (!Util.getString(teacher.getStr("mobile")).equals(getPara("mobile"))
-                && Teacher.dao.find(Teacher.dao.getSql("teacher.mobile"), getPara("mobile")).size() != 0
+                && Teacher.dao.find(Teacher.dao.getSql("Teacher.mobile"), getPara("mobile")).size() != 0
                 && Parent.dao.find(Parent.dao.getSql("parent.mobile"), getPara("mobile")).size() != 0) {
             renderText("该手机号码已存在!");
         } else {
@@ -529,16 +529,16 @@ public class TeacherController extends Controller {
      */
     public void forTeacherPersonal() throws WeixinException {
         // 检测session中是否存在teacher
-        if (getSessionAttr("teacher") == null) {
+        if (getSessionAttr("Teacher") == null) {
             // 检测cookie中是否存在EnterpriseId
             if (getCookie("die") == null || getCookie("die").equals("")) {
                 // 检测是否来自微信请求
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher teacher = Teacher.dao.findFirst(Teacher.dao.getSql("teacher.weixin_teacher"), user.getUserId(), 1);
+                    Teacher teacher = Teacher.dao.findFirst(Teacher.dao.getSql("Teacher.weixin_teacher"), user.getUserId(), 1);
                     // 检测是否有权限
                     if (teacher != null) {
-                        setSessionAttr("teacher", teacher);
+                        setSessionAttr("Teacher", teacher);
                         setCookie("die", teacher.getId().toString(), 60 * 30);
                         render("/static/TeacherOfPersonal.html");
                     } else {
@@ -549,7 +549,7 @@ public class TeacherController extends Controller {
                 }
             } else {
                 Teacher teacher = Teacher.dao.findById(getCookie("die"));
-                setSessionAttr("teacher", teacher);
+                setSessionAttr("Teacher", teacher);
                 render("/static/TeacherOfPersonal.html");
             }
         } else {
@@ -559,7 +559,7 @@ public class TeacherController extends Controller {
 
     @Before(AjaxTeacher.class)
     public void getNow() {
-        renderJson(Teacher.dao.findById(((Teacher) getSessionAttr("teacher")).getId()));
+        renderJson(Teacher.dao.findById(((Teacher) getSessionAttr("Teacher")).getId()));
     }
 
 }

@@ -1,2 +1,3 @@
 import * as Mobile from '../Mobile.js'
-export const login = `${Mobile.Prefix}/login`
+export const base = 'MainMobile'
+export const login = `${Mobile.Prefix}/${base}/login`

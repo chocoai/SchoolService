@@ -27,8 +27,8 @@ import java.util.List;
 public class TeacherMessageController extends Controller {
     private String getSQL(String sql) {
         return "FROM teachermessage " +
-                "LEFT JOIN teacher " +
-                "ON teachermessage.teacher_id = teacher.id " +
+                "LEFT JOIN Teacher " +
+                "ON teachermessage.teacher_id = Teacher.id " +
                 "WHERE (teachermessage.title LIKE '%" + sql +
                 "%' OR teachermessage.content LIKE '%" + sql +
                 "%') AND teachermessage.teacher_id = " +((Teacher) getSessionAttr("manager")).getId().toString() +
@@ -43,7 +43,7 @@ public class TeacherMessageController extends Controller {
             if (getCookie("dim") == null || getCookie("dim").equals("")) {
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
+                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
                     if (manager != null) {
                         setSessionAttr("manager", manager);
                         setCookie("dim", manager.getId().toString(), 60 * 30);
@@ -73,7 +73,7 @@ public class TeacherMessageController extends Controller {
     @Before(AjaxManager.class)
     public void list() {
         String list,select;
-        List<Teacher> teacherz=Teacher.dao.find("SELECT * FROM teacher WHERE state = 1 ORDER BY name ASC");
+        List<Teacher> teacherz=Teacher.dao.find("SELECT * FROM Teacher WHERE state = 1 ORDER BY name ASC");
         String ss = "";
         if (teacherz.size() > 0) {
             for (Teacher t : teacherz) {
@@ -87,7 +87,7 @@ public class TeacherMessageController extends Controller {
         } else {
             list="\"list\":[]";
         }
-        List<Teacher> teachers = Teacher.dao.find("SELECT id FROM teacher WHERE state=1");
+        List<Teacher> teachers = Teacher.dao.find("SELECT id FROM Teacher WHERE state=1");
         String tt = "";
         if (teachers.size() > 0) {
             for (Teacher t : teachers) {
@@ -104,7 +104,7 @@ public class TeacherMessageController extends Controller {
      */
     @Before(AjaxManager.class)
     public void query() {
-        renderJson(Teachermessage.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teachermessage.*,teacher.name", getSQL(getPara("queryString"))).getList());
+        renderJson(Teachermessage.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT teachermessage.*,Teacher.name", getSQL(getPara("queryString"))).getList());
     }
 
     /**
@@ -125,15 +125,15 @@ public class TeacherMessageController extends Controller {
     @Before({Login.class, OverdueCheck.class})
     public void get() {
         String teacheres,teacherez,messages;
-        String sql= "SELECT teacher.*, teachermessageread.time "+
+        String sql= "SELECT Teacher.*, teachermessageread.time "+
                 " FROM teachermessageread " +
-                " LEFT JOIN teacher " +
-                " ON teachermessageread.teacher_id = teacher.id " +
+                " LEFT JOIN Teacher " +
+                " ON teachermessageread.teacher_id = Teacher.id " +
                 " WHERE teachermessageread.message_id = ? AND teachermessageread.state = ?";
-        String sq= "SELECT teacher.name AS name, teachermessage.* "+
+        String sq= "SELECT Teacher.name AS name, teachermessage.* "+
                 " FROM teachermessage " +
-                " LEFT JOIN teacher " +
-                " ON teachermessage.teacher_id = teacher.id " +
+                " LEFT JOIN Teacher " +
+                " ON teachermessage.teacher_id = Teacher.id " +
                 " WHERE teachermessage.id = ?";
         List<Record> teachers =Db.find(sql,getPara("id"),1);
         List<Record> teacherz =Db.find(sql,getPara("id"),0);
@@ -251,10 +251,10 @@ public class TeacherMessageController extends Controller {
 
     @Before({Tx.class, AjaxManager.class})
     public void send(){
-        String sql= "SELECT teacher.* "+
+        String sql= "SELECT Teacher.* "+
                 " FROM teachermessageread " +
-                " LEFT JOIN teacher " +
-                " ON teachermessageread.teacher_id = teacher.id " +
+                " LEFT JOIN Teacher " +
+                " ON teachermessageread.teacher_id = Teacher.id " +
                 " WHERE teachermessageread.message_id = ? AND teachermessageread.state = 0";
         List<Record> teachers =Db.find(sql,getPara("id"));
         Teachermessage teacherMessage=Teachermessage.dao.findById(getPara("id"));

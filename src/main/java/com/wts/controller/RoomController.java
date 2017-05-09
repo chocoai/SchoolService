@@ -35,7 +35,7 @@ public class RoomController extends Controller {
             if (getCookie("dim") == null || getCookie("dim").equals("")) {
                 if (!(getPara("code") == null || getPara("code").equals(""))) {
                     User user = WP.me.getUserByCode(getPara("code"));
-                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
+                    Teacher manager = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId = ? AND state = ? AND isManager = 1", user.getUserId(), 1);
                     if (manager != null) {
                         setSessionAttr("manager", manager);
                         setCookie("dim", manager.getId().toString(), 60 * 30);
@@ -293,10 +293,10 @@ public class RoomController extends Controller {
         String SQL = "SELECT DISTINCT room.id, room.name, room.state" +
                 " FROM (((courseroomteacher" +
                 " LEFT JOIN room ON room.id = courseroomteacher.room_id)" +
-                " LEFT JOIN teacher ON teacher.id = courseroomteacher.teacher_id)" +
+                " LEFT JOIN Teacher ON Teacher.id = courseroomteacher.teacher_id)" +
                 " LEFT JOIN semester ON semester.id = courseroomteacher.semester_id)" +
-                " WHERE room.state = 1 AND teacher.id = ? AND semester.id = ?";
-        renderJson(Db.find(SQL, ((Teacher) getSessionAttr("teacher")).getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId()));
+                " WHERE room.state = 1 AND Teacher.id = ? AND semester.id = ?";
+        renderJson(Db.find(SQL, ((Teacher) getSessionAttr("Teacher")).getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId()));
     }
 
     @Before(AjaxTeacher.class)
@@ -304,10 +304,10 @@ public class RoomController extends Controller {
         String SQL = "SELECT DISTINCT room.id, room.name, room.state" +
                 " FROM (((courseroomteacher" +
                 " LEFT JOIN room ON room.id = courseroomteacher.room_id)" +
-                " LEFT JOIN teacher ON teacher.id = courseroomteacher.teacher_id)" +
+                " LEFT JOIN Teacher ON Teacher.id = courseroomteacher.teacher_id)" +
                 " LEFT JOIN semester ON semester.id = courseroomteacher.semester_id)" +
-                " WHERE room.state = 1 AND teacher.id = ? AND semester.id = ?";
-        Record record = Db.findFirst(SQL, ((Teacher) getSessionAttr("teacher")).getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId());
+                " WHERE room.state = 1 AND Teacher.id = ? AND semester.id = ?";
+        Record record = Db.findFirst(SQL, ((Teacher) getSessionAttr("Teacher")).getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId());
         if (record != null) {
             renderText(record.get("id").toString());
         } else {
@@ -321,7 +321,7 @@ public class RoomController extends Controller {
                 "FROM courseroomteacher" +
                 "LEFT JOIN course ON courseroomteacher.course_id = course.id" +
                 "WHERE courseroomteacher.teacher_id = ? AND courseroomteacher.semester_id = ? AND courseroomteacher.room_id = ?";
-        renderJson(Db.find(SQL, ((Teacher) getSessionAttr("teacher")).getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId(), getPara("id")));
+        renderJson(Db.find(SQL, ((Teacher) getSessionAttr("Teacher")).getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId(), getPara("id")));
     }
 
     @Before(AjaxTeacher.class)
@@ -330,7 +330,7 @@ public class RoomController extends Controller {
                 "FROM courseroomteacher" +
                 "LEFT JOIN course ON courseroomteacher.course_id = course.id" +
                 "WHERE courseroomteacher.teacher_id = ? AND courseroomteacher.semester_id = ? AND courseroomteacher.room_id = ?";
-        Record record = Db.findFirst(SQL, ((Teacher) getSessionAttr("teacher")).getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId(), getPara("id"));
+        Record record = Db.findFirst(SQL, ((Teacher) getSessionAttr("Teacher")).getId(), Semester.dao.findFirst(Semester.dao.getSql("semester.used")).getId(), getPara("id"));
         if (record != null) {
             renderText(record.get("id").toString());
         } else {

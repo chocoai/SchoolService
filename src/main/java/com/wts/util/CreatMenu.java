@@ -18,7 +18,7 @@ public class CreatMenu {
 
   public static void CreateManager (){
     // 校园管理入口菜单
-    String TEACHER = BASIC.replaceAll("XXXXX","teacher%2fMobile_Manager_Teacher%2f");
+    String TEACHER = BASIC.replaceAll("XXXXX","Teacher%2fMobile_Manager_Teacher%2f");
     String ROOM = BASIC.replaceAll("XXXXX","room%2fMobile_Manager_Room%2f");
     String COURSE = BASIC.replaceAll("XXXXX","course%2fMobile_Manager_Course%2f");
     String STUDENT = BASIC.replaceAll("XXXXX","student%2fMobile_Manager_Student%2f");

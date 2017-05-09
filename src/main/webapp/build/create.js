@@ -120,7 +120,7 @@ new HtmlWebpackPlugin({
   }),
   new HtmlWebpackPlugin({
     title: '移动_教师_主页',
-    filename: '../dist/static/html/mobile/teacher/Mobile_Teacher_Home.html',
+    filename: '../dist/static/html/mobile/Teacher/Mobile_Teacher_Home.html',
     template: 'html/template.html',
     inject: true,
     chunks: ['vendor', 'manifest', 'Mobile_Teacher_Home'],
@@ -133,7 +133,7 @@ new HtmlWebpackPlugin({
   }),
   new HtmlWebpackPlugin({
     title: '移动_教师_课程',
-    filename: '../dist/static/html/mobile/teacher/Mobile_Teacher_Course.html',
+    filename: '../dist/static/html/mobile/Teacher/Mobile_Teacher_Course.html',
     template: 'html/template.html',
     inject: true,
     chunks: ['vendor', 'manifest', 'Mobile_Teacher_Course'],
@@ -146,7 +146,7 @@ new HtmlWebpackPlugin({
   }),
   new HtmlWebpackPlugin({
     title: '移动_教师_教师消息',
-    filename: '../dist/static/html/mobile/teacher/Mobile_Teacher_TeacherMessage.html',
+    filename: '../dist/static/html/mobile/Teacher/Mobile_Teacher_TeacherMessage.html',
     template: 'html/template.html',
     inject: true,
     chunks: ['vendor', 'manifest', 'Mobile_Teacher_TeacherMessage'],
@@ -159,7 +159,7 @@ new HtmlWebpackPlugin({
   }),
   new HtmlWebpackPlugin({
     title: '移动_教师_学生',
-    filename: '../dist/static/html/mobile/teacher/Mobile_Teacher_Student.html',
+    filename: '../dist/static/html/mobile/Teacher/Mobile_Teacher_Student.html',
     template: 'html/template.html',
     inject: true,
     chunks: ['vendor', 'manifest', 'Mobile_Teacher_Student'],

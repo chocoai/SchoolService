@@ -1,4 +1,4 @@
-package com.wts.controller;
+package com.wts.controller.WeiXin;
 
 
 import com.wts.util.msg.Resp.TextMessage;

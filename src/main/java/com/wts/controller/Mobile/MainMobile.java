@@ -1,15 +1,11 @@
-package com.wts.controller.teacher;
+package com.wts.controller.Mobile;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.wts.entity.WxService;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
-import me.chanjar.weixin.cp.api.WxCpInMemoryConfigStorage;
-import me.chanjar.weixin.cp.api.WxCpServiceImpl;
-import me.chanjar.weixin.cp.bean.WxCpMessage;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -18,17 +14,14 @@ import java.util.List;
 import static com.wts.util.Util.PermissionString;
 
 
-public class MainDesktop extends Controller {
+public class MainMobile extends Controller {
   public void index() throws Exception{
-//    String userId = "WangTianShuo";
-//    WxCpMessage message = WxCpMessage.TEXT().agentId(26).toUser(userId).content("Hello").build();
-//    WxService.getMe().messageSend(message);
-    render("/static/html/desktop/Desktop_Login.html");
+    render("/static/html/mobile/Mobile_Login.html");
   }
 
   @Before(OverdueCheck.class)
   public void Teacher_Home() {
-    render("/static/html/desktop/teacher/Desktop_Teacher_Home.html");
+    render("/static/html/mobile/Teacher/Mobile_Teacher_Home.html");
   }
   /**
    * 登录
@@ -47,14 +40,14 @@ public class MainDesktop extends Controller {
       setCookie("user", "", 60 * 60 * 24 * 7);
       setCookie("password", "", 60 * 60 * 24 * 7);
       Teacher teacher = Teacher.dao.findById("1");
-      setSessionAttr("teacher", teacher);
+      setSessionAttr("Teacher", teacher);
       setCookie("dit", teacher.getId().toString(), 60 * 60 * 3);
       List<Record> lists = Db.find(
               "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
                       " LEFT JOIN permission" +
                       " ON teacherpermission.permission_id = permission.id" +
                       " WHERE teacher_id=? AND permission.url LIKE '%Page%'"
-              ,((Teacher) getSessionAttr("teacher")).getId().toString());
+              ,((Teacher) getSessionAttr("Teacher")).getId().toString());
       String permission = "";
       for (int i=0;i<lists.size();i++){
         if (lists.get(i).get("state").toString().equals("1")){
@@ -73,6 +66,7 @@ public class MainDesktop extends Controller {
       setCookie("ParentDesktop", PermissionString("ParentDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("StudentParentIdentityDesktop", PermissionString("StudentParentIdentityDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("RoomStudentDesktop", PermissionString("RoomStudentDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("CourseRoomTeacherDesktop", PermissionString("CourseRoomTeacherDesktop",teacher.getId().toString()), 60 * 6 * 10);
 
       renderText("OK");
     } else {
@@ -89,7 +83,7 @@ public class MainDesktop extends Controller {
                     " LEFT JOIN permission" +
                     " ON teacherpermission.permission_id = permission.id" +
                     " WHERE teacher_id=? AND permission.url LIKE '%Desktop%'"
-            ,((Teacher) getSessionAttr("teacher")).getId().toString());
+            ,((Teacher) getSessionAttr("Teacher")).getId().toString());
     String permission = "";
     for (int i=0;i<lists.size();i++){
       if (lists.get(i).get("state").toString().equals("1")){
@@ -99,7 +93,7 @@ public class MainDesktop extends Controller {
       }
     }
     setCookie("permission", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
-    setCookie("name",((Teacher) getSessionAttr("teacher")).getName(),60 * 6 * 10);
+    setCookie("name",((Teacher) getSessionAttr("Teacher")).getName(),60 * 6 * 10);
   }
 
   /**
@@ -111,7 +105,7 @@ public class MainDesktop extends Controller {
                     " LEFT JOIN permission" +
                     " ON teacherpermission.permission_id = permission.id" +
                     " WHERE teacher_id=? AND permission.url LIKE '%Page%'"
-            ,((Teacher) getSessionAttr("teacher")).getId().toString());
+            ,((Teacher) getSessionAttr("Teacher")).getId().toString());
     String permission = "";
     for (int i=0;i<lists.size();i++){
       if (lists.get(i).get("state").toString().equals("1")){
@@ -121,7 +115,7 @@ public class MainDesktop extends Controller {
       }
     }
     setCookie("menu", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
-    setCookie("name",((Teacher) getSessionAttr("teacher")).getName(),60 * 6 * 10);
+    setCookie("name",((Teacher) getSessionAttr("Teacher")).getName(),60 * 6 * 10);
   }
 
   /**
@@ -136,7 +130,7 @@ public class MainDesktop extends Controller {
    * */
   public void Exit() {
     setSessionAttr("manager", "");
-    setSessionAttr("teacher", "");
+    setSessionAttr("Teacher", "");
     setSessionAttr("parent", "");
     setCookie("permission", "", -1);
     redirect("/");

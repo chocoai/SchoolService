@@ -51,7 +51,7 @@ public class _MappingKit {
 		arp.addMapping("studentcourse", "course_id,semester_id,student_id", Studentcourse.class);
 		// Composite Primary Key order: identity_id,parent_id,student_id
 		arp.addMapping("studentparentidentity", "identity_id,parent_id,student_id", Studentparentidentity.class);
-		arp.addMapping("teacher", "id", Teacher.class);
+		arp.addMapping("Teacher", "id", Teacher.class);
 		arp.addMapping("teachermessage", "id", Teachermessage.class);
 		arp.addMapping("teachermessageread", "id", Teachermessageread.class);
 		// Composite Primary Key order: permission_id,teacher_id

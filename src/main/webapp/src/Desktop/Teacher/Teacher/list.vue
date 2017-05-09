@@ -256,7 +256,6 @@
         this.keyword = keyword
         this.$Loading.start()
         this.$Message.info('正在进行导出操作，请稍后...')
-        this.inactive = false
         window.location.href = API.download + '?keyword=' + keyword
       },
       getBorder (border) {

@@ -22,7 +22,7 @@ public class CourseRoomController extends Controller {
                 "%' OR room.`name` LIKE '%" + sql +
                 "%' OR room.`slogan` LIKE '%" + sql +
                 "%' AND courseroomteacher.semester_id= " + getNow().getId().toString() +
-                " AND courseroomteacher.teacher_id= " + ((Teacher) getSessionAttr("teacher")).getId().toString() +
+                " AND courseroomteacher.teacher_id= " + ((Teacher) getSessionAttr("Teacher")).getId().toString() +
                 " AND course.state = 1" +
                 " AND room.state = 1" +
                 " ORDER BY courseroomteacher.id DESC";
@@ -89,7 +89,7 @@ public class CourseRoomController extends Controller {
     public void save()  {
         if (Courseroomteacher.dao.find("SELECT * FROM courseroomteacher " +
                 "WHERE course_id = ? AND room_id = ? AND teacher_id = ? AND semester_id = ?",
-                getPara("course_id"),getPara("room_id"),((Teacher) getSessionAttr("teacher")).getId().toString(),getNow().getId().toString()).size() != 0) {
+                getPara("course_id"),getPara("room_id"),((Teacher) getSessionAttr("Teacher")).getId().toString(),getNow().getId().toString()).size() != 0) {
             renderText("已选择，请重新选择!");
         } else {
             if (Courseroom.dao.find("SELECT * FROM courseroom " +
@@ -105,7 +105,7 @@ public class CourseRoomController extends Controller {
             courseroomteacher.set("course_id",getPara("course_id"))
                     .set("room_id",getPara("room_id"))
                     .set("semester_id",getNow().getId().toString())
-                    .set("teacher_id",((Teacher) getSessionAttr("teacher")).getId().toString())
+                    .set("teacher_id",((Teacher) getSessionAttr("Teacher")).getId().toString())
                     .save();
             renderText("OK");
         }
@@ -117,7 +117,7 @@ public class CourseRoomController extends Controller {
             renderText("要删除的记录不存在!");
         } else if(courseroomteacher.getSemesterId().equals(getNow().getId())){
             renderText("要删除的记录与当前学期不一致!");
-        } else if(courseroomteacher.getTeacherId().equals(((Teacher) getSessionAttr("teacher")).getId())){
+        } else if(courseroomteacher.getTeacherId().equals(((Teacher) getSessionAttr("Teacher")).getId())){
             renderText("要删除的记录与当前教师不一致!");
         } else {
             int course = courseroomteacher.getCourseId();

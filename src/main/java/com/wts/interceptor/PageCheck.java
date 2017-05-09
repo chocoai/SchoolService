@@ -12,7 +12,7 @@ public class PageCheck implements Interceptor {
 
     public void intercept(Invocation inv) {
         HttpSession session = inv.getController().getSession();
-        Teacher teacher = (Teacher) session.getAttribute("teacher");
+        Teacher teacher = (Teacher) session.getAttribute("Teacher");
         String url = inv.getTarget().getClass().getSimpleName() + "/" + inv.getMethodName();
         Permission permission = Permission.dao.findFirst("SELECT * FROM permission WHERE url=?", url);
         if (permission == null) {

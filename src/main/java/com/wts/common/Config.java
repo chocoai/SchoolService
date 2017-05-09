@@ -12,7 +12,10 @@ import com.jfinal.plugin.druid.DruidPlugin;
 import com.jfinal.render.ViewType;
 import com.jfinal.template.Engine;
 import com.wts.controller.*;
-import com.wts.controller.teacher.*;
+import com.wts.controller.Desktop.MainDesktop;
+import com.wts.controller.Desktop.Teacher.*;
+import com.wts.controller.Mobile.MainMobile;
+import com.wts.controller.WeiXin.CallBack;
 import com.wts.entity.model._MappingKit;
 
 /**
@@ -47,9 +50,12 @@ public class Config extends JFinalConfig {
         me.add("/StudentParentIdentityDesktop", StudentParentIdentityDesktop.class);
         me.add("/IdentityDesktop", IdentityDesktop.class);
         me.add("/RoomStudentDesktop", RoomStudentDesktop.class);
+        me.add("/CourseRoomTeacherDesktop", CourseRoomTeacherDesktop.class);
+
+        me.add("/MainMobile", MainMobile.class);
 //        me.add("/ForCourse", ForCourse.class);
 //        me.add("/courseRoom", CourseRoomController.class);
-//        me.add("/teacher", TeacherController.class);
+//        me.add("/Teacher", TeacherController.class);
 //        me.add("/teacherMessage", TeacherMessageController.class);
 //        me.add("/teacherMessageRead", TeacherMessageReadController.class);
 //        me.add("/room", RoomController.class);

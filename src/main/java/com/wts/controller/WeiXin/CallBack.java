@@ -1,4 +1,4 @@
-package com.wts.controller;
+package com.wts.controller.WeiXin;
 
 import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.core.Controller;
@@ -99,7 +99,7 @@ public class CallBack extends Controller {
       Map<String, String> requestMap = MessageUtil.parseXml(request);
       // 发送方帐号
       String FromUserName = requestMap.get("FromUserName");
-      Teacher teacher = Teacher.dao.findFirst("SELECT * FROM teacher WHERE userId=?", FromUserName);
+      Teacher teacher = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId=?", FromUserName);
       Parent parent = Parent.dao.findFirst("SELECT * FROM parent WHERE userId=?", FromUserName);
       if (requestMap.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
         User user = WP.me.getUser(FromUserName);

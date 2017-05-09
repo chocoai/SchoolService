@@ -187,6 +187,9 @@
       getData1 (value) {
         this.id1 = value.id
         this.name1 = value.name
+        this.$Notice.info({
+          title: '已选择班级：' + this.name1
+        })
       },
       getList1 (pageList, pageTotal) {
         this.pageList1 = pageList
@@ -214,6 +217,9 @@
       getData2 (value) {
         this.id2 = value.id
         this.name2 = value.name
+        this.$Notice.info({
+          title: '已选择学生：' + this.name2
+        })
       },
       getList2 (pageList, pageTotal) {
         this.pageList2 = pageList

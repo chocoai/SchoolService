@@ -1,18 +1,19 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="StudentParentIdentity" :name="name" three="新增" :menu="menu"></MenuList></Col>
+      <Col><MenuList active="CourseRoomTeacher" :name="name" three="新增" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="8"><div class="right"><Search @goQuery="getQuery1" :download="download"></Search></div></Col>
-      <Col span="8"><div class="right"><Search @goQuery="getQuery2" :download="download"></Search></div></Col>
-      <Col span="8"><div class="right"><Search @goQuery="getQuery3" :download="download"></Search></div></Col>
+      <Col span="6"><div class="right"><Search @goQuery="getQuery1" :download="download"></Search></div></Col>
+      <Col span="6"><div class="right"><Search @goQuery="getQuery2" :download="download"></Search></div></Col>
+      <Col span="6"><div class="right"><Search @goQuery="getQuery3" :download="download"></Search></div></Col>
+      <Col span="6"><div class="right"><Search @goQuery="getQuery4" :download="download"></Search></div></Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="8">
+      <Col span="6">
         <div class="layout-content">
           <Table
             highlight-row
@@ -24,7 +25,7 @@
           </Table>
         </div>
       </Col>
-      <Col span="8">
+      <Col span="6">
         <div class="layout-content">
           <Table
             highlight-row
@@ -36,7 +37,7 @@
           </Table>
         </div>
       </Col>
-      <Col span="8">
+      <Col span="6">
         <div class="layout-content">
           <Table
             highlight-row
@@ -48,9 +49,21 @@
           </Table>
         </div>
       </Col>
+      <Col span="6">
+      <div class="layout-content">
+        <Table
+          highlight-row
+          @on-row-dblclick="getData4"
+          height="450"
+          size="small"
+          :columns="columns4"
+          :data="pageList4">
+        </Table>
+      </div>
+      </Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="8">
+      <Col span="6">
         <div class="right">
           <Page
             ref="pages1"
@@ -64,7 +77,7 @@
           </Page>
         </div>
       </Col>
-      <Col span="8">
+      <Col span="6">
         <div class="right">
           <Page
             ref="pages2"
@@ -78,7 +91,7 @@
           </Page>
         </div>
       </Col>
-      <Col span="8">
+      <Col span="6">
         <div class="right">
           <Page
             ref="pages3"
@@ -92,14 +105,29 @@
           </Page>
         </div>
       </Col>
+      <Col span="6">
+      <div class="right">
+        <Page
+          ref="pages4"
+          @goList="getList4"
+          @savePageCurrent="saveCurrent4"
+          @savePageCurrentAndKeyword="CurrentAndKeyword4"
+          :queryURL="query4"
+          :totalURL="total4"
+          :keyword="keyword4"
+        >
+        </Page>
+      </div>
+      </Col>
     </Row>
     <Row v-show="!showLoad">
       <Col span="16">
         <div class="rights">
           <Button size="large" type="info">请双击行选择相关信息</Button>
-          <Tag type="dot" color="blue">学生：{{name1}}</Tag>
-          <Tag type="dot" color="green">家长：{{name2}}</Tag>
-          <Tag type="dot" color="yellow">身份：{{name3}}</Tag>
+          <Tag type="dot" color="blue">课程：{{name1}}</Tag>
+          <Tag type="dot" color="green">班级：{{name2}}</Tag>
+          <Tag type="dot" color="yellow">教师：{{name3}}</Tag>
+          <Tag type="dot" color="error">学期：{{name4}}</Tag>
         </div>
       </Col>
       <Col span="8">
@@ -131,44 +159,58 @@
         name: '',
         permission: [],
         menu: [],
-        query1: API.queryStudent,
-        total1: API.totalStudent,
-        query2: API.queryParent,
-        total2: API.totalParent,
-        query3: API.queryIdentity,
-        total3: API.totalIdentity,
+        query1: API.queryCourse,
+        total1: API.totalCourse,
+        query2: API.queryRoom,
+        total2: API.totalRoom,
+        query3: API.queryTeacher,
+        total3: API.totalTeacher,
+        query4: API.querySemester,
+        total4: API.totalSemester,
         keyword1: '',
         keyword2: '',
         keyword3: '',
+        keyword4: '',
         pageList1: [],
         pageList2: [],
         pageList3: [],
+        pageList4: [],
         pageTotal1: '',
         pageTotal2: '',
         pageTotal3: '',
+        pageTotal4: '',
         name1: '未知',
         name2: '未知',
         name3: '未知',
+        name4: '未知',
         id1: '',
         id2: '',
         id3: '',
+        id4: '',
         showLoad: true,
         download: false,
         columns1: [
           {
-            title: '学生姓名',
+            title: '课程名称',
             key: 'name',
             align: 'center'
           },
           {
-            title: '身份证号码',
-            key: 'number',
+            title: '课程类型',
+            key: 'type',
             align: 'center'
           }
         ],
         columns2: [
           {
-            title: '家长姓名',
+            title: '班级名称',
+            key: 'name',
+            align: 'center'
+          }
+        ],
+        columns3: [
+          {
+            title: '教师姓名',
             key: 'name',
             align: 'center'
           },
@@ -176,11 +218,16 @@
             title: '联系电话',
             key: 'mobile',
             align: 'center'
+          },
+          {
+            title: '教师类别',
+            key: 'type',
+            align: 'center'
           }
         ],
-        columns3: [
+        columns4: [
           {
-            title: '身份',
+            title: '学期名称',
             key: 'name',
             align: 'center'
           }
@@ -188,7 +235,7 @@
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('StudentParentIdentityDesktop') === null || getCookie('StudentParentIdentityDesktop') === undefined || getCookie('StudentParentIdentityDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('CourseRoomTeacherDesktop') === null || getCookie('CourseRoomTeacherDesktop') === undefined || getCookie('CourseRoomTeacherDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -200,7 +247,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie('CourseRoomTeacherDesktop')))
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
               this.showLoad = false
@@ -216,7 +263,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('StudentParentIdentityDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie('CourseRoomTeacherDesktop')))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
@@ -234,6 +281,9 @@
       getData1 (value) {
         this.id1 = value.id
         this.name1 = value.name
+        this.$Notice.info({
+          title: '已选择课程：' + this.name1
+        })
       },
       getList1 (pageList, pageTotal) {
         this.pageList1 = pageList
@@ -261,6 +311,9 @@
       getData2 (value) {
         this.id2 = value.id
         this.name2 = value.name
+        this.$Notice.info({
+          title: '已选择班级：' + this.name2
+        })
       },
       getList2 (pageList, pageTotal) {
         this.pageList2 = pageList
@@ -288,6 +341,9 @@
       getData3 (value) {
         this.id3 = value.id
         this.name3 = value.name
+        this.$Notice.info({
+          title: '已选择教师：' + this.name3
+        })
       },
       getList3 (pageList, pageTotal) {
         this.pageList3 = pageList
@@ -304,6 +360,36 @@
           pageCurrent3: pageCurrent
         })
       },
+      getQuery4 (keyword) {
+        this.keyword4 = keyword
+        this.$refs.pages4.query(keyword)
+      },
+      getQueryNoChange4 (keyword) {
+        this.keyword4 = keyword
+        this.$refs.pages4.queryNoChange(keyword)
+      },
+      getData4 (value) {
+        this.id4 = value.id
+        this.name4 = value.name
+        this.$Notice.info({
+          title: '已选择学期：' + this.name3
+        })
+      },
+      getList4 (pageList, pageTotal) {
+        this.pageList4 = pageList
+        this.pageTotal4 = pageTotal
+      },
+      saveCurrent4 (pageCurrent) {
+        this.$store.commit('save', {
+          pageCurrent4: pageCurrent
+        })
+      },
+      CurrentAndKeyword4 (keyword, pageCurrent) {
+        this.$store.commit('save', {
+          keyword4: keyword,
+          pageCurrent4: pageCurrent
+        })
+      },
       goReset () {
         this.keyword1 = ''
         this.$refs.pages1.query(this.keyword1)
@@ -317,6 +403,10 @@
         this.$refs.pages3.query(this.keyword3)
         this.name3 = '未知'
         this.id3 = ''
+        this.keyword4 = ''
+        this.$refs.pages4.query(this.keyword4)
+        this.name4 = '未知'
+        this.id4 = ''
       },
       goSave () {
         this.$Loading.start()
@@ -324,9 +414,10 @@
         this.$http.get(
           API.save,
           { params: {
-            sid: this.id1,
-            pid: this.id2,
-            iid: this.id3
+            cid: this.id1,
+            rid: this.id2,
+            tid: this.id3,
+            sid: this.id4
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

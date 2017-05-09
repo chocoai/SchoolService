@@ -51,7 +51,7 @@
 //  }
 //  public void forTeacher() throws WeixinException {
 //    // 检测session中是否存在teacher
-//    if (getSessionAttr("teacher") == null || ((Enterprise)getSessionAttr("teacher")).getIsTeacher()!=1) {
+//    if (getSessionAttr("Teacher") == null || ((Enterprise)getSessionAttr("Teacher")).getIsTeacher()!=1) {
 //      // 检测cookie中是否存在EnterpriseId
 //      if (getCookie("die") == null || getCookie("die").equals("")) {
 //        // 检测是否来自微信请求
@@ -60,7 +60,7 @@
 //          Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isTeacher=1 and userId=?", user.getUserId());
 //          // 检测是否有权限
 //          if (enterprise != null) {
-//            setSessionAttr("teacher", enterprise);
+//            setSessionAttr("Teacher", enterprise);
 //            setCookie("die", enterprise.getId().toString(), 60 * 30);
 //            render("/static/NoticeForTeacher.html");
 //          } else {
@@ -71,7 +71,7 @@
 //        }
 //      } else {
 //        Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-//        setSessionAttr("teacher", enterprise);
+//        setSessionAttr("Teacher", enterprise);
 //        render("/static/NoticeForTeacher.html");
 //      }
 //    } else {
