@@ -180,16 +180,6 @@
             }
           },
           {
-            title: '家长绑定',
-            key: 'bind',
-            sortable: true,
-            render (row) {
-              const color = row.bind.toString() === '1' ? 'green' : row.bind.toString() === '0' ? 'yellow' : 'red'
-              const text = row.bind.toString() === '1' ? '已绑定' : row.bind.toString() === '0' ? '未绑定' : '错误'
-              return `<tag type="dot" color="${color}">${text}</tag>`
-            }
-          },
-          {
             title: '操作',
             key: 'state',
             align: 'center',

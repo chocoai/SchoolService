@@ -25,17 +25,21 @@ public class Util {
             "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
                     " LEFT JOIN permission" +
                     " ON teacherpermission.permission_id = permission.id" +
-                    " WHERE teacher_id=? AND permission.url LIKE '%"+sqlString+"%'"
-            ,teacherId);
+                    " WHERE teacher_id=? AND permission.url LIKE '%" + sqlString + "%'"
+            , teacherId);
     String permission = "";
-    for (int i=0;i<lists.size();i++){
-      if (lists.get(i).get("state").toString().equals("1")){
-        permission = permission + "\""+lists.get(i).get("url")+"\": true, ";
-      } else {
-        permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
+    if (lists.size() != 0) {
+      for (int i = 0; i < lists.size(); i++) {
+        if (lists.get(i).get("state").toString().equals("1")) {
+          permission = permission + "\"" + lists.get(i).get("url") + "\": true, ";
+        } else {
+          permission = permission + "\"" + lists.get(i).get("url") + "\": false, ";
+        }
       }
+      return "{" + permission.substring(0, permission.length() - 2).replace(sqlString + "/", "") + "}";
+    } else {
+      return "{}";
     }
-    return "{"+permission.substring(0,permission.length()-2).replace(sqlString+"/","")+"}";
   }
 
   public static void main(String[] args) {
