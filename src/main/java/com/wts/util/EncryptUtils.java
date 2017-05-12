@@ -8,9 +8,6 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by 王天硕 on 2016/9/17.
- */
 public class EncryptUtils {
 
   /**

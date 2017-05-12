@@ -17,6 +17,10 @@ import com.wts.validator.Query;
 import com.wts.validator.parent.Parent_Edit;
 import com.wts.validator.parent.Parent_Exist;
 import com.wts.validator.parent.Parent_Save;
+import com.wts.weixin.service.ParentService;
+import com.wts.weixin.service.TeacherService;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.cp.bean.WxCpUser;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -105,19 +109,21 @@ public class ParentDesktop extends Controller {
     if (object.get("state").toString().equals("4")) {
       renderText("该家长已处于未关注状态!");
     } else {
-      User user = new User(object.get("userId").toString(), object.get("name").toString());
-      user.setMobile(object.get("mobile").toString());
-      user.setPartyIds(1);
+      WxCpUser user = new WxCpUser();
+      user.setUserId(object.getStr("userId"));
+      user.setName(object.getStr("name"));
+      user.setMobile(object.getStr("mobile"));
+      user.setDepartIds(new Integer[] { 1 });
       try {
-        WP.me.createUser(user);
+        ParentService.me().userCreate(user);
         List<String> userIds = new ArrayList<String>();
-        userIds.add(object.get("userId").toString());
-        WP.me.addTagUsers(ParamesAPI.parentTagId, userIds, new ArrayList<Integer>());
+        userIds.add(object.getStr("userId"));
+        ParentService.me().tagAddUsers(ParamesAPI.parentTagId, userIds, null);
         object.set("state", 1).update();
         logger.warn("function:"+this.getClass().getSimpleName()+"/Active;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";parent_id:"+getPara("id")+";");
         renderText("OK");
-      } catch (WeixinException e) {
-        renderText(e.getErrorText());
+      } catch (WxErrorException e) {
+        renderText(e.getMessage());
       }
     }
   }
@@ -132,12 +138,12 @@ public class ParentDesktop extends Controller {
       renderText("该家长已处于取消关注状态!");
     } else {
       try {
-        WP.me.deleteUser(object.getUserId());
+        ParentService.me().userDelete(object.getUserId());
         object.set("state", 3).update();
         logger.warn("function:"+this.getClass().getSimpleName()+"/Inactive;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";parent_id:"+getPara("id")+";");
         renderText("OK");
-      } catch (WeixinException e) {
-        renderText(e.getErrorText());
+      } catch (WxErrorException e) {
+        renderText(e.getMessage());
       }
     }
   }
@@ -152,13 +158,13 @@ public class ParentDesktop extends Controller {
       renderText("该家长已删除!");
     } else {
       try {
-        WP.me.deleteUser(object.getUserId());
+        ParentService.me().userDelete(object.getUserId());
         object.set("state", 3).update();
         object.set("del", 1).update();
         logger.warn("function:"+this.getClass().getSimpleName()+"/Delete;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";parent_id:"+getPara("id")+";");
         renderText("OK");
-      } catch (WeixinException e) {
-        renderText(e.getErrorText());
+      } catch (WxErrorException e) {
+        renderText(e.getMessage());
       }
     }
   }
@@ -168,25 +174,28 @@ public class ParentDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Parent_Save.class})
   public void Save() {
-    User user = new User(getUserId(getPara("name")), getPara("name").trim());
-    user.setMobile(getPara("mobile").trim());
-    user.setPartyIds(1);
     try {
-      WP.me.createUser(user);
+      WxCpUser user = new WxCpUser();
+      user.setUserId(getUserId(getPara("name")));
+      user.setName(getPara("name"));
+      user.setMobile(getPara("mobile"));
+      user.setDepartIds(new Integer[] { 1 });
+      ParentService.me().userCreate(user);
       List<String> userIds = new ArrayList<String>();
       userIds.add(getUserId(getPara("name")));
-      WP.me.addTagUsers(ParamesAPI.parentTagId, userIds, new ArrayList<Integer>());
+      ParentService.me().tagAddUsers(ParamesAPI.parentTagId, userIds, null);
       Parent object = new Parent();
       object.set("name", getPara("name"))
               .set("userId", getUserId(getPara("name")))
               .set("mobile", getPara("mobile"))
+              .set("type", getPara("type"))
               .set("state", 4)
               .set("del", 0)
               .save();
       logger.warn("function:"+this.getClass().getSimpleName()+"/Save;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";parent_id:"+object.get("id")+";");
       renderText("OK");
-    } catch (WeixinException e) {
-      renderText(e.getErrorText());
+    } catch (WxErrorException e) {
+      renderText(e.getMessage());
     }
   }
 
@@ -197,16 +206,17 @@ public class ParentDesktop extends Controller {
   public void Edit() {
     try {
       Parent object = Parent.dao.findById(getPara("id"));
-      User user = new User(object.get("userId").toString(), object.get("name").toString());
+      WxCpUser user = ParentService.me().userGet(object.getStr("userId"));
       user.setMobile(getPara("mobile").trim());
-      WP.me.updateUser(user);
+      ParentService.me().userUpdate(user);
       object.set("name", getPara("name"))
               .set("mobile", getPara("mobile"))
+              .set("type", getPara("type"))
               .update();
       logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";parent_id:"+getPara("id")+";");
       renderText("OK");
-    } catch (WeixinException e) {
-      renderText(e.getErrorText());
+    } catch (WxErrorException e) {
+      renderText(e.getMessage());
     }
   }
 

@@ -13,9 +13,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-/**
- * Created by 王天硕 on 2017/4/28.
- */
 public class ExportUtil {
   public static void export(String[] title,String fileName,String SQL,HttpServletResponse response) throws IOException {
     List<Record> list = Db.find(SQL);

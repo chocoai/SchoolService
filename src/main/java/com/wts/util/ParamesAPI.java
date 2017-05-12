@@ -4,7 +4,7 @@ public class ParamesAPI {
 
   // 教师
   public static int teacherAgentId = 28;
-  public static int teacherTagId = 2;
+  public static String teacherTagId = "2";
   public static String teacherURLs = "http://wts.natapp1.cc/";
   public static String teacherToken = "weixin4j";
   public static String teacherEncodingAESKey = "vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT";
@@ -12,7 +12,7 @@ public class ParamesAPI {
 
   // 家长
   public static int parentAgentId = 29;
-  public static int parentTagId = 3;
+  public static String parentTagId = "3";
   public static String parentURLs = "http://wts.natapp1.cc/";
   public static String parentToken = "weixin4j";
   public static String parentEncodingAESKey = "vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT";

@@ -15,8 +15,9 @@ import com.wts.controller.*;
 import com.wts.controller.Desktop.MainDesktop;
 import com.wts.controller.Desktop.Teacher.*;
 import com.wts.controller.Mobile.MainMobile;
-import com.wts.controller.WeiXin.CallBack;
 import com.wts.entity.model._MappingKit;
+import com.wts.weixin.callback.ParentCallback;
+import com.wts.weixin.callback.TeacherCallback;
 
 /**
  * API引导式配置
@@ -40,6 +41,10 @@ public class Config extends JFinalConfig {
      */
     public void configRoute(Routes me) {
         me.add("/", MainController.class);
+
+        me.add("/ParentCallback", ParentCallback.class);
+        me.add("/TeacherCallback", TeacherCallback.class);
+
         me.add("/MainDesktop", MainDesktop.class);
         me.add("/CourseDesktop", CourseDesktop.class);
         me.add("/SemesterDesktop", SemesterDesktop.class);
@@ -62,7 +67,6 @@ public class Config extends JFinalConfig {
 //        me.add("/student", StudentController.class);
 //        me.add("/parent", ParentController.class);
 //        me.add("/relation", RelationController.class);
-        me.add("/callBack", CallBack.class);
 
 //        me.add("/roomwork", RoomworkController.class);
 //        me.add("/roomworkread", RoomworkReadController.class);

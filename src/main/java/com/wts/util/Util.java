@@ -3,8 +3,6 @@ package com.wts.util;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
-import com.wts.entity.model.Parent;
-import com.wts.entity.model.Teacher;
 
 import java.util.List;
 

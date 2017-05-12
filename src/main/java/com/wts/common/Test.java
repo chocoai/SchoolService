@@ -8,6 +8,7 @@ import com.wts.entity.model.Parent;
 import com.wts.entity.model.Teacher;
 import com.wts.util.PinyinTool;
 import com.wts.util.Util;
+import com.wts.weixin.service.ParentService;
 import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
@@ -27,9 +28,8 @@ public class Test {
   }
 
   public static void main(String[] args) throws Exception {
-    logger.debug("This is debug message");
-    logger.info("This is info message");
-    logger.error("This is error message");
+    System.out.println(ParentService.me().departGet());
+
 //    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
 //      renderText("班级名称格式应为：XXXX级XX班");
     // 电子邮箱的正则
@@ -63,7 +63,7 @@ public class Test {
 //    for (int i = 0; i<4-integers.length; i++){
 //      System.out.println("第二组："+i);
 //    }
-    System.out.println(get("吕东杰"));
+    //System.out.println(get("吕东杰"));
   }
 
 }

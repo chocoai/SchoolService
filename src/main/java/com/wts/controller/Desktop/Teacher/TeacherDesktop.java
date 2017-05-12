@@ -17,6 +17,9 @@ import com.wts.validator.Query;
 import com.wts.validator.teacher.Teacher_Edit;
 import com.wts.validator.teacher.Teacher_Exist;
 import com.wts.validator.teacher.Teacher_Save;
+import com.wts.weixin.service.TeacherService;
+import me.chanjar.weixin.common.exception.WxErrorException;
+import me.chanjar.weixin.cp.bean.WxCpUser;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -105,19 +108,21 @@ public class TeacherDesktop extends Controller {
     if (object.get("state").toString().equals("4")) {
       renderText("该教师已处于未关注状态!");
     } else {
-      User user = new User(object.get("userId").toString(), object.get("name").toString());
-      user.setMobile(object.get("mobile").toString());
-      user.setPartyIds(1);
+      WxCpUser user = new WxCpUser();
+      user.setUserId(object.getStr("userId"));
+      user.setName(object.getStr("name"));
+      user.setMobile(object.getStr("mobile"));
+      user.setDepartIds(new Integer[] { 1 });
       try {
-        WP.me.createUser(user);
+        TeacherService.me().userCreate(user);
         List<String> userIds = new ArrayList<String>();
-        userIds.add(object.get("userId").toString());
-        WP.me.addTagUsers(ParamesAPI.teacherTagId, userIds, new ArrayList<Integer>());
+        userIds.add(object.getStr("userId"));
+        TeacherService.me().tagAddUsers(ParamesAPI.teacherTagId, userIds, null);
         object.set("state", 1).update();
         logger.warn("function:"+this.getClass().getSimpleName()+"/Active;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+getPara("id")+";");
         renderText("OK");
-      } catch (WeixinException e) {
-        renderText(e.getErrorText());
+      } catch (WxErrorException e) {
+        renderText(e.getMessage());
       }
     }
   }
@@ -132,12 +137,12 @@ public class TeacherDesktop extends Controller {
       renderText("该教师已处于取消关注状态!");
     } else {
       try {
-        WP.me.deleteUser(object.getUserId());
+        TeacherService.me().userDelete(object.getUserId());
         object.set("state", 3).update();
         logger.warn("function:"+this.getClass().getSimpleName()+"/Inactive;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+getPara("id")+";");
         renderText("OK");
-      } catch (WeixinException e) {
-        renderText(e.getErrorText());
+      } catch (WxErrorException e) {
+        renderText(e.getMessage());
       }
     }
   }
@@ -152,13 +157,13 @@ public class TeacherDesktop extends Controller {
       renderText("该教师已删除!");
     } else {
       try {
-        WP.me.deleteUser(object.getUserId());
+        TeacherService.me().userDelete(object.getUserId());
         object.set("state", 3).update();
         object.set("del", 1).update();
         logger.warn("function:"+this.getClass().getSimpleName()+"/Delete;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+getPara("id")+";");
         renderText("OK");
-      } catch (WeixinException e) {
-        renderText(e.getErrorText());
+      } catch (WxErrorException e) {
+        renderText(e.getMessage());
       }
     }
   }
@@ -168,14 +173,16 @@ public class TeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Teacher_Save.class})
   public void Save() {
-    User user = new User(getUserId(getPara("name")), getPara("name").trim());
-    user.setMobile(getPara("mobile").trim());
-    user.setPartyIds(1);
     try {
-      WP.me.createUser(user);
+      WxCpUser user = new WxCpUser();
+      user.setUserId(getUserId(getPara("name")));
+      user.setName(getPara("name"));
+      user.setMobile(getPara("mobile"));
+      user.setDepartIds(new Integer[] { 1 });
+      TeacherService.me().userCreate(user);
       List<String> userIds = new ArrayList<String>();
       userIds.add(getUserId(getPara("name")));
-      WP.me.addTagUsers(ParamesAPI.teacherTagId, userIds, new ArrayList<Integer>());
+      TeacherService.me().tagAddUsers(ParamesAPI.teacherTagId, userIds, null);
       Teacher object = new Teacher();
       object.set("name", getPara("name"))
               .set("userId", getUserId(getPara("name")))
@@ -186,8 +193,8 @@ public class TeacherDesktop extends Controller {
               .save();
       logger.warn("function:"+this.getClass().getSimpleName()+"/Save;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+object.get("id")+";");
       renderText("OK");
-    } catch (WeixinException e) {
-      renderText(e.getErrorText());
+    } catch (WxErrorException e) {
+      renderText(e.getMessage());
     }
   }
 
@@ -198,17 +205,17 @@ public class TeacherDesktop extends Controller {
   public void Edit() {
     try {
       Teacher object = Teacher.dao.findById(getPara("id"));
-      User user = new User(object.get("userId").toString(), object.get("name").toString());
+      WxCpUser  user = TeacherService.me().userGet(object.getStr("userId"));
       user.setMobile(getPara("mobile").trim());
-      WP.me.updateUser(user);
+      TeacherService.me().userUpdate(user);
       object.set("name", getPara("name"))
               .set("mobile", getPara("mobile"))
               .set("type", getPara("type"))
               .update();
       logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+getPara("id")+";");
       renderText("OK");
-    } catch (WeixinException e) {
-      renderText(e.getErrorText());
+    } catch (WxErrorException e) {
+      renderText(e.getMessage());
     }
   }
 
