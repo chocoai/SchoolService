@@ -12,6 +12,7 @@ import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
 import com.wts.validator.courseRoomTeacher.CourseRoomTeacher_Exist;
 import com.wts.validator.courseRoomTeacher.CourseRoomTeacher_Save;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -19,6 +20,8 @@ import static com.wts.util.Util.PermissionString;
 
 
 public class CourseRoomTeacherDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(CourseRoomTeacherDesktop.class);
+
   /**
    * 页面
    */
@@ -116,6 +119,12 @@ public class CourseRoomTeacherDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacher_Exist.class})
   public void Delete() {
     Courseroomteacher.dao.deleteById(getPara("cid"), getPara("rid"), getPara("sid"), getPara("tid"));
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Delete;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "course_id:" + getPara("cid") + ";" +
+            "room_id:" + getPara("rid") + ";" +
+            "semester_id:" + getPara("sid") + ";" +
+            "teacher_id:" + getPara("tid") + ";");
     renderText("OK");
   }
 
@@ -130,9 +139,14 @@ public class CourseRoomTeacherDesktop extends Controller {
             .set("semester_id", getPara("sid"))
             .set("teacher_id", getPara("tid"))
             .save();
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Save;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "course_id:" + getPara("cid") + ";" +
+            "room_id:" + getPara("rid") + ";" +
+            "semester_id:" + getPara("sid") + ";" +
+            "teacher_id:" + getPara("tid") + ";");
     renderText("OK");
   }
-
 
   /**
    * 导出

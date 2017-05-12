@@ -13,6 +13,7 @@ import com.wts.validator.Query;
 import com.wts.validator.semester.Semester_Edit;
 import com.wts.validator.semester.Semester_Exist;
 import com.wts.validator.semester.Semester_Save;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Date;
@@ -21,6 +22,7 @@ import static com.wts.util.Util.PermissionString;
 
 
 public class SemesterDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(SemesterDesktop.class);
   /**
    * 页面
    */
@@ -94,6 +96,7 @@ public class SemesterDesktop extends Controller {
     } else {
       object.set("state", 1).update();
       Db.update("UPDATE semester SET state = 0 WHERE id <> ?", getPara("id"));
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Active;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";semester_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -107,6 +110,7 @@ public class SemesterDesktop extends Controller {
       renderText("该学期已非当前学期!");
     } else {
       object.set("state", 0).update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Inactive;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";semester_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -121,6 +125,7 @@ public class SemesterDesktop extends Controller {
       renderText("该学期已删除!");
     } else {
       object.set("del", 1).update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Delete;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";semester_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -136,6 +141,7 @@ public class SemesterDesktop extends Controller {
             .set("state", 0)
             .set("del", 0)
             .save();
+    logger.warn("function:"+this.getClass().getSimpleName()+"/Save;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";semester_id:"+object.get("id")+";");
     renderText("OK");
   }
 
@@ -149,6 +155,7 @@ public class SemesterDesktop extends Controller {
             .set("time_start", new Date(getParaToLong("time_start")))
             .set("time_end", new Date(getParaToLong("time_end")))
             .update();
+    logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";semester_id:"+getPara("id")+";");
     renderText("OK");
   }
 

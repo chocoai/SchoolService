@@ -12,6 +12,7 @@ import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
 import com.wts.validator.studentParentIdentity.StudentParentIdentity_Exist;
 import com.wts.validator.studentParentIdentity.StudentParentIdentity_Save;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -19,6 +20,8 @@ import static com.wts.util.Util.PermissionString;
 
 
 public class StudentParentIdentityDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(StudentParentIdentityDesktop.class);
+
   /**
    * 页面
    */
@@ -111,6 +114,11 @@ public class StudentParentIdentityDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class, StudentParentIdentity_Exist.class})
   public void Delete() {
     Studentparentidentity.dao.deleteById(getPara("iid"), getPara("pid"), getPara("sid"));
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Delete;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "identity_id:" + getPara("iid") + ";" +
+            "parent_id:" + getPara("pid") + ";" +
+            "student_id:" + getPara("sid") + ";");
     renderText("OK");
   }
 
@@ -124,6 +132,11 @@ public class StudentParentIdentityDesktop extends Controller {
             .set("parent_id", getPara("pid"))
             .set("identity_id", getPara("iid"))
             .save();
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Save;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "identity_id:" + getPara("iid") + ";" +
+            "parent_id:" + getPara("pid") + ";" +
+            "student_id:" + getPara("sid") + ";");
     renderText("OK");
   }
 

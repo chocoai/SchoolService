@@ -12,6 +12,7 @@ import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
 import com.wts.validator.roomStudent.RoomStudent_Exist;
 import com.wts.validator.roomStudent.RoomStudent_Save;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -19,6 +20,8 @@ import static com.wts.util.Util.PermissionString;
 
 
 public class RoomStudentDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(RoomStudentDesktop.class);
+
   /**
    * 页面
    */
@@ -102,6 +105,10 @@ public class RoomStudentDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class, RoomStudent_Exist.class})
   public void Delete() {
     Roomstudent.dao.deleteById(getPara("rid"),  getPara("sid"));
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Delete;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "room_id:" + getPara("rid") + ";" +
+            "student_id:" + getPara("sid") + ";");
     renderText("OK");
   }
 
@@ -114,6 +121,10 @@ public class RoomStudentDesktop extends Controller {
     object.set("student_id", getPara("sid"))
             .set("room_id", getPara("rid"))
             .save();
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Save;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "room_id:" + getPara("rid") + ";" +
+            "student_id:" + getPara("sid") + ";");
     renderText("OK");
   }
 

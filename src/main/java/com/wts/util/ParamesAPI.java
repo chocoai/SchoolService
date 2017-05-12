@@ -1,26 +1,27 @@
 package com.wts.util;
 
 public class ParamesAPI {
-  // token
-  public static String token = "weixin4j";
-  // 随机戳
-  public static String encodingAESKey = "vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT";
-  //你的企业号ID
-  public static String corpId = "wx947e7da41f395af7";
-  //管理应用ID
-  public static int managerId = 26;
-  //教师应用ID
-  public static int teacherId = 28;
-  //家长应用ID
-  public static int parentId = 29;
-  //管理标签ID
-  public static int managerTagId = 4;
-  //教师标签ID
+
+  // 教师
+  public static int teacherAgentId = 28;
   public static int teacherTagId = 2;
-  //家长标签ID
+  public static String teacherURLs = "http://wts.natapp1.cc/";
+  public static String teacherToken = "weixin4j";
+  public static String teacherEncodingAESKey = "vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT";
+  public static String teacherSecret = "thcMcEeJdhuSDw7S_9314ILJ2hqPRCCxhupksDvPDQkUgfqfjDxVx16jPR_ztzzK";
+
+  // 家长
+  public static int parentAgentId = 29;
   public static int parentTagId = 3;
-  // 管理组的凭证密钥，每个secret代表了对应用、通讯录、接口的不同权限；不同的管理组拥有不同的secret
+  public static String parentURLs = "http://wts.natapp1.cc/";
+  public static String parentToken = "weixin4j";
+  public static String parentEncodingAESKey = "vUiM1GBGtPzce8Jh3UikdsHvn3NMghUT9l9Fr8UarrT";
+  public static String parentSecret = "thcMcEeJdhuSDw7S_9314ILJ2hqPRCCxhupksDvPDQkUgfqfjDxVx16jPR_ztzzK";
+
+  // 企业
   public static String secret = "thcMcEeJdhuSDw7S_9314ILJ2hqPRCCxhupksDvPDQkUgfqfjDxVx16jPR_ztzzK";
+  public static String corpId = "wx947e7da41f395af7";
+
   // OAuth2 回调地址
   public static String REDIRECT_URI = "";
   // 网址

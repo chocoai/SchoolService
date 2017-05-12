@@ -13,6 +13,7 @@ import com.wts.validator.*;
 import com.wts.validator.course.Course_Edit;
 import com.wts.validator.course.Course_Exist;
 import com.wts.validator.course.Course_Save;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -20,6 +21,8 @@ import static com.wts.util.Util.PermissionString;
 
 
 public class CourseDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(CourseDesktop.class);
+
   /**
    * 页面
    */
@@ -95,6 +98,7 @@ public class CourseDesktop extends Controller {
       renderText("该课程已激活!");
     } else {
       object.set("state", 1).update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Active;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";course_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -109,6 +113,7 @@ public class CourseDesktop extends Controller {
       renderText("该课程已注销!");
     } else {
       object.set("state", 0).update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Inactive;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";course_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -123,6 +128,7 @@ public class CourseDesktop extends Controller {
       renderText("该课程已删除!");
     } else {
       object.set("del", 1).update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Delete;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";course_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -140,6 +146,7 @@ public class CourseDesktop extends Controller {
             .set("state", getPara("state"))
             .set("del", 0)
             .save();
+    logger.warn("function:"+this.getClass().getSimpleName()+"/Save;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";course_id:"+object.get("id")+";");
     renderText("OK");
   }
 
@@ -155,6 +162,7 @@ public class CourseDesktop extends Controller {
             .set("type", getPara("type"))
             .set("state", getPara("state"))
             .update();
+    logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";course_id:"+getPara("id")+";");
     renderText("OK");
   }
 

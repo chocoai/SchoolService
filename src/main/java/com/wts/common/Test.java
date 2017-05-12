@@ -27,6 +27,9 @@ public class Test {
   }
 
   public static void main(String[] args) throws Exception {
+    logger.debug("This is debug message");
+    logger.info("This is info message");
+    logger.error("This is error message");
 //    if (!getPara("name").matches("\\d{4}[\\u7ea7]\\d{1,2}[\\u73ed]")) {
 //      renderText("班级名称格式应为：XXXX级XX班");
     // 电子邮箱的正则

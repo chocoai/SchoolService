@@ -1,8 +1,9 @@
 # Created by .ignore support plugin (hsz.mobi)
 log/
 target/
-src/main/webapp/node_modules/
-src/main/webapp/dist/
-src/main/webapp/static/
+web/node_modules/
+web/dist/
+web/static/
 .idea/inspectionProfiles/
-.idea/workspace.xml
+.idea/workspace.xm
+src/main/webapp/static

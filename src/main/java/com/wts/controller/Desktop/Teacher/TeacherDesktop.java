@@ -17,6 +17,7 @@ import com.wts.validator.Query;
 import com.wts.validator.teacher.Teacher_Edit;
 import com.wts.validator.teacher.Teacher_Exist;
 import com.wts.validator.teacher.Teacher_Save;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ import static com.wts.util.Util.PermissionString;
 
 
 public class TeacherDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(TeacherDesktop.class);
+
   /**
    * 页面
    */
@@ -111,6 +114,7 @@ public class TeacherDesktop extends Controller {
         userIds.add(object.get("userId").toString());
         WP.me.addTagUsers(ParamesAPI.teacherTagId, userIds, new ArrayList<Integer>());
         object.set("state", 1).update();
+        logger.warn("function:"+this.getClass().getSimpleName()+"/Active;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+getPara("id")+";");
         renderText("OK");
       } catch (WeixinException e) {
         renderText(e.getErrorText());
@@ -130,6 +134,7 @@ public class TeacherDesktop extends Controller {
       try {
         WP.me.deleteUser(object.getUserId());
         object.set("state", 3).update();
+        logger.warn("function:"+this.getClass().getSimpleName()+"/Inactive;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+getPara("id")+";");
         renderText("OK");
       } catch (WeixinException e) {
         renderText(e.getErrorText());
@@ -150,6 +155,7 @@ public class TeacherDesktop extends Controller {
         WP.me.deleteUser(object.getUserId());
         object.set("state", 3).update();
         object.set("del", 1).update();
+        logger.warn("function:"+this.getClass().getSimpleName()+"/Delete;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+getPara("id")+";");
         renderText("OK");
       } catch (WeixinException e) {
         renderText(e.getErrorText());
@@ -178,6 +184,7 @@ public class TeacherDesktop extends Controller {
               .set("state", 4)
               .set("del", 0)
               .save();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Save;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+object.get("id")+";");
       renderText("OK");
     } catch (WeixinException e) {
       renderText(e.getErrorText());
@@ -198,6 +205,7 @@ public class TeacherDesktop extends Controller {
               .set("mobile", getPara("mobile"))
               .set("type", getPara("type"))
               .update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";teacher_id:"+getPara("id")+";");
       renderText("OK");
     } catch (WeixinException e) {
       renderText(e.getErrorText());

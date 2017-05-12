@@ -13,6 +13,7 @@ import com.wts.validator.Query;
 import com.wts.validator.student.Student_Edit;
 import com.wts.validator.student.Student_Exist;
 import com.wts.validator.student.Student_Save;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
@@ -21,6 +22,8 @@ import static com.wts.util.Util.PermissionString;
 
 
 public class StudentDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(StudentDesktop.class);
+
   /**
    * 页面
    */
@@ -93,6 +96,7 @@ public class StudentDesktop extends Controller {
       renderText("该学生已激活!");
     } else {
       object.set("state", 1).update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Active;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";student_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -107,6 +111,7 @@ public class StudentDesktop extends Controller {
       renderText("该学生已注销!");
     } else {
       object.set("state", 0).update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Inactive;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";student_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -121,6 +126,7 @@ public class StudentDesktop extends Controller {
       renderText("该学生已删除!");
     } else {
       object.set("del", 1).update();
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Delete;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";student_id:"+getPara("id")+";");
       renderText("OK");
     }
   }
@@ -141,6 +147,7 @@ public class StudentDesktop extends Controller {
             .set("bind", 0)
             .set("del", 0)
             .save();
+    logger.warn("function:"+this.getClass().getSimpleName()+"/Save;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";student_id:"+object.get("id")+";");
     renderText("OK");
   }
 
@@ -159,6 +166,7 @@ public class StudentDesktop extends Controller {
             .set("state", getPara("state"))
             .set("bind", 0)
             .update();
+    logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";student_id:"+getPara("id")+";");
     renderText("OK");
   }
 

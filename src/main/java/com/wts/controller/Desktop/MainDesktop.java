@@ -4,8 +4,10 @@ import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
+import com.wts.controller.Desktop.Teacher.SemesterDesktop;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -14,6 +16,8 @@ import java.util.List;
 import static com.wts.util.Util.PermissionString;
 
 public class MainDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(MainDesktop.class);
+
   public void index() throws Exception{
     render("/static/html/desktop/Desktop_Login.html");
   }
@@ -57,7 +61,7 @@ public class MainDesktop extends Controller {
       setCookie("StudentParentIdentityDesktop", PermissionString("StudentParentIdentityDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("RoomStudentDesktop", PermissionString("RoomStudentDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("CourseRoomTeacherDesktop", PermissionString("CourseRoomTeacherDesktop",teacher.getId().toString()), 60 * 6 * 10);
-
+      logger.warn("function:"+this.getClass().getSimpleName()+"/Login;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";");
       renderText("OK");
     } else {
       renderText("error");
