@@ -160,10 +160,15 @@
             title: '课程状态',
             key: 'state',
             sortable: true,
-            render (row) {
+            render (h, params) => {
               const color = row.state.toString() === '1' ? 'green' : row.state.toString() === '0' ? 'yellow' : 'red'
               const text = row.state.toString() === '1' ? '当前学期' : row.state.toString() === '0' ? '非当前学期' : '错误'
-              return `<tag type="dot" color="${color}">${text}</tag>`
+              return h('Tag', {
+                props: {
+                  type: 'dot',
+                  color = color
+                }
+              }, text);
             }
           },
           {
@@ -171,9 +176,25 @@
             key: 'state',
             align: 'center',
             width: 300,
-            render (row, column, index) {
+            render: (h, params) => {
               const states1 = row.state.toString() === '1'
               const states2 = row.state.toString() === '0'
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary'
+                  },
+                  on: {
+                    click: () => {
+                      goEdit(params.index)
+                    }
+                  }
+                }, '修改'),
+
+
+
+
+
               return `
               <i-button type="primary" @click="goEdit(${index})" v-if="permission.Edit">修改</i-button>
               <i-button type="warning" v-if="${states1} && permission.Inactive" @click="showInactive(${index})">注销</i-button>
