@@ -45,6 +45,7 @@
   import MenuList from '../Menu/menuList.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
+  import { bus } from '../../Common/bus.js'
   export default {
     name: 'edit',
     components: { Copy, MenuList },
@@ -133,6 +134,7 @@
     methods: {
       goBack () {
         this.$router.push({ path: '/list' })
+        bus.$emit('goBack', this.$store.state.keyword, this.$store.state.pageCurrent)
       },
       fetchData (id) {
         this.$http.get(

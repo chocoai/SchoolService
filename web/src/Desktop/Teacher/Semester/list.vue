@@ -105,11 +105,13 @@
   import Page from '../../Common/page.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
+  import listBtn from './listBtn.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
+  import { bus } from '../../Common/bus.js'
   export default {
     name: 'list',
-    components: { Copy, MenuList, Search, Page, Options, Loading },
+    components: { Copy, MenuList, Search, Page, Options, Loading, listBtn },
     data () {
       return {
         name: '',
@@ -137,8 +139,8 @@
             title: '序号',
             key: 'id',
             sortable: true,
-            render (row, column, index) {
-              return `${index + 1}`
+            render: (h, params) => {
+              return h('p', {}, params.index + 1)
             }
           },
           {
@@ -160,15 +162,15 @@
             title: '课程状态',
             key: 'state',
             sortable: true,
-            render (h, params) => {
-              const color = row.state.toString() === '1' ? 'green' : row.state.toString() === '0' ? 'yellow' : 'red'
-              const text = row.state.toString() === '1' ? '当前学期' : row.state.toString() === '0' ? '非当前学期' : '错误'
+            render: (h, params) => {
+              const color = params.row.state.toString() === '1' ? 'green' : params.row.state.toString() === '0' ? 'yellow' : 'red'
+              const text = params.row.state.toString() === '1' ? '当前学期' : params.row.state.toString() === '0' ? '非当前学期' : '错误'
               return h('Tag', {
                 props: {
                   type: 'dot',
-                  color = color
+                  color: color
                 }
-              }, text);
+              }, text)
             }
           },
           {
@@ -176,38 +178,20 @@
             key: 'state',
             align: 'center',
             width: 300,
-            render: (h, params) => {
-              const states1 = row.state.toString() === '1'
-              const states2 = row.state.toString() === '0'
-              return h('div', [
-                h('Button', {
-                  props: {
-                    type: 'primary'
-                  },
-                  on: {
-                    click: () => {
-                      goEdit(params.index)
-                    }
-                  }
-                }, '修改'),
-
-
-
-
-
-              return `
-              <i-button type="primary" @click="goEdit(${index})" v-if="permission.Edit">修改</i-button>
-              <i-button type="warning" v-if="${states1} && permission.Inactive" @click="showInactive(${index})">注销</i-button>
-              <i-button type="success" v-if="${states2} && permission.Active" @click="showActive(${index})">激活</i-button>
-              <i-button type="error" @click="showDelete(${index})" v-if="permission.Delete">删除</i-button>
-              `
+            render (h, params) {
+              return h(listBtn, {
+                props: {
+                  params: params,
+                  cookieName: API.base
+                }
+              })
             }
           }
         ]
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('SemesterDesktop') === null || getCookie('SemesterDesktop') === undefined || getCookie('SemesterDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -219,7 +203,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('SemesterDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
               this.download = this.permission.Download
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
@@ -236,12 +220,24 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('SemesterDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
         this.download = this.permission.Download
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
+      bus.$on('forEdit', (index) => {
+        this.$router.push({ path: '/edit/' + this.pageList[index].id })
+      })
+      bus.$on('forInactive', (index) => {
+        this.showInactive(index)
+      })
+      bus.$on('forActive', (index) => {
+        this.showActive(index)
+      })
+      bus.$on('forDelete', (index) => {
+        this.showDelete(index)
+      })
     },
     methods: {
       showDelete (index) {
@@ -305,9 +301,6 @@
       },
       goAdd () {
         this.$router.push({ path: '/add' })
-      },
-      goEdit (index) {
-        this.$router.push({ path: '/edit/' + this.pageList[index].id })
       },
       goDelete () {
         this.$Loading.start()

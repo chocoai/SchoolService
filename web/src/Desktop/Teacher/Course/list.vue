@@ -106,11 +106,13 @@
   import Page from '../../Common/page.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
+  import listBtn from './listBtn.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
+  import { bus } from '../../Common/bus.js'
   export default {
     name: 'list',
-    components: { Copy, MenuList, Search, Page, Options, Loading },
+    components: { Copy, MenuList, Search, Page, Options, Loading, listBtn },
     data () {
       return {
         name: '',
@@ -138,8 +140,8 @@
             title: '序号',
             key: 'id',
             sortable: true,
-            render (row, column, index) {
-              return `${index + 1}`
+            render: (h, params) => {
+              return h('p', {}, params.index + 1)
             }
           },
           {
@@ -156,9 +158,9 @@
             title: '课程人数',
             key: 'amount',
             sortable: true,
-            render (row) {
-              const num = row.amount.toString() === '0' ? '不限' : row.amount + '人'
-              return `${num}`
+            render: (h, params) => {
+              const num = params.row.amount.toString() === '0' ? '不限' : params.row.amount + '人'
+              return h('p', {}, num)
             }
           },
           {
@@ -170,10 +172,15 @@
             title: '课程状态',
             key: 'state',
             sortable: true,
-            render (row) {
-              const color = row.state.toString() === '1' ? 'green' : row.state.toString() === '0' ? 'yellow' : 'red'
-              const text = row.state.toString() === '1' ? '可用' : row.state.toString() === '0' ? '停用' : '错误'
-              return `<tag type="dot" color="${color}">${text}</tag>`
+            render: (h, params) => {
+              const color = params.row.state.toString() === '1' ? 'green' : params.row.state.toString() === '0' ? 'yellow' : 'red'
+              const text = params.row.state.toString() === '1' ? '可用' : params.row.state.toString() === '0' ? '停用' : '错误'
+              return h('Tag', {
+                props: {
+                  type: 'dot',
+                  color: color
+                }
+              }, text)
             }
           },
           {
@@ -181,22 +188,20 @@
             key: 'state',
             align: 'center',
             width: 300,
-            render (row, column, index) {
-              const states1 = row.state.toString() === '1'
-              const states2 = row.state.toString() === '0'
-              return `
-              <i-button type="primary" @click="goEdit(${index})" v-if="permission.Edit">修改</i-button>
-              <i-button type="warning" v-if="${states1} && permission.Inactive" @click="showInactive(${index})">注销</i-button>
-              <i-button type="success" v-if="${states2} && permission.Active" @click="showActive(${index})">激活</i-button>
-              <i-button type="error" @click="showDelete(${index})" v-if="permission.Delete">删除</i-button>
-              `
+            render (h, params) {
+              return h(listBtn, {
+                props: {
+                  params: params,
+                  cookieName: API.base
+                }
+              })
             }
           }
         ]
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('CourseDesktop') === null || getCookie('CourseDesktop') === undefined || getCookie('CourseDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -208,7 +213,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('CourseDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
               this.download = this.permission.Download
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
@@ -225,12 +230,27 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('CourseDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
         this.download = this.permission.Download
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
+      bus.$on('forEdit', (index) => {
+        this.$router.push({ path: '/edit/' + this.pageList[index].id })
+      })
+      bus.$on('forInactive', (index) => {
+        this.showInactive(index)
+      })
+      bus.$on('forActive', (index) => {
+        this.showActive(index)
+      })
+      bus.$on('forDelete', (index) => {
+        this.showDelete(index)
+      })
+      bus.$on('goBack', (keyword, pageCurrent) => {
+        this.getQueryNoChange(keyword)
+      })
     },
     methods: {
       showDelete (index) {
@@ -294,9 +314,6 @@
       },
       goAdd () {
         this.$router.push({ path: '/add' })
-      },
-      goEdit (index) {
-        this.$router.push({ path: '/edit/' + this.pageList[index].id })
       },
       goDelete () {
         this.$Loading.start()
