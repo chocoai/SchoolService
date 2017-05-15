@@ -46,6 +46,7 @@
             ref="pages"
             @goList="getList"
             @savePageCurrent="saveCurrent"
+            @savePageCurrentPageSize="saveSize"
             @savePageCurrentAndKeyword="CurrentAndKeyword"
             :queryURL="query"
             :totalURL="total"
@@ -248,9 +249,9 @@
       bus.$on('forDelete', (index) => {
         this.showDelete(index)
       })
-      bus.$on('goBack', (keyword, pageCurrent) => {
-        this.getQueryNoChange(keyword)
-      })
+    },
+    mounted: function () {
+      this.getBack()
     },
     methods: {
       showDelete (index) {
@@ -276,6 +277,9 @@
         this.keyword = keyword
         this.$refs.pages.queryNoChange(keyword)
       },
+      getBack () {
+        this.$refs.pages.queryAccurate()
+      },
       getDownload (keyword) {
         this.keyword = keyword
         this.$Loading.start()
@@ -299,11 +303,18 @@
       },
       getList (pageList, pageTotal) {
         this.pageList = pageList
+        console.log(pageList)
         this.pageTotal = pageTotal
       },
       saveCurrent (pageCurrent) {
         this.$store.commit('save', {
           pageCurrent: pageCurrent
+        })
+      },
+      saveSize (pageCurrent, pageSize) {
+        this.$store.commit('save', {
+          pageCurrent: pageCurrent,
+          pageSize: pageSize
         })
       },
       CurrentAndKeyword (keyword, pageCurrent) {

@@ -62,7 +62,7 @@
       sizeChange (value) {
         this.pageSize = value
         this.pageCurrent = 1
-        this.$emit('savePageCurrent', this.pageCurrent)
+        this.$emit('savePageCurrentPageSize', this.pageCurrent, this.pageSize)
         this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
       },
       pageChange (value) {
@@ -80,6 +80,12 @@
         this.keyword = keyword
         this.$emit('savePageCurrentAndKeyword', this.keyword, this.pageCurrent)
         this.getLists(this.queryURL, this.totalURL, this.keyword, this.pageCurrent, this.pageSize)
+      },
+      queryAccurate () {
+        console.log(this.$store.state.keyword)
+        console.log(this.$store.state.pageCurrent)
+        console.log(this.$store.state.pageSize)
+        this.getLists(this.queryURL, this.totalURL, this.$store.state.keyword, this.$store.state.pageCurrent, this.$store.state.pageSize)
       }
     }
   }
