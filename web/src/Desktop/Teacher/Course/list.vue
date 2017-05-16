@@ -143,7 +143,7 @@
         keyword: '',
         pageCurrent: '',
         pageSize: '',
-        pageTotal: '',
+        pageTotal: 0,
         pageList: [],
         showLoad: true,
         del: false,
@@ -223,9 +223,9 @@
     },
     created: function () {
       this.keyword = this.$store.state.keyword
-      this.pageCurrent = this.$store.state.pageCurrent
-      this.pageSize = this.$store.state.pageSize
-      this.sizeChange(this.pageSize)
+      this.pageCurrent = parseInt(this.$store.state.pageCurrent)
+      this.pageSize = parseInt(this.$store.state.pageSize)
+      this.getLists()
       if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
@@ -299,7 +299,7 @@
                 window.location.href = '/MainDesktop'
               } else {
                 this.pageList = res.body
-                this.pageTotal = response.body
+                this.pageTotal = parseInt(response.body)
               }
             }, (response) => {
               this.$Notice.error({
