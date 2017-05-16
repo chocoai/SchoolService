@@ -10,7 +10,29 @@
       <Col>
         <div>
           <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.Save">新增</Button></div>
-          <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload" :download="download"></Search></div>
+          <div class="right">
+            <div class="left">
+              <Input type="text" v-model="keyword" placeholder="请输入关键词" style="width:270px;">
+              <span slot="prepend">关键词</span>
+              </Input>
+            </div>
+            <div class="right">
+              <Button-group>
+                <Button type="ghost" @click="goQuery">
+                  <Icon type="search"></Icon>
+                  搜索
+                </Button>
+                <Button type="ghost" @click="goQueryReset">
+                  <Icon type="refresh"></Icon>
+                  重置
+                </Button>
+                <Button type="ghost" @click="goDownload" v-if="permission.Download">
+                  <Icon type="android-download"></Icon>
+                  下载
+                </Button>
+              </Button-group>
+            </div>
+          </div>
         </div>
       </Col>
     </Row>
@@ -43,15 +65,14 @@
         </div>
         <div class="right">
           <Page
-            ref="pages"
-            @goList="getList"
-            @savePageCurrent="saveCurrent"
-            @savePageCurrentPageSize="saveSize"
-            @savePageCurrentAndKeyword="CurrentAndKeyword"
-            :queryURL="query"
-            :totalURL="total"
-            :keyword="keyword"
-          >
+            :total="pageTotal"
+            :current="pageCurrent"
+            :page-size="pageSize"
+            @on-page-size-change="sizeChange"
+            @on-change="pageChange"
+            show-sizer
+            show-elevator
+            show-total>
           </Page>
         </div>
       </div>
@@ -103,8 +124,6 @@
 <script>
   import Copy from '../../Common/copy.vue'
   import MenuList from '../Menu/menuList.vue'
-  import Search from '../../Common/search.vue'
-  import Page from '../../Common/page.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
   import listBtn from './listBtn.vue'
@@ -113,18 +132,19 @@
   import { bus } from '../../Common/bus.js'
   export default {
     name: 'list',
-    components: { Copy, MenuList, Search, Page, Options, Loading, listBtn },
+    components: { Copy, MenuList, Options, Loading, listBtn },
     data () {
       return {
         name: '',
         permission: [],
         menu: [],
-        download: false,
         query: API.query,
         total: API.total,
         keyword: '',
+        pageCurrent: 1,
+        pageSize: 10,
+        pageTotal: 0,
         pageList: [],
-        pageTotal: '',
         showLoad: true,
         del: false,
         inactive: false,
@@ -215,7 +235,6 @@
               API.permission
             ).then((res) => {
               this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-              this.download = this.permission.Download
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
               this.showLoad = false
@@ -232,11 +251,11 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-        this.download = this.permission.Download
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
+      this.goQuery()
       bus.$on('forEdit', (index) => {
         this.$router.push({ path: '/edit/' + this.pageList[index].id })
       })
@@ -251,9 +270,85 @@
       })
     },
     mounted: function () {
-      this.getBack()
+      this.goQueryAccurate()
     },
     methods: {
+      getLists (keyword, pageCurrent, pageSize) {
+        this.$http.get(
+          API.query,
+          { params: {
+            keyword: keyword,
+            pageCurrent: pageCurrent,
+            pageSize: pageSize
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((res) => {
+          if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
+          } else {
+            this.$http.get(
+              API.total,
+              { params: {
+                keyword: keyword
+              } },
+              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+            ).then((response) => {
+              if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+                this.$Notice.error({
+                  title: '登录过期或非法操作!'
+                })
+                window.location.href = '/MainDesktop'
+              } else {
+                this.pageList = res.body
+                this.pageTotal = response.body
+              }
+            }, (response) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
+          }
+        }, (res) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
+      },
+      sizeChange (value) {
+        this.pageSize = value
+        this.pageCurrent = 1
+        this.$store.commit('save', {
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+      },
+      pageChange (value) {
+        this.pageCurrent = value
+        this.$store.commit('save', {
+          pageCurrent: this.pageCurrent
+        })
+        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+      },
+      goQueryReset () {
+        this.pageCurrent = 1
+        this.keyword = ''
+        this.$store.commit('save', {
+          pageCurrent: this.pageCurrent,
+          keyword: this.keyword
+        })
+        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+      },
+      goQuery () {
+        this.$store.commit('save', {
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize,
+          keyword: this.keyword
+        })
+        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+      },
+      goQueryAccurate () {
+        this.getLists(this.$store.state.keyword, this.$store.state.pageCurrent, this.$store.state.pageSize)
+      },
       showDelete (index) {
         this.del = true
         this.index = index
@@ -269,22 +364,10 @@
         this.index = index
         this.names = this.pageList[index].name
       },
-      getQuery (keyword) {
-        this.keyword = keyword
-        this.$refs.pages.query(keyword)
-      },
-      getQueryNoChange (keyword) {
-        this.keyword = keyword
-        this.$refs.pages.queryNoChange(keyword)
-      },
-      getBack () {
-        this.$refs.pages.queryAccurate()
-      },
-      getDownload (keyword) {
-        this.keyword = keyword
+      goDownload () {
         this.$Loading.start()
         this.$Message.info('正在进行导出操作，请稍后...')
-        window.location.href = API.download + '?keyword=' + keyword
+        window.location.href = API.download + '?keyword=' + this.keyword
       },
       getBorder (border) {
         this.border = border
@@ -300,28 +383,6 @@
           this.height = 450
           this.size = 'small'
         }
-      },
-      getList (pageList, pageTotal) {
-        this.pageList = pageList
-        console.log(pageList)
-        this.pageTotal = pageTotal
-      },
-      saveCurrent (pageCurrent) {
-        this.$store.commit('save', {
-          pageCurrent: pageCurrent
-        })
-      },
-      saveSize (pageCurrent, pageSize) {
-        this.$store.commit('save', {
-          pageCurrent: pageCurrent,
-          pageSize: pageSize
-        })
-      },
-      CurrentAndKeyword (keyword, pageCurrent) {
-        this.$store.commit('save', {
-          keyword: keyword,
-          pageCurrent: pageCurrent
-        })
       },
       goAdd () {
         this.$router.push({ path: '/add' })
