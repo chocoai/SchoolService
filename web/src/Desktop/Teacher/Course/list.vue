@@ -11,12 +11,12 @@
         <div>
           <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.Save">新增</Button></div>
           <div class="right">
-            <div class="left">
+            <div class="queryLeft">
               <Input type="text" v-model="keyword" placeholder="请输入关键词" style="width:270px;">
               <span slot="prepend">关键词</span>
               </Input>
             </div>
-            <div class="right">
+            <div class="queryRight">
               <Button-group>
                 <Button type="ghost" @click="goQuery">
                   <Icon type="search"></Icon>
@@ -313,6 +313,26 @@
           })
         })
       },
+      goQuery () {
+        this.$store.commit('save', {
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize,
+          keyword: this.keyword
+        })
+        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+      },
+      goQueryReset () {
+        this.pageCurrent = 1
+        this.keyword = ''
+        this.$store.commit('save', {
+          pageCurrent: this.pageCurrent,
+          keyword: this.keyword
+        })
+        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+      },
+      goQueryAccurate () {
+        this.getLists(this.$store.state.keyword, this.$store.state.pageCurrent, this.$store.state.pageSize)
+      },
       sizeChange (value) {
         this.pageSize = value
         this.pageCurrent = 1
@@ -329,26 +349,6 @@
         })
         this.getLists(this.keyword, this.pageCurrent, this.pageSize)
       },
-      goQueryReset () {
-        this.pageCurrent = 1
-        this.keyword = ''
-        this.$store.commit('save', {
-          pageCurrent: this.pageCurrent,
-          keyword: this.keyword
-        })
-        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
-      },
-      goQuery () {
-        this.$store.commit('save', {
-          pageCurrent: this.pageCurrent,
-          pageSize: this.pageSize,
-          keyword: this.keyword
-        })
-        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
-      },
-      goQueryAccurate () {
-        this.getLists(this.$store.state.keyword, this.$store.state.pageCurrent, this.$store.state.pageSize)
-      },
       showDelete (index) {
         this.del = true
         this.index = index
@@ -363,11 +363,6 @@
         this.active = true
         this.index = index
         this.names = this.pageList[index].name
-      },
-      goDownload () {
-        this.$Loading.start()
-        this.$Message.info('正在进行导出操作，请稍后...')
-        window.location.href = API.download + '?keyword=' + this.keyword
       },
       getBorder (border) {
         this.border = border
@@ -386,6 +381,11 @@
       },
       goAdd () {
         this.$router.push({ path: '/add' })
+      },
+      goDownload () {
+        this.$Loading.start()
+        this.$Message.info('正在进行导出操作，请稍后...')
+        window.location.href = API.download + '?keyword=' + this.keyword
       },
       goDelete () {
         this.$Loading.start()
@@ -525,6 +525,12 @@
   .right{
     margin: 15px;
     border-radius: 4px;
+    float: right;
+  }
+  .queryLeft{
+    float: left;
+  }
+  .queryRight{
     float: right;
   }
 </style>
