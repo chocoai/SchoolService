@@ -141,9 +141,9 @@
         query: API.query,
         total: API.total,
         keyword: '',
-        pageCurrent: 1,
-        pageSize: 10,
-        pageTotal: 0,
+        pageCurrent: '',
+        pageSize: '',
+        pageTotal: '',
         pageList: [],
         showLoad: true,
         del: false,
@@ -222,6 +222,10 @@
       }
     },
     created: function () {
+      this.keyword = this.$store.state.keyword
+      this.pageCurrent = this.$store.state.pageCurrent
+      this.pageSize = this.$store.state.pageSize
+      this.getLists(this.keyword, this.pageCurrent, this.pageSize)
       if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
@@ -255,7 +259,6 @@
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
-      this.goQuery()
       bus.$on('forEdit', (index) => {
         this.$router.push({ path: '/edit/' + this.pageList[index].id })
       })
@@ -268,9 +271,6 @@
       bus.$on('forDelete', (index) => {
         this.showDelete(index)
       })
-    },
-    mounted: function () {
-      this.goQueryAccurate()
     },
     methods: {
       getLists (keyword, pageCurrent, pageSize) {
@@ -314,10 +314,11 @@
         })
       },
       goQuery () {
+        this.pageCurrent = 1
         this.$store.commit('save', {
+          keyword: this.keyword,
           pageCurrent: this.pageCurrent,
-          pageSize: this.pageSize,
-          keyword: this.keyword
+          pageSize: this.pageSize
         })
         this.getLists(this.keyword, this.pageCurrent, this.pageSize)
       },
@@ -325,18 +326,17 @@
         this.pageCurrent = 1
         this.keyword = ''
         this.$store.commit('save', {
+          keyword: this.keyword,
           pageCurrent: this.pageCurrent,
-          keyword: this.keyword
+          pageSize: this.pageSize
         })
         this.getLists(this.keyword, this.pageCurrent, this.pageSize)
-      },
-      goQueryAccurate () {
-        this.getLists(this.$store.state.keyword, this.$store.state.pageCurrent, this.$store.state.pageSize)
       },
       sizeChange (value) {
         this.pageSize = value
         this.pageCurrent = 1
         this.$store.commit('save', {
+          keyword: this.keyword,
           pageCurrent: this.pageCurrent,
           pageSize: this.pageSize
         })
@@ -345,7 +345,9 @@
       pageChange (value) {
         this.pageCurrent = value
         this.$store.commit('save', {
-          pageCurrent: this.pageCurrent
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
         })
         this.getLists(this.keyword, this.pageCurrent, this.pageSize)
       },
