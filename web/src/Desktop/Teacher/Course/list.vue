@@ -225,7 +225,7 @@
       this.keyword = this.$store.state.keyword
       this.pageCurrent = this.$store.state.pageCurrent
       this.pageSize = this.$store.state.pageSize
-      this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+      this.sizeChange(this.pageSize)
       if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
@@ -273,13 +273,13 @@
       })
     },
     methods: {
-      getLists (keyword, pageCurrent, pageSize) {
+      getLists () {
         this.$http.get(
           API.query,
           { params: {
-            keyword: keyword,
-            pageCurrent: pageCurrent,
-            pageSize: pageSize
+            keyword: this.$store.state.keyword,
+            pageCurrent: this.$store.state.pageCurrent,
+            pageSize: this.$store.state.pageSize
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((res) => {
@@ -288,7 +288,7 @@
             this.$http.get(
               API.total,
               { params: {
-                keyword: keyword
+                keyword: this.$store.state.keyword
               } },
               { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
             ).then((response) => {
@@ -320,7 +320,7 @@
           pageCurrent: this.pageCurrent,
           pageSize: this.pageSize
         })
-        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+        this.getLists()
       },
       goQueryReset () {
         this.pageCurrent = 1
@@ -330,7 +330,7 @@
           pageCurrent: this.pageCurrent,
           pageSize: this.pageSize
         })
-        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+        this.getLists()
       },
       sizeChange (value) {
         this.pageSize = value
@@ -340,7 +340,7 @@
           pageCurrent: this.pageCurrent,
           pageSize: this.pageSize
         })
-        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+        this.getLists()
       },
       pageChange (value) {
         this.pageCurrent = value
@@ -349,7 +349,7 @@
           pageCurrent: this.pageCurrent,
           pageSize: this.pageSize
         })
-        this.getLists(this.keyword, this.pageCurrent, this.pageSize)
+        this.getLists()
       },
       showDelete (index) {
         this.del = true
