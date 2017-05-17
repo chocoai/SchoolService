@@ -55,12 +55,14 @@ router.afterEach((to, from, next) => {
 const store = new Vuex.Store({
   state: {
     keyword: '',
-    pageCurrent: '1'
+    pageCurrent: '1',
+    pageSize: '10'
   },
   mutations: {
     save (state, page) {
       state.keyword = page.keyword
       state.pageCurrent = page.pageCurrent
+      state.pageSize = page.pageSize
     }
   }
 })

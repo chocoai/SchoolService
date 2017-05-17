@@ -5,6 +5,7 @@ import VueResource from 'vue-resource'
 import Vuex from 'vuex'
 import Add from './add.vue'
 import List from './list.vue'
+import * as API from './API.js'
 import { getCookie } from '../../../cookieUtil.js'
 import 'iview/dist/styles/iview.css'   // 使用 CSS
 Vue.use(VueRouter)
@@ -17,7 +18,7 @@ const routes = [
   { path: '/add',
     component: Add,
     beforeEnter: (to, from, next) => {
-      if (JSON.parse(JSON.parse(getCookie('RoomStudentDesktop'))).Save) {
+      if (JSON.parse(JSON.parse(getCookie(API.base))).Save) {
         next()
       } else {
         next({ path: '/' })
@@ -44,6 +45,7 @@ const store = new Vuex.Store({
   state: {
     keyword: '',
     pageCurrent: '1',
+    pageSize: '10',
     keyword1: '',
     pageCurrent1: '1',
     keyword2: '',
@@ -53,6 +55,7 @@ const store = new Vuex.Store({
     save (state, page) {
       state.keyword = page.keyword
       state.pageCurrent = page.pageCurrent
+      state.pageSize = page.pageSize
       state.keyword1 = page.keyword1
       state.pageCurrent1 = page.pageCurrent1
       state.keyword2 = page.keyword2

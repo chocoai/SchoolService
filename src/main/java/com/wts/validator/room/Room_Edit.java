@@ -25,8 +25,8 @@ public class Room_Edit implements Interceptor {
                     ) {
                 inv.getController().renderText("该班级已存在!");
             } else if (object.get("name").equals(year)
-                    && object.get("order").equals(order)
-                    && object.get("state").equals(state)
+                    && object.getOrder().toString().equals(order)
+                    && object.getState().toString().equals(state)
                     ) {
                 inv.getController().renderText("未发现修改内容!");
             } else {

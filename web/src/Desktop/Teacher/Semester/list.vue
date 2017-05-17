@@ -1,33 +1,55 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="semester" :name="name" three="列表" :menu="menu"></MenuList></Col>
+      <Col><MenuList :active="base" :name="name" three="列表" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
     </Row>
     <Row v-show="!showLoad">
       <Col>
-        <div>
-          <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.Save">新增</Button></div>
-          <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload" :download="download"></Search></div>
+      <div>
+        <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.Save">新增</Button></div>
+        <div class="right">
+          <div class="queryLeft">
+            <Input type="text" v-model="keyword" placeholder="请输入关键词" style="width:270px;">
+            <span slot="prepend">关键词</span>
+            </Input>
+          </div>
+          <div class="queryRight">
+            <Button-group>
+              <Button type="ghost" @click="goQuery">
+                <Icon type="search"></Icon>
+                搜索
+              </Button>
+              <Button type="ghost" @click="goQueryReset">
+                <Icon type="refresh"></Icon>
+                重置
+              </Button>
+              <Button type="ghost" @click="goDownload" v-if="permission.Download">
+                <Icon type="android-download"></Icon>
+                下载
+              </Button>
+            </Button-group>
+          </div>
         </div>
+      </div>
       </Col>
     </Row>
     <Row v-show="!showLoad">
       <Col>
-        <div class="layout-content">
-          <Table
-            highlight-row
-            :height="height"
-            :context="self"
-            :border="border"
-            :stripe="stripe"
-            :size="size"
-            :columns="columns"
-            :data="pageList">
-          </Table>
-        </div>
+      <div class="layout-content">
+        <Table
+          highlight-row
+          :height="height"
+          :context="self"
+          :border="border"
+          :stripe="stripe"
+          :size="size"
+          :columns="columns"
+          :data="pageList">
+        </Table>
+      </div>
       </Col>
     </Row>
     <Row v-show="!showLoad">
@@ -43,14 +65,14 @@
         </div>
         <div class="right">
           <Page
-            ref="pages"
-            @goList="getList"
-            @savePageCurrent="saveCurrent"
-            @savePageCurrentAndKeyword="CurrentAndKeyword"
-            :queryURL="query"
-            :totalURL="total"
-            :keyword="keyword"
-          >
+            :total="pageTotal"
+            :current="pageCurrent"
+            :page-size="pageSize"
+            @on-page-size-change="sizeChange"
+            @on-change="pageChange"
+            show-sizer
+            show-elevator
+            show-total>
           </Page>
         </div>
       </div>
@@ -63,12 +85,25 @@
         <span>删除确认</span>
       </p>
       <div style="text-align:center">
-        <p>学期：{{names}}删除后，关联信息会一并删除。</p>
+        <p>课程：{{names}}删除后，关联信息会一并删除。</p>
         <p>该功能必须慎用！</p>
         <p>是否继续删除？</p>
       </div>
       <div slot="footer">
         <Button type="error" size="large" long @click="goDelete">删除</Button>
+      </div>
+    </Modal>
+    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="information-circled"></Icon>
+        <span>注销确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>课程：{{names}}注销后，关联信息会一并失效。</p>
+        <p>是否继续注销？</p>
+      </div>
+      <div slot="footer">
+        <Button type="warning" size="large" long @click="goInactive">注销</Button>
       </div>
     </Modal>
     <Modal v-model="active" width="360" :styles="{top: '40px'}">
@@ -77,23 +112,11 @@
         <span>激活确认</span>
       </p>
       <div style="text-align:center">
-        <p>学期：{{names}}激活后，原激活学期将注销。</p>
+        <p>课程：{{names}}激活后，请重新设置关联信息。</p>
         <p>是否继续激活？</p>
       </div>
       <div slot="footer">
         <Button type="success" size="large" long @click="goActive">激活</Button>
-      </div>
-    </Modal>
-    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
-      <p slot="header" style="color:#66CDAA;text-align:center">
-        <Icon type="information-circled"></Icon>
-        <span>注销确认</span>
-      </p>
-      <div style="text-align:center">
-        <p>是否继续注销？</p>
-      </div>
-      <div slot="footer">
-        <Button type="success" size="large" long @click="goInactive">注销</Button>
       </div>
     </Modal>
   </div>
@@ -101,32 +124,32 @@
 <script>
   import Copy from '../../Common/copy.vue'
   import MenuList from '../Menu/menuList.vue'
-  import Search from '../../Common/search.vue'
-  import Page from '../../Common/page.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
-  import listBtn from './listBtn.vue'
+  import listBtn from '../../Common/listBtn.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
   import { bus } from '../../Common/bus.js'
   export default {
     name: 'list',
-    components: { Copy, MenuList, Search, Page, Options, Loading, listBtn },
+    components: { Copy, MenuList, Options, Loading, listBtn },
     data () {
       return {
         name: '',
+        base: API.base,
         permission: [],
         menu: [],
-        download: false,
         query: API.query,
         total: API.total,
         keyword: '',
+        pageCurrent: '',
+        pageSize: '',
+        pageTotal: 0,
         pageList: [],
-        pageTotal: '',
         showLoad: true,
         del: false,
-        active: false,
         inactive: false,
+        active: false,
         index: '',
         names: '',
         border: false,
@@ -182,7 +205,8 @@
               return h(listBtn, {
                 props: {
                   params: params,
-                  cookieName: API.base
+                  cookieName: API.base,
+                  url: API.permission
                 }
               })
             }
@@ -191,6 +215,10 @@
       }
     },
     created: function () {
+      this.keyword = this.$store.state.keyword
+      this.pageCurrent = parseInt(this.$store.state.pageCurrent)
+      this.pageSize = parseInt(this.$store.state.pageSize)
+      this.getLists()
       if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
@@ -204,7 +232,6 @@
               API.permission
             ).then((res) => {
               this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-              this.download = this.permission.Download
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
               this.showLoad = false
@@ -221,7 +248,6 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-        this.download = this.permission.Download
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
@@ -240,6 +266,84 @@
       })
     },
     methods: {
+      getLists () {
+        this.$http.get(
+          API.query,
+          { params: {
+            keyword: this.$store.state.keyword,
+            pageCurrent: this.$store.state.pageCurrent,
+            pageSize: this.$store.state.pageSize
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((res) => {
+          if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
+          } else {
+            this.$http.get(
+              API.total,
+              { params: {
+                keyword: this.$store.state.keyword
+              } },
+              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+            ).then((response) => {
+              if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+                this.$Notice.error({
+                  title: '登录过期或非法操作!'
+                })
+                window.location.href = '/MainDesktop'
+              } else {
+                this.pageList = res.body
+                this.pageTotal = parseInt(response.body)
+              }
+            }, (response) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
+          }
+        }, (res) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
+      },
+      goQuery () {
+        this.pageCurrent = 1
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists()
+      },
+      goQueryReset () {
+        this.pageCurrent = 1
+        this.keyword = ''
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists()
+      },
+      sizeChange (value) {
+        this.pageSize = value
+        this.pageCurrent = 1
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists()
+      },
+      pageChange (value) {
+        this.pageCurrent = value
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists()
+      },
       showDelete (index) {
         this.del = true
         this.index = index
@@ -254,20 +358,6 @@
         this.active = true
         this.index = index
         this.names = this.pageList[index].name
-      },
-      getQuery (keyword) {
-        this.keyword = keyword
-        this.$refs.pages.query(keyword)
-      },
-      getQueryNoChange (keyword) {
-        this.keyword = keyword
-        this.$refs.pages.queryNoChange(keyword)
-      },
-      getDownload (keyword) {
-        this.keyword = keyword
-        this.$Loading.start()
-        this.$Message.info('正在进行导出操作，请稍后...')
-        window.location.href = API.download + '?keyword=' + keyword
       },
       getBorder (border) {
         this.border = border
@@ -284,23 +374,13 @@
           this.size = 'small'
         }
       },
-      getList (pageList, pageTotal) {
-        this.pageList = pageList
-        this.pageTotal = pageTotal
-      },
-      saveCurrent (pageCurrent) {
-        this.$store.commit('save', {
-          pageCurrent: pageCurrent
-        })
-      },
-      CurrentAndKeyword (keyword, pageCurrent) {
-        this.$store.commit('save', {
-          keyword: keyword,
-          pageCurrent: pageCurrent
-        })
-      },
       goAdd () {
         this.$router.push({ path: '/add' })
+      },
+      goDownload () {
+        this.$Loading.start()
+        this.$Message.info('正在进行导出操作，请稍后...')
+        window.location.href = API.download + '?keyword=' + this.keyword
       },
       goDelete () {
         this.$Loading.start()
@@ -314,7 +394,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
+            this.getLists()
             this.$Notice.success({
               title: '操作完成!',
               desc: '学期：' + this.pageList[this.index].name + '已删除！'
@@ -350,7 +430,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
+            this.getLists()
             this.$Notice.success({
               title: '操作完成!',
               desc: '学期：' + this.pageList[this.index].name + '已注销！'
@@ -386,7 +466,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
+            this.getLists()
             this.$Notice.success({
               title: '操作完成!',
               desc: '学期：' + this.pageList[this.index].name + '已激活！'
@@ -440,6 +520,12 @@
   .right{
     margin: 15px;
     border-radius: 4px;
+    float: right;
+  }
+  .queryLeft{
+    float: left;
+  }
+  .queryRight{
     float: right;
   }
 </style>

@@ -27,9 +27,9 @@ public class Course_Edit implements Interceptor {
         inv.getController().renderText("该名称已存在!");
       } else if(object.getStr("name").equals(name)
               && object.getStr("detail").equals(detail)
-              && object.getStr("amount").equals(amount)
-              && object.getStr("type").equals(type)
-              && object.getStr("state").equals(state)
+              && object.getAmount().toString().equals(amount)
+              && object.getType().toString().equals(type)
+              && object.getState().toString().equals(state)
               ){
         inv.getController().renderText("未发现修改内容!");
       }else {

@@ -32,7 +32,7 @@ public class Student_Edit implements Interceptor {
               && object.getStr("number").equals(number)
               && object.getStr("code").equals(code)
               && object.getStr("address").equals(address)
-              && object.getStr("state").equals(state)
+              && object.getState().toString().equals(state)
               ){
         inv.getController().renderText("未发现修改内容!");
       }else {

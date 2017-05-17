@@ -18,7 +18,7 @@ public class Teacher_Edit implements Interceptor {
       Teacher object = Teacher.dao.findById(id);
       if(object.getStr("name").equals(name)
               && object.getStr("mobile").equals(mobile)
-              && object.get("type").toString().equals(type)
+              && object.getType().toString().equals(type)
               ){
         inv.getController().renderText("未发现修改内容!");
       }else {

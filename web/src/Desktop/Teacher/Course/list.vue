@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="course" :name="name" three="列表" :menu="menu"></MenuList></Col>
+      <Col><MenuList :active="base" :name="name" three="列表" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
@@ -126,7 +126,7 @@
   import MenuList from '../Menu/menuList.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
-  import listBtn from './listBtn.vue'
+  import listBtn from '../../Common/listBtn.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
   import { bus } from '../../Common/bus.js'
@@ -136,6 +136,7 @@
     data () {
       return {
         name: '',
+        base: API.base,
         permission: [],
         menu: [],
         query: API.query,
@@ -213,7 +214,8 @@
               return h(listBtn, {
                 props: {
                   params: params,
-                  cookieName: API.base
+                  cookieName: API.base,
+                  url: API.permission
                 }
               })
             }
@@ -401,7 +403,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
+            this.getLists()
             this.$Notice.success({
               title: '操作完成!',
               desc: '课程：' + this.pageList[this.index].name + '已删除！'
@@ -437,7 +439,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
+            this.getLists()
             this.$Notice.success({
               title: '操作完成!',
               desc: '课程：' + this.pageList[this.index].name + '已注销！'
@@ -473,7 +475,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
+            this.getLists()
             this.$Notice.success({
               title: '操作完成!',
               desc: '课程：' + this.pageList[this.index].name + '已激活！'

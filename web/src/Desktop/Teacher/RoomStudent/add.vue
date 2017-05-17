@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="RoomStudent" :name="name" three="新增" :menu="menu"></MenuList></Col>
+      <Col><MenuList :active="base" :name="name" three="新增" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
@@ -101,6 +101,7 @@
     data () {
       return {
         name: '',
+        base: API.base,
         permission: [],
         menu: [],
         query1: API.queryRoom,
@@ -141,7 +142,7 @@
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('RoomStudentDesktop') === null || getCookie('RoomStudentDesktop') === undefined || getCookie('RoomStudentDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -153,7 +154,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('RoomStudentDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
               this.showLoad = false
@@ -169,7 +170,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('RoomStudentDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false

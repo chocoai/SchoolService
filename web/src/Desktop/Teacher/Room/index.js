@@ -6,6 +6,7 @@ import Vuex from 'vuex'
 import Add from './add.vue'
 import List from './list.vue'
 import Edit from './edit.vue'
+import * as API from './API.js'
 import { getCookie } from '../../../cookieUtil.js'
 import 'iview/dist/styles/iview.css'   // 使用 CSS
 Vue.use(VueRouter)
@@ -18,7 +19,7 @@ const routes = [
   { path: '/add',
     component: Add,
     beforeEnter: (to, from, next) => {
-      if (JSON.parse(JSON.parse(getCookie('RoomDesktop'))).Save) {
+      if (JSON.parse(JSON.parse(getCookie(API.base))).Save) {
         next()
       } else {
         next({ path: '/' })
@@ -28,7 +29,7 @@ const routes = [
   { path: '/edit/:id',
     component: Edit,
     beforeEnter: (to, from, next) => {
-      if (JSON.parse(JSON.parse(getCookie('RoomDesktop'))).Edit) {
+      if (JSON.parse(JSON.parse(getCookie(API.base))).Edit) {
         next()
       } else {
         next({ path: '/' })
@@ -54,12 +55,14 @@ router.afterEach((to, from, next) => {
 const store = new Vuex.Store({
   state: {
     keyword: '',
-    pageCurrent: '1'
+    pageCurrent: '1',
+    pageSize: '10'
   },
   mutations: {
     save (state, page) {
       state.keyword = page.keyword
       state.pageCurrent = page.pageCurrent
+      state.pageSize = page.pageSize
     }
   }
 })

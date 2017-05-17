@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="room" :name="name" three="新增" :menu="menu"></MenuList></Col>
+      <Col><MenuList :active="base" :name="name" three="新增" :menu="menu"></MenuList></Col>
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
@@ -50,6 +50,7 @@
           ]
         },
         name: '',
+        base: API.base,
         permission: [],
         menu: [],
         showLoad: true,
@@ -62,7 +63,7 @@
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('RoomDesktop') === null || getCookie('RoomDesktop') === undefined || getCookie('RoomDesktop') === '') {
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -74,7 +75,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('RoomDesktop')))
+              this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
             }, (res) => {
@@ -89,7 +90,7 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('RoomDesktop')))
+        this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }

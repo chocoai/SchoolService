@@ -7,14 +7,14 @@
   </div>
 </template>
 <script>
-  import { getCookie } from '../../../cookieUtil.js'
-  import { bus } from '../../Common/bus.js'
-  import * as API from './API.js'
+  import { getCookie } from '../../cookieUtil.js'
+  import { bus } from './bus.js'
   export default {
-    props: ['params', 'cookieName'],
+    props: ['params', 'cookieName', 'url'],
     data () {
       return {
         cookieName: '',
+        url: '',
         Edit: false,
         Inactive: false,
         Active: false,
@@ -27,7 +27,7 @@
       const states2 = this.params.row.state.toString() === '0'
       if (getCookie(this.cookieName) === null || getCookie(this.cookieName) === undefined || getCookie(this.cookieName) === '') {
         this.$http.get(
-          API.permission
+          this.url
         ).then((res) => {
           this.permission = JSON.parse(JSON.parse(getCookie(this.cookieName)))
           this.Edit = this.permission.Edit

@@ -12,12 +12,12 @@
             <Icon type="stats-bars"></Icon>
             基础管理
           </template>
-          <Menu-item name="semester" v-if="menu.SemesterDesktop_Page">学期</Menu-item>
-          <Menu-item name="course" v-if="menu.CourseDesktop_Page">课程</Menu-item>
-          <Menu-item name="room" v-if="menu.RoomDesktop_Page">班级</Menu-item>
-          <Menu-item name="teacher" v-if="menu.TeacherDesktop_Page">教师</Menu-item>
-          <Menu-item name="student" v-if="menu.StudentDesktop_Page">学生</Menu-item>
-          <Menu-item name="parent" v-if="menu.ParentDesktop_Page">家长</Menu-item>
+          <Menu-item name="SemesterDesktop" v-if="menu.SemesterDesktop_Page">学期</Menu-item>
+          <Menu-item name="CourseDesktop" v-if="menu.CourseDesktop_Page">课程</Menu-item>
+          <Menu-item name="RoomDesktop" v-if="menu.RoomDesktop_Page">班级</Menu-item>
+          <Menu-item name="TeacherDesktop" v-if="menu.TeacherDesktop_Page">教师</Menu-item>
+          <Menu-item name="StudentDesktop" v-if="menu.StudentDesktop_Page">学生</Menu-item>
+          <Menu-item name="ParentDesktop" v-if="menu.ParentDesktop_Page">家长</Menu-item>
         </Submenu>
         <Submenu name="relation">
           <template slot="title">
@@ -25,7 +25,7 @@
             关系管理
           </template>
           <Menu-item name="StudentParentIdentity" v-if="menu.StudentParentIdentityDesktop_Page">学生_家长_身份</Menu-item>
-          <Menu-item name="RoomStudent" v-if="menu.RoomStudentDesktop_Page">班级_学生</Menu-item>
+          <Menu-item name="RoomStudentDesktop" v-if="menu.RoomStudentDesktop_Page">班级_学生</Menu-item>
           <Menu-item name="CourseRoomTeacher" v-if="menu.CourseRoomTeacherDesktop_Page">课程_班级_教师</Menu-item>
         </Submenu>
         <Submenu name="information">
@@ -83,21 +83,21 @@
         switch (this.active) {
           case 'home':
             return '首页'
-          case 'semester':
+          case 'SemesterDesktop':
             return '基础管理'
-          case 'course':
+          case 'CourseDesktop':
             return '基础管理'
-          case 'room':
+          case 'RoomDesktop':
             return '基础管理'
-          case 'teacher':
+          case 'TeacherDesktop':
             return '基础管理'
-          case 'student':
+          case 'StudentDesktop':
             return '基础管理'
-          case 'parent':
+          case 'ParentDesktop':
             return '基础管理'
           case 'StudentParentIdentity':
             return '关系管理'
-          case 'RoomStudent':
+          case 'RoomStudentDesktop':
             return '关系管理'
           case 'CourseRoomTeacher':
             return '关系管理'
@@ -121,21 +121,21 @@
         switch (this.active) {
           case 'home':
             return ''
-          case 'semester':
+          case 'SemesterDesktop':
             return '学期'
-          case 'course':
+          case 'CourseDesktop':
             return '课程'
-          case 'room':
+          case 'RoomDesktop':
             return '班级'
-          case 'teacher':
+          case 'TeacherDesktop':
             return '教师'
-          case 'student':
+          case 'StudentDesktop':
             return '学生'
-          case 'parent':
+          case 'ParentDesktop':
             return '家长'
           case 'StudentParentIdentity':
             return '学生_家长_身份'
-          case 'RoomStudent':
+          case 'RoomStudentDesktop':
             return '班级_学生'
           case 'CourseRoomTeacher':
             return '课程_班级_教师'
@@ -162,28 +162,28 @@
           case 'home':
             window.location.href = '../MainDesktop/Teacher_Home'
             break
-          case 'semester':
+          case 'SemesterDesktop':
             window.location.href = '/SemesterDesktop/Page'
             break
-          case 'course':
+          case 'CourseDesktop':
             window.location.href = '/CourseDesktop/Page'
             break
-          case 'room':
+          case 'RoomDesktop':
             window.location.href = '/RoomDesktop/Page'
             break
-          case 'teacher':
+          case 'TeacherDesktop':
             window.location.href = '/TeacherDesktop/Page'
             break
-          case 'student':
+          case 'StudentDesktop':
             window.location.href = '/StudentDesktop/Page'
             break
-          case 'parent':
+          case 'ParentDesktop':
             window.location.href = '/ParentDesktop/Page'
             break
           case 'StudentParentIdentity':
             window.location.href = '/StudentParentIdentityDesktop/Page'
             break
-          case 'RoomStudent':
+          case 'RoomStudentDesktop':
             window.location.href = '/RoomStudentDesktop/Page'
             break
           case 'CourseRoomTeacher':

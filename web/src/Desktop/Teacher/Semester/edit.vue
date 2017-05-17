@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active="semester" :name="name" three="修改" :menu="menu"></MenuList></Col>
+      <Col><MenuList :active="base" :name="name" three="修改" :menu="menu"></MenuList></Col>
     </Row>
     <Row>
       <Col span="8">&nbsp;</Col>
@@ -71,6 +71,7 @@
           ]
         },
         name: '',
+        base: API.base,
         permission: [],
         menu: [],
         showLoad: true,
