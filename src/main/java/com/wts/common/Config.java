@@ -64,9 +64,9 @@ public class Config extends JFinalConfig {
 //        me.add("/Teacher", TeacherController.class);
 //        me.add("/teacherMessage", TeacherMessageController.class);
 //        me.add("/teacherMessageRead", TeacherMessageReadController.class);
-//        me.add("/room", RoomController.class);
-//        me.add("/student", StudentController.class);
-//        me.add("/parent", ParentController.class);
+//        me.add("/Room", RoomController.class);
+//        me.add("/Student", StudentController.class);
+//        me.add("/Parent", ParentController.class);
 //        me.add("/relation", RelationController.class);
 
 //        me.add("/roomwork", RoomworkController.class);

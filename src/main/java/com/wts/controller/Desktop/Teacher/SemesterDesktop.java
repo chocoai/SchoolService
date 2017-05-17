@@ -10,9 +10,9 @@ import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
-import com.wts.validator.semester.Semester_Edit;
-import com.wts.validator.semester.Semester_Exist;
-import com.wts.validator.semester.Semester_Save;
+import com.wts.validator.Semester.Semester_Edit;
+import com.wts.validator.Semester.Semester_Exist;
+import com.wts.validator.Semester.Semester_Save;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -95,7 +95,7 @@ public class SemesterDesktop extends Controller {
       renderText("该学期已为当前学期!");
     } else {
       object.set("state", 1).update();
-      Db.update("UPDATE semester SET state = 0 WHERE id <> ?", getPara("id"));
+      Db.update("UPDATE Semester SET state = 0 WHERE id <> ?", getPara("id"));
       logger.warn("function:"+this.getClass().getSimpleName()+"/Active;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";semester_id:"+getPara("id")+";");
       renderText("OK");
     }
@@ -182,7 +182,7 @@ public class SemesterDesktop extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkNameForAdd() {
-    if (Db.find("SELECT * FROM semester WHERE name = ?", getPara("name")).size() != 0) {
+    if (Db.find("SELECT * FROM Semester WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该学期名称已存在!");
     } else {
       renderText("OK");
@@ -207,5 +207,11 @@ public class SemesterDesktop extends Controller {
    */
   public static Semester getNow() {
     return Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1");
+  }
+  /**
+   * 当前学期
+   */
+  public void init() {
+    renderText(Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1").toJson());
   }
 }

@@ -58,7 +58,7 @@
 //    }
 //    public void forParent() throws WeixinException {
 //        // 检测session中是否存在teacher
-//        if (getSessionAttr("parent") == null || ((Enterprise) getSessionAttr("parent")).getIsParent() != 1) {
+//        if (getSessionAttr("Parent") == null || ((Enterprise) getSessionAttr("Parent")).getIsParent() != 1) {
 //            // 检测cookie中是否存在EnterpriseId
 //            if (getCookie("die") == null || getCookie("die").equals("")) {
 //                // 检测是否来自微信请求
@@ -67,7 +67,7 @@
 //                    Enterprise enterprise = Enterprise.dao.findFirst("select * from enterprise where state=1 and isParent=1 and userId=?", user.getUserId());
 //                    // 检测是否有权限
 //                    if (enterprise != null) {
-//                        setSessionAttr("parent", enterprise);
+//                        setSessionAttr("Parent", enterprise);
 //                        setCookie("die", enterprise.getId().toString(), 60 * 30);
 //                        render("/static/RoomworkForParent.html");
 //                    } else {
@@ -78,7 +78,7 @@
 //                }
 //            } else {
 //                Enterprise enterprise = Enterprise.dao.findById(getCookie("die"));
-//                setSessionAttr("parent", enterprise);
+//                setSessionAttr("Parent", enterprise);
 //                render("/static/RoomworkForParent.html");
 //            }
 //        } else {
@@ -123,7 +123,7 @@
 //    }
 //    @Before(AjaxTeacher.class)
 //    public void queryForTeacher() {
-//        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name as cname,enterprise.name as ename", "FROM ((roomwork left join course on roomwork.course_id=course.id ) left join enterprise on roomwork.teacher_id = enterprise.id) WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("Teacher")).getId() +" ORDER BY roomwork.id DESC");
+//        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,Course.name as cname,enterprise.name as ename", "FROM ((roomwork left join Course on roomwork.course_id=Course.id ) left join enterprise on roomwork.teacher_id = enterprise.id) WHERE roomwork.room_id = "+ getPara("roomId") +" and roomwork.content LIKE '%"+getPara("queryString")+"%' and roomwork.teacher_id = "+ ((Enterprise) getSessionAttr("Teacher")).getId() +" ORDER BY roomwork.id DESC");
 //        renderJson(roomworks.getList());
 //    }
 //    @Before(AjaxTeacher.class)
@@ -137,7 +137,7 @@
 //    }
 //    @Before(AjaxParent.class)
 //    public void queryForParent() {
-//        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,course.name as cname,enterprise.name as ename", "FROM ((roomwork left join course on roomwork.course_id=course.id ) left join enterprise on roomwork.teacher_id = enterprise.id) WHERE roomwork.state=1 and roomwork.room_id = "+ getPara("roomId") +" and (roomwork.content LIKE '%"+getPara("queryString")+"%' or roomwork.title LIKE '%"+getPara("queryString")+"%') ORDER BY roomwork.id DESC");
+//        Page<Record> roomworks = Db.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"), "SELECT roomwork.*,Course.name as cname,enterprise.name as ename", "FROM ((roomwork left join Course on roomwork.course_id=Course.id ) left join enterprise on roomwork.teacher_id = enterprise.id) WHERE roomwork.state=1 and roomwork.room_id = "+ getPara("roomId") +" and (roomwork.content LIKE '%"+getPara("queryString")+"%' or roomwork.title LIKE '%"+getPara("queryString")+"%') ORDER BY roomwork.id DESC");
 //        renderJson(roomworks.getList());
 //    }
 //    @Before(AjaxParent.class)

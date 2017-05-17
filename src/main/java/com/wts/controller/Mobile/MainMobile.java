@@ -131,7 +131,7 @@ public class MainMobile extends Controller {
   public void Exit() {
     setSessionAttr("manager", "");
     setSessionAttr("Teacher", "");
-    setSessionAttr("parent", "");
+    setSessionAttr("Parent", "");
     setCookie("permission", "", -1);
     redirect("/");
   }

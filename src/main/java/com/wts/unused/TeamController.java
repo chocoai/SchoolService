@@ -90,20 +90,20 @@
 //  }
 //  @Before(AjaxParent.class)
 //  public void parentTeamList() {
-//    List<Record> teams = Db.find("select distinct student.team_id as id,team.name as name,team.state as state" +
-//            " from student" +
+//    List<Record> teams = Db.find("select distinct Student.team_id as id,team.name as name,team.state as state" +
+//            " from Student" +
 //            " left join team" +
-//            " on team.id=student.team_id" +
-//            " where team.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("parent")).getId());
+//            " on team.id=Student.team_id" +
+//            " where team.state=1 and Student.state=1 and Student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("Parent")).getId());
 //    renderJson(teams);
 //  }
 //  @Before(AjaxParent.class)
 //  public void parentTeamFirst() {
-//    Record team = Db.findFirst("select distinct student.team_id as id,team.name as name,team.state as state" +
-//            " from student" +
+//    Record team = Db.findFirst("select distinct Student.team_id as id,team.name as name,team.state as state" +
+//            " from Student" +
 //            " left join team" +
-//            " on team.id=student.team_id" +
-//            " where team.state=1 and student.state=1 and student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("parent")).getId());
+//            " on team.id=Student.team_id" +
+//            " where team.state=1 and Student.state=1 and Student.id in (select distinct student_id from relation where parent_id=?)",((Enterprise) getSessionAttr("Parent")).getId());
 //    if (team!=null){
 //      renderText(team.get("id").toString());
 //    }else{

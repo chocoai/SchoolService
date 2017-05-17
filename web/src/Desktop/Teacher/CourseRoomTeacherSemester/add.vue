@@ -372,6 +372,17 @@
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
+      this.$http.get(
+        API.initSemester,
+        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+      ).then((response) => {
+        this.id4 = response.body.id
+        this.name4 = response.body.name
+      }, (response) => {
+        this.$Notice.error({
+          title: '服务器内部错误!'
+        })
+      })
     },
     methods: {
       getLists1 () {

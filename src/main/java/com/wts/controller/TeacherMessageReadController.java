@@ -60,12 +60,12 @@ public class TeacherMessageReadController extends Controller {
     /**
      * 查询
      */
-    @Before(AjaxTeacher.class)
-    public void query() {
-        renderJson(Courseroomteacher.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"),
-                "SELECT DISTINCT teachermessageread.*, teachermessage.title, teachermessage.content, Teacher.name AS tname, teachermessage.time AS ttime, teachermessage.state AS tstate, teachermessage.reply AS treply, teachermessage.id AS tid",
-                getSQL(getPara("queryString"))).getList());
-    }
+//    @Before(AjaxTeacher.class)
+//    public void query() {
+//        renderJson(Courseroomteacher.dao.paginate(getParaToInt("pageCurrent"), getParaToInt("pageSize"),
+//                "SELECT DISTINCT teachermessageread.*, teachermessage.title, teachermessage.content, Teacher.name AS tname, teachermessage.time AS ttime, teachermessage.state AS tstate, teachermessage.reply AS treply, teachermessage.id AS tid",
+//                getSQL(getPara("queryString"))).getList());
+//    }
 
     /**
      * 计数

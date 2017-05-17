@@ -10,7 +10,7 @@ public class LoginParent implements Interceptor {
     public void intercept(Invocation inv) {
 
         HttpSession session = inv.getController().getSession();
-        if (session.getAttribute("parent") == null) {
+        if (session.getAttribute("Parent") == null) {
             inv.getController().redirect("/");
         } else {
             inv.invoke();

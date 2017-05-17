@@ -172,7 +172,7 @@ new HtmlWebpackPlugin({
   }),
   new HtmlWebpackPlugin({
     title: '移动_家长_主页',
-    filename: '../dist/static/html/mobile/parent/Mobile_Parent_Home.html',
+    filename: '../dist/static/html/mobile/Parent/Mobile_Parent_Home.html',
     template: 'html/template.html',
     inject: true,
     chunks: ['vendor', 'manifest', 'Mobile_Parent_Home'],
@@ -185,7 +185,7 @@ new HtmlWebpackPlugin({
   }),
   new HtmlWebpackPlugin({
     title: '移动_家长_学生',
-    filename: '../dist/static/html/mobile/parent/Mobile_Parent_Student.html',
+    filename: '../dist/static/html/mobile/Parent/Mobile_Parent_Student.html',
     template: 'html/template.html',
     inject: true,
     chunks: ['vendor', 'manifest', 'Mobile_Parent_Student'],

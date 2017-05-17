@@ -1,11 +1,8 @@
 package com.wts.controller.Desktop.Teacher;
 
-import com.foxinmy.weixin4j.exception.WeixinException;
-import com.foxinmy.weixin4j.qy.model.User;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
-import com.wts.entity.WP;
 import com.wts.entity.model.Parent;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
@@ -14,11 +11,10 @@ import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.util.ParamesAPI;
 import com.wts.validator.Query;
-import com.wts.validator.parent.Parent_Edit;
-import com.wts.validator.parent.Parent_Exist;
-import com.wts.validator.parent.Parent_Save;
+import com.wts.validator.Parent.Parent_Edit;
+import com.wts.validator.Parent.Parent_Exist;
+import com.wts.validator.Parent.Parent_Save;
 import com.wts.weixin.service.ParentService;
-import com.wts.weixin.service.TeacherService;
 import me.chanjar.weixin.common.exception.WxErrorException;
 import me.chanjar.weixin.cp.bean.WxCpUser;
 import org.apache.log4j.Logger;
@@ -245,7 +241,7 @@ public class ParentDesktop extends Controller {
   public void checkMobileForAdd() {
     if (Teacher.dao.find("SELECT * FROM Teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该家长的联系电话已存在!");
-    } else if (Parent.dao.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+    } else if (Parent.dao.find("SELECT * FROM Parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该家长的联系电话已存在!");
     } else {
       renderText("OK");
@@ -260,7 +256,7 @@ public class ParentDesktop extends Controller {
     if (Db.find("SELECT * FROM Teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该家长的联系电话已存在!");
     } else if (!Parent.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
-            && Db.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+            && Db.find("SELECT * FROM Parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该家长的联系电话已存在!");
     } else {
       renderText("OK");

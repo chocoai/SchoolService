@@ -10,8 +10,8 @@ import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
-import com.wts.validator.courseRoomTeacher.CourseRoomTeacher_Exist;
-import com.wts.validator.courseRoomTeacher.CourseRoomTeacher_Save;
+import com.wts.validator.CourseRoomTeacherSemester.CourseRoomTeacherSemester_Exist;
+import com.wts.validator.CourseRoomTeacherSemester.CourseRoomTeacherSemester_Save;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -116,7 +116,7 @@ public class CourseRoomTeacherSemesterDesktop extends Controller {
   /**
    * 删除
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacher_Exist.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacherSemester_Exist.class})
   public void Delete() {
     Courseroomteachersemester.dao.deleteById(getPara("cid"), getPara("rid"), getPara("sid"), getPara("tid"));
     logger.warn("function:" + this.getClass().getSimpleName() + "/Delete;" +
@@ -131,7 +131,7 @@ public class CourseRoomTeacherSemesterDesktop extends Controller {
   /**
    * 保存
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacher_Save.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacherSemester_Save.class})
   public void Save() {
     Courseroomteachersemester object = new Courseroomteachersemester();
     object.set("course_id", getPara("cid"))

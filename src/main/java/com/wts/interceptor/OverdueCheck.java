@@ -7,7 +7,7 @@ public class OverdueCheck implements Interceptor {
 
   public void intercept(Invocation inv) {
     if ((inv.getController().getSession().getAttribute("Teacher") == null
-            && inv.getController().getSession().getAttribute("parent") == null)
+            && inv.getController().getSession().getAttribute("Parent") == null)
 //            || inv.getController().getRequest().getHeader("X-Requested-With") == null
             ) {
       inv.getController().renderText("overdue");

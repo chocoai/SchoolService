@@ -189,12 +189,15 @@
               const sexes = params.row.sex.toString() === '1' ? 'male' : params.row.sex.toString() === '2' ? 'female' : 'person'
               const color = params.row.sex.toString() === '1' ? '#0099CC' : params.row.sex.toString() === '2' ? '#CC6699' : 'red'
               const text = params.row.sex.toString() === '1' ? '男生' : params.row.sex.toString() === '2' ? '女生' : '错误'
-              return h('Icon', {
-                props: {
-                  type: sexes,
-                  color: color
-                }
-              }, text)
+              return h('div', [
+                h('Icon', {
+                  props: {
+                    type: sexes,
+                    color: color
+                  }
+                }),
+                h('i', text)
+              ])
             }
           },
           {

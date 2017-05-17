@@ -40,7 +40,7 @@
 #end
 
 ### 操作数据表parent
-#namespace("parent")
+#namespace("Parent")
   #sql("login_parent")
     SELECT * FROM parent
     WHERE (login = #p(lmewuq) AND pass = #p(pass) AND state = #p(state))
@@ -81,7 +81,7 @@
 #end
 
 ### 操作数据表student
-#namespace("student")
+#namespace("Student")
   #sql("id")
     SELECT * FROM student WHERE id = ?
   #end
@@ -95,21 +95,21 @@
 #end
 
 ### 操作数据表roomStudent
-#namespace("roomStudent")
+#namespace("RoomStudent")
   #sql("studentId")
     SELECT * FROM roomstudent WHERE studentId = ?
   #end
 #end
 
 ### 操作数据表semester
-#namespace("semester")
+#namespace("Semester")
   #sql("used")
     SELECT * FROM semester WHERE state = 1
   #end
 #end
 
 ### 操作数据表room
-#namespace("room")
+#namespace("Room")
   #sql("slogan")
     SELECT * FROM room WHERE slogan = ?
   #end
@@ -122,7 +122,7 @@
 #end
 
 ### 操作数据表roomStudent
-#namespace("roomStudent")
+#namespace("RoomStudent")
   #sql("list_parent")
     SELECT DISTINCT room.id, room.name, room.state
     FROM ((roomstudent
@@ -134,7 +134,7 @@
 #end
 
 ### 操作数据表courseRoomTeacher
-#namespace("courseRoomTeacher")
+#namespace("CourseRoomTeacherSemester")
   #sql("list_teacher")
     SELECT DISTINCT room.id, room.name, room.state
     FROM (((courseroomteacher

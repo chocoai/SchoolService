@@ -1,5 +1,5 @@
 import * as Mobile from '../../Mobile.js'
-export const base = 'student'
+export const base = 'Student'
 export const checkNumberForAdd = `${Mobile.Prefix}/${base}/checkNumberForAdd`
 export const checkNumberForEdit = `${Mobile.Prefix}/${base}/checkNumberForEdit`
 export const checkCodeForAdd = `${Mobile.Prefix}/${base}/checkCodeForAdd`

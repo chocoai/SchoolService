@@ -13,15 +13,15 @@ import static com.wts.util.Util.getString;
 public class RelationController extends Controller {
     private String getSQL(String sql) {
         return "FROM (((relation " +
-                "LEFT JOIN parent ON relation.parent_id = parent.id) " +
-                "LEFT JOIN student ON relation.student_id = student.id) " +
+                "LEFT JOIN Parent ON relation.parent_id = Parent.id) " +
+                "LEFT JOIN Student ON relation.student_id = Student.id) " +
                 "LEFT JOIN identity ON relation.identity_id = identity.id) " +
-                "WHERE student.`name` LIKE '%" + sql +
-                "%' OR student.`number` LIKE '%" + sql +
-                "%' OR student.`code` LIKE '%" + sql +
-                "%' OR student.`address` LIKE '%" + sql +
-                "%' AND parent.id=" + ((Parent) getSessionAttr("parent")).getId() +
-                "ORDER BY student.`name` ASC";
+                "WHERE Student.`name` LIKE '%" + sql +
+                "%' OR Student.`number` LIKE '%" + sql +
+                "%' OR Student.`code` LIKE '%" + sql +
+                "%' OR Student.`address` LIKE '%" + sql +
+                "%' AND Parent.id=" + ((Parent) getSessionAttr("Parent")).getId() +
+                "ORDER BY Student.`name` ASC";
     }
     /**
      * 列表
@@ -60,20 +60,20 @@ public class RelationController extends Controller {
             renderText(checkIDNumberDetail(getPara("number")));
         } else if (getPara("identity_id")==null) {
             renderText("未指定您的身份!");
-        } else if (Student.dao.find("SELECT * FROM student WHERE number=? AND code=? AND name=?", getPara("number"), getPara("code"), getPara("name")).size()==0) {
+        } else if (Student.dao.find("SELECT * FROM Student WHERE number=? AND code=? AND name=?", getPara("number"), getPara("code"), getPara("name")).size()==0) {
             renderText("请核实相关信息再关联学生!");
         } else {
-            Student student = Student.dao.findFirst("SELECT * FROM student WHERE number=? AND code=? AND name=?", getPara("number"), getPara("code"), getPara("name"));
+            Student student = Student.dao.findFirst("SELECT * FROM Student WHERE number=? AND code=? AND name=?", getPara("number"), getPara("code"), getPara("name"));
             if (Relation.dao.find("SELECT * FROM relation WHERE parent_id=? AND student_id=? AND identity_id=?",
-                    ((Parent) getSessionAttr("parent")).getId(),student.getId(),getPara("identity_id")).size()!=0){
+                    ((Parent) getSessionAttr("Parent")).getId(),student.getId(),getPara("identity_id")).size()!=0){
                 renderText("不能重复绑定!");
             }else{
                 Relation relation = new Relation();
-                relation.set("parent_id",((Parent) getSessionAttr("parent")).getId())
+                relation.set("parent_id",((Parent) getSessionAttr("Parent")).getId())
                         .set("student_id",student.getId())
                         .set("identity_id",getPara("identity_id"))
                         .save();
-                Parent.dao.findById(((Parent) getSessionAttr("parent")).getId()).set("bind",1).update();
+                Parent.dao.findById(((Parent) getSessionAttr("Parent")).getId()).set("bind",1).update();
                 student.set("bind",1).update();
                 renderText("OK");
             }
@@ -84,7 +84,7 @@ public class RelationController extends Controller {
         Relation relation = Relation.dao.findById(getPara("id"));
         if (relation == null) {
             renderText("要删除的记录不存在!");
-        } else if(relation.getParentId().equals(((Parent) getSessionAttr("parent")).getId())){
+        } else if(relation.getParentId().equals(((Parent) getSessionAttr("Parent")).getId())){
             renderText("要删除的记录与当前家长不一致!");
         } else {
             int parentId = relation.getParentId();

@@ -46,7 +46,7 @@
 //  }
 //  @Before({Tx.class,AjaxParent.class})
 //  public void readTeamworkById() {
-//    Teamworkread teamworkread = Teamworkread.dao.findFirst("select * from teamworkread where teamwork_id=? and parent_id=?", getPara("id"), ((Enterprise) getSessionAttr("parent")).getId());
+//    Teamworkread teamworkread = Teamworkread.dao.findFirst("select * from teamworkread where teamwork_id=? and parent_id=?", getPara("id"), ((Enterprise) getSessionAttr("Parent")).getId());
 //    if (teamworkread != null) {
 //      if (Teamwork.dao.findById(teamworkread.getTeamworkId()).getState() == 1) {
 //        if (teamworkread.getState() == 0) {
@@ -67,7 +67,7 @@
 //
 //  @Before({Tx.class, AjaxParent.class})
 //  public void readRoomworkStateById() {
-//    Teamworkread teamworkread = Teamworkread.dao.findFirst("select * from teamworkread where teamwork_id=? and parent_id=?", getPara("id"), ((Enterprise) getSessionAttr("parent")).getId());
+//    Teamworkread teamworkread = Teamworkread.dao.findFirst("select * from teamworkread where teamwork_id=? and parent_id=?", getPara("id"), ((Enterprise) getSessionAttr("Parent")).getId());
 //    if (teamworkread != null) {
 //      renderText(Teamwork.dao.findById(teamworkread.getTeamworkId()).getState().toString());
 //    } else {
@@ -75,9 +75,9 @@
 //    }
 //  }
 //  public void getReadTeamwork(){
-//    List<Record> students = Db.find("select student.`name` as sname,student.sex,student.number,identity.`name` as dname,teamworkread.time" +
+//    List<Record> students = Db.find("select Student.`name` as sname,Student.sex,Student.number,identity.`name` as dname,teamworkread.time" +
 //            " from (((teamworkread " +
-//            " left join student on teamworkread.student_id=student.id)" +
+//            " left join Student on teamworkread.student_id=Student.id)" +
 //            " left join enterprise on teamworkread.parent_id=enterprise.id)" +
 //            " left join identity on teamworkread.identity_id=identity.id)" +
 //            " where teamworkread.teamwork_id=? and teamworkread.state=1",getPara("id"));
@@ -88,16 +88,16 @@
 //    }
 //  }
 //  public void getUnreadTeamwork(){
-//    List<Record> students = Db.find("select DISTINCT student.`name` as sname,student.sex,student.number,student.id as id" +
+//    List<Record> students = Db.find("select DISTINCT Student.`name` as sname,Student.sex,Student.number,Student.id as id" +
 //            " from (((teamworkread " +
-//            " left join student on teamworkread.student_id=student.id)" +
+//            " left join Student on teamworkread.student_id=Student.id)" +
 //            " left join enterprise on teamworkread.parent_id=enterprise.id)" +
 //            " left join identity on teamworkread.identity_id=identity.id)" +
 //            " where teamworkread.teamwork_id=? and teamworkread.state=0 and " +
-//            " student.number not in (" +
-//            " select DISTINCT student.number" +
+//            " Student.number not in (" +
+//            " select DISTINCT Student.number" +
 //            " from (((teamworkread " +
-//            " left join student on teamworkread.student_id=student.id)" +
+//            " left join Student on teamworkread.student_id=Student.id)" +
 //            " left join enterprise on teamworkread.parent_id=enterprise.id)" +
 //            " left join identity on teamworkread.identity_id=identity.id)" +
 //            " where teamworkread.teamwork_id=? and teamworkread.state=1)",getPara("id"),getPara("id"));
@@ -108,16 +108,16 @@
 //    }
 //  }
 //  public void send() {
-//    List<Record> teamworkread = Db.find("select DISTINCT student.`name` as sname,student.sex,student.number,student.id as id" +
+//    List<Record> teamworkread = Db.find("select DISTINCT Student.`name` as sname,Student.sex,Student.number,Student.id as id" +
 //            " from (((teamworkread " +
-//            " left join student on teamworkread.student_id=student.id)" +
+//            " left join Student on teamworkread.student_id=Student.id)" +
 //            " left join enterprise on teamworkread.parent_id=enterprise.id)" +
 //            " left join identity on teamworkread.identity_id=identity.id)" +
 //            " where teamworkread.teamwork_id=? and teamworkread.state=0 and " +
-//            " student.number not in (" +
-//            " select DISTINCT student.number" +
+//            " Student.number not in (" +
+//            " select DISTINCT Student.number" +
 //            " from (((teamworkread " +
-//            " left join student on teamworkread.student_id=student.id)" +
+//            " left join Student on teamworkread.student_id=Student.id)" +
 //            " left join enterprise on teamworkread.parent_id=enterprise.id)" +
 //            " left join identity on teamworkread.identity_id=identity.id)" +
 //            " where teamworkread.teamwork_id=? and teamworkread.state=1)",getPara("teamwork_id"),getPara("teamwork_id"));

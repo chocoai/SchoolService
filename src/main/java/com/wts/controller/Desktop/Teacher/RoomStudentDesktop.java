@@ -10,8 +10,8 @@ import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
-import com.wts.validator.roomStudent.RoomStudent_Exist;
-import com.wts.validator.roomStudent.RoomStudent_Save;
+import com.wts.validator.RoomStudent.RoomStudent_Exist;
+import com.wts.validator.RoomStudent.RoomStudent_Save;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

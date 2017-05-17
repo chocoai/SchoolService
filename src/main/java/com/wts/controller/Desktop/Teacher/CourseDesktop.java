@@ -10,9 +10,9 @@ import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.*;
-import com.wts.validator.course.Course_Edit;
-import com.wts.validator.course.Course_Exist;
-import com.wts.validator.course.Course_Save;
+import com.wts.validator.Course.Course_Edit;
+import com.wts.validator.Course.Course_Exist;
+import com.wts.validator.Course.Course_Save;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -172,7 +172,7 @@ public class CourseDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
     String[] title={"序号","课程名称","课程详情","课程类型","课程状态"};
-    String fileName = "course";
+    String fileName = "Course";
     String SQL = "select id AS 序号,name AS 课程名称, detail AS 课程详情, " +
             "(case type when 1 then '必修课' when 2 then '选修课' else '错误' end ) AS 课程类型, " +
             "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 课程状态 " +
@@ -190,7 +190,7 @@ public class CourseDesktop extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkNameForAdd() {
-    if (Db.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
+    if (Db.find("SELECT * FROM Course WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该课程名称已存在!");
     } else {
       renderText("OK");
@@ -203,7 +203,7 @@ public class CourseDesktop extends Controller {
   @Before(OverdueCheck.class)
   public void checkNameForEdit() {
     if (!Course.dao.findById(getPara("id")).get("name").equals(getPara("name"))
-            && Db.find("SELECT * FROM course WHERE name = ?", getPara("name")).size() != 0) {
+            && Db.find("SELECT * FROM Course WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该课程名称已存在!");
     } else {
       renderText("OK");

@@ -10,10 +10,10 @@ import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
-import com.wts.validator.course.Course_Exist;
-import com.wts.validator.room.Room_Edit;
-import com.wts.validator.room.Room_Exist;
-import com.wts.validator.room.Room_Save;
+import com.wts.validator.Course.Course_Exist;
+import com.wts.validator.Room.Room_Edit;
+import com.wts.validator.Room.Room_Exist;
+import com.wts.validator.Room.Room_Save;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -184,7 +184,7 @@ public class RoomDesktop extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkNameForAdd() {
-    if (Db.find("SELECT * FROM room WHERE name = ?", getPara("name")).size() != 0) {
+    if (Db.find("SELECT * FROM Room WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该班级名称已存在!");
     } else {
       renderText("OK");
@@ -197,7 +197,7 @@ public class RoomDesktop extends Controller {
   @Before(OverdueCheck.class)
   public void checkNameForEdit() {
     if (!Room.dao.findById(getPara("id")).get("name").equals(getPara("name"))
-            && Db.find("SELECT * FROM room WHERE name = ?", getPara("name")).size() != 0) {
+            && Db.find("SELECT * FROM Room WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该班级名称已存在!");
     } else {
       renderText("OK");

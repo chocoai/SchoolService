@@ -10,8 +10,8 @@ import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
-import com.wts.validator.studentParentIdentity.StudentParentIdentity_Exist;
-import com.wts.validator.studentParentIdentity.StudentParentIdentity_Save;
+import com.wts.validator.StudentParentIdentity.StudentParentIdentity_Exist;
+import com.wts.validator.StudentParentIdentity.StudentParentIdentity_Save;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -70,7 +70,7 @@ public class StudentParentIdentityDesktop extends Controller {
                     "parent.name AS pname," +
                     "student.name AS sname," +
                     "identity.name AS iname," +
-                    "parent.mobile AS pmobile," +
+                    "Parent.mobile AS pmobile," +
                     "student.number AS snumber," +
                     "student.code AS scode",
             "FROM (((studentparentidentity " +
@@ -163,7 +163,7 @@ public class StudentParentIdentityDesktop extends Controller {
             "AND (parent.name LIKE '%" + getPara("keyword") + "%' " +
             "OR student.name LIKE '%" + getPara("keyword") + "%' " +
             "OR identity.name LIKE '%" + getPara("keyword") + "%' " +
-            "OR  parent.mobile LIKE '%" + getPara("keyword") + "%' " +
+            "OR parent.mobile LIKE '%" + getPara("keyword") + "%' " +
             "OR student.number LIKE '%" + getPara("keyword") + "%' " +
             "OR student.code LIKE '%" + getPara("keyword") + "%')";
     logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +

@@ -60,7 +60,9 @@ public class MainDesktop extends Controller {
       setCookie("ParentDesktop", PermissionString("ParentDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("StudentParentIdentityDesktop", PermissionString("StudentParentIdentityDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("RoomStudentDesktop", PermissionString("RoomStudentDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("CourseRoomTeacherDesktop", PermissionString("CourseRoomTeacherDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("CourseRoomTeacherSemesterDesktop", PermissionString("CourseRoomTeacherSemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("StudentCourseSemesterDesktop", PermissionString("StudentCourseSemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
+
       logger.warn("function:"+this.getClass().getSimpleName()+"/Login;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";");
       renderText("OK");
     } else {
@@ -125,7 +127,7 @@ public class MainDesktop extends Controller {
   public void Exit() {
     setSessionAttr("manager", "");
     setSessionAttr("Teacher", "");
-    setSessionAttr("parent", "");
+    setSessionAttr("Parent", "");
     setCookie("permission", "", -1);
     redirect("/");
   }

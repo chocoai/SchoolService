@@ -50,7 +50,7 @@
 //  }
 //  @Before({Tx.class,AjaxParent.class})
 //  public void readRoomworkById (){
-//    Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("id"),((Enterprise) getSessionAttr("parent")).getId());
+//    Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("id"),((Enterprise) getSessionAttr("Parent")).getId());
 //    if (roomworkread != null) {
 //      if (Roomwork.dao.findById(roomworkread.getRoomworkId()).getState() == 1) {
 //        if (roomworkread.getState() == 0) {
@@ -70,7 +70,7 @@
 //  }
 //  @Before({Tx.class,AjaxParent.class})
 //  public void readRoomworkStateById (){
-//    Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("id"),((Enterprise) getSessionAttr("parent")).getId());
+//    Roomworkread roomworkread = Roomworkread.dao.findFirst("select * from roomworkread where roomwork_id=? and parent_id=?",getPara("id"),((Enterprise) getSessionAttr("Parent")).getId());
 //    if (roomworkread!=null) {
 //      renderText(Roomwork.dao.findById(roomworkread.getRoomworkId()).getState().toString());
 //    }else{
@@ -79,9 +79,9 @@
 //  }
 //  @Before(AjaxTeacher.class)
 //  public void getReadRoomwork(){
-//    List<Record> students = Db.find("select student.`name` as sname,student.sex,student.number,identity.`name` as dname,roomworkread.time" +
+//    List<Record> students = Db.find("select Student.`name` as sname,Student.sex,Student.number,identity.`name` as dname,roomworkread.time" +
 //            " from (((roomworkread " +
-//            " left join student on roomworkread.student_id=student.id)" +
+//            " left join Student on roomworkread.student_id=Student.id)" +
 //            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
 //            " left join identity on roomworkread.identity_id=identity.id)" +
 //            " where roomworkread.roomwork_id=? and roomworkread.state=1",getPara("id"));
@@ -93,16 +93,16 @@
 //  }
 //  @Before(AjaxTeacher.class)
 //  public void getUnreadRoomwork(){
-//    List<Record> students = Db.find("select DISTINCT student.`name` as sname,student.sex,student.number,student.id as id" +
+//    List<Record> students = Db.find("select DISTINCT Student.`name` as sname,Student.sex,Student.number,Student.id as id" +
 //            " from (((roomworkread " +
-//            " left join student on roomworkread.student_id=student.id)" +
+//            " left join Student on roomworkread.student_id=Student.id)" +
 //            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
 //            " left join identity on roomworkread.identity_id=identity.id)" +
 //            " where roomworkread.roomwork_id=? and roomworkread.state=0 and " +
-//            " student.number not in (" +
-//            " select DISTINCT student.number" +
+//            " Student.number not in (" +
+//            " select DISTINCT Student.number" +
 //            " from (((roomworkread " +
-//            " left join student on roomworkread.student_id=student.id)" +
+//            " left join Student on roomworkread.student_id=Student.id)" +
 //            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
 //            " left join identity on roomworkread.identity_id=identity.id)" +
 //            " where roomworkread.roomwork_id=? and roomworkread.state=1)",getPara("id"),getPara("id"));
@@ -113,16 +113,16 @@
 //    }
 //  }
 //  public void send() {
-//    List<Record> roomworkread = Db.find("select DISTINCT student.`name` as sname,student.sex,student.number,student.id as id" +
+//    List<Record> roomworkread = Db.find("select DISTINCT Student.`name` as sname,Student.sex,Student.number,Student.id as id" +
 //            " from (((roomworkread " +
-//            " left join student on roomworkread.student_id=student.id)" +
+//            " left join Student on roomworkread.student_id=Student.id)" +
 //            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
 //            " left join identity on roomworkread.identity_id=identity.id)" +
 //            " where roomworkread.roomwork_id=? and roomworkread.state=0 and " +
-//            " student.number not in (" +
-//            " select DISTINCT student.number" +
+//            " Student.number not in (" +
+//            " select DISTINCT Student.number" +
 //            " from (((roomworkread " +
-//            " left join student on roomworkread.student_id=student.id)" +
+//            " left join Student on roomworkread.student_id=Student.id)" +
 //            " left join enterprise on roomworkread.parent_id=enterprise.id)" +
 //            " left join identity on roomworkread.identity_id=identity.id)" +
 //            " where roomworkread.roomwork_id=? and roomworkread.state=1)",getPara("roomwork_id"),getPara("roomwork_id"));

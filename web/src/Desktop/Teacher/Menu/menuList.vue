@@ -26,7 +26,7 @@
           </template>
           <Menu-item name="StudentParentIdentityDesktop" v-if="menu.StudentParentIdentityDesktop_Page">学生_家长_身份</Menu-item>
           <Menu-item name="RoomStudentDesktop" v-if="menu.RoomStudentDesktop_Page">班级_学生</Menu-item>
-          <Menu-item name="CourseRoomTeacherDesktop" v-if="menu.CourseRoomTeacherDesktop_Page">课程_班级_教师</Menu-item>
+          <Menu-item name="CourseRoomTeacherSemesterDesktop" v-if="menu.CourseRoomTeacherSemesterDesktop_Page">课程_班级_教师_学期</Menu-item>
           <Menu-item name="StudentCourseSemesterDesktop" v-if="menu.StudentCourseSemesterDesktop_Page">学生_课程_学期</Menu-item>
         </Submenu>
         <Submenu name="information">
@@ -100,7 +100,7 @@
             return '关系管理'
           case 'RoomStudentDesktop':
             return '关系管理'
-          case 'CourseRoomTeacherDesktop':
+          case 'CourseRoomTeacherSemesterDesktop':
             return '关系管理'
           case 'StudentCourseSemesterDesktop':
             return '关系管理'
@@ -140,8 +140,8 @@
             return '学生_家长_身份'
           case 'RoomStudentDesktop':
             return '班级_学生'
-          case 'CourseRoomTeacherDesktop':
-            return '课程_班级_教师'
+          case 'CourseRoomTeacherSemesterDesktop':
+            return '课程_班级_教师_学期'
           case 'StudentCourseSemesterDesktop':
             return '学生_课程_学期'
           case 'notice':
@@ -191,8 +191,8 @@
           case 'RoomStudentDesktop':
             window.location.href = '/RoomStudentDesktop/Page'
             break
-          case 'CourseRoomTeacherDesktop':
-            window.location.href = '/CourseRoomTeacherDesktop/Page'
+          case 'CourseRoomTeacherSemesterDesktop':
+            window.location.href = '/CourseRoomTeacherSemesterDesktop/Page'
             break
           case 'StudentCourseSemesterDesktop':
             window.location.href = '/StudentCourseSemesterDesktop/Page'

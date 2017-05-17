@@ -1,20 +1,32 @@
-INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('1', '2017第一学期', NULL, NULL, '1', '0');
-INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('2', '2017第二学期', NULL, NULL, '0', '0');
-INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('3', '2018第一学期', NULL, NULL, '0', '0');
-INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('4', '2018第二学期', NULL, NULL, '0', '0');
+INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('1', '2016第一学期', NULL, NULL, '0', '0');
+INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('2', '2016第二学期', NULL, NULL, '0', '0');
+INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('3', '2017第一学期', NULL, NULL, '1', '0');
+INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('4', '2017第二学期', NULL, NULL, '0', '0');
+INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('5', '2018第一学期', NULL, NULL, '0', '0');
+INSERT INTO `school_service`.`semester` (`id`, `name`, `time_start`, `time_end`, `state`, `del`) VALUES ('6', '2018第二学期', NULL, NULL, '0', '0');
 
 INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('1', '2011级1班', '2011', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('2', '2011级2班', '2011', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('3', '2012级1班', '2012', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('4', '2012级2班', '2012', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('5', '2013级1班', '2013', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('6', '2013级2班', '2013', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('7', '2014级1班', '2014', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('8', '2014级2班', '2014', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('9', '2015级1班', '2015', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('10', '2015级2班', '2015', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('11', '2016级1班', '2016', '1', '1', '0');
-INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('12', '2016级2班', '2016', '1', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('2', '2011级2班', '2011', '2', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('3', '2011级3班', '2011', '3', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('4', '2012级1班', '2012', '1', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('5', '2012级2班', '2012', '2', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('6', '2012级3班', '2012', '3', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('7', '2013级1班', '2013', '1', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('8', '2013级2班', '2013', '2', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('9', '2013级3班', '2013', '3', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('10', '2014级1班', '2014', '1', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('11', '2014级2班', '2014', '2', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('12', '2014级3班', '2014', '3', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('13', '2015级1班', '2015', '1', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('14', '2015级2班', '2015', '2', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('15', '2015级3班', '2015', '3', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('16', '2016级1班', '2016', '1', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('17', '2016级2班', '2016', '2', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('18', '2016级3班', '2016', '3', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('19', '2017级1班', '2017', '1', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('20', '2017级2班', '2017', '2', '1', '0');
+INSERT INTO `school_service`.`room` (`id`, `name`, `year`, `order`, `state`, `del`) VALUES ('21', '2017级3班', '2017', '3', '1', '0');
+
 INSERT INTO `school_service`.`identity` (`id`, `name`) VALUES ('1', '爸爸');
 INSERT INTO `school_service`.`identity` (`id`, `name`) VALUES ('2', '妈妈');
 INSERT INTO `school_service`.`identity` (`id`, `name`) VALUES ('3', '爷爷');
@@ -49,12 +61,7 @@ INSERT INTO `school_service`.`course` (`id`, `name`, `detail`, `amount`, `type`,
 INSERT INTO `school_service`.`course` (`id`, `name`, `detail`, `amount`, `type`, `state`, `del`) VALUES ('26', '篮球', 'a', '50', '2', '1', '0');
 INSERT INTO `school_service`.`course` (`id`, `name`, `detail`, `amount`, `type`, `state`, `del`) VALUES ('27', '美八度', 'a', '50', '2', '1', '0');
 INSERT INTO `school_service`.`course` (`id`, `name`, `detail`, `amount`, `type`, `state`, `del`) VALUES ('28', '国际数棋', 'a', '50', '2', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('1', 'WangTianShuo', NULL, '王天硕', NULL, '18653145531', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKaruicXHCsdZFKB6t38U8EW1XQ/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('2', 'XuHanQi', NULL, '徐汉琪', NULL, '13864100771', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKar4pX7uQLQUQBo6E5fVJqLMQ/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('3', 'WangMingLiang', NULL, '王明亮', NULL, '13969190978', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKarPx9G3VVkWgtbaOicREtnEkg/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('4', 'WangQun', NULL, '王群', NULL, '15949700280', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVPTvhDrfQHA4ZZNG4UC6UDe9ibekzyomiam7r9Bk9HEhbw/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('5', 'DuJunPeng', NULL, '杜君鹏', NULL, '15288868587', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVf2EDiaJNQjiaNY8QGx2D6wNRuqUgoZIricL3Riasn4ANFibg/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('6', 'LanLiJian', NULL, '兰立建', NULL, '13791111219', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVJ1qjjm4pjd9x0HsicunLvh55UnTOL5opR9xsyQCKBl2g/', '1', '0');
+
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('1', 'CourseDesktop/Page', '列表');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('2', 'CourseDesktop/Save', '新增');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('3', 'CourseDesktop/Active', '激活');
@@ -135,7 +142,12 @@ INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('77', 'C
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('78', 'CourseRoomTeacherSemesterDesktop/Delete', '删除');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('79', 'IdentityDesktop/Query', '查找');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('80', 'IdentityDesktop/Total', '计数');
-
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('81', 'StudentCourseSemesterDesktop/Page', '列表');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('82', 'StudentCourseSemesterDesktop/Save', '新增');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('83', 'StudentCourseSemesterDesktop/Download', '下载');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('84', 'StudentCourseSemesterDesktop/Query', '查找');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('85', 'StudentCourseSemesterDesktop/Total', '计数');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('86', 'StudentCourseSemesterDesktop/Delete', '删除');
 
 
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '1', '1');
@@ -218,3 +230,9 @@ INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`,
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '78', '1');
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '79', '1');
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '80', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '81', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '82', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '83', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '84', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '85', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '86', '1');

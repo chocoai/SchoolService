@@ -99,31 +99,31 @@
 //      Map<String, String> requestMap = MessageUtil.parseXml(request);
 //      // 发送方帐号
 //      String FromUserName = requestMap.get("FromUserName");
-//      Teacher teacher = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId=?", FromUserName);
-//      Parent parent = Parent.dao.findFirst("SELECT * FROM parent WHERE userId=?", FromUserName);
+//      Teacher Teacher = Teacher.dao.findFirst("SELECT * FROM Teacher WHERE userId=?", FromUserName);
+//      Parent Parent = Parent.dao.findFirst("SELECT * FROM Parent WHERE userId=?", FromUserName);
 //      if (requestMap.get("Event").equals(MessageUtil.EVENT_TYPE_SUBSCRIBE)) {
 //        User user = WP.me.getUser(FromUserName);
-//        if (teacher != null) {
-//          teacher.set("sex", user.getGender())
+//        if (Teacher != null) {
+//          Teacher.set("sex", user.getGender())
 //                  .set("picUrl", user.getAvatar())
 //                  .set("state", 1)
 //                  .update();
 //        }
-//        if (parent != null) {
-//          parent.set("sex", user.getGender())
+//        if (Parent != null) {
+//          Parent.set("sex", user.getGender())
 //                  .set("picUrl", user.getAvatar())
 //                  .set("state", 1)
 //                  .update();
 //        }
 //      }
 //      if (requestMap.get("Event").equals(MessageUtil.EVENT_TYPE_UNSUBSCRIBE)) {
-//        if (teacher != null) {
-//          teacher.set("picUrl", "")
+//        if (Teacher != null) {
+//          Teacher.set("picUrl", "")
 //                  .set("state", 3)
 //                  .update();
 //        }
-//        if (parent != null) {
-//          parent.set("picUrl", "")
+//        if (Parent != null) {
+//          Parent.set("picUrl", "")
 //                  .set("state", 3)
 //                  .update();
 //        }

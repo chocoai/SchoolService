@@ -1,5 +1,5 @@
 import * as Desktop from '../../Desktop.js'
-export const base = 'CourseRoomTeacherDesktop'
+export const base = 'CourseRoomTeacherSemesterDesktop'
 export const base1 = 'CourseDesktop'
 export const base2 = 'RoomDesktop'
 export const base3 = 'TeacherDesktop'
@@ -14,6 +14,7 @@ export const queryTeacher = `${Desktop.Prefix}/${base3}/Query`
 export const totalTeacher = `${Desktop.Prefix}/${base3}/Total`
 export const querySemester = `${Desktop.Prefix}/${base4}/Query`
 export const totalSemester = `${Desktop.Prefix}/${base4}/Total`
+export const initSemester = `${Desktop.Prefix}/${base4}/init`
 export const download = `${Desktop.Prefix}/${base}/Download`
 export const save = `${Desktop.Prefix}/${base}/Save`
 export const del = `${Desktop.Prefix}/${base}/Delete`

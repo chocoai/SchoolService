@@ -1,5 +1,5 @@
 import * as Mobile from '../../Mobile.js'
-export const base = 'student'
+export const base = 'Student'
 export const get = `${Mobile.Prefix}/${base}/get`
 export const query = `${Mobile.Prefix}/${base}/queryByRoom`
 export const total = `${Mobile.Prefix}/${base}/totalByRoom`

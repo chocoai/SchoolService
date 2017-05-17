@@ -19,11 +19,11 @@
 //  public static void CreateManager (){
 //    // 校园管理入口菜单
 //    String TEACHER = BASIC.replaceAll("XXXXX","Teacher%2fMobile_Manager_Teacher%2f");
-//    String ROOM = BASIC.replaceAll("XXXXX","room%2fMobile_Manager_Room%2f");
-//    String COURSE = BASIC.replaceAll("XXXXX","course%2fMobile_Manager_Course%2f");
-//    String STUDENT = BASIC.replaceAll("XXXXX","student%2fMobile_Manager_Student%2f");
-//    String PARENT = BASIC.replaceAll("XXXXX","parent%2fMobile_Manager_Parent%2f");
-//    String SEMESTER = BASIC.replaceAll("XXXXX","semester%2fMobile_Manager_Semester%2f");
+//    String ROOM = BASIC.replaceAll("XXXXX","Room%2fMobile_Manager_Room%2f");
+//    String COURSE = BASIC.replaceAll("XXXXX","Course%2fMobile_Manager_Course%2f");
+//    String STUDENT = BASIC.replaceAll("XXXXX","Student%2fMobile_Manager_Student%2f");
+//    String PARENT = BASIC.replaceAll("XXXXX","Parent%2fMobile_Manager_Parent%2f");
+//    String SEMESTER = BASIC.replaceAll("XXXXX","Semester%2fMobile_Manager_Semester%2f");
 //    String TEACHERMESSAGE = BASIC.replaceAll("XXXXX","teacherMessage%2fMobile_Manager_TeacherMessage%2f");
 //
 //    Button manager_1 = new Button("教师", TEACHER, ButtonType.view);
@@ -60,7 +60,7 @@
 //
 //  public static void CreateTeacher (){
 //    // 班级管理入口菜单
-//    String COURSE = BASIC.replaceAll("XXXXX","course%2fMobile_Teacher_Course%2f");
+//    String COURSE = BASIC.replaceAll("XXXXX","Course%2fMobile_Teacher_Course%2f");
 //    String TEACHERMESSAGE = BASIC.replaceAll("XXXXX","teacherMessageRead%2fMobile_Teacher_TeacherMessage%2f");
 //
 //
@@ -89,8 +89,8 @@
 //  private static String NOTICEZ = BASIC.replaceAll("XXXXX","notice%2fforParent%2f");
 //  private static String ROOMWORKS = BASIC.replaceAll("XXXXX","roomwork%2fforParent%2f");
 //  private static String TEAMWORKS = BASIC.replaceAll("XXXXX","teamwork%2fforParent%2f");
-//  private static String PARENTSTUDENT = BASIC.replaceAll("XXXXX","student%2fforParent%2f");
-//  private static String PERSONALB = BASIC.replaceAll("XXXXX","parent%2fforParentPersonal%2f");
+//  private static String PARENTSTUDENT = BASIC.replaceAll("XXXXX","Student%2fforParent%2f");
+//  private static String PERSONALB = BASIC.replaceAll("XXXXX","Parent%2fforParentPersonal%2f");
 //
 //  public static void CreateParent (){
 //    Button parent_1 = new Button("校园公告", NOTICEZ, ButtonType.view);

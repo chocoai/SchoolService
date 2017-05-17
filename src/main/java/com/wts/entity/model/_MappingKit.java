@@ -19,7 +19,7 @@ public class _MappingKit {
 		arp.addMapping("assessment", "id", Assessment.class);
 		// Composite Primary Key order: assessment_id,student_id
 		arp.addMapping("assessmentdetail", "assessment_id,student_id", Assessmentdetail.class);
-		arp.addMapping("course", "id", Course.class);
+		arp.addMapping("Course", "id", Course.class);
 		arp.addMapping("coursechoose", "id", Coursechoose.class);
 		arp.addMapping("coursechoosedetail", "id", Coursechoosedetail.class);
 		arp.addMapping("coursemessage", "id", Coursemessage.class);
@@ -36,20 +36,20 @@ public class _MappingKit {
 		arp.addMapping("identity", "id", Identity.class);
 		arp.addMapping("leave", "id", Leave.class);
 		arp.addMapping("notice", "id", Notice.class);
-		arp.addMapping("parent", "id", Parent.class);
+		arp.addMapping("Parent", "id", Parent.class);
 		arp.addMapping("permission", "id", Permission.class);
-		arp.addMapping("room", "id", Room.class);
+		arp.addMapping("Room", "id", Room.class);
 		// Composite Primary Key order: room_id,student_id
 		arp.addMapping("roomstudent", "room_id,student_id", Roomstudent.class);
 		// Composite Primary Key order: order_course,order_day,semester_id
 		arp.addMapping("schedule", "order_course,order_day,semester_id", Schedule.class);
-		arp.addMapping("semester", "id", Semester.class);
-		arp.addMapping("student", "id", Student.class);
+		arp.addMapping("Semester", "id", Semester.class);
+		arp.addMapping("Student", "id", Student.class);
 		// Composite Primary Key order: course_id,semester_id,student_id
 		arp.addMapping("studentcoursesemester", "course_id,semester_id,student_id", Studentcoursesemester.class);
 		// Composite Primary Key order: identity_id,parent_id,student_id
 		arp.addMapping("studentparentidentity", "identity_id,parent_id,student_id", Studentparentidentity.class);
-		arp.addMapping("teacher", "id", Teacher.class);
+		arp.addMapping("Teacher", "id", Teacher.class);
 		arp.addMapping("teachermessage", "id", Teachermessage.class);
 		arp.addMapping("teachermessageread", "id", Teachermessageread.class);
 		// Composite Primary Key order: permission_id,teacher_id

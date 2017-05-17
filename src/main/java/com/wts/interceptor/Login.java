@@ -9,7 +9,7 @@ public class Login implements Interceptor {
 
     public void intercept(Invocation inv) {
         HttpSession session = inv.getController().getSession();
-        if (session.getAttribute("Teacher") == null && session.getAttribute("manager") == null && session.getAttribute("parent") == null) {
+        if (session.getAttribute("Teacher") == null && session.getAttribute("manager") == null && session.getAttribute("Parent") == null) {
             inv.getController().redirect("/");
         } else {
             inv.invoke();
