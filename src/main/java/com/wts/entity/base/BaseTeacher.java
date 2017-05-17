@@ -25,14 +25,6 @@ public abstract class BaseTeacher<M extends BaseTeacher<M>> extends Model<M> imp
 		return get("userId");
 	}
 
-	public void setLogin(java.lang.String login) {
-		set("login", login);
-	}
-
-	public java.lang.String getLogin() {
-		return get("login");
-	}
-
 	public void setPass(java.lang.String pass) {
 		set("pass", pass);
 	}
@@ -103,14 +95,6 @@ public abstract class BaseTeacher<M extends BaseTeacher<M>> extends Model<M> imp
 
 	public java.lang.Integer getState() {
 		return get("state");
-	}
-
-	public void setIsManager(java.lang.Integer isManager) {
-		set("isManager", isManager);
-	}
-
-	public java.lang.Integer getIsManager() {
-		return get("isManager");
 	}
 
 	public void setPicUrl(java.lang.String picUrl) {

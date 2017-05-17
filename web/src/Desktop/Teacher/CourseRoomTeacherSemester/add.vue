@@ -7,10 +7,10 @@
       <Col><Loading></Loading></Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="9">
+      <Col span="6">
         <div class="right">
           <div class="queryLeft">
-            <Input type="text" v-model="keyword1" placeholder="请输入关键词" style="width:270px;">
+            <Input type="text" v-model="keyword1" placeholder="请输入关键词" style="width:150px;">
             <span slot="prepend">关键词</span>
             </Input>
           </div>
@@ -28,10 +28,10 @@
           </div>
         </div>
       </Col>
-      <Col span="9">
+      <Col span="6">
         <div class="right">
           <div class="queryLeft">
-            <Input type="text" v-model="keyword2" placeholder="请输入关键词" style="width:270px;">
+            <Input type="text" v-model="keyword2" placeholder="请输入关键词" style="width:150px;">
             <span slot="prepend">关键词</span>
             </Input>
           </div>
@@ -70,9 +70,30 @@
           </div>
         </div>
       </Col>
+      <Col span="6">
+        <div class="right">
+          <div class="queryLeft">
+            <Input type="text" v-model="keyword4" placeholder="请输入关键词" style="width:150px;">
+            <span slot="prepend">关键词</span>
+            </Input>
+          </div>
+          <div class="queryRight">
+            <Button-group>
+              <Button type="ghost" @click="goQuery4">
+                <Icon type="search"></Icon>
+                搜索
+              </Button>
+              <Button type="ghost" @click="goQueryReset4">
+                <Icon type="refresh"></Icon>
+                重置
+              </Button>
+            </Button-group>
+          </div>
+        </div>
+      </Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="9">
+      <Col span="6">
         <div class="layout-content">
           <Table
             highlight-row
@@ -84,7 +105,7 @@
           </Table>
         </div>
       </Col>
-      <Col span="9">
+      <Col span="6">
         <div class="layout-content">
           <Table
             highlight-row
@@ -97,20 +118,32 @@
         </div>
       </Col>
       <Col span="6">
-      <div class="layout-content">
-        <Table
-          highlight-row
-          @on-row-dblclick="getData3"
-          height="450"
-          size="small"
-          :columns="columns3"
-          :data="pageList3">
-        </Table>
-      </div>
+        <div class="layout-content">
+          <Table
+            highlight-row
+            @on-row-dblclick="getData3"
+            height="450"
+            size="small"
+            :columns="columns3"
+            :data="pageList3">
+          </Table>
+        </div>
+      </Col>
+      <Col span="6">
+        <div class="layout-content">
+          <Table
+            highlight-row
+            @on-row-dblclick="getData4"
+            height="450"
+            size="small"
+            :columns="columns4"
+            :data="pageList4">
+          </Table>
+        </div>
       </Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="9">
+      <Col span="6">
         <div class="right">
           <Page
             :total="pageTotal1"
@@ -125,7 +158,7 @@
           </Page>
         </div>
       </Col>
-      <Col span="9">
+      <Col span="6">
         <div class="right">
           <Page
             :total="pageTotal2"
@@ -150,6 +183,22 @@
             @on-change="pageChange3"
             placement="top"
             show-sizer
+            show-elevator
+            show-total>
+          </Page>
+        </div>
+      </Col>
+      <Col span="6">
+        <div class="right">
+          <Page
+            :total="pageTotal4"
+            :current="pageCurrent4"
+            :page-size="pageSize4"
+            @on-page-size-change="sizeChange4"
+            @on-change="pageChange4"
+            placement="top"
+            show-sizer
+            show-elevator
             show-total>
           </Page>
         </div>
@@ -159,9 +208,10 @@
       <Col span="16">
         <div class="rights">
           <Button size="large" type="info">请双击行选择相关信息</Button>
-          <Tag type="dot" color="blue">学生：{{name1}}</Tag>
-          <Tag type="dot" color="green">家长：{{name2}}</Tag>
-          <Tag type="dot" color="yellow">身份：{{name3}}</Tag>
+          <Tag type="dot" color="blue">课程：{{name1}}</Tag>
+          <Tag type="dot" color="green">班级：{{name2}}</Tag>
+          <Tag type="dot" color="yellow">教师：{{name3}}</Tag>
+          <Tag type="dot" color="red">学期：{{name4}}</Tag>
         </div>
       </Col>
       <Col span="8">
@@ -195,37 +245,50 @@
         keyword1: '',
         keyword2: '',
         keyword3: '',
+        keyword4: '',
         pageList1: [],
         pageList2: [],
         pageList3: [],
+        pageList4: [],
         pageTotal1: '',
         pageTotal2: '',
         pageTotal3: '',
+        pageTotal4: '',
         pageCurrent1: '',
         pageCurrent2: '',
         pageCurrent3: '',
+        pageCurrent4: '',
         name1: '未知',
         name2: '未知',
         name3: '未知',
+        name4: '未知',
         id1: '',
         id2: '',
         id3: '',
+        id4: '',
         showLoad: true,
         columns1: [
           {
-            title: '学生姓名',
+            title: '课程名称',
             key: 'name',
             align: 'center'
           },
           {
-            title: '身份证号码',
-            key: 'number',
+            title: '课程类型',
+            key: 'tname',
             align: 'center'
           }
         ],
         columns2: [
           {
-            title: '家长姓名',
+            title: '班级名称',
+            key: 'name',
+            align: 'center'
+          }
+        ],
+        columns3: [
+          {
+            title: '教师姓名',
             key: 'name',
             align: 'center'
           },
@@ -233,11 +296,26 @@
             title: '联系电话',
             key: 'mobile',
             align: 'center'
+          },
+          {
+            title: '教师类别',
+            key: 'type',
+            align: 'center',
+            render: (h, params) => {
+              const color = params.row.type.toString() === '1' ? 'green' : params.row.type.toString() === '2' ? 'yellow' : params.row.type.toString() === '3' ? 'blue' : 'red'
+              const text = params.row.type.toString() === '1' ? '在编' : params.row.type.toString() === '2' ? '聘用' : params.row.type.toString() === '3' ? '校外' : '错误'
+              return h('Tag', {
+                props: {
+                  type: 'dot',
+                  color: color
+                }
+              }, text)
+            }
           }
         ],
-        columns3: [
+        columns4: [
           {
-            title: '身份',
+            title: '学期名称',
             key: 'name',
             align: 'center'
           }
@@ -257,6 +335,10 @@
       this.pageCurrent3 = parseInt(this.$store.state.pageCurrent3)
       this.pageSize3 = parseInt(this.$store.state.pageSize3)
       this.getLists3()
+      this.keyword4 = this.$store.state.keyword4
+      this.pageCurrent4 = parseInt(this.$store.state.pageCurrent4)
+      this.pageSize4 = parseInt(this.$store.state.pageSize4)
+      this.getLists4()
       if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
@@ -294,7 +376,7 @@
     methods: {
       getLists1 () {
         this.$http.get(
-          API.queryStudent,
+          API.queryCourse,
           { params: {
             keyword: this.$store.state.keyword1,
             pageCurrent: this.$store.state.pageCurrent1,
@@ -305,7 +387,7 @@
           if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
           } else {
             this.$http.get(
-              API.totalStudent,
+              API.totalCourse,
               { params: {
                 keyword: this.$store.state.keyword1
               } },
@@ -334,7 +416,7 @@
       },
       getLists2 () {
         this.$http.get(
-          API.queryParent,
+          API.queryRoom,
           { params: {
             keyword: this.$store.state.keyword2,
             pageCurrent: this.$store.state.pageCurrent2,
@@ -345,7 +427,7 @@
           if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
           } else {
             this.$http.get(
-              API.totalParent,
+              API.totalRoom,
               { params: {
                 keyword: this.$store.state.keyword2
               } },
@@ -374,7 +456,7 @@
       },
       getLists3 () {
         this.$http.get(
-          API.queryIdentity,
+          API.queryTeacher,
           { params: {
             keyword: this.$store.state.keyword3,
             pageCurrent: this.$store.state.pageCurrent3,
@@ -385,7 +467,7 @@
           if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
           } else {
             this.$http.get(
-              API.totalIdentity,
+              API.totalTeacher,
               { params: {
                 keyword: this.$store.state.keyword3
               } },
@@ -399,6 +481,46 @@
               } else {
                 this.pageList3 = res.body
                 this.pageTotal3 = parseInt(response.body)
+              }
+            }, (response) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
+          }
+        }, (res) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
+      },
+      getLists4 () {
+        this.$http.get(
+          API.querySemester,
+          { params: {
+            keyword: this.$store.state.keyword4,
+            pageCurrent: this.$store.state.pageCurrent4,
+            pageSize: this.$store.state.pageSize4
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((res) => {
+          if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
+          } else {
+            this.$http.get(
+              API.totalSemester,
+              { params: {
+                keyword: this.$store.state.keyword4
+              } },
+              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+            ).then((response) => {
+              if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+                this.$Notice.error({
+                  title: '登录过期或非法操作!'
+                })
+                window.location.href = '/MainDesktop'
+              } else {
+                this.pageList4 = res.body
+                this.pageTotal4 = parseInt(response.body)
               }
             }, (response) => {
               this.$Notice.error({
@@ -439,6 +561,15 @@
         })
         this.getLists3()
       },
+      goQuery4 () {
+        this.pageCurrent4 = 1
+        this.$store.commit('save', {
+          keyword4: this.keyword4,
+          pageCurrent4: this.pageCurrent4,
+          pageSize4: this.pageSize4
+        })
+        this.getLists4()
+      },
       goQueryReset1 () {
         this.pageCurrent1 = 1
         this.keyword1 = ''
@@ -468,6 +599,16 @@
           pageSize3: this.pageSize3
         })
         this.getLists3()
+      },
+      goQueryReset4 () {
+        this.pageCurrent4 = 1
+        this.keyword4 = ''
+        this.$store.commit('save', {
+          keyword4: this.keyword4,
+          pageCurrent4: this.pageCurrent4,
+          pageSize4: this.pageSize4
+        })
+        this.getLists4()
       },
       sizeChange1 (value) {
         this.pageSize1 = value
@@ -499,6 +640,16 @@
         })
         this.getLists3()
       },
+      sizeChange4 (value) {
+        this.pageSize4 = value
+        this.pageCurrent4 = 1
+        this.$store.commit('save', {
+          keyword4: this.keyword4,
+          pageCurrent4: this.pageCurrent4,
+          pageSize4: this.pageSize4
+        })
+        this.getLists4()
+      },
       pageChange1 (value) {
         this.pageCurrent1 = value
         this.$store.commit('save', {
@@ -526,25 +677,41 @@
         })
         this.getLists3()
       },
+      pageChange4 (value) {
+        this.pageCurrent4 = value
+        this.$store.commit('save', {
+          keyword4: this.keyword4,
+          pageCurrent4: this.pageCurrent4,
+          pageSize4: this.pageSize4
+        })
+        this.getLists4()
+      },
       getData1 (value) {
         this.id1 = value.id
         this.name1 = value.name
         this.$Notice.info({
-          title: '已选择学生：' + this.name1
+          title: '已选择课程：' + this.name1
         })
       },
       getData2 (value) {
         this.id2 = value.id
         this.name2 = value.name
         this.$Notice.info({
-          title: '已选择家长：' + this.name2
+          title: '已选择班级：' + this.name2
         })
       },
       getData3 (value) {
         this.id3 = value.id
         this.name3 = value.name
         this.$Notice.info({
-          title: '已选择身份：' + this.name3
+          title: '已选择教师：' + this.name3
+        })
+      },
+      getData4 (value) {
+        this.id4 = value.id
+        this.name4 = value.name
+        this.$Notice.info({
+          title: '已选择学期：' + this.name4
         })
       },
       goReset () {
@@ -560,17 +727,24 @@
         this.pageCurrent3 = ''
         this.name3 = '未知'
         this.id3 = ''
+        this.keyword4 = ''
+        this.pageCurrent4 = ''
+        this.name4 = '未知'
+        this.id4 = ''
         this.$store.commit('save', {
           keyword1: this.keyword1,
           keyword2: this.keyword2,
           keyword3: this.keyword3,
+          keyword4: this.keyword4,
           pageCurrent1: this.pageCurrent1,
           pageCurrent2: this.pageCurrent2,
-          pageCurrent3: this.pageCurrent3
+          pageCurrent3: this.pageCurrent3,
+          pageCurrent4: this.pageCurrent4
         })
         this.getLists1()
         this.getLists2()
         this.getLists3()
+        this.getLists4()
       },
       goSave () {
         this.$Loading.start()
@@ -578,9 +752,10 @@
         this.$http.get(
           API.save,
           { params: {
-            sid: this.id1,
-            pid: this.id2,
-            iid: this.id3
+            cid: this.id1,
+            rid: this.id2,
+            tid: this.id3,
+            sid: this.id4
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

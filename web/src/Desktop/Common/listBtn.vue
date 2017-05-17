@@ -1,9 +1,9 @@
 <template>
   <div>
-    <Button type="primary" size="large" @click="goEdit" v-if="Edit">修改</Button>
-    <Button type="warning" size="large" @click="goInactive" v-if="Inactive">注销</Button>
-    <Button type="success" size="large" @click="goActive" v-if="Active">激活</Button>
-    <Button type="error" size="large" @click="goDelete" v-if="Delete">删除</Button>
+    <Button type="primary" @click="goEdit" v-if="Edit">修改</Button>
+    <Button type="warning" @click="goInactive" v-if="Inactive">注销</Button>
+    <Button type="success" @click="goActive" v-if="Active">激活</Button>
+    <Button type="error" @click="goDelete" v-if="Delete">删除</Button>
   </div>
 </template>
 <script>

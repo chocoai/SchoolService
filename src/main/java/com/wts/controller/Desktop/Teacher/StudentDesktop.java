@@ -175,14 +175,17 @@ public class StudentDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
-    String[] title={"序号","学生姓名","身份证号码","学籍号码","家庭地址","性别","家长绑定情况","状态"};
+    String[] title={"序号","学生姓名","身份证号码","学籍号码","家庭地址","性别","状态"};
     String fileName = "Student";
     String SQL = "select id AS 序号,name AS 学生姓名, number AS 身份证号码, code AS 学籍号码, address AS 家庭地址, " +
             "(case sex when 1 then '男' when 2 then '女' else '未知' end ) AS 性别, " +
-            "(case bind when 1 then '已绑定' when 2 then '未绑定' else '错误' end ) AS 家长绑定, " +
             "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 状态 " +
             "from student where del = 0 AND name like '%"+getPara("keyword")+"%' OR number LIKE '%" + getPara("keyword") + "%' OR code LIKE '%" + getPara("keyword") + "%' " +
             "ORDER BY id ASC";
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "file_name:" + fileName + ";" +
+            "sql:" + SQL + ";");
     ExportUtil.export(title,fileName,SQL,getResponse());
   }
 

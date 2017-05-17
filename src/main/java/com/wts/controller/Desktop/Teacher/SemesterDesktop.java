@@ -170,6 +170,10 @@ public class SemesterDesktop extends Controller {
             "(case state when 1 then '当前学期' when 2 then '非当前学期' else '错误' end ) AS 学期状态 " +
             "from semester where del = 0 AND name like '%"+getPara("keyword")+"%'" +
             "ORDER BY id ASC";
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "file_name:" + fileName + ";" +
+            "sql:" + SQL + ";");
     ExportUtil.export(title,fileName,SQL,getResponse());
   }
 

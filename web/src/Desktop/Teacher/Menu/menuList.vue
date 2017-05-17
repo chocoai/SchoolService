@@ -24,9 +24,10 @@
             <Icon type="stats-bars"></Icon>
             关系管理
           </template>
-          <Menu-item name="StudentParentIdentity" v-if="menu.StudentParentIdentityDesktop_Page">学生_家长_身份</Menu-item>
+          <Menu-item name="StudentParentIdentityDesktop" v-if="menu.StudentParentIdentityDesktop_Page">学生_家长_身份</Menu-item>
           <Menu-item name="RoomStudentDesktop" v-if="menu.RoomStudentDesktop_Page">班级_学生</Menu-item>
-          <Menu-item name="CourseRoomTeacher" v-if="menu.CourseRoomTeacherDesktop_Page">课程_班级_教师</Menu-item>
+          <Menu-item name="CourseRoomTeacherDesktop" v-if="menu.CourseRoomTeacherDesktop_Page">课程_班级_教师</Menu-item>
+          <Menu-item name="StudentCourseSemesterDesktop" v-if="menu.StudentCourseSemesterDesktop_Page">学生_课程_学期</Menu-item>
         </Submenu>
         <Submenu name="information">
           <template slot="title">
@@ -95,11 +96,13 @@
             return '基础管理'
           case 'ParentDesktop':
             return '基础管理'
-          case 'StudentParentIdentity':
+          case 'StudentParentIdentityDesktop':
             return '关系管理'
           case 'RoomStudentDesktop':
             return '关系管理'
-          case 'CourseRoomTeacher':
+          case 'CourseRoomTeacherDesktop':
+            return '关系管理'
+          case 'StudentCourseSemesterDesktop':
             return '关系管理'
           case 'notice':
             return '信息管理'
@@ -133,12 +136,14 @@
             return '学生'
           case 'ParentDesktop':
             return '家长'
-          case 'StudentParentIdentity':
+          case 'StudentParentIdentityDesktop':
             return '学生_家长_身份'
           case 'RoomStudentDesktop':
             return '班级_学生'
-          case 'CourseRoomTeacher':
+          case 'CourseRoomTeacherDesktop':
             return '课程_班级_教师'
+          case 'StudentCourseSemesterDesktop':
+            return '学生_课程_学期'
           case 'notice':
             return '公告'
           case 'attendance':
@@ -180,14 +185,17 @@
           case 'ParentDesktop':
             window.location.href = '/ParentDesktop/Page'
             break
-          case 'StudentParentIdentity':
+          case 'StudentParentIdentityDesktop':
             window.location.href = '/StudentParentIdentityDesktop/Page'
             break
           case 'RoomStudentDesktop':
             window.location.href = '/RoomStudentDesktop/Page'
             break
-          case 'CourseRoomTeacher':
+          case 'CourseRoomTeacherDesktop':
             window.location.href = '/CourseRoomTeacherDesktop/Page'
+            break
+          case 'StudentCourseSemesterDesktop':
+            window.location.href = '/StudentCourseSemesterDesktop/Page'
             break
           default:
             window.location.href = '/MainDesktop'

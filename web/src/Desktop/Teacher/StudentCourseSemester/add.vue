@@ -7,7 +7,7 @@
       <Col><Loading></Loading></Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="9">
+      <Col span="8">
         <div class="right">
           <div class="queryLeft">
             <Input type="text" v-model="keyword1" placeholder="请输入关键词" style="width:270px;">
@@ -28,7 +28,7 @@
           </div>
         </div>
       </Col>
-      <Col span="9">
+      <Col span="8">
         <div class="right">
           <div class="queryLeft">
             <Input type="text" v-model="keyword2" placeholder="请输入关键词" style="width:270px;">
@@ -49,10 +49,10 @@
           </div>
         </div>
       </Col>
-      <Col span="6">
+      <Col span="8">
         <div class="right">
           <div class="queryLeft">
-            <Input type="text" v-model="keyword3" placeholder="请输入关键词" style="width:150px;">
+            <Input type="text" v-model="keyword3" placeholder="请输入关键词" style="width:270px;">
             <span slot="prepend">关键词</span>
             </Input>
           </div>
@@ -72,7 +72,7 @@
       </Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="9">
+      <Col span="8">
         <div class="layout-content">
           <Table
             highlight-row
@@ -84,7 +84,7 @@
           </Table>
         </div>
       </Col>
-      <Col span="9">
+      <Col span="8">
         <div class="layout-content">
           <Table
             highlight-row
@@ -96,7 +96,7 @@
           </Table>
         </div>
       </Col>
-      <Col span="6">
+      <Col span="8">
       <div class="layout-content">
         <Table
           highlight-row
@@ -110,7 +110,7 @@
       </Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="9">
+      <Col span="8">
         <div class="right">
           <Page
             :total="pageTotal1"
@@ -125,7 +125,7 @@
           </Page>
         </div>
       </Col>
-      <Col span="9">
+      <Col span="8">
         <div class="right">
           <Page
             :total="pageTotal2"
@@ -140,7 +140,7 @@
           </Page>
         </div>
       </Col>
-      <Col span="6">
+      <Col span="8">
         <div class="right">
           <Page
             :total="pageTotal3"
@@ -160,8 +160,8 @@
         <div class="rights">
           <Button size="large" type="info">请双击行选择相关信息</Button>
           <Tag type="dot" color="blue">学生：{{name1}}</Tag>
-          <Tag type="dot" color="green">家长：{{name2}}</Tag>
-          <Tag type="dot" color="yellow">身份：{{name3}}</Tag>
+          <Tag type="dot" color="green">课程：{{name2}}</Tag>
+          <Tag type="dot" color="yellow">学期：{{name3}}</Tag>
         </div>
       </Col>
       <Col span="8">
@@ -225,19 +225,19 @@
         ],
         columns2: [
           {
-            title: '家长姓名',
+            title: '课程名称',
             key: 'name',
             align: 'center'
           },
           {
-            title: '联系电话',
-            key: 'mobile',
+            title: '课程类型',
+            key: 'tname',
             align: 'center'
           }
         ],
         columns3: [
           {
-            title: '身份',
+            title: '学期名称',
             key: 'name',
             align: 'center'
           }
@@ -334,7 +334,7 @@
       },
       getLists2 () {
         this.$http.get(
-          API.queryParent,
+          API.queryCourse,
           { params: {
             keyword: this.$store.state.keyword2,
             pageCurrent: this.$store.state.pageCurrent2,
@@ -345,7 +345,7 @@
           if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
           } else {
             this.$http.get(
-              API.totalParent,
+              API.totalCourse,
               { params: {
                 keyword: this.$store.state.keyword2
               } },
@@ -374,7 +374,7 @@
       },
       getLists3 () {
         this.$http.get(
-          API.queryIdentity,
+          API.querySemester,
           { params: {
             keyword: this.$store.state.keyword3,
             pageCurrent: this.$store.state.pageCurrent3,
@@ -385,7 +385,7 @@
           if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
           } else {
             this.$http.get(
-              API.totalIdentity,
+              API.totalSemester,
               { params: {
                 keyword: this.$store.state.keyword3
               } },
@@ -537,14 +537,14 @@
         this.id2 = value.id
         this.name2 = value.name
         this.$Notice.info({
-          title: '已选择家长：' + this.name2
+          title: '已选择课程：' + this.name2
         })
       },
       getData3 (value) {
         this.id3 = value.id
         this.name3 = value.name
         this.$Notice.info({
-          title: '已选择身份：' + this.name3
+          title: '已选择学期：' + this.name3
         })
       },
       goReset () {
@@ -579,8 +579,8 @@
           API.save,
           { params: {
             sid: this.id1,
-            pid: this.id2,
-            iid: this.id3
+            cid: this.id2,
+            xid: this.id3
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

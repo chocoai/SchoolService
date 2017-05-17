@@ -86,7 +86,7 @@
         <span>删除确认</span>
       </p>
       <div style="text-align:center">
-        <p>即将要删除学生（{{sname}}）与家长（{{pname}}）的身份（{{iname}}）</p>
+        <p>即将要删除学生（{{sname}}）与课程（{{cname}}）在学期（{{xname}}）的关系</p>
         <p>关系删除后需要重新绑定。</p>
         <p>该功能必须慎用！</p>
         <p>是否继续删除？</p>
@@ -123,8 +123,8 @@
         del: false,
         index: '',
         sname: '',
-        dname: '',
-        iname: '',
+        cname: '',
+        xname: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -145,12 +145,12 @@
             sortable: true
           },
           {
-            title: '家长姓名',
-            key: 'pname',
+            title: '课程姓名',
+            key: 'cname',
             sortable: true
           },
           {
-            title: '关系',
+            title: '学期名称',
             key: 'iname',
             sortable: true
           },
@@ -219,8 +219,8 @@
         this.del = true
         this.index = index
         this.sname = this.pageList[index].sname
-        this.dname = this.pageList[index].dname
-        this.iname = this.pageList[index].iname
+        this.cname = this.pageList[index].cname
+        this.xname = this.pageList[index].xname
       },
       getLists () {
         this.$http.get(
@@ -330,8 +330,8 @@
         this.$http.get(
           API.del,
           { params: {
-            iid: this.pageList[this.index].iid,
-            pid: this.pageList[this.index].pid,
+            xid: this.pageList[this.index].xid,
+            cid: this.pageList[this.index].cid,
             sid: this.pageList[this.index].sid
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }

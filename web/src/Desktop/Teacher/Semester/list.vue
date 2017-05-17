@@ -70,6 +70,7 @@
             :page-size="pageSize"
             @on-page-size-change="sizeChange"
             @on-change="pageChange"
+            placement="top"
             show-sizer
             show-elevator
             show-total>
@@ -139,8 +140,6 @@
         base: API.base,
         permission: [],
         menu: [],
-        query: API.query,
-        total: API.total,
         keyword: '',
         pageCurrent: '',
         pageSize: '',
@@ -182,7 +181,7 @@
             sortable: true
           },
           {
-            title: '课程状态',
+            title: '学期状态',
             key: 'state',
             sortable: true,
             render: (h, params) => {

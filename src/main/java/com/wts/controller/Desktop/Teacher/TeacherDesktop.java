@@ -231,6 +231,10 @@ public class TeacherDesktop extends Controller {
             "(case state when 1 then '关注' when 2 then '已冻结' when 3 then '取消关注' when 4 then '未关注' else '错误' end ) AS 关注状态 " +
             "from Teacher where del = 0 AND name like '%" + getPara("keyword") + "%' OR mobile LIKE '%" + getPara("keyword") + "%' " +
             "ORDER BY id ASC";
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "file_name:" + fileName + ";" +
+            "sql:" + SQL + ";");
     ExportUtil.export(title, fileName, SQL, getResponse());
   }
 

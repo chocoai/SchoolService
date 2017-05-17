@@ -3,7 +3,7 @@ package com.wts.controller.Desktop.Teacher;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
-import com.wts.entity.model.Courseroomteacher;
+import com.wts.entity.model.Courseroomteachersemester;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.PageCheck;
@@ -19,8 +19,8 @@ import java.io.IOException;
 import static com.wts.util.Util.PermissionString;
 
 
-public class CourseRoomTeacherDesktop extends Controller {
-  private static Logger logger = Logger.getLogger(CourseRoomTeacherDesktop.class);
+public class CourseRoomTeacherSemesterDesktop extends Controller {
+  private static Logger logger = Logger.getLogger(CourseRoomTeacherSemesterDesktop.class);
 
   /**
    * 页面
@@ -37,12 +37,12 @@ public class CourseRoomTeacherDesktop extends Controller {
         setSessionAttr("Teacher", teacher);
         setCookie("dit", teacher.getId().toString(), 60 * 60 * 3);
         setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(), teacher.getId().toString()), 60 * 6 * 10);
-        render("/static/html/desktop/Teacher/Desktop_Teacher_CourseRoomTeacher.html");
+        render("/static/html/desktop/Teacher/Desktop_Teacher_CourseRoomTeacherSemester.html");
       }
     } else {
       String teacherId = ((Teacher) getSessionAttr("Teacher")).getId().toString();
       setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(), teacherId), 60 * 6 * 10);
-      render("/static/html/desktop/Teacher/Desktop_Teacher_CourseRoomTeacher.html");
+      render("/static/html/desktop/Teacher/Desktop_Teacher_CourseRoomTeacherSemester.html");
     }
   }
 
@@ -66,27 +66,27 @@ public class CourseRoomTeacherDesktop extends Controller {
             "SELECT " +
                     "course.id AS cid," +
                     "room.id AS rid," +
-                    "Teacher.id AS tid," +
+                    "teacher.id AS tid," +
                     "semester.id AS sid," +
                     "course.name AS cname," +
                     "room.name AS rname," +
-                    "Teacher.name AS tname," +
+                    "teacher.name AS tname," +
                     "semester.name AS sname,",
-            "FROM ((((courseroomteacher " +
-                    "LEFT JOIN course ON courseroomteacher.course_id = course.id) " +
-                    "LEFT JOIN room ON courseroomteacher.room = room.id) " +
-                    "LEFT JOIN Teacher ON courseroomteacher.teacher_id = Teacher.id) " +
-                    "LEFT JOIN semester ON courseroomteacher.semester_id = semester.id) " +
+            "FROM ((((courseroomteachersemester " +
+                    "LEFT JOIN course ON courseroomteachersemester.course_id = course.id) " +
+                    "LEFT JOIN room ON courseroomteachersemester.room_id = room.id) " +
+                    "LEFT JOIN teacher ON courseroomteachersemester.teacher_id = teacher.id) " +
+                    "LEFT JOIN semester ON courseroomteachersemester.semester_id = semester.id) " +
                     "WHERE course.del = 0 " +
                     "AND room.del = 0 " +
-                    "AND Teacher.del = 0 " +
+                    "AND teacher.del = 0 " +
                     "AND semester.del = 0 " +
                     "AND (course.name LIKE '%" + getPara("keyword") + "%' " +
                     "OR room.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR Teacher.name LIKE '%" + getPara("keyword") + "%' " +
+                    "OR teacher.name LIKE '%" + getPara("keyword") + "%' " +
                     "OR semester.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR Teacher.mobile LIKE '%" + getPara("keyword") + "%' " +
-                    "OR Teacher.userId LIKE '%" + getPara("keyword") + "%')").getList());
+                    "OR teacher.mobile LIKE '%" + getPara("keyword") + "%' " +
+                    "OR teacher.userId LIKE '%" + getPara("keyword") + "%')").getList());
   }
 
   /**
@@ -94,21 +94,21 @@ public class CourseRoomTeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("FROM ((((courseroomteacher " +
-            "LEFT JOIN course ON courseroomteacher.course_id = course.id) " +
-                    "LEFT JOIN room ON courseroomteacher.room = room.id) " +
-                    "LEFT JOIN Teacher ON courseroomteacher.teacher_id = Teacher.id) " +
-                    "LEFT JOIN semester ON courseroomteacher.semester_id = semester.id) " +
+    Long count = Db.queryLong("SELECT COUNT(*) FROM ((((courseroomteachersemester " +
+            "LEFT JOIN course ON courseroomteachersemester.course_id = course.id) " +
+                    "LEFT JOIN room ON courseroomteachersemester.room_id = room.id) " +
+                    "LEFT JOIN teacher ON courseroomteachersemester.teacher_id = teacher.id) " +
+                    "LEFT JOIN semester ON courseroomteachersemester.semester_id = semester.id) " +
                     "WHERE course.del = 0 " +
                     "AND room.del = 0 " +
-                    "AND Teacher.del = 0 " +
+                    "AND teacher.del = 0 " +
                     "AND semester.del = 0 " +
                     "AND (course.name LIKE '%" + getPara("keyword") + "%' " +
                     "OR room.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR Teacher.name LIKE '%" + getPara("keyword") + "%' " +
+                    "OR teacher.name LIKE '%" + getPara("keyword") + "%' " +
                     "OR semester.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR Teacher.mobile LIKE '%" + getPara("keyword") + "%' " +
-                    "OR Teacher.userId LIKE '%" + getPara("keyword") + "%')");
+                    "OR teacher.mobile LIKE '%" + getPara("keyword") + "%' " +
+                    "OR teacher.userId LIKE '%" + getPara("keyword") + "%')");
     renderText(count.toString());
   }
 
@@ -118,7 +118,7 @@ public class CourseRoomTeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacher_Exist.class})
   public void Delete() {
-    Courseroomteacher.dao.deleteById(getPara("cid"), getPara("rid"), getPara("sid"), getPara("tid"));
+    Courseroomteachersemester.dao.deleteById(getPara("cid"), getPara("rid"), getPara("sid"), getPara("tid"));
     logger.warn("function:" + this.getClass().getSimpleName() + "/Delete;" +
             "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
             "course_id:" + getPara("cid") + ";" +
@@ -133,7 +133,7 @@ public class CourseRoomTeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacher_Save.class})
   public void Save() {
-    Courseroomteacher object = new Courseroomteacher();
+    Courseroomteachersemester object = new Courseroomteachersemester();
     object.set("course_id", getPara("cid"))
             .set("room_id", getPara("rid"))
             .set("semester_id", getPara("sid"))
@@ -154,27 +154,31 @@ public class CourseRoomTeacherDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
     String[] title = {"课程名称", "班级名称", "教师姓名", "学期名称"};
-    String fileName = "studentparentidentity";
+    String fileName = "CourseRoomTeacherSemester";
     String SQL = "SELECT " +
-            "course.name AS cname," +
-            "room.name AS rname," +
-            "Teacher.name AS tname," +
-            "semester.name AS sname," +
-            "FROM ((((courseroomteacher " +
-            "LEFT JOIN course ON courseroomteacher.course_id = course.id) " +
-            "LEFT JOIN room ON courseroomteacher.room = room.id) " +
-            "LEFT JOIN Teacher ON courseroomteacher.teacher_id = Teacher.id) " +
-            "LEFT JOIN semester ON courseroomteacher.semester_id = semester.id) " +
+            "course.name AS 课程名称," +
+            "room.name AS 班级名称," +
+            "teacher.name AS 教师姓名," +
+            "semester.name AS 学期名称," +
+            "FROM ((((courseroomteachersemester " +
+            "LEFT JOIN course ON courseroomteachersemester.course_id = course.id) " +
+            "LEFT JOIN room ON courseroomteachersemester.room_id = room.id) " +
+            "LEFT JOIN teacher ON courseroomteachersemester.teacher_id = teacher.id) " +
+            "LEFT JOIN semester ON courseroomteachersemester.semester_id = semester.id) " +
             "WHERE course.del = 0 " +
             "AND room.del = 0 " +
-            "AND Teacher.del = 0 " +
+            "AND teacher.del = 0 " +
             "AND semester.del = 0 " +
             "AND (course.name LIKE '%" + getPara("keyword") + "%' " +
             "OR room.name LIKE '%" + getPara("keyword") + "%' " +
-            "OR Teacher.name LIKE '%" + getPara("keyword") + "%' " +
+            "OR teacher.name LIKE '%" + getPara("keyword") + "%' " +
             "OR semester.name LIKE '%" + getPara("keyword") + "%' " +
-            "OR Teacher.mobile LIKE '%" + getPara("keyword") + "%' " +
-            "OR Teacher.userId LIKE '%" + getPara("keyword") + "%')";
+            "OR teacher.mobile LIKE '%" + getPara("keyword") + "%' " +
+            "OR teacher.userId LIKE '%" + getPara("keyword") + "%')";
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "file_name:" + fileName + ";" +
+            "sql:" + SQL + ";");
     ExportUtil.export(title, fileName, SQL, getResponse());
   }
 

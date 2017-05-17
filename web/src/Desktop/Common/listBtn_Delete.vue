@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Button type="error" size="large" @click="goDelete" v-if="Delete">删除</Button>
+    <Button type="error" @click="goDelete" v-if="Delete">删除</Button>
   </div>
 </template>
 <script>

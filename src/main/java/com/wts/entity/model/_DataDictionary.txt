@@ -92,16 +92,7 @@ Table: coursemessageread
  state       | INT(10)      | YES  |     |         | 是否阅读0未读1已读
 -------------+--------------+------+-----+---------+---------
 
-Table: courseroom
--------------+---------+------+-----+---------+---------
- Field       | Type    | Null | Key | Default | Remarks 
--------------+---------+------+-----+---------+---------
- course_id   | INT(10) | NO   | PRI |         |         
- room_id     | INT(10) | NO   | PRI |         |         
- semester_id | INT(10) | NO   | PRI |         |         
--------------+---------+------+-----+---------+---------
-
-Table: courseroomteacher
+Table: courseroomteachersemester
 -------------+---------+------+-----+---------+---------
  Field       | Type    | Null | Key | Default | Remarks 
 -------------+---------+------+-----+---------+---------
@@ -223,7 +214,6 @@ Table: parent
 ----------+--------------+------+-----+---------+---------
  id       | INT(10)      | NO   | PRI |         | 企业号用户序号 
  userId   | VARCHAR(255) | YES  |     |         | 微信号     
- login    | VARCHAR(255) | YES  |     |         | 登录名     
  pass     | VARCHAR(255) | YES  |     |         | 登录密码    
  name     | VARCHAR(255) | YES  |     |         | 姓名      
  sex      | INT(10)      | YES  |     |         | 性别0未知1男2女
@@ -234,7 +224,6 @@ Table: parent
  address  | VARCHAR(255) | YES  |     |         | 联系地址    
  state    | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
  picUrl   | VARCHAR(255) | YES  |     |         | 头像地址    
- bind     | INT(10)      | YES  |     |         | 是否绑定学生0否1是
  del      | INT(10)      | YES  |     |         | 删除标识0否1是
 ----------+--------------+------+-----+---------+---------
 
@@ -302,11 +291,10 @@ Table: student
  birth   | DATETIME(19) | YES  |     |         | 出生日期    
  address | VARCHAR(255) | YES  |     |         | 家庭地址    
  state   | INT(10)      | YES  |     |         | 学生状态0停用1可用
- bind    | INT(10)      | YES  |     |         | 是否绑定家长0否1是
  del     | INT(10)      | YES  |     |         | 删除标识0否1是
 ---------+--------------+------+-----+---------+---------
 
-Table: studentcourse
+Table: studentcoursesemester
 -------------+---------+------+-----+---------+---------
  Field       | Type    | Null | Key | Default | Remarks 
 -------------+---------+------+-----+---------+---------
@@ -325,26 +313,24 @@ Table: studentparentidentity
 -------------+---------+------+-----+---------+---------
 
 Table: teacher
------------+--------------+------+-----+---------+---------
- Field     | Type         | Null | Key | Default | Remarks 
------------+--------------+------+-----+---------+---------
- id        | INT(10)      | NO   | PRI |         | 企业号用户序号 
- userId    | VARCHAR(255) | YES  |     |         | 微信号     
- login     | VARCHAR(255) | YES  |     |         | 登录名     
- pass      | VARCHAR(255) | YES  |     |         | 登录密码    
- name      | VARCHAR(255) | YES  |     |         | 姓名      
- sex       | INT(10)      | YES  |     |         | 性别0未知1男2女
- mobile    | VARCHAR(255) | YES  |     |         | 手机号码    
- email     | VARCHAR(255) | YES  |     |         | 电子邮箱    
- weixinId  | VARCHAR(255) | YES  |     |         | 微信账号    
- qq        | VARCHAR(255) | YES  |     |         | QQ号     
- address   | VARCHAR(255) | YES  |     |         | 联系地址    
- state     | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
- isManager | INT(10)      | YES  |     |         | 是否管理0否1是
- picUrl    | VARCHAR(255) | YES  |     |         | 头像地址    
- type      | INT(10)      | YES  |     |         | 1在编2聘用3校外
- del       | INT(10)      | YES  |     |         | 删除标识0否1是
------------+--------------+------+-----+---------+---------
+----------+--------------+------+-----+---------+---------
+ Field    | Type         | Null | Key | Default | Remarks 
+----------+--------------+------+-----+---------+---------
+ id       | INT(10)      | NO   | PRI |         | 企业号用户序号 
+ userId   | VARCHAR(255) | YES  |     |         | 微信号     
+ pass     | VARCHAR(255) | YES  |     |         | 登录密码    
+ name     | VARCHAR(255) | YES  |     |         | 姓名      
+ sex      | INT(10)      | YES  |     |         | 性别0未知1男2女
+ mobile   | VARCHAR(255) | YES  |     |         | 手机号码    
+ email    | VARCHAR(255) | YES  |     |         | 电子邮箱    
+ weixinId | VARCHAR(255) | YES  |     |         | 微信账号    
+ qq       | VARCHAR(255) | YES  |     |         | QQ号     
+ address  | VARCHAR(255) | YES  |     |         | 联系地址    
+ state    | INT(10)      | YES  |     |         | 账号状态1关注2已冻结3取消关注4未关注
+ picUrl   | VARCHAR(255) | YES  |     |         | 头像地址    
+ type     | INT(10)      | YES  |     |         | 1在编2聘用3校外
+ del      | INT(10)      | YES  |     |         | 删除标识0否1是
+----------+--------------+------+-----+---------+---------
 
 Table: teachermessage
 ------------+--------------+------+-----+---------+---------

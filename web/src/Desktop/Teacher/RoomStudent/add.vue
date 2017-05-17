@@ -7,8 +7,48 @@
       <Col><Loading></Loading></Col>
     </Row>
     <Row v-show="!showLoad">
-      <Col span="12"><div class="right"><Search @goQuery="getQuery1" :download="download"></Search></div></Col>
-      <Col span="12"><div class="right"><Search @goQuery="getQuery2" :download="download"></Search></div></Col>
+      <Col span="12">
+        <div class="right">
+          <div class="queryLeft">
+            <Input type="text" v-model="keyword1" placeholder="请输入关键词" style="width:270px;">
+            <span slot="prepend">关键词</span>
+            </Input>
+          </div>
+          <div class="queryRight">
+            <Button-group>
+              <Button type="ghost" @click="goQuery1">
+                <Icon type="search"></Icon>
+                搜索
+              </Button>
+              <Button type="ghost" @click="goQueryReset1">
+                <Icon type="refresh"></Icon>
+                重置
+              </Button>
+            </Button-group>
+          </div>
+        </div>
+      </Col>
+      <Col span="12">
+        <div class="right">
+          <div class="queryLeft">
+            <Input type="text" v-model="keyword2" placeholder="请输入关键词" style="width:270px;">
+            <span slot="prepend">关键词</span>
+            </Input>
+          </div>
+          <div class="queryRight">
+            <Button-group>
+              <Button type="ghost" @click="goQuery2">
+                <Icon type="search"></Icon>
+                搜索
+              </Button>
+              <Button type="ghost" @click="goQueryReset2">
+                <Icon type="refresh"></Icon>
+                重置
+              </Button>
+            </Button-group>
+          </div>
+        </div>
+      </Col>
     </Row>
     <Row v-show="!showLoad">
       <Col span="12">
@@ -40,28 +80,30 @@
       <Col span="12">
         <div class="right">
           <Page
-            ref="pages1"
-            @goList="getList1"
-            @savePageCurrent="saveCurrent1"
-            @savePageCurrentAndKeyword="CurrentAndKeyword1"
-            :queryURL="query1"
-            :totalURL="total1"
-            :keyword="keyword1"
-          >
+            :total="pageTotal1"
+            :current="pageCurrent1"
+            :page-size="pageSize1"
+            @on-page-size-change="sizeChange1"
+            @on-change="pageChange1"
+            placement="top"
+            show-sizer
+            show-elevator
+            show-total>
           </Page>
         </div>
       </Col>
       <Col span="12">
         <div class="right">
           <Page
-            ref="pages2"
-            @goList="getList2"
-            @savePageCurrent="saveCurrent2"
-            @savePageCurrentAndKeyword="CurrentAndKeyword2"
-            :queryURL="query2"
-            :totalURL="total2"
-            :keyword="keyword2"
-          >
+            :total="pageTotal2"
+            :current="pageCurrent2"
+            :page-size="pageSize2"
+            @on-page-size-change="sizeChange2"
+            @on-change="pageChange2"
+            placement="top"
+            show-sizer
+            show-elevator
+            show-total>
           </Page>
         </div>
       </Col>
@@ -90,36 +132,31 @@
 <script>
   import Copy from '../../Common/copy.vue'
   import MenuList from '../Menu/menuList.vue'
-  import Search from '../../Common/search.vue'
-  import Page from '../../Common/page.vue'
   import Loading from '../../Common/loading.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
   export default {
     name: 'add',
-    components: { Copy, MenuList, Search, Page, Loading },
+    components: { Copy, MenuList, Loading },
     data () {
       return {
         name: '',
         base: API.base,
         permission: [],
         menu: [],
-        query1: API.queryRoom,
-        total1: API.totalRoom,
-        query2: API.queryStudent,
-        total2: API.totalStudent,
         keyword1: '',
         keyword2: '',
         pageList1: [],
         pageList2: [],
         pageTotal1: '',
         pageTotal2: '',
+        pageCurrent1: '',
+        pageCurrent2: '',
         name1: '未知',
         name2: '未知',
         id1: '',
         id2: '',
         showLoad: true,
-        download: false,
         columns1: [
           {
             title: '班级名称',
@@ -142,6 +179,14 @@
       }
     },
     created: function () {
+      this.keyword1 = this.$store.state.keyword1
+      this.pageCurrent1 = parseInt(this.$store.state.pageCurrent1)
+      this.pageSize1 = parseInt(this.$store.state.pageSize1)
+      this.getLists1()
+      this.keyword2 = this.$store.state.keyword2
+      this.pageCurrent2 = parseInt(this.$store.state.pageCurrent2)
+      this.pageSize2 = parseInt(this.$store.state.pageSize2)
+      this.getLists2()
       if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
@@ -177,13 +222,161 @@
       }
     },
     methods: {
-      getQuery1 (keyword) {
-        this.keyword1 = keyword
-        this.$refs.pages1.query(keyword)
+      getLists1 () {
+        this.$http.get(
+          API.queryRoom,
+          { params: {
+            keyword: this.$store.state.keyword1,
+            pageCurrent: this.$store.state.pageCurrent1,
+            pageSize: this.$store.state.pageSize1
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((res) => {
+          if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
+          } else {
+            this.$http.get(
+              API.totalRoom,
+              { params: {
+                keyword: this.$store.state.keyword1
+              } },
+              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+            ).then((response) => {
+              if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+                this.$Notice.error({
+                  title: '登录过期或非法操作!'
+                })
+                window.location.href = '/MainDesktop'
+              } else {
+                this.pageList1 = res.body
+                this.pageTotal1 = parseInt(response.body)
+              }
+            }, (response) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
+          }
+        }, (res) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
       },
-      getQueryNoChange1 (keyword) {
-        this.keyword1 = keyword
-        this.$refs.pages1.queryNoChange(keyword)
+      getLists2 () {
+        this.$http.get(
+          API.queryStudent,
+          { params: {
+            keyword: this.$store.state.keyword2,
+            pageCurrent: this.$store.state.pageCurrent2,
+            pageSize: this.$store.state.pageSize2
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((res) => {
+          if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
+          } else {
+            this.$http.get(
+              API.totalStudent,
+              { params: {
+                keyword: this.$store.state.keyword2
+              } },
+              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+            ).then((response) => {
+              if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+                this.$Notice.error({
+                  title: '登录过期或非法操作!'
+                })
+                window.location.href = '/MainDesktop'
+              } else {
+                this.pageList2 = res.body
+                this.pageTotal2 = parseInt(response.body)
+              }
+            }, (response) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
+          }
+        }, (res) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
+      },
+      goQuery1 () {
+        this.pageCurrent1 = 1
+        this.$store.commit('save', {
+          keyword1: this.keyword1,
+          pageCurrent1: this.pageCurrent1,
+          pageSize1: this.pageSize1
+        })
+        this.getLists1()
+      },
+      goQuery2 () {
+        this.pageCurrent2 = 1
+        this.$store.commit('save', {
+          keyword2: this.keyword2,
+          pageCurrent2: this.pageCurrent2,
+          pageSize2: this.pageSize2
+        })
+        this.getLists2()
+      },
+      goQueryReset1 () {
+        this.pageCurrent1 = 1
+        this.keyword1 = ''
+        this.$store.commit('save', {
+          keyword1: this.keyword1,
+          pageCurrent1: this.pageCurrent1,
+          pageSize1: this.pageSize1
+        })
+        this.getLists1()
+      },
+      goQueryReset2 () {
+        this.pageCurrent2 = 1
+        this.keyword2 = ''
+        this.$store.commit('save', {
+          keyword2: this.keyword2,
+          pageCurrent2: this.pageCurrent2,
+          pageSize2: this.pageSize2
+        })
+        this.getLists2()
+      },
+      sizeChange1 (value) {
+        this.pageSize1 = value
+        this.pageCurrent1 = 1
+        this.$store.commit('save', {
+          keyword1: this.keyword1,
+          pageCurrent1: this.pageCurrent1,
+          pageSize1: this.pageSize1
+        })
+        this.getLists1()
+      },
+      sizeChange2 (value) {
+        this.pageSize2 = value
+        this.pageCurrent2 = 1
+        this.$store.commit('save', {
+          keyword2: this.keyword2,
+          pageCurrent2: this.pageCurrent2,
+          pageSize2: this.pageSize2
+        })
+        this.getLists2()
+      },
+      pageChange1 (value) {
+        this.pageCurrent1 = value
+        this.$store.commit('save', {
+          keyword1: this.keyword1,
+          pageCurrent1: this.pageCurrent1,
+          pageSize1: this.pageSize1
+        })
+        this.getLists1()
+      },
+      pageChange2 (value) {
+        this.pageCurrent2 = value
+        this.$store.commit('save', {
+          keyword2: this.keyword2,
+          pageCurrent2: this.pageCurrent2,
+          pageSize2: this.pageSize2
+        })
+        this.getLists2()
       },
       getData1 (value) {
         this.id1 = value.id
@@ -192,29 +385,6 @@
           title: '已选择班级：' + this.name1
         })
       },
-      getList1 (pageList, pageTotal) {
-        this.pageList1 = pageList
-        this.pageTotal1 = pageTotal
-      },
-      saveCurrent1 (pageCurrent) {
-        this.$store.commit('save', {
-          pageCurrent1: pageCurrent
-        })
-      },
-      CurrentAndKeyword1 (keyword, pageCurrent) {
-        this.$store.commit('save', {
-          keyword1: keyword,
-          pageCurrent1: pageCurrent
-        })
-      },
-      getQuery2 (keyword) {
-        this.keyword2 = keyword
-        this.$refs.pages2.query(keyword)
-      },
-      getQueryNoChange2 (keyword) {
-        this.keyword2 = keyword
-        this.$refs.pages2.queryNoChange(keyword)
-      },
       getData2 (value) {
         this.id2 = value.id
         this.name2 = value.name
@@ -222,30 +392,23 @@
           title: '已选择学生：' + this.name2
         })
       },
-      getList2 (pageList, pageTotal) {
-        this.pageList2 = pageList
-        this.pageTotal2 = pageTotal
-      },
-      saveCurrent2 (pageCurrent) {
-        this.$store.commit('save', {
-          pageCurrent2: pageCurrent
-        })
-      },
-      CurrentAndKeyword2 (keyword, pageCurrent) {
-        this.$store.commit('save', {
-          keyword2: keyword,
-          pageCurrent2: pageCurrent
-        })
-      },
       goReset () {
         this.keyword1 = ''
-        this.$refs.pages1.query(this.keyword1)
+        this.pageCurrent1 = ''
         this.name1 = '未知'
         this.id1 = ''
         this.keyword2 = ''
-        this.$refs.pages2.query(this.keyword2)
+        this.pageCurrent2 = ''
         this.name2 = '未知'
         this.id2 = ''
+        this.$store.commit('save', {
+          keyword1: this.keyword1,
+          keyword2: this.keyword2,
+          pageCurrent1: this.pageCurrent1,
+          pageCurrent2: this.pageCurrent2
+        })
+        this.getLists1()
+        this.getLists2()
       },
       goSave () {
         this.$Loading.start()
@@ -322,6 +485,12 @@
   .rights{
     margin: 0px;
     border-radius: 4px;
+    float: right;
+  }
+  .queryLeft{
+    float: left;
+  }
+  .queryRight{
     float: right;
   }
 </style>

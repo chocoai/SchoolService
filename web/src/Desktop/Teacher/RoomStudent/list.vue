@@ -70,6 +70,7 @@
             :page-size="pageSize"
             @on-page-size-change="sizeChange"
             @on-change="pageChange"
+            placement="top"
             show-sizer
             show-elevator
             show-total>
@@ -114,8 +115,6 @@
         base: API.base,
         permission: [],
         menu: [],
-        query: API.query,
-        total: API.total,
         keyword: '',
         pageCurrent: '',
         pageSize: '',
@@ -179,6 +178,10 @@
       }
     },
     created: function () {
+      this.keyword = this.$store.state.keyword
+      this.pageCurrent = parseInt(this.$store.state.pageCurrent)
+      this.pageSize = parseInt(this.$store.state.pageSize)
+      this.getLists()
       if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
@@ -391,6 +394,12 @@
   .right{
     margin: 15px;
     border-radius: 4px;
+    float: right;
+  }
+  .queryLeft{
+    float: left;
+  }
+  .queryRight{
     float: right;
   }
 </style>

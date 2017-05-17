@@ -49,12 +49,12 @@ INSERT INTO `school_service`.`course` (`id`, `name`, `detail`, `amount`, `type`,
 INSERT INTO `school_service`.`course` (`id`, `name`, `detail`, `amount`, `type`, `state`, `del`) VALUES ('26', '篮球', 'a', '50', '2', '1', '0');
 INSERT INTO `school_service`.`course` (`id`, `name`, `detail`, `amount`, `type`, `state`, `del`) VALUES ('27', '美八度', 'a', '50', '2', '1', '0');
 INSERT INTO `school_service`.`course` (`id`, `name`, `detail`, `amount`, `type`, `state`, `del`) VALUES ('28', '国际数棋', 'a', '50', '2', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `login`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `isManager`, `picUrl`, `type`, `del`) VALUES ('1', 'WangTianShuo', NULL, NULL, '王天硕', NULL, '18653145531', '', '', '', '', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKaruicXHCsdZFKB6t38U8EW1XQ/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `login`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `isManager`, `picUrl`, `type`, `del`) VALUES ('2', 'XuHanQi', NULL, NULL, '徐汉琪', NULL, '13864100771', '', '', '', '', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKar4pX7uQLQUQBo6E5fVJqLMQ/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `login`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `isManager`, `picUrl`, `type`, `del`) VALUES ('3', 'WangMingLiang', NULL, NULL, '王明亮', NULL, '13969190978', '', '', '', '', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKarPx9G3VVkWgtbaOicREtnEkg/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `login`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `isManager`, `picUrl`, `type`, `del`) VALUES ('4', 'WangQun', NULL, NULL, '王群', NULL, '15949700280', '', '', '', '', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVPTvhDrfQHA4ZZNG4UC6UDe9ibekzyomiam7r9Bk9HEhbw/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `login`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `isManager`, `picUrl`, `type`, `del`) VALUES ('5', 'DuJunPeng', NULL, NULL, '杜君鹏', NULL, '15288868587', '', '', '', '', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVf2EDiaJNQjiaNY8QGx2D6wNRuqUgoZIricL3Riasn4ANFibg/', '1', '0');
-INSERT INTO `school_service`.`teacher` (`id`, `userId`, `login`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `isManager`, `picUrl`, `type`, `del`) VALUES ('6', 'LanLiJian', NULL, NULL, '兰立建', NULL, '13791111219', '', '', '', '', '1', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVJ1qjjm4pjd9x0HsicunLvh55UnTOL5opR9xsyQCKBl2g/', '1', '0');
+INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('1', 'WangTianShuo', NULL, '王天硕', NULL, '18653145531', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKaruicXHCsdZFKB6t38U8EW1XQ/', '1', '0');
+INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('2', 'XuHanQi', NULL, '徐汉琪', NULL, '13864100771', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKar4pX7uQLQUQBo6E5fVJqLMQ/', '1', '0');
+INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('3', 'WangMingLiang', NULL, '王明亮', NULL, '13969190978', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichXg9lLYicEWAxwZgLIMOcKarPx9G3VVkWgtbaOicREtnEkg/', '1', '0');
+INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('4', 'WangQun', NULL, '王群', NULL, '15949700280', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVPTvhDrfQHA4ZZNG4UC6UDe9ibekzyomiam7r9Bk9HEhbw/', '1', '0');
+INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('5', 'DuJunPeng', NULL, '杜君鹏', NULL, '15288868587', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVf2EDiaJNQjiaNY8QGx2D6wNRuqUgoZIricL3Riasn4ANFibg/', '1', '0');
+INSERT INTO `school_service`.`teacher` (`id`, `userId`, `pass`, `name`, `sex`, `mobile`, `email`, `weixinId`, `qq`, `address`, `state`, `picUrl`, `type`, `del`) VALUES ('6', 'LanLiJian', NULL, '兰立建', NULL, '13791111219', '', '', '', '', '1', 'http://shp.qpic.cn/bizmp/ZVx4icpOeichVJ1qjjm4pjd9x0HsicunLvh55UnTOL5opR9xsyQCKBl2g/', '1', '0');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('1', 'CourseDesktop/Page', '列表');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('2', 'CourseDesktop/Save', '新增');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('3', 'CourseDesktop/Active', '激活');
@@ -127,12 +127,14 @@ INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('69', 'R
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('70', 'RoomStudentDesktop/Query', '查找');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('71', 'RoomStudentDesktop/Total', '计数');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('72', 'RoomStudentDesktop/Delete', '删除');
-INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('73', 'CourseRoomTeacherDesktop/Page', '列表');
-INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('74', 'CourseRoomTeacherDesktop/Save', '新增');
-INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('75', 'CourseRoomTeacherDesktop/Download', '下载');
-INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('76', 'CourseRoomTeacherDesktop/Query', '查找');
-INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('77', 'CourseRoomTeacherDesktop/Total', '计数');
-INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('78', 'CourseRoomTeacherDesktop/Delete', '删除');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('73', 'CourseRoomTeacherSemesterDesktop/Page', '列表');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('74', 'CourseRoomTeacherSemesterDesktop/Save', '新增');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('75', 'CourseRoomTeacherSemesterDesktop/Download', '下载');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('76', 'CourseRoomTeacherSemesterDesktop/Query', '查找');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('77', 'CourseRoomTeacherSemesterDesktop/Total', '计数');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('78', 'CourseRoomTeacherSemesterDesktop/Delete', '删除');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('79', 'IdentityDesktop/Query', '查找');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('80', 'IdentityDesktop/Total', '计数');
 
 
 
@@ -214,3 +216,5 @@ INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`,
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '76', '1');
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '77', '1');
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '78', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '79', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '80', '1');

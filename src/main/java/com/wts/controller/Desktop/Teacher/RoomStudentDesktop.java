@@ -135,12 +135,12 @@ public class RoomStudentDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Download() throws IOException {
     String[] title = {"班级名称", "学生姓名", "学生身份证号码", "学生学籍编号"};
-    String fileName = "roomstudent";
+    String fileName = "RoomStudent";
     String SQL = "SELECT " +
-            "room.name AS rname," +
-            "student.name AS sname," +
-            "student.number AS snumber," +
-            "student.code AS scode" +
+            "room.name AS 班级名称," +
+            "student.name AS 学生姓名," +
+            "student.number AS 学生身份证号码," +
+            "student.code AS 学生学籍编号" +
             "FROM ((roomstudent" +
             "LEFT JOIN room ON roomstudent.room_id = room.id)" +
             "LEFT JOIN student ON roomstudent.student_id = student.id)" +
@@ -150,6 +150,10 @@ public class RoomStudentDesktop extends Controller {
             "OR student.name LIKE '%" + getPara("keyword") + "%' " +
             "OR student.number LIKE '%" + getPara("keyword") + "%' " +
             "OR student.code LIKE '%" + getPara("keyword") + "%')";
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "file_name:" + fileName + ";" +
+            "sql:" + SQL + ";");
     ExportUtil.export(title, fileName, SQL, getResponse());
   }
 

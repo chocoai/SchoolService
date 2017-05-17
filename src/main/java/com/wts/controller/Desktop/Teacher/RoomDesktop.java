@@ -172,6 +172,10 @@ public class RoomDesktop extends Controller {
             "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 班级状态 " +
             "from room where del = 0 AND name like '%"+getPara("keyword")+"%'" +
             "ORDER BY id ASC";
+    logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +
+            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
+            "file_name:" + fileName + ";" +
+            "sql:" + SQL + ";");
     ExportUtil.export(title,fileName,SQL,getResponse());
   }
 

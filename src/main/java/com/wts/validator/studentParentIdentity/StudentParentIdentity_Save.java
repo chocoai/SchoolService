@@ -17,7 +17,7 @@ public class StudentParentIdentity_Save implements Interceptor {
       if (Db.find("SELECT * FROM studentparentidentity WHERE identity_id = ? AND parent_id = ? AND student_id = ?", iid,pid,sid).size() != 0) {
         inv.getController().renderText("该关系已存在!");
       } else if (Db.find("SELECT * FROM studentparentidentity WHERE parent_id = ? AND student_id = ?", pid,sid).size() != 0) {
-        inv.getController().renderText("该关系已存在!");
+        inv.getController().renderText("已存在关联!");
       } else{
         inv.invoke();
       }

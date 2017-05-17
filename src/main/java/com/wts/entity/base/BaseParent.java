@@ -25,14 +25,6 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 		return get("userId");
 	}
 
-	public void setLogin(java.lang.String login) {
-		set("login", login);
-	}
-
-	public java.lang.String getLogin() {
-		return get("login");
-	}
-
 	public void setPass(java.lang.String pass) {
 		set("pass", pass);
 	}
@@ -111,14 +103,6 @@ public abstract class BaseParent<M extends BaseParent<M>> extends Model<M> imple
 
 	public java.lang.String getPicUrl() {
 		return get("picUrl");
-	}
-
-	public void setBind(java.lang.Integer bind) {
-		set("bind", bind);
-	}
-
-	public java.lang.Integer getBind() {
-		return get("bind");
 	}
 
 	public void setDel(java.lang.Integer del) {

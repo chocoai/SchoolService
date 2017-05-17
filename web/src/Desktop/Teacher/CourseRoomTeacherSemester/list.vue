@@ -1,33 +1,55 @@
 <template>
   <div class="layout">
     <Row>
-      <Col><MenuList active=CourseRoomTeacher" :name="name" three="列表" :menu="menu"></MenuList></Col>
+      <Col><MenuList :active="base" :name="name" three="列表" :menu="menu"></MenuList></Col>
     </Row>
     <Row v-if="showLoad">
       <Col><Loading></Loading></Col>
     </Row>
     <Row v-show="!showLoad">
       <Col>
-        <div>
-          <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.Save">新增</Button></div>
-          <div class="right"><Search @goQuery="getQuery" @goDownload="getDownload" :download="download"></Search></div>
+      <div>
+        <div class="left"><Button type="info" size="large" @click="goAdd" v-if="permission.Save">新增</Button></div>
+        <div class="right">
+          <div class="queryLeft">
+            <Input type="text" v-model="keyword" placeholder="请输入关键词" style="width:270px;">
+            <span slot="prepend">关键词</span>
+            </Input>
+          </div>
+          <div class="queryRight">
+            <Button-group>
+              <Button type="ghost" @click="goQuery">
+                <Icon type="search"></Icon>
+                搜索
+              </Button>
+              <Button type="ghost" @click="goQueryReset">
+                <Icon type="refresh"></Icon>
+                重置
+              </Button>
+              <Button type="ghost" @click="goDownload" v-if="permission.Download">
+                <Icon type="android-download"></Icon>
+                下载
+              </Button>
+            </Button-group>
+          </div>
         </div>
+      </div>
       </Col>
     </Row>
     <Row v-show="!showLoad">
       <Col>
-        <div class="layout-content">
-          <Table
-            highlight-row
-            :height="height"
-            :context="self"
-            :border="border"
-            :stripe="stripe"
-            :size="size"
-            :columns="columns"
-            :data="pageList">
-          </Table>
-        </div>
+      <div class="layout-content">
+        <Table
+          highlight-row
+          :height="height"
+          :context="self"
+          :border="border"
+          :stripe="stripe"
+          :size="size"
+          :columns="columns"
+          :data="pageList">
+        </Table>
+      </div>
       </Col>
     </Row>
     <Row v-show="!showLoad">
@@ -43,14 +65,15 @@
         </div>
         <div class="right">
           <Page
-            ref="pages"
-            @goList="getList"
-            @savePageCurrent="saveCurrent"
-            @savePageCurrentAndKeyword="CurrentAndKeyword"
-            :queryURL="query"
-            :totalURL="total"
-            :keyword="keyword"
-          >
+            :total="pageTotal"
+            :current="pageCurrent"
+            :page-size="pageSize"
+            @on-page-size-change="sizeChange"
+            @on-change="pageChange"
+            placement="top"
+            show-sizer
+            show-elevator
+            show-total>
           </Page>
         </div>
       </div>
@@ -77,24 +100,23 @@
 <script>
   import Copy from '../../Common/copy.vue'
   import MenuList from '../Menu/menuList.vue'
-  import Search from '../../Common/search.vue'
-  import Page from '../../Common/page.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
+  import listBtn from '../../Common/listBtn_Delete.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
+  import { bus } from '../../Common/bus.js'
   export default {
     name: 'list',
-    components: { Copy, MenuList, Search, Page, Options, Loading },
+    components: { Copy, MenuList, Options, Loading, listBtn },
     data () {
       return {
         name: '',
+        base: API.base,
         permission: [],
         menu: [],
-        download: false,
-        query: API.query,
-        total: API.total,
         keyword: '',
+        pageCurrent: '',
         pageList: [],
         pageTotal: '',
         showLoad: true,
@@ -114,8 +136,8 @@
             title: '序号',
             key: 'id',
             sortable: true,
-            render (row, column, index) {
-              return `${index + 1}`
+            render: (h, params) => {
+              return h('p', {}, params.index + 1)
             }
           },
           {
@@ -143,17 +165,25 @@
             key: 'state',
             align: 'center',
             width: 200,
-            render (row, column, index) {
-              return `
-              <i-button type="error" @click="showDelete(${index})" v-if="permission.Delete">删除</i-button>
-              `
+            render (h, params) {
+              return h(listBtn, {
+                props: {
+                  params: params,
+                  cookieName: API.base,
+                  url: API.permission
+                }
+              })
             }
           }
         ]
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie('CourseRoomTeacherDesktop') === null || getCookie('CourseRoomTeacherDesktop') === undefined || getCookie('CourseRoomTeacherDesktop') === '') {
+      this.keyword = this.$store.state.keyword
+      this.pageCurrent = parseInt(this.$store.state.pageCurrent)
+      this.pageSize = parseInt(this.$store.state.pageSize)
+      this.getLists()
+      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -165,8 +195,7 @@
             this.$http.get(
               API.permission
             ).then((res) => {
-              this.permission = JSON.parse(JSON.parse(getCookie('CourseRoomTeacherDesktop')))
-              this.download = this.permission.Download
+              this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
               this.menu = JSON.parse(JSON.parse(getCookie('menu')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
               this.showLoad = false
@@ -182,12 +211,14 @@
           })
         })
       } else {
-        this.permission = JSON.parse(JSON.parse(getCookie('CourseRoomTeacherDesktop')))
-        this.download = this.permission.Download
+        this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
         this.menu = JSON.parse(JSON.parse(getCookie('menu')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
+      bus.$on('forDelete', (index) => {
+        this.showDelete(index)
+      })
     },
     methods: {
       showDelete (index) {
@@ -198,19 +229,88 @@
         this.tname = this.pageList[index].tname
         this.sname = this.pageList[index].sname
       },
-      getQuery (keyword) {
-        this.keyword = keyword
-        this.$refs.pages.query(keyword)
+      getLists () {
+        this.$http.get(
+          API.query,
+          { params: {
+            keyword: this.$store.state.keyword,
+            pageCurrent: this.$store.state.pageCurrent,
+            pageSize: this.$store.state.pageSize
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
+        ).then((res) => {
+          if (res.body.toString() === 'illegal' || res.body.toString() === 'overdue') {
+          } else {
+            this.$http.get(
+              API.total,
+              { params: {
+                keyword: this.$store.state.keyword
+              } },
+              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+            ).then((response) => {
+              if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+                this.$Notice.error({
+                  title: '登录过期或非法操作!'
+                })
+                window.location.href = '/MainDesktop'
+              } else {
+                this.pageList = res.body
+                this.pageTotal = parseInt(response.body)
+              }
+            }, (response) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
+          }
+        }, (res) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
       },
-      getQueryNoChange (keyword) {
-        this.keyword = keyword
-        this.$refs.pages.queryNoChange(keyword)
+      goQuery () {
+        this.pageCurrent = 1
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists()
       },
-      getDownload (keyword) {
-        this.keyword = keyword
+      goQueryReset () {
+        this.pageCurrent = 1
+        this.keyword = ''
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists()
+      },
+      sizeChange (value) {
+        this.pageSize = value
+        this.pageCurrent = 1
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists()
+      },
+      pageChange (value) {
+        this.pageCurrent = value
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+        this.getLists()
+      },
+      goDownload () {
         this.$Loading.start()
         this.$Message.info('正在进行导出操作，请稍后...')
-        window.location.href = API.download + '?keyword=' + keyword
+        window.location.href = API.download + '?keyword=' + this.keyword
       },
       getBorder (border) {
         this.border = border
@@ -226,20 +326,6 @@
           this.height = 450
           this.size = 'small'
         }
-      },
-      getList (pageList) {
-        this.pageList = pageList
-      },
-      saveCurrent (pageCurrent) {
-        this.$store.commit('save', {
-          pageCurrent: pageCurrent
-        })
-      },
-      CurrentAndKeyword (keyword, pageCurrent) {
-        this.$store.commit('save', {
-          keyword: keyword,
-          pageCurrent: pageCurrent
-        })
       },
       goAdd () {
         this.$router.push({ path: '/add' })
@@ -259,7 +345,7 @@
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
-            this.getQueryNoChange(this.keyword)
+            this.getLists()
             this.$Notice.success({
               title: '操作完成!',
               desc: '关系已删除！'
@@ -313,6 +399,12 @@
   .right{
     margin: 15px;
     border-radius: 4px;
+    float: right;
+  }
+  .queryLeft{
+    float: left;
+  }
+  .queryRight{
     float: right;
   }
 </style>

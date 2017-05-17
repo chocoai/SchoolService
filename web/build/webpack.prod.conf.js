@@ -184,10 +184,22 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_CourseRoomTeacher.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_CourseRoomTeacherSemester.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'Desktop_Teacher_CourseRoomTeacher'],
+      chunks: ['vendor', 'manifest', 'Desktop_Teacher_CourseRoomTeacherSemester'],
+      minify: {
+        removeComments: true,
+        collapseWhitespace: true,
+        removeAttributeQuotes: true
+      },
+      chunksSortMode: 'dependency'
+    }),
+    new HtmlWebpackPlugin({
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_StudentCourseSemester.html',
+      template: 'html/template.html',
+      inject: true,
+      chunks: ['vendor', 'manifest', 'Desktop_Teacher_StudentCourseSemester'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,
