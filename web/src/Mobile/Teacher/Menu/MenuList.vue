@@ -8,14 +8,8 @@
         <mu-list-item title="主页" @click.native="goHome">
           <mu-icon slot="left" value="school" color="#795548"/>
         </mu-list-item>
-        <mu-list-item title="教师消息" @click.native="goTeacherMessage">
+        <mu-list-item title="学期管理" @click.native="goSemester" v-if="menu.SemesterMobile_Page">
           <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
-        </mu-list-item>
-        <mu-list-item title="班级课程" @click.native="goCourse">
-          <mu-icon slot="left" value="chrome_reader_mode" color="orange300"/>
-        </mu-list-item>
-        <mu-list-item title="班级学生" @click.native="goStudent">
-          <mu-icon slot="left" value="face" color="teal300"/>
         </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="grey900"/>
@@ -27,7 +21,7 @@
 <script>
   export default {
     name: 'Menu',
-    props: ['open'],
+    props: ['open', 'menu'],
     data () {
       return {
         menuTitle: '济南市育明小学'
@@ -42,16 +36,10 @@
         this.$emit('closeMenu')
       },
       goHome () {
-        window.location.href = '/Mobile_Teacher_Home'
+        window.location.href = '/MainMobile/Teacher_Home'
       },
-      goTeacherMessage () {
-        window.location.href = '/teacherMessageRead/Mobile_Teacher_TeacherMessage'
-      },
-      goCourse () {
-        window.location.href = '/course/Mobile_Teacher_Course'
-      },
-      goStudent () {
-        window.location.href = '/student/Mobile_Teacher_Student'
+      goSemester () {
+        window.location.href = '/Mobile_Teacher_Semester/Page'
       },
       goExit () {
         window.location.href = '/exit'

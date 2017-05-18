@@ -46,7 +46,7 @@ public class MainMobile extends Controller {
               "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
                       " LEFT JOIN permission" +
                       " ON teacherpermission.permission_id = permission.id" +
-                      " WHERE teacher_id=? AND permission.url LIKE '%Page%'"
+                      " WHERE teacher_id=? AND permission.url LIKE '%Mobile/Page%'"
               ,((Teacher) getSessionAttr("Teacher")).getId().toString());
       String permission = "";
       for (int i=0;i<lists.size();i++){
@@ -58,15 +58,7 @@ public class MainMobile extends Controller {
       }
       setCookie("menu", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
       setCookie("name",URLEncoder.encode(teacher.getName(), "UTF-8"),60 * 6 * 10);
-      setCookie("SemesterDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("CourseDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("RoomDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("StudentDesktop", PermissionString("StudentDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("TeacherDesktop", PermissionString("TeacherDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("ParentDesktop", PermissionString("ParentDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("StudentParentIdentityDesktop", PermissionString("StudentParentIdentityDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("RoomStudentDesktop", PermissionString("RoomStudentDesktop",teacher.getId().toString()), 60 * 6 * 10);
-      setCookie("CourseRoomTeacherDesktop", PermissionString("CourseRoomTeacherDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("SemesterMobile", PermissionString("SemesterMobile",teacher.getId().toString()), 60 * 6 * 10);
 
       renderText("OK");
     } else {
@@ -82,7 +74,7 @@ public class MainMobile extends Controller {
             "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
                     " LEFT JOIN permission" +
                     " ON teacherpermission.permission_id = permission.id" +
-                    " WHERE teacher_id=? AND permission.url LIKE '%Desktop%'"
+                    " WHERE teacher_id=? AND permission.url LIKE '%Mobile%'"
             ,((Teacher) getSessionAttr("Teacher")).getId().toString());
     String permission = "";
     for (int i=0;i<lists.size();i++){
@@ -104,7 +96,7 @@ public class MainMobile extends Controller {
             "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
                     " LEFT JOIN permission" +
                     " ON teacherpermission.permission_id = permission.id" +
-                    " WHERE teacher_id=? AND permission.url LIKE '%Page%'"
+                    " WHERE teacher_id=? AND permission.url LIKE '%Mobile/Page%'"
             ,((Teacher) getSessionAttr("Teacher")).getId().toString());
     String permission = "";
     for (int i=0;i<lists.size();i++){

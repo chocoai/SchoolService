@@ -67,12 +67,12 @@ const router = new VueRouter({
 
 const store = new Vuex.Store({
   state: {
-    queryString: '',
+    keyword: '',
     pageCurrent: '1'
   },
   mutations: {
     save (state, page) {
-      state.queryString = page.queryString
+      state.keyword = page.keyword
       state.pageCurrent = page.pageCurrent
     }
   }

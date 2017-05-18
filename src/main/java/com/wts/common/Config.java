@@ -15,6 +15,7 @@ import com.wts.controller.*;
 import com.wts.controller.Desktop.MainDesktop;
 import com.wts.controller.Desktop.Teacher.*;
 import com.wts.controller.Mobile.MainMobile;
+import com.wts.controller.Mobile.Teacher.SemesterMobile;
 import com.wts.entity.model._MappingKit;
 import com.wts.weixin.callback.ParentCallback;
 import com.wts.weixin.callback.TeacherCallback;
@@ -59,6 +60,7 @@ public class Config extends JFinalConfig {
         me.add("/StudentCourseSemesterDesktop", StudentCourseSemesterDesktop.class);
 
         me.add("/MainMobile", MainMobile.class);
+        me.add("/SemesterMobile", SemesterMobile.class);
 //        me.add("/ForCourse", ForCourse.class);
 //        me.add("/courseRoom", CourseRoomController.class);
 //        me.add("/Teacher", TeacherController.class);

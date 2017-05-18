@@ -102,8 +102,8 @@ export default {
         API.save,
         { params: {
           name: this.name,
-          timeStart: this.timeStart,
-          timeEnd: this.timeStart
+          time_start: this.timeStart,
+          time_end: this.timeEnd
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {

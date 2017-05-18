@@ -40,7 +40,7 @@ public class MainDesktop extends Controller {
               "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
                       " LEFT JOIN permission" +
                       " ON teacherpermission.permission_id = permission.id" +
-                      " WHERE teacher_id=? AND permission.url LIKE '%Page%'"
+                      " WHERE teacher_id=? AND permission.url LIKE '%Desktop/Page%'"
               ,((Teacher) getSessionAttr("Teacher")).getId().toString());
       String permission = "";
       for (int i=0;i<lists.size();i++){
@@ -100,7 +100,7 @@ public class MainDesktop extends Controller {
             "SELECT permission.url, teacherpermission.state FROM teacherpermission " +
                     " LEFT JOIN permission" +
                     " ON teacherpermission.permission_id = permission.id" +
-                    " WHERE teacher_id=? AND permission.url LIKE '%Page%'"
+                    " WHERE teacher_id=? AND permission.url LIKE '%Desktop/Page%'"
             ,((Teacher) getSessionAttr("Teacher")).getId().toString());
     String permission = "";
     for (int i=0;i<lists.size();i++){

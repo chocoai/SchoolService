@@ -135,8 +135,8 @@ export default {
         { params: {
           id: this.$route.params.id,
           name: this.name,
-          timeStart: this.timeStart,
-          timeEnd: this.timeEnd
+          time_start: this.timeStart,
+          time_end: this.timeEnd
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {

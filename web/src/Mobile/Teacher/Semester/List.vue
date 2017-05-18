@@ -25,7 +25,7 @@
       </mu-flexbox-item>
     </mu-flexbox>
     <br/>
-    <menuList :open="open" v-on:closeMenu="closeMenu"></menuList>
+    <menuList :open="open" v-on:closeMenu="closeMenu" :menu="menu"></menuList>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
@@ -47,10 +47,12 @@
         chip: false,
         open: false,
         bottomPopup: false,
+        permission: [],
+        menu: [],
         icon: '',
         color: '',
         message: '',
-        queryString: '',
+        keyword: '',
         list: [],
         pageTotal: '',
         pageSize: '7',
@@ -58,10 +60,33 @@
       }
     },
     created: function () {
-      this.queryString = this.$store.state.queryString
+      this.keyword = this.$store.state.keyword
       this.pageCurrent = this.$store.state.pageCurrent
-      this.query(this.queryString, this.pageCurrent, this.pageSize)
-      this.total(this.queryString, this.pageSize)
+      this.pageSize = this.$store.state.pageSize
+      this.getLists()
+      if (getCookie('MobileMenu') === null || getCookie('MobileMenu') === undefined || getCookie('MobileMenu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
+        this.$http.get(
+          API.menu
+        ).then((response) => {
+          if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+            this.openPopup('登录过期或非法操作!', 'error', 'red')
+          } else {
+            this.$http.get(
+              API.permission
+            ).then((res) => {
+              this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
+              this.menu = JSON.parse(JSON.parse(getCookie('MobileMenu')))
+            }, (res) => {
+              this.openPopup('服务器内部错误!', 'error', 'red')
+            })
+          }
+        }, (response) => {
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
+      } else {
+        this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
+        this.menu = JSON.parse(JSON.parse(getCookie(''MobileMenu')))
+      }
     },
     methods: {
       openMenu () {
@@ -77,54 +102,51 @@
         this.bottomPopup = true
         setTimeout(() => { this.bottomPopup = false }, 1500)
       },
-      query (queryString, pageCurrent, pageSize) {
+      getLists () {
         this.$http.get(
           API.query,
           { params: {
-            queryString: queryString,
-            pageCurrent: pageCurrent,
-            pageSize: pageSize
+            keyword: this.$store.state.keyword,
+            pageCurrent: this.$store.state.pageCurrent,
+            pageSize: this.$store.state.pageSize
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' }, emulateJSON: true }
         ).then((response) => {
-          this.list = response.body
-          this.pageCurrent = pageCurrent
-          this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
+          this.$http.get(
+            API.total,
+            { params: {
+              keyword: this.$store.state.keyword,
+              pageSize: this.$store.state.pageSize
+            } },
+            { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+          ).then((res) => {
+            this.list = response.body
+            this.pageCurrent = pageCurrent
+            this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
+            this.pageTotal = res.body
+            this.pageTotal === '0' ? this.chip = false : this.chip = true
+            this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
+          }, (response) => {
+            this.openPopup('服务器内部错误!', 'error', 'red')
+          })
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
       },
-      total (queryString, pageSize) {
-        this.$http.get(
-          API.total,
-          { params: {
-            queryString: queryString,
-            pageSize: pageSize
-          } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          this.pageTotal = response.body
-          this.pageTotal === '0' ? this.chip = false : this.chip = true
-          this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
-      },
-      goQuery (value) {
-        this.queryString = value
+      goQuery () {
         this.pageCurrent = '1'
         this.$store.commit('save', {
-          queryString: this.queryString,
-          pageCurrent: this.pageCurrent
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
         })
-        this.query(this.queryString, this.pageCurrent, this.pageSize)
-        this.total(this.queryString, this.pageSize)
+        this.getLists()
         this.before = false
       },
       goEdit (id) {
         this.$router.push({ path: '/edit/' + id })
         this.$store.commit('save', {
-          queryString: this.queryString,
+          keyword: this.keyword,
           pageCurrent: this.pageCurrent
         })
       },
