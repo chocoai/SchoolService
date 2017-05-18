@@ -2,8 +2,8 @@
   <div>
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
-      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="goQuery" :value="queryString"/>
-      <mu-icon-button icon='add' slot="right" @click="goAdd"/>
+      <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="goQuery" :value="keyword"/>
+      <mu-icon-button icon='add' slot="right" @click="goAdd" v-if="permission.Save"/>
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="semester in list" :value="semester.id" :title="semester.name" :afterText="semester.state.toString() === '0'?'注销':'激活'" @click="goEdit(semester.id)">
@@ -55,7 +55,7 @@
         keyword: '',
         list: [],
         pageTotal: '',
-        pageSize: '7',
+        pageSize: '',
         pageCurrent: ''
       }
     },
@@ -85,7 +85,7 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-        this.menu = JSON.parse(JSON.parse(getCookie(''MobileMenu')))
+        this.menu = JSON.parse(JSON.parse(getCookie('MobileMenu')))
       }
     },
     methods: {
@@ -121,7 +121,7 @@
             { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
           ).then((res) => {
             this.list = response.body
-            this.pageCurrent = pageCurrent
+            this.pageCurrent = this.$store.state.pageCurrent
             this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
             this.pageTotal = res.body
             this.pageTotal === '0' ? this.chip = false : this.chip = true
@@ -144,23 +144,38 @@
         this.before = false
       },
       goEdit (id) {
-        this.$router.push({ path: '/edit/' + id })
-        this.$store.commit('save', {
-          keyword: this.keyword,
-          pageCurrent: this.pageCurrent
-        })
+        if (this.permission.Edit) {
+          this.$router.push({ path: '/edit/' + id })
+          this.$store.commit('save', {
+            keyword: this.keyword,
+            pageCurrent: this.pageCurrent,
+            pageSize: this.pageSize
+          })
+        } else {
+          this.openPopup('您没有修改权限!', 'error', 'red')
+        }
       },
       pageBefore () {
         this.pageCurrent--
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
         this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
         this.next = true
-        this.query(this.queryString, this.pageCurrent, this.pageSize)
+        this.getLists()
       },
       pageNext () {
         this.pageCurrent++
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
-        this.query(this.queryString, this.pageCurrent, this.pageSize)
+        this.getLists()
       },
       goAdd () {
         this.$router.push({ path: '/add' })

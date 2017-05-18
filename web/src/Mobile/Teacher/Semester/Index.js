@@ -68,12 +68,14 @@ const router = new VueRouter({
 const store = new Vuex.Store({
   state: {
     keyword: '',
-    pageCurrent: '1'
+    pageCurrent: '1',
+    pageSize: '8'
   },
   mutations: {
     save (state, page) {
       state.keyword = page.keyword
       state.pageCurrent = page.pageCurrent
+      state.pageSize = page.pageSize
     }
   }
 })
