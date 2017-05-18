@@ -1,19 +1,17 @@
 <template>
   <div>
     <mu-appbar title="学期详情">
-      <mu-icon-button icon='reply' slot="right" @click="goReply"/>
+      <mu-icon-button icon='reply' slot="right" @click="goReply" v-if="permission.Page"/>
     </mu-appbar>
-    <mu-text-field label="学期名称" :disabled="Edit_Able" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
-    <mu-date-picker label="开始时间" :disabled="Edit_Able" v-model="timeStart" fullWidth labelFloat icon="schedule"/><br/>
-    <mu-date-picker label="终止时间" :disabled="Edit_Able" v-model="timeEnd" fullWidth labelFloat icon="schedule"/><br/>
+    <mu-text-field label="学期名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
+    <mu-date-picker label="开始时间" v-model="timeStart" fullWidth labelFloat icon="schedule"/><br/>
+    <mu-date-picker label="终止时间" v-model="timeEnd" fullWidth labelFloat icon="schedule"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="edit" v-if="Edit_Able" @click="goEdit" primary/>
-        <mu-float-button icon="cancel" v-if="Save_Able" @click="goCancel" secondary/>
+        <mu-float-button icon="edit" v-if="permission.Edit" @click="goEdit" backgroundColor="blue"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="compare_arrows" v-if="Edit_Able" :disabled="Active_Able" @click="openActive" backgroundColor="green"/>
-        <mu-float-button icon="done" v-if="Save_Able" :disabled="saveAble" @click="goSave" backgroundColor="green"/>
+        <mu-float-button icon="cached" v-if="permission.Get" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-dialog :open="Reading" title="正在读取" >
@@ -21,10 +19,6 @@
     </mu-dialog>
     <mu-dialog :open="Saving" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
-    </mu-dialog>
-    <mu-dialog :open="Activing" title="确定要激活该学期吗?" @close="goClose">
-      <mu-flat-button label="取消" @click="goClose" />
-      <mu-flat-button label="确定" @click="goActive" secondary/>
     </mu-dialog>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
@@ -34,17 +28,16 @@
 
 <script>
 import * as API from './API.js'
+import { getCookie } from '../../../cookieUtil.js'
 export default {
   name: 'Edit',
   data () {
     return {
-      Edit_Able: true,
-      Save_Able: false,
-      Active_Able: false,
-      Activing: false,
       Saving: false,
       Reading: true,
       bottomPopup: false,
+      permission: [],
+      menu: [],
       icon: '',
       color: '',
       message: '',
@@ -59,26 +52,41 @@ export default {
   },
   created () {
     this.fetchData(this.$route.params.id)
+    if (getCookie('MenuMobile') === null || getCookie('MenuMobile') === undefined || getCookie('MenuMobile') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
+      this.$http.get(
+        API.menu
+      ).then((response) => {
+        if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+          this.openPopup('登录过期或非法操作!', 'error', 'red')
+        } else {
+          this.$http.get(
+            API.permission
+          ).then((res) => {
+            this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
+            this.menu = JSON.parse(JSON.parse(getCookie('MenuMobile')))
+          }, (res) => {
+            this.openPopup('服务器内部错误!', 'error', 'red')
+          })
+        }
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
+    } else {
+      this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
+      this.menu = JSON.parse(JSON.parse(getCookie('MenuMobile')))
+    }
   },
   watch: {
     // 如果路由有变化，会再次执行该方法
     '$route': 'fetchData'
   },
-  computed: {
-    saveAble: function () {
-      if (this.nameErrorText.toString() === 'OK') {
-        return false
-      } else {
-        return true
-      }
-    }
-  },
   methods: {
     goReply () {
       this.$router.push({ path: '/list' })
     },
-    openActive () {
-      this.Activing = true
+    goReset () {
+      this.Reading = false
+      this.fetchData(this.$route.params.id)
     },
     openPopup (message, icon, color) {
       this.message = message
@@ -86,47 +94,6 @@ export default {
       this.color = color
       this.bottomPopup = true
       setTimeout(() => { this.bottomPopup = false }, 1500)
-    },
-    goEdit () {
-      this.Edit_Able = false
-      this.Save_Able = true
-    },
-    goCancel () {
-      this.Edit_Able = true
-      this.Save_Able = false
-      this.fetchData(this.$route.params.id)
-    },
-    goClose () {
-      this.Activing = false
-    },
-    goActive () {
-      this.$http.get(
-        API.active,
-        { params: { id: this.$route.params.id } },
-        { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-      ).then((response) => {
-        if (response.body === 'error') {
-          this.openPopup('请重新登录!', 'report_problem', 'red')
-          window.location.href = '/'
-        } else if (response.body === 'OK') {
-          this.Edit_Able = true
-          this.Save_Able = false
-          this.Active_Able = true
-          this.openPopup('激活成功!', 'check_circle', 'green')
-          setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
-        } else if (response.body === '要激活的学期不存在!') {
-          this.Edit_Able = true
-          this.Save_Able = false
-          this.Active_Able = true
-          this.openPopup(response.body, 'report_problem', 'red')
-          setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
-        } else {
-          this.openPopup(response.body, 'report_problem', 'red')
-          setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
-        }
-      }, (response) => {
-        this.openPopup('服务器内部错误!', 'error', 'red')
-      })
     },
     goSave () {
       this.Saving = true
@@ -141,9 +108,9 @@ export default {
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.Saving = false
-        if (response.body === 'error') {
+        if (response.body === 'illegal' || response.body.toString() === 'overdue') {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
-          window.location.href = '/'
+          window.location.href = '/MainMobile'
         } else if (response.body === 'OK') {
           this.openPopup('修改成功！', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
@@ -166,11 +133,6 @@ export default {
         this.timeStart = this.semester.time_start
         this.timeEnd = this.semester.time_end
         this.state = this.semester.state
-        if (this.semester.state.toString() === '0') {
-          this.Active_Able = false
-        } else {
-          this.Active_Able = true
-        }
         this.Reading = false
       }, (response) => {
       })
@@ -188,9 +150,9 @@ export default {
           { params: { id: this.$route.params.id, name: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
-          if (response.body === 'error') {
+          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
+            window.location.href = '/MainMobile'
           } else if (response.body === 'OK') {
             this.nameErrorText = 'OK'
             this.nameErrorColor = 'green'

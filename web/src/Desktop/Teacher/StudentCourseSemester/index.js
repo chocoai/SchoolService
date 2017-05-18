@@ -14,7 +14,16 @@ Vue.use(Vuex)
 Vue.use(iView)
 
 const routes = [
-  { path: '/list', component: List },
+  { path: '/list',
+    component: List,
+    beforeEnter: (to, from, next) => {
+      if (JSON.parse(JSON.parse(getCookie(API.base))).Page) {
+        next()
+      } else {
+        next({ path: '/' })
+      }
+    }
+  },
   { path: '/add',
     component: Add,
     beforeEnter: (to, from, next) => {

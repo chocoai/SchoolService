@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import Login from './Login.vue'
+import Login from './login.vue'
 import VueResource from 'vue-resource'
 
 import 'material-design-icons/iconfont/material-icons.css'

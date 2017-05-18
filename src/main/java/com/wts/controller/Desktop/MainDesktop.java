@@ -50,7 +50,7 @@ public class MainDesktop extends Controller {
           permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
         }
       }
-      setCookie("menu", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
+      setCookie("MenuDesktop", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
       setCookie("name",URLEncoder.encode(teacher.getName(), "UTF-8"),60 * 6 * 10);
       setCookie("SemesterDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("CourseDesktop", PermissionString("SemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
@@ -88,7 +88,7 @@ public class MainDesktop extends Controller {
         permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
       }
     }
-    setCookie("permission", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
+    setCookie("PermissionDesktop", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
     setCookie("name",((Teacher) getSessionAttr("Teacher")).getName(),60 * 6 * 10);
   }
 
@@ -110,7 +110,7 @@ public class MainDesktop extends Controller {
         permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
       }
     }
-    setCookie("menu", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
+    setCookie("MenuDesktop", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
     setCookie("name",((Teacher) getSessionAttr("Teacher")).getName(),60 * 6 * 10);
   }
 

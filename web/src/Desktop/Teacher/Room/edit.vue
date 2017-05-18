@@ -20,9 +20,9 @@
           </Radio-group>
         </Form-item>
         <Form-item>
-          <Button size="large" type="success" @click="goEdit">保存</Button>
-          <Button size="large" type="warning" style="margin-left: 8px" @click="goReset">重置</Button>
-          <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack">返回</Button>
+          <Button size="large" type="success" @click="goEdit" v-if="permission.Edit">保存</Button>
+          <Button size="large" type="warning" style="margin-left: 8px" @click="goReset"  v-if="permission.Get">重置</Button>
+          <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack" v-if="permission.Page">返回</Button>
         </Form-item>
       </Form>
       </Col>
@@ -64,7 +64,7 @@
     },
     created: function () {
       this.fetchData(this.$route.params.id)
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
+      if (getCookie('MenuDesktop') === null || getCookie('MenuDesktop') === undefined || getCookie('MenuDesktop') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -77,7 +77,7 @@
               API.permission
             ).then((res) => {
               this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-              this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+              this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
             }, (res) => {
               this.$Notice.error({
@@ -92,7 +92,7 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+        this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
     },

@@ -168,7 +168,7 @@ public class SemesterMobile extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkNameForAdd() {
-    if (Db.find("SELECT * FROM Semester WHERE name = ?", getPara("name")).size() != 0) {
+    if (Db.find("SELECT * FROM semester WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该学期名称已存在!");
     } else {
       renderText("OK");
@@ -188,16 +188,4 @@ public class SemesterMobile extends Controller {
     }
   }
 
-  /**
-   * 当前学期
-   */
-  public static Semester getNow() {
-    return Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1");
-  }
-  /**
-   * 当前学期
-   */
-  public void init() {
-    renderText(Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1").toJson());
-  }
 }

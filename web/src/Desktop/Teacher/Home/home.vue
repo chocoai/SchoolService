@@ -22,7 +22,7 @@
       }
     },
     created: function () {
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '') {
+      if (getCookie('MenuDesktop') === null || getCookie('MenuDesktop') === undefined || getCookie('MenuDesktop') === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -31,7 +31,7 @@
               title: '登录过期或非法操作!'
             })
           } else {
-            this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+            this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
             this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
           }
         }, (response) => {
@@ -40,7 +40,7 @@
           })
         })
       } else {
-        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+        this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
     }

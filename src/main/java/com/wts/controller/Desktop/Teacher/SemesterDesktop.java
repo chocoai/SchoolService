@@ -182,7 +182,7 @@ public class SemesterDesktop extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkNameForAdd() {
-    if (Db.find("SELECT * FROM Semester WHERE name = ?", getPara("name")).size() != 0) {
+    if (Db.find("SELECT * FROM semester WHERE name = ?", getPara("name")).size() != 0) {
       renderText("该学期名称已存在!");
     } else {
       renderText("OK");

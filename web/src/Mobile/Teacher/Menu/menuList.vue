@@ -36,10 +36,10 @@
         this.$emit('closeMenu')
       },
       goHome () {
-        window.location.href = '/MainMobile/Teacher_Home'
+        window.location.href = '../MainMobile/Teacher_Home'
       },
       goSemester () {
-        window.location.href = '/Mobile_Teacher_Semester/Page'
+        window.location.href = '/SemesterMobile/Page'
       },
       goExit () {
         window.location.href = '/exit'

@@ -84,7 +84,7 @@
     },
     created: function () {
       this.fetchData(this.$route.params.id)
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
+      if (getCookie('MenuDesktop') === null || getCookie('MenuDesktop') === undefined || getCookie('MenuDesktop') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -97,7 +97,7 @@
               API.permission
             ).then((res) => {
               this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-              this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+              this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
             }, (res) => {
               this.$Notice.error({
@@ -112,7 +112,7 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+        this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
     },

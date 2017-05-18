@@ -227,7 +227,7 @@
       this.pageCurrent = parseInt(this.$store.state.pageCurrent)
       this.pageSize = parseInt(this.$store.state.pageSize)
       this.getLists()
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
+      if (getCookie('MenuDesktop') === null || getCookie('MenuDesktop') === undefined || getCookie('MenuDesktop') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -240,7 +240,7 @@
               API.permission
             ).then((res) => {
               this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-              this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+              this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
               this.showLoad = false
             }, (res) => {
@@ -256,7 +256,7 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+        this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }

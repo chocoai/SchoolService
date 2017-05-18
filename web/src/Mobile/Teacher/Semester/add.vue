@@ -1,7 +1,7 @@
 <template>
   <div>
     <mu-appbar title="创建新学期">
-      <mu-icon-button icon='reply' slot="right" @click="gorReply"/>
+      <mu-icon-button icon='reply' slot="right" @click="gorReply" v-if="permission.Page"/>
     </mu-appbar>
     <mu-text-field label="学期名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
     <mu-date-picker label="开始时间" v-model="timeStart" fullWidth labelFloat icon="schedule"/><br/>
@@ -11,10 +11,10 @@
     </mu-dialog>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
+        <mu-float-button :disabled="Save_Able" icon="save" @click="goSave" backgroundColor="green" v-if="permission.Save"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button :disabled="Save_Able" icon="save" @click="goSave" backgroundColor="green"/>
+        <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
       </mu-flexbox-item>
     </mu-flexbox>
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
@@ -25,12 +25,15 @@
 
 <script>
 import * as API from './API.js'
+import { getCookie } from '../../../cookieUtil.js'
 export default {
   name: 'Add',
   data () {
     return {
       bottomPopup: false,
       Saving: false,
+      permission: [],
+      menu: [],
       icon: '',
       color: '',
       name: '',
@@ -39,6 +42,31 @@ export default {
       message: '',
       nameErrorText: '',
       nameErrorColor: ''
+    }
+  },
+  created: function () {
+    if (getCookie('MenuMobile') === null || getCookie('MenuMobile') === undefined || getCookie('MenuMobile') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
+      this.$http.get(
+        API.menu
+      ).then((response) => {
+        if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+          this.openPopup('登录过期或非法操作!', 'error', 'red')
+        } else {
+          this.$http.get(
+            API.permission
+          ).then((res) => {
+            this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
+            this.menu = JSON.parse(JSON.parse(getCookie('MenuMobile')))
+          }, (res) => {
+            this.openPopup('服务器内部错误!', 'error', 'red')
+          })
+        }
+      }, (response) => {
+        this.openPopup('服务器内部错误!', 'error', 'red')
+      })
+    } else {
+      this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
+      this.menu = JSON.parse(JSON.parse(getCookie('MenuMobile')))
     }
   },
   computed: {
@@ -81,9 +109,9 @@ export default {
           { params: { name: value } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
-          if (response.body === 'error') {
+          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
             this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/'
+            window.location.href = '/MainMobile'
           } else if (response.body === 'OK') {
             this.nameErrorText = 'OK'
             this.nameErrorColor = 'green'
@@ -108,9 +136,9 @@ export default {
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
         this.Saving = false
-        if (response.body === 'error') {
+        if (response.body === 'illegal' || response.body.toString() === 'overdue') {
           this.openPopup('请重新登录!', 'report_problem', 'orange')
-          window.location.href = '/'
+          window.location.href = '/MainMobile'
         } else if (response.body === 'OK') {
           this.openPopup('保存成功！', 'check_circle', 'green')
           setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)

@@ -6,7 +6,7 @@
       <mu-icon-button icon='add' slot="right" @click="goAdd" v-if="permission.Save"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="semester in list" :value="semester.id" :title="semester.name" :afterText="semester.state.toString() === '0'?'注销':'激活'" @click="goEdit(semester.id)">
+      <mu-list-item v-for="semester in list" :value="semester.id" :title="semester.name" :afterText="semester.state.toString() === '0'?'注销':'激活'" @click="goSheet(semester.id, semester.state, semester.name)">
         <mu-icon v-if="semester.state.toString() === '0'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
         <mu-icon v-if="semester.state.toString() === '1'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
       </mu-list-item>
@@ -29,12 +29,36 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
+    <mu-bottom-sheet :open="bottomSheet" @close="bottomSheet=false">
+      <mu-list>
+        <mu-sub-header inset>{{name}}</mu-sub-header>
+        <mu-list-item title="修改" v-if="permission.Edit" @click="goEdit">
+          <mu-avatar icon="edit" backgroundColor="blue" slot="leftAvatar" />
+        </mu-list-item>
+        <mu-list-item title="激活" v-if="permission.Active && !state" @click="goActive">
+          <mu-avatar icon="visibility" backgroundColor="Green" slot="leftAvatar" />
+        </mu-list-item>
+        <mu-list-item title="注销" v-if="permission.Inactive && state" @click="goInactive">
+          <mu-avatar icon="visibility_off" backgroundColor="Amber" slot="leftAvatar" />
+        </mu-list-item>
+        <mu-list-item title="删除" v-if="permission.Delete" @click="goDelete">
+          <mu-avatar icon="delete" backgroundColor="red" slot="leftAvatar" />
+        </mu-list-item>
+        <mu-list-item title="取消" @click="bottomSheet=false">
+          <mu-avatar icon="undo" backgroundColor="Grey" slot="leftAvatar" />
+        </mu-list-item>
+      </mu-list>
+    </mu-bottom-sheet>
+    <mu-dialog :open="Operating" title="正在操作" >
+      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
+    </mu-dialog>
   </div>
 </template>
 
 <script>
   import * as API from './API.js'
-  import MenuList from '../Menu/MenuList'
+  import { getCookie } from '../../../cookieUtil.js'
+  import MenuList from '../Menu/menuList'
   export default {
     name: 'list',
     components: {
@@ -47,11 +71,16 @@
         chip: false,
         open: false,
         bottomPopup: false,
+        bottomSheet: false,
+        Operating: false,
         permission: [],
         menu: [],
         icon: '',
         color: '',
         message: '',
+        id: '',
+        name: '',
+        state: false,
         keyword: '',
         list: [],
         pageTotal: '',
@@ -64,7 +93,7 @@
       this.pageCurrent = this.$store.state.pageCurrent
       this.pageSize = this.$store.state.pageSize
       this.getLists()
-      if (getCookie('MobileMenu') === null || getCookie('MobileMenu') === undefined || getCookie('MobileMenu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
+      if (getCookie('MenuMobile') === null || getCookie('MenuMobile') === undefined || getCookie('MenuMobile') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -75,7 +104,7 @@
               API.permission
             ).then((res) => {
               this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-              this.menu = JSON.parse(JSON.parse(getCookie('MobileMenu')))
+              this.menu = JSON.parse(JSON.parse(getCookie('MenuMobile')))
             }, (res) => {
               this.openPopup('服务器内部错误!', 'error', 'red')
             })
@@ -85,7 +114,7 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-        this.menu = JSON.parse(JSON.parse(getCookie('MobileMenu')))
+        this.menu = JSON.parse(JSON.parse(getCookie('MenuMobile')))
       }
     },
     methods: {
@@ -121,8 +150,7 @@
             { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
           ).then((res) => {
             this.list = response.body
-            this.pageCurrent = this.$store.state.pageCurrent
-            this.pageCurrent.toString() === '1' ? this.before = false : this.before = true
+            this.$store.state.pageCurrent.toString() === '1' ? this.before = false : this.before = true
             this.pageTotal = res.body
             this.pageTotal === '0' ? this.chip = false : this.chip = true
             this.pageTotal === '1' || this.pageTotal === '0' || this.pageTotal.toString() === this.$store.state.pageCurrent.toString() ? this.next = false : this.next = true
@@ -132,6 +160,16 @@
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
+      },
+      goSheet (id, state, name) {
+        this.id = id
+        this.name = name
+        if (state.toString() === '1') {
+          this.state = true
+        } else {
+          this.state = false
+        }
+        this.bottomSheet = true
       },
       goQuery () {
         this.pageCurrent = '1'
@@ -143,17 +181,85 @@
         this.getLists()
         this.before = false
       },
-      goEdit (id) {
-        if (this.permission.Edit) {
-          this.$router.push({ path: '/edit/' + id })
-          this.$store.commit('save', {
-            keyword: this.keyword,
-            pageCurrent: this.pageCurrent,
-            pageSize: this.pageSize
-          })
-        } else {
-          this.openPopup('您没有修改权限!', 'error', 'red')
-        }
+      goEdit () {
+        this.$router.push({ path: '/edit/' + this.id })
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
+      },
+      goDelete () {
+        this.bottomSheet = false
+        this.Operating = true
+        this.$http.get(
+          API.del,
+          { params: { id: this.id } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          this.Operating = false
+          if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+            this.openPopup('请重新登录!', 'report_problem', 'orange')
+            window.location.href = '/MainMobile'
+          } else if (response.body === 'OK') {
+            this.openPopup('保存成功！', 'check_circle', 'green')
+            setTimeout(() => { this.getLists() }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'orange')
+          }
+          this.Operating = false
+        }, (response) => {
+          this.Operating = false
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
+      },
+      goActive () {
+        this.bottomSheet = false
+        this.Operating = true
+        this.$http.get(
+          API.active,
+          { params: { id: this.id } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          this.Operating = false
+          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
+            this.openPopup('请重新登录!', 'report_problem', 'red')
+            window.location.href = '/MainMobile'
+          } else if (response.body === 'OK') {
+            this.openPopup('激活成功!', 'check_circle', 'green')
+            setTimeout(() => { this.getLists() }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.getLists() }, 1000)
+          }
+        }, (response) => {
+          this.Operating = false
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
+      },
+      goInactive () {
+        this.bottomSheet = false
+        this.Operating = true
+        this.$http.get(
+          API.inactive,
+          { params: { id: this.id } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          this.Operating = false
+          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
+            this.openPopup('请重新登录!', 'report_problem', 'red')
+            window.location.href = '/MainMobile'
+          } else if (response.body === 'OK') {
+            this.openPopup('注销成功!', 'check_circle', 'green')
+            setTimeout(() => { this.getLists() }, 1000)
+          } else {
+            this.openPopup(response.body, 'report_problem', 'red')
+            setTimeout(() => { this.getLists() }, 1000)
+          }
+        }, (response) => {
+          this.Operating = false
+          this.openPopup('服务器内部错误!', 'error', 'red')
+        })
       },
       pageBefore () {
         this.pageCurrent--

@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
-import Home from './Home.vue'
+import Home from './home.vue'
 
 import 'material-design-icons/iconfont/material-icons.css'
 import 'muse-components/styles/base.less' // 加载基础的样式

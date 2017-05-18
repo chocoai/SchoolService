@@ -3,7 +3,7 @@
     <mu-appbar title="欢迎使用育明小学信息管理系统"/>
     <mu-flexbox>
       <mu-flexbox-item >
-        <mu-text-field hintText="手机号码" icon="face" v-model="mobile" fullWidth/><br/>
+        <mu-text-field hintText="手机号码" icon="phone" v-model="mobile" fullWidth/><br/>
         <mu-text-field hintText="密码" icon="blur_on" v-model="pass" type="password" fullWidth/><br/>
         <mu-select-field hintText="用户类别" icon="settings" v-model="type" fullWidth>
           <mu-menu-item value="teacher" title="教师"/>

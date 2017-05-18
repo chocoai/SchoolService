@@ -10,8 +10,8 @@ function resolve (dir) {
 module.exports = {
   entry: {
     Mobile_Login: './src/Mobile/Login/Index.js',
+    Mobile_Teacher_Home: './src/Mobile/Teacher/Home/Index.js',
     Mobile_Teacher_Semester: './src/Mobile/Teacher/Semester/Index.js',
-    // Mobile_Manager_Home: './src/Mobile/Manager/Home/Index.js',
     // Mobile_Manager_Semester: './src/Mobile/Manager/Semester/Index.js',
     // Mobile_Manager_Course: './src/Mobile/Manager/Course/Index.js',
     // Mobile_Manager_Teacher: './src/Mobile/Manager/Teacher/Index.js',

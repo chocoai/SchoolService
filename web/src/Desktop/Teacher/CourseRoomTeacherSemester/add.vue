@@ -217,9 +217,9 @@
       <Col span="8">
         <Form :label-width="100" ref="addForm" :model="object">
           <Form-item>
-            <Button size="large" type="success" @click="goSave">保存</Button>
+            <Button size="large" type="success" @click="goSave"  v-if="permission.Save">保存</Button>
             <Button size="large" type="warning" style="margin-left: 8px" @click="goReset">重置</Button>
-            <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack">返回</Button>
+            <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack" v-if="permission.Page">返回</Button>
           </Form-item>
         </Form>
       </Col>
@@ -339,7 +339,7 @@
       this.pageCurrent4 = parseInt(this.$store.state.pageCurrent4)
       this.pageSize4 = parseInt(this.$store.state.pageSize4)
       this.getLists4()
-      if (getCookie('menu') === null || getCookie('menu') === undefined || getCookie('menu') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
+      if (getCookie('MenuDesktop') === null || getCookie('MenuDesktop') === undefined || getCookie('MenuDesktop') === '' || getCookie(API.base) === null || getCookie(API.base) === undefined || getCookie(API.base) === '') {
         this.$http.get(
           API.menu
         ).then((response) => {
@@ -352,7 +352,7 @@
               API.permission
             ).then((res) => {
               this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-              this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+              this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
               this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
               this.showLoad = false
             }, (res) => {
@@ -368,7 +368,7 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
-        this.menu = JSON.parse(JSON.parse(getCookie('menu')))
+        this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }

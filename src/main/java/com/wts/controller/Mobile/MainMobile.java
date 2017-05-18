@@ -36,7 +36,7 @@ public class MainMobile extends Controller {
 //      System.out.println(e.toString());
 //    }
 //    System.out.println("111");
-    if (getPara("user").equals("") && getPara("password").equals("")) {
+    if (getPara("mobile").equals("1") && getPara("pass").equals("1")) {
       setCookie("user", "", 60 * 60 * 24 * 7);
       setCookie("password", "", 60 * 60 * 24 * 7);
       Teacher teacher = Teacher.dao.findById("1");
@@ -56,8 +56,7 @@ public class MainMobile extends Controller {
           permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
         }
       }
-      setCookie("menu", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
-      setCookie("name",URLEncoder.encode(teacher.getName(), "UTF-8"),60 * 6 * 10);
+      setCookie("MenuMobile", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
       setCookie("SemesterMobile", PermissionString("SemesterMobile",teacher.getId().toString()), 60 * 6 * 10);
 
       renderText("OK");
@@ -84,8 +83,7 @@ public class MainMobile extends Controller {
         permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
       }
     }
-    setCookie("permission", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
-    setCookie("name",((Teacher) getSessionAttr("Teacher")).getName(),60 * 6 * 10);
+    setCookie("PermissionMobile", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
   }
 
   /**
@@ -106,8 +104,7 @@ public class MainMobile extends Controller {
         permission = permission + "\""+lists.get(i).get("url")+"\": false, ";
       }
     }
-    setCookie("menu", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
-    setCookie("name",((Teacher) getSessionAttr("Teacher")).getName(),60 * 6 * 10);
+    setCookie("MenuMobile", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
   }
 
   /**

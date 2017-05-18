@@ -11,7 +11,7 @@ public class OverdueCheck implements Interceptor {
 //            || inv.getController().getRequest().getHeader("X-Requested-With") == null
             ) {
       inv.getController().renderText("overdue");
-      inv.getController().redirect("/MainDesktop");
+      inv.getController().redirect("/");
     } else {
       inv.invoke();
     }
