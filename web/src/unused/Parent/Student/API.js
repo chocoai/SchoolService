@@ -1,4 +1,4 @@
-import * as Mobile from '../../Mobile.js'
+import * as Mobile from '../../../Mobile/Mobile.js'
 export const base = 'relation'
 export const save = `${Mobile.Prefix}/${base}/save`
 export const dele = `${Mobile.Prefix}/${base}/delete`

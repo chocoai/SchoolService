@@ -72,7 +72,7 @@ public class TeacherDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT *",
-            "FROM Teacher WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%' " +
+            "FROM teacher WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%' " +
                     "OR userId LIKE '%" + getPara("keyword") + "%' " +
                     "OR mobile LIKE '%" + getPara("keyword") + "%') ORDER BY id DESC").getList());
   }
@@ -82,7 +82,7 @@ public class TeacherDesktop extends Controller {
    */
   @Before({OverdueCheck.class, PermissionCheck.class})
   public void Total() {
-    Long count = Db.queryLong("SELECT COUNT(*) FROM Teacher WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%' " +
+    Long count = Db.queryLong("SELECT COUNT(*) FROM teacher WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%' " +
             "OR userId LIKE '%" + getPara("keyword") + "%' " +
             "OR mobile LIKE '%" + getPara("keyword") + "%')");
     renderText(count.toString());
@@ -240,9 +240,9 @@ public class TeacherDesktop extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkMobileForAdd() {
-    if (Teacher.dao.find("SELECT * FROM Teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+    if (Teacher.dao.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该教师的联系电话已存在!");
-    } else if (Parent.dao.find("SELECT * FROM Parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+    } else if (Parent.dao.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该教师的联系电话已存在!");
     } else {
       renderText("OK");
@@ -255,9 +255,9 @@ public class TeacherDesktop extends Controller {
   @Before(OverdueCheck.class)
   public void checkMobileForEdit() {
     if (!Teacher.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
-            && Db.find("SELECT * FROM Teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+            && Db.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该教师的联系电话已存在!");
-    } else if (Db.find("SELECT * FROM Parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+    } else if (Db.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该教师的联系电话已存在!");
     } else {
       renderText("OK");

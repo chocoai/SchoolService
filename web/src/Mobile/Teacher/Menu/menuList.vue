@@ -14,6 +14,18 @@
         <mu-list-item title="课程管理" @click.native="goCourse" v-if="menu.CourseMobile_Page">
           <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
         </mu-list-item>
+        <mu-list-item title="班级管理" @click.native="goRoom" v-if="menu.RoomMobile_Page">
+          <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
+        </mu-list-item>
+        <mu-list-item title="教师管理" @click.native="goTeacher" v-if="menu.TeacherMobile_Page">
+          <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
+        </mu-list-item>
+        <mu-list-item title="家长管理" @click.native="goParent" v-if="menu.ParentMobile_Page">
+          <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
+        </mu-list-item>
+        <mu-list-item title="学生管理" @click.native="goStudent" v-if="menu.StudentMobile_Page">
+          <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
+        </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="grey900"/>
         </mu-list-item>
@@ -46,6 +58,18 @@
       },
       goCourse () {
         window.location.href = '/CourseMobile/Page'
+      },
+      goRoom () {
+        window.location.href = '/RoomMobile/Page'
+      },
+      goTeacher () {
+        window.location.href = '/TeacherMobile/Page'
+      },
+      goParent () {
+        window.location.href = '/ParentMobile/Page'
+      },
+      goStudent () {
+        window.location.href = '/StudentMobile/Page'
       },
       goExit () {
         window.location.href = '/exit'

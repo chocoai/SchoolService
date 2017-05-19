@@ -165,7 +165,6 @@ public class StudentMobile extends Controller {
             .set("sex", getSex(getPara("number")))
             .set("birth", getBirthDate(getPara("number")))
             .set("address", getPara("type"))
-            .set("state", getPara("state"))
             .set("bind", 0)
             .update();
     logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";student_id:"+getPara("id")+";");
@@ -180,7 +179,7 @@ public class StudentMobile extends Controller {
   public void checkNumberForAdd() {
     if (!checkIDNumberDetailB(getPara("number"))){
       renderText(checkIDNumberDetail(getPara("number")));
-    } else if (Db.find("SELECT * FROM Student WHERE number = ?", getPara("number")).size() != 0) {
+    } else if (Db.find("SELECT * FROM student WHERE number = ?", getPara("number")).size() != 0) {
       renderText("该学生身份证号码已存在!");
     } else {
       renderText("OK");
@@ -195,7 +194,7 @@ public class StudentMobile extends Controller {
     if (!checkIDNumberDetailB(getPara("number"))){
       renderText(checkIDNumberDetail(getPara("number")));
     } else if (!Student.dao.findById(getPara("id")).get("number").equals(getPara("number"))
-            && Db.find("SELECT * FROM Student WHERE number = ?", getPara("number")).size() != 0) {
+            && Db.find("SELECT * FROM student WHERE number = ?", getPara("number")).size() != 0) {
       renderText("该学生身份证号码已存在!");
     } else {
       renderText("OK");
@@ -206,7 +205,7 @@ public class StudentMobile extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkCodeForAdd() {
-    if (Db.find("SELECT * FROM Student WHERE code = ?", getPara("code")).size() != 0) {
+    if (Db.find("SELECT * FROM student WHERE code = ?", getPara("code")).size() != 0) {
       renderText("该学生学籍号码已存在!");
     } else {
       renderText("OK");
@@ -219,7 +218,7 @@ public class StudentMobile extends Controller {
   @Before(OverdueCheck.class)
   public void checkCodeForEdit() {
     if (!Student.dao.findById(getPara("id")).get("code").equals(getPara("code"))
-            && Db.find("SELECT * FROM Student WHERE code = ?", getPara("code")).size() != 0) {
+            && Db.find("SELECT * FROM student WHERE code = ?", getPara("code")).size() != 0) {
       renderText("该学生学籍号码已存在!");
     } else {
       renderText("OK");

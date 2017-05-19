@@ -189,7 +189,6 @@ public class ParentMobile extends Controller {
       object.set("name", getPara("name"))
               .set("userId", getUserId(getPara("name")))
               .set("mobile", getPara("mobile"))
-              .set("type", getPara("type"))
               .set("state", 4)
               .set("del", 0)
               .save();
@@ -212,7 +211,6 @@ public class ParentMobile extends Controller {
       ParentService.me().userUpdate(user);
       object.set("name", getPara("name"))
               .set("mobile", getPara("mobile"))
-              .set("type", getPara("type"))
               .update();
       logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";parent_id:"+getPara("id")+";");
       renderText("OK");
@@ -226,9 +224,9 @@ public class ParentMobile extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkMobileForAdd() {
-    if (Teacher.dao.find("SELECT * FROM Teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+    if (Teacher.dao.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该家长的联系电话已存在!");
-    } else if (Parent.dao.find("SELECT * FROM Parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+    } else if (Parent.dao.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该家长的联系电话已存在!");
     } else {
       renderText("OK");
@@ -240,10 +238,10 @@ public class ParentMobile extends Controller {
    */
   @Before(OverdueCheck.class)
   public void checkMobileForEdit() {
-    if (Db.find("SELECT * FROM Teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
+    if (Db.find("SELECT * FROM teacher WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该家长的联系电话已存在!");
     } else if (!Parent.dao.findById(getPara("id")).get("mobile").equals(getPara("mobile"))
-            && Db.find("SELECT * FROM Parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
+            && Db.find("SELECT * FROM parent WHERE mobile = ?", getPara("mobile")).size() != 0) {
       renderText("该家长的联系电话已存在!");
     } else {
       renderText("OK");

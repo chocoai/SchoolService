@@ -1,4 +1,4 @@
-import * as Mobile from '../../Mobile.js'
+import * as Mobile from '../../Mobile/Mobile.js'
 const base = 'teacherMessage'
 export const save = `${Mobile.Prefix}/${base}/save`
 export const inactive = `${Mobile.Prefix}/${base}/inactive`
