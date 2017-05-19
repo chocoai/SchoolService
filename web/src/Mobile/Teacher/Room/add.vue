@@ -3,8 +3,8 @@
     <mu-appbar title="创建新班级">
       <mu-icon-button icon='reply' slot="right" @click="gorReply" v-if="permission.Page"/>
     </mu-appbar>
-    <mu-text-field label="入学年份" v-model="year" fullWidth labelFloat icon="supervisor_account" type="number" max="2050" min="2000"/><br/>
-    <mu-text-field label="班序" v-model="order" fullWidth labelFloat icon="supervisor_account" type="number" max="30" min="1"/><br/>
+    <mu-text-field label="入学年份" v-model="year" fullWidth labelFloat icon="schedule" type="number" max="2050" min="2000"/><br/>
+    <mu-text-field label="班序" v-model="order" fullWidth labelFloat icon="format_list_numbered" type="number" max="30" min="1"/><br/>
     <mu-select-field label="班级状态" icon="settings" v-model="state" fullWidth>
       <mu-menu-item value="1" title="激活"/>
       <mu-menu-item value="0" title="注销"/>
@@ -39,8 +39,8 @@ export default {
       menu: [],
       icon: '',
       color: '',
-      year: '',
-      order: '',
+      year: '2017',
+      order: '1',
       state: '1',
       message: ''
     }

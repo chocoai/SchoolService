@@ -6,6 +6,10 @@
     <mu-text-field label="学期名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
     <mu-date-picker label="开始时间" v-model="timeStart" fullWidth labelFloat icon="schedule"/><br/>
     <mu-date-picker label="终止时间" v-model="timeEnd" fullWidth labelFloat icon="schedule"/><br/>
+    <mu-select-field label="学期状态" icon="settings" v-model="state" fullWidth disable>
+      <mu-menu-item value="1" title="激活"/>
+      <mu-menu-item value="0" title="注销"/>
+    </mu-select-field>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="permission.Edit" @click="goEdit" backgroundColor="blue"/>

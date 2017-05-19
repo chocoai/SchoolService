@@ -16,6 +16,12 @@
         <Form-item label="终止日期" prop="time_end" required>
           <Date-picker type="date" v-model="object.time_end" placement="bottom-end" placeholder="选择终止日期" style="width: 400px"></Date-picker>
         </Form-item>
+        <Form-item size="large" label="学期状态" required>
+          <Radio-group v-model="object.state" type="button">
+            <Radio label="1" disabled>激活</Radio>
+            <Radio label="0" disabled>注销</Radio>
+          </Radio-group>
+        </Form-item>
         <Form-item>
           <Button size="large" type="success" @click="goEdit" v-if="permission.Edit">保存</Button>
           <Button size="large" type="warning" style="margin-left: 8px" @click="goReset"  v-if="permission.Get">重置</Button>
@@ -78,7 +84,8 @@
         object: {
           name: '',
           time_start: '',
-          time_end: ''
+          time_end: '',
+          state: ''
         }
       }
     },

@@ -15,8 +15,8 @@
           </Form-item>
           <Form-item size="large" label="班级状态" required>
             <Radio-group v-model="object.state" type="button">
-              <Radio label="1">激活</Radio>
-              <Radio label="0">注销</Radio>
+              <Radio label="1" disabled>激活</Radio>
+              <Radio label="0" disabled>注销</Radio>
             </Radio-group>
           </Form-item>
           <Form-item>

@@ -125,10 +125,10 @@ public class MainDesktop extends Controller {
    * 登出
    * */
   public void Exit() {
-    setSessionAttr("manager", "");
     setSessionAttr("Teacher", "");
     setSessionAttr("Parent", "");
-    setCookie("permission", "", -1);
+    setCookie("PermissionDesktop", "", -1);
+    setCookie("MenuDesktop", "", -1);
     redirect("/");
   }
 }

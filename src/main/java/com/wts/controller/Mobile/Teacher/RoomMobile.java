@@ -1,4 +1,4 @@
-package com.wts.controller.Desktop.Teacher;
+package com.wts.controller.Mobile.Teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -9,11 +9,12 @@ import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
-import com.wts.validator.Query;
 import com.wts.validator.Course.Course_Exist;
+import com.wts.validator.Query;
 import com.wts.validator.Room.Room_Edit;
 import com.wts.validator.Room.Room_Exist;
 import com.wts.validator.Room.Room_Save;
+import com.wts.validator.Total;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -21,8 +22,8 @@ import java.io.IOException;
 import static com.wts.util.Util.PermissionString;
 
 
-public class RoomDesktop extends Controller {
-  private static Logger logger = Logger.getLogger(RoomDesktop.class);
+public class RoomMobile extends Controller {
+  private static Logger logger = Logger.getLogger(RoomMobile.class);
 
   /**
    * 页面
@@ -39,12 +40,12 @@ public class RoomDesktop extends Controller {
         setSessionAttr("Teacher", teacher);
         setCookie("dit", teacher.getId().toString(), 60 * 60 * 3);
         setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(),teacher.getId().toString()), 60 * 6 * 10);
-        render("/static/html/desktop/Teacher/Desktop_Teacher_Room.html");
+        render("/static/html/mobile/Teacher/Mobile_Teacher_Room.html");
       }
     } else {
       String teacherId = ((Teacher) getSessionAttr("Teacher")).getId().toString();
       setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(),teacherId), 60 * 6 * 10);
-      render("/static/html/desktop/Teacher/Desktop_Teacher_Room.html");
+      render("/static/html/mobile/Teacher/Mobile_Teacher_Room.html");
     }
   }
 
@@ -72,10 +73,14 @@ public class RoomDesktop extends Controller {
   /**
    * 计数
    */
-  @Before({OverdueCheck.class, PermissionCheck.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Total.class})
   public void Total() {
     Long count = Db.queryLong("SELECT COUNT(*) FROM room WHERE del = 0 AND (name LIKE '%" + getPara("keyword") + "%')");
-    renderText(count.toString());
+    if (count % getParaToInt("pageSize") == 0) {
+      renderText((count / getParaToInt("pageSize")) + "");
+    } else {
+      renderText((count / getParaToInt("pageSize") + 1) + "");
+    }
   }
 
   /**
@@ -159,25 +164,6 @@ public class RoomDesktop extends Controller {
     logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";room_id:"+object.get("id")+";");
     renderText("OK");
   }
-
-  /**
-   * 导出
-   */
-  @Before({OverdueCheck.class, PermissionCheck.class})
-  public void Download() throws IOException {
-    String[] title={"序号","班级名称","入学年份","班序","班级状态"};
-    String fileName = "Room";
-    String SQL = "select id AS 序号,name AS 班级名称, `year` AS 入学年份, `order` AS 班序, " +
-            "(case state when 1 then '可用' when 2 then '停用' else '错误' end ) AS 班级状态 " +
-            "from room where del = 0 AND name like '%"+getPara("keyword")+"%'" +
-            "ORDER BY id ASC";
-    logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +
-            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
-            "file_name:" + fileName + ";" +
-            "sql:" + SQL + ";");
-    ExportUtil.export(title,fileName,SQL,getResponse());
-  }
-
   /**
    * 检测名称_新增
    */

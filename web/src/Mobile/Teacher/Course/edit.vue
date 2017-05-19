@@ -10,6 +10,10 @@
       <mu-menu-item value="1" title="必修课"/>
       <mu-menu-item value="2" title="选修课"/>
     </mu-select-field>
+    <mu-select-field label="课程状态" icon="settings" v-model="state" fullWidth disabled >
+      <mu-menu-item value="1" title="激活"/>
+      <mu-menu-item value="0" title="注销"/>
+    </mu-select-field>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="permission.Edit" @click="goEdit" backgroundColor="blue"/>

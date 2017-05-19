@@ -22,6 +22,12 @@
             <Radio label="2">选修课</Radio>
           </Radio-group>
         </Form-item>
+        <Form-item size="large" label="课程状态" required>
+          <Radio-group v-model="object.state" type="button">
+            <Radio label="1" disabled>激活</Radio>
+            <Radio label="0" disabled>注销</Radio>
+          </Radio-group>
+        </Form-item>
         <Form-item>
           <Button size="large" type="success" @click="goEdit" v-if="permission.Edit">保存</Button>
           <Button size="large" type="warning" style="margin-left: 8px" @click="goReset"  v-if="permission.Get">重置</Button>

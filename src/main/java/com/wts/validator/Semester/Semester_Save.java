@@ -12,6 +12,7 @@ public class Semester_Save implements Interceptor {
     if (!StrKit.isBlank(inv.getController().getPara("name"))
             && !StrKit.isBlank(inv.getController().getPara("time_start"))
             && !StrKit.isBlank(inv.getController().getPara("time_end"))
+            && !StrKit.isBlank(inv.getController().getPara("state"))
             ) {
       String name = inv.getController().getPara("name");
       Date time_start = new Date(inv.getController().getParaToLong("time_start"));

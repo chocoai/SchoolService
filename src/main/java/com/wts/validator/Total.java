@@ -4,10 +4,9 @@ import com.jfinal.aop.Interceptor;
 import com.jfinal.aop.Invocation;
 import com.jfinal.kit.StrKit;
 
-public class Query implements Interceptor {
+public class Total implements Interceptor {
   public void intercept(Invocation inv) {
-    if (!StrKit.isBlank(inv.getController().getPara("pageCurrent"))
-            && !StrKit.isBlank(inv.getController().getPara("pageSize"))
+    if (!StrKit.isBlank(inv.getController().getPara("pageSize"))
             && !StrKit.isBlank(inv.getController().getPara("keyword"))
             ) {
       inv.invoke();

@@ -59,6 +59,10 @@ public class MainMobile extends Controller {
       setCookie("MenuMobile", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
       setCookie("SemesterMobile", PermissionString("SemesterMobile",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("CourseMobile", PermissionString("CourseMobile",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("RoomMobile", PermissionString("RoomMobile",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("TeacherMobile", PermissionString("TeacherMobile",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("ParentMobile", PermissionString("ParentMobile",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("StudentMobile", PermissionString("StudentMobile",teacher.getId().toString()), 60 * 6 * 10);
 
       renderText("OK");
     } else {
@@ -119,10 +123,10 @@ public class MainMobile extends Controller {
    * 登出
    * */
   public void Exit() {
-    setSessionAttr("manager", "");
     setSessionAttr("Teacher", "");
     setSessionAttr("Parent", "");
-    setCookie("permission", "", -1);
+    setCookie("PermissionMobile", "", -1);
+    setCookie("MenuMobile", "", -1);
     redirect("/");
   }
 }

@@ -13,6 +13,7 @@ import com.wts.validator.Query;
 import com.wts.validator.Semester.Semester_Edit;
 import com.wts.validator.Semester.Semester_Exist;
 import com.wts.validator.Semester.Semester_Save;
+import com.wts.validator.Total;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -71,7 +72,7 @@ public class SemesterMobile extends Controller {
   /**
    * 计数
    */
-  @Before({OverdueCheck.class, PermissionCheck.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Total.class})
   public void Total() {
     Long count = Db.queryLong("SELECT COUNT(*) FROM semester WHERE name LIKE '%" + getPara("keyword") + "%'");
     if (count % getParaToInt("pageSize") == 0) {
@@ -142,7 +143,7 @@ public class SemesterMobile extends Controller {
     object.set("name", getPara("name"))
             .set("time_start", new Date(getParaToLong("time_start")))
             .set("time_end", new Date(getParaToLong("time_end")))
-            .set("state", 0)
+            .set("state", getPara("state"))
             .set("del", 0)
             .save();
     logger.warn("function:"+this.getClass().getSimpleName()+"/Save;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";semester_id:"+object.get("id")+";");

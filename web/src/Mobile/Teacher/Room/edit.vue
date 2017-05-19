@@ -1,11 +1,14 @@
 <template>
   <div>
-    <mu-appbar title="学期详情">
+    <mu-appbar title="班级详情">
       <mu-icon-button icon='reply' slot="right" @click="goReply" v-if="permission.Page"/>
     </mu-appbar>
-    <mu-text-field label="学期名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
-    <mu-date-picker label="开始时间" v-model="timeStart" fullWidth labelFloat icon="schedule"/><br/>
-    <mu-date-picker label="终止时间" v-model="timeEnd" fullWidth labelFloat icon="schedule"/><br/>
+    <mu-text-field label="入学年份" v-model="year" fullWidth labelFloat icon="schedule" type="number" max="2050" min="2000"/><br/>
+    <mu-text-field label="班序" v-model="order" fullWidth labelFloat icon="format_list_numbered" type="number" max="30" min="1"/><br/>
+    <mu-select-field label="班级状态" icon="settings" v-model="state" fullWidth disabled>
+      <mu-menu-item value="1" title="激活"/>
+      <mu-menu-item value="0" title="注销"/>
+    </mu-select-field>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="permission.Edit" @click="goEdit" backgroundColor="blue"/>
@@ -41,13 +44,10 @@ export default {
       icon: '',
       color: '',
       message: '',
-      semester: [],
-      name: '',
-      timeStart: '',
-      timeEnd: '',
-      state: '',
-      nameErrorText: '',
-      nameErrorColor: ''
+      object: [],
+      year: '',
+      order: '',
+      state: ''
     }
   },
   created () {
@@ -101,9 +101,8 @@ export default {
         API.edit,
         { params: {
           id: this.$route.params.id,
-          name: this.name,
-          time_start: this.timeStart,
-          time_end: this.timeEnd
+          year: this.year,
+          order: this.order
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
@@ -128,42 +127,12 @@ export default {
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.semester = response.body
-        this.name = this.semester.name
-        this.timeStart = this.semester.time_start
-        this.timeEnd = this.semester.time_end
-        this.state = this.semester.state
+        this.object = response.body
+        this.year = this.object.year
+        this.order = this.object.order
         this.Reading = false
       }, (response) => {
       })
-    },
-    checkName (value) {
-      if (value === null || value === undefined || value === '') {
-        this.nameErrorText = '名称为必填项!'
-        this.nameErrorColor = 'orange'
-      } else if (value.length > 20) {
-        this.nameErrorText = '名称不得超过20字符'
-        this.nameErrorColor = 'orange'
-      } else {
-        this.$http.get(
-          API.checkNameForEdit,
-          { params: { id: this.$route.params.id, name: value } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/MainMobile'
-          } else if (response.body === 'OK') {
-            this.nameErrorText = 'OK'
-            this.nameErrorColor = 'green'
-          } else {
-            this.nameErrorText = response.body
-            this.nameErrorColor = 'red'
-          }
-        }, (response) => {
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
-      }
     }
   }
 }

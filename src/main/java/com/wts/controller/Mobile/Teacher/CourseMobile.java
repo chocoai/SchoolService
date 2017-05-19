@@ -12,6 +12,7 @@ import com.wts.validator.Course.Course_Edit;
 import com.wts.validator.Course.Course_Exist;
 import com.wts.validator.Course.Course_Save;
 import com.wts.validator.Query;
+import com.wts.validator.Total;
 import org.apache.log4j.Logger;
 
 import static com.wts.util.Util.PermissionString;
@@ -71,7 +72,7 @@ public class CourseMobile extends Controller {
   /**
    * 计数
    */
-  @Before({OverdueCheck.class, PermissionCheck.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Total.class})
   public void Total() {
     Long count = Db.queryLong("SELECT COUNT(*) FROM course WHERE name LIKE '%" + getPara("keyword") + "%' OR detail LIKE '%" + getPara("keyword") + "%'");
     if (count % getParaToInt("pageSize") == 0) {
@@ -161,7 +162,6 @@ public class CourseMobile extends Controller {
             .set("detail", getPara("detail"))
             .set("amount", getPara("amount"))
             .set("type", getPara("type"))
-            .set("state", getPara("state"))
             .update();
     logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";course_id:"+getPara("id")+";");
     renderText("OK");

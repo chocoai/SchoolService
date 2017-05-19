@@ -160,7 +160,6 @@ public class CourseDesktop extends Controller {
             .set("detail", getPara("detail"))
             .set("amount", getPara("amount"))
             .set("type", getPara("type"))
-            .set("state", getPara("state"))
             .update();
     logger.warn("function:"+this.getClass().getSimpleName()+"/Edit;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";course_id:"+getPara("id")+";");
     renderText("OK");

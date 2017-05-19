@@ -10,6 +10,10 @@
       <mu-menu-item value="1" title="必修课"/>
       <mu-menu-item value="2" title="选修课"/>
     </mu-select-field>
+    <mu-select-field label="课程状态" icon="settings" v-model="state" fullWidth disabled >
+      <mu-menu-item value="1" title="激活"/>
+      <mu-menu-item value="0" title="注销"/>
+    </mu-select-field>
     <mu-dialog :open="Saving" title="正在保存" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
@@ -44,6 +48,7 @@ export default {
       detail: '',
       amount: 0,
       type: '1',
+      state: '1',
       message: '',
       nameErrorText: '',
       nameErrorColor: '',
@@ -95,6 +100,7 @@ export default {
       this.detailErrorText = ''
       this.detailErrorColor = ''
       this.type = '1'
+      this.state = '1'
       this.amount = 0
     },
     checkName (value) {
@@ -145,7 +151,8 @@ export default {
           name: this.name,
           detail: this.detail,
           amount: this.amount,
-          type: this.type
+          type: this.type,
+          state: this.state
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {

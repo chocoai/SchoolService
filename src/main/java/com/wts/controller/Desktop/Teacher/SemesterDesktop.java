@@ -138,7 +138,7 @@ public class SemesterDesktop extends Controller {
     object.set("name", getPara("name"))
             .set("time_start", new Date(getParaToLong("time_start")))
             .set("time_end", new Date(getParaToLong("time_end")))
-            .set("state", 0)
+            .set("state", getPara("state"))
             .set("del", 0)
             .save();
     logger.warn("function:"+this.getClass().getSimpleName()+"/Save;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";semester_id:"+object.get("id")+";");
