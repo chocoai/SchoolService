@@ -19,12 +19,6 @@
         <Form-item label="家庭住址" prop="address" required>
           <Input size="large" v-model="object.address" placeholder="请输入学生的家庭住址" style="width: 400px"></Input>
         </Form-item>
-        <Form-item size="large" label="学生状态" required>
-          <Radio-group v-model="object.state" type="button">
-            <Radio label="1">激活</Radio>
-            <Radio label="0">注销</Radio>
-          </Radio-group>
-        </Form-item>
         <Form-item>
           <Button size="large" type="success" @click="goEdit" v-if="permission.Edit">保存</Button>
           <Button size="large" type="warning" style="margin-left: 8px" @click="goReset"  v-if="permission.Get">重置</Button>
@@ -196,8 +190,7 @@
             name: this.object.name,
             number: this.object.number,
             code: this.object.code,
-            address: this.object.address,
-            state: this.object.state
+            address: this.object.address
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

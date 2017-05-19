@@ -6,11 +6,11 @@
       <mu-icon-button icon='add' slot="right" @click="goAdd" v-if="permission.Save"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="course in list" :value="course.id" :title="course.name" :afterText="course.state.toString() === '0'?'注销':'激活'" :describeText="course.type.toString() === '1'?'必修课':'选修课'" @click="goSheet(course.id, course.state, course.name)">
-        <mu-icon v-if="course.state.toString() === '0' && course.type.toString() === '1'" slot="left" color="grey300" value="block" :size="35" />
-        <mu-icon v-if="course.state.toString() === '1' && course.type.toString() === '1'" slot="left" color="cyan300" value="beenhere" :size="35" />
-        <mu-icon v-if="course.state.toString() === '0' && course.type.toString() === '2'" slot="left" color="grey300" value="block" :size="35" />
-        <mu-icon v-if="course.state.toString() === '1' && course.type.toString() === '2'" slot="left" color="cyan300" value="beenhere" :size="35" />
+      <mu-list-item v-for="object in list" :value="object.id" :title="object.name" :afterText="object.state.toString() === '0'?'注销':'激活'" :describeText="object.type.toString() === '1'?'必修课':'选修课'" @click="goSheet(object.id, object.state, object.name)">
+        <mu-icon v-if="object.state.toString() === '0' && object.type.toString() === '1'" slot="left" color="grey300" value="block" :size="35" />
+        <mu-icon v-if="object.state.toString() === '1' && object.type.toString() === '1'" slot="left" color="cyan300" value="beenhere" :size="35" />
+        <mu-icon v-if="object.state.toString() === '0' && object.type.toString() === '2'" slot="left" color="grey300" value="block" :size="35" />
+        <mu-icon v-if="object.state.toString() === '1' && object.type.toString() === '2'" slot="left" color="cyan300" value="beenhere" :size="35" />
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -32,12 +32,12 @@
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
     <mu-bottom-sheet :open="bottomSheet" @close="goClose">
-      <mu-sub-header inset>{{name}}</mu-sub-header>
-      <mu-raised-button label="修改" v-if="permission.Edit" @click="goEdit" icon="edit" backgroundColor="blue" fullWidth/>
-      <mu-raised-button label="激活" v-if="permission.Active && !state" @click="showActive" icon="beenhere" backgroundColor="green" fullWidth/>
-      <mu-raised-button label="注销" v-if="permission.Inactive && state" @click="showInactive" icon="block" backgroundColor="amber" fullWidth/>
-      <mu-raised-button label="删除" v-if="permission.Delete" @click="showDelete" icon="delete" backgroundColor="red" fullWidth/>
-      <mu-raised-button label="取消" @click="goClose" icon="undo" backgroundColor="grey" fullWidth/>
+      <mu-sub-header>{{name}}</mu-sub-header>
+      <mu-raised-button class="raised-button" label="修改" v-if="permission.Edit" @click="goEdit" icon="edit" backgroundColor="blue" fullWidth/>
+      <mu-raised-button class="raised-button" label="激活" v-if="permission.Active && !state" @click="showActive" icon="beenhere" backgroundColor="green" fullWidth/>
+      <mu-raised-button class="raised-button" label="注销" v-if="permission.Inactive && state" @click="showInactive" icon="block" backgroundColor="amber" fullWidth/>
+      <mu-raised-button class="raised-button" label="删除" v-if="permission.Delete" @click="showDelete" icon="delete" backgroundColor="red" fullWidth/>
+      <mu-raised-button class="raised-button" label="取消" @click="goClose" icon="undo" backgroundColor="grey" fullWidth/>
     </mu-bottom-sheet>
     <mu-dialog :open="Checking" :title="title" @close="goClose">
       <mu-flat-button label="取消" @click="goClose" />
@@ -342,5 +342,8 @@
     height: 70px;
     text-align: center;
     line-height: 32px;
+  }
+  .raised-button {
+    margin: 3px 1px 3px;
   }
 </style>

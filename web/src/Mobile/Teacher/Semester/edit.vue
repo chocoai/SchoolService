@@ -41,7 +41,7 @@ export default {
       icon: '',
       color: '',
       message: '',
-      semester: [],
+      object: [],
       name: '',
       timeStart: '',
       timeEnd: '',
@@ -128,11 +128,11 @@ export default {
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.semester = response.body
-        this.name = this.semester.name
-        this.timeStart = this.semester.time_start
-        this.timeEnd = this.semester.time_end
-        this.state = this.semester.state
+        this.object = response.body
+        this.name = this.object.name
+        this.timeStart = this.object.time_start
+        this.timeEnd = this.object.time_end
+        this.state = this.object.state
         this.Reading = false
       }, (response) => {
       })

@@ -22,12 +22,6 @@
             <Radio label="2">选修课</Radio>
           </Radio-group>
         </Form-item>
-        <Form-item size="large" label="课程状态" required>
-          <Radio-group v-model="object.state" type="button">
-            <Radio label="1">激活</Radio>
-            <Radio label="0">注销</Radio>
-          </Radio-group>
-        </Form-item>
         <Form-item>
           <Button size="large" type="success" @click="goEdit" v-if="permission.Edit">保存</Button>
           <Button size="large" type="warning" style="margin-left: 8px" @click="goReset"  v-if="permission.Get">重置</Button>
@@ -168,8 +162,7 @@
             name: this.object.name,
             detail: this.object.detail,
             amount: this.object.amount,
-            type: this.object.type,
-            state: this.object.state
+            type: this.object.type
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

@@ -1,15 +1,11 @@
 <template>
   <div>
-    <mu-appbar title="课程详情">
+    <mu-appbar title="学期详情">
       <mu-icon-button icon='reply' slot="right" @click="goReply" v-if="permission.Page"/>
     </mu-appbar>
-    <mu-text-field label="课程名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
-    <mu-text-field label="课程描述" v-model="detail" :errorColor="detailErrorColor" :errorText="detailErrorText" @input="checkDetail" fullWidth labelFloat icon="title" maxLength="100" multiLine :rows="3" :rowsMax="6"/><br/>
-    <mu-text-field label="选课人数" v-model="amount" fullWidth labelFloat icon="supervisor_account" type="number" max="60" min="0"/><br/>
-    <mu-select-field label="课程类别"  icon="settings" v-model="type" fullWidth>
-      <mu-menu-item value="1" title="必修课"/>
-      <mu-menu-item value="2" title="选修课"/>
-    </mu-select-field>
+    <mu-text-field label="学期名称" v-model="name" :errorColor="nameErrorColor" :errorText="nameErrorText" @input="checkName" fullWidth labelFloat icon="title" maxLength="20"/><br/>
+    <mu-date-picker label="开始时间" v-model="timeStart" fullWidth labelFloat icon="schedule"/><br/>
+    <mu-date-picker label="终止时间" v-model="timeEnd" fullWidth labelFloat icon="schedule"/><br/>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="edit" v-if="permission.Edit" @click="goEdit" backgroundColor="blue"/>
@@ -45,16 +41,13 @@ export default {
       icon: '',
       color: '',
       message: '',
-      object: [],
+      semester: [],
       name: '',
-      detail: '',
-      amount: 0,
-      type: '',
+      timeStart: '',
+      timeEnd: '',
       state: '',
       nameErrorText: '',
-      nameErrorColor: '',
-      detailErrorText: '',
-      detailErrorColor: ''
+      nameErrorColor: ''
     }
   },
   created () {
@@ -109,9 +102,8 @@ export default {
         { params: {
           id: this.$route.params.id,
           name: this.name,
-          detail: this.detail,
-          amount: this.amount,
-          type: this.type
+          time_start: this.timeStart,
+          time_end: this.timeEnd
         } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
@@ -136,12 +128,11 @@ export default {
         { params: { id: id } },
         { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
       ).then((response) => {
-        this.object = response.body
-        this.name = this.object.name
-        this.detail = this.object.detail
-        this.amount = this.object.amount
-        this.type = this.object.type
-        this.state = this.object.state
+        this.semester = response.body
+        this.name = this.semester.name
+        this.timeStart = this.semester.time_start
+        this.timeEnd = this.semester.time_end
+        this.state = this.semester.state
         this.Reading = false
       }, (response) => {
       })
@@ -172,18 +163,6 @@ export default {
         }, (response) => {
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
-      }
-    },
-    checkDetail (value) {
-      if (value === null || value === undefined || value === '') {
-        this.detailErrorText = '课程表述为必填项!'
-        this.detailErrorColor = 'orange'
-      } else if (value.length > 100) {
-        this.detailErrorText = '课程表述不得超过100字符'
-        this.detailErrorColor = 'orange'
-      } else {
-        this.detailErrorText = 'OK'
-        this.detailErrorColor = 'green'
       }
     }
   }
