@@ -11,7 +11,7 @@
     </mu-dialog>
     <mu-flexbox>
       <mu-flexbox-item class="flex-demo">
-        <mu-float-button :disabled="Save_Able" icon="save" @click="goSave" backgroundColor="green" v-if="permission.Save"/>
+        <mu-float-button icon="save" @click="goSave" backgroundColor="green" v-if="permission.Save"/>
       </mu-flexbox-item>
       <mu-flexbox-item class="flex-demo">
         <mu-float-button icon="cached" @click="goReset" backgroundColor="orange"/>
@@ -67,15 +67,6 @@ export default {
     } else {
       this.permission = JSON.parse(JSON.parse(getCookie(API.base)))
       this.menu = JSON.parse(JSON.parse(getCookie('MenuMobile')))
-    }
-  },
-  computed: {
-    Save_Able: function () {
-      if (this.nameErrorText.toString() === 'OK') {
-        return false
-      } else {
-        return true
-      }
     }
   },
   methods: {

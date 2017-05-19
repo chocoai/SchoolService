@@ -11,6 +11,9 @@
         <mu-list-item title="学期管理" @click.native="goSemester" v-if="menu.SemesterMobile_Page">
           <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
         </mu-list-item>
+        <mu-list-item title="课程管理" @click.native="goCourse" v-if="menu.CourseMobile_Page">
+          <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
+        </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="grey900"/>
         </mu-list-item>
@@ -40,6 +43,9 @@
       },
       goSemester () {
         window.location.href = '/SemesterMobile/Page'
+      },
+      goCourse () {
+        window.location.href = '/CourseMobile/Page'
       },
       goExit () {
         window.location.href = '/exit'

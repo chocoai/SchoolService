@@ -58,6 +58,7 @@ public class MainMobile extends Controller {
       }
       setCookie("MenuMobile", "{"+permission.substring(0,permission.length()-2).replace("/","_")+"}", 60 * 6 * 10);
       setCookie("SemesterMobile", PermissionString("SemesterMobile",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("CourseMobile", PermissionString("CourseMobile",teacher.getId().toString()), 60 * 6 * 10);
 
       renderText("OK");
     } else {

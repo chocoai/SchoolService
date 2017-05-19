@@ -7,8 +7,8 @@
     </mu-appbar>
     <mu-list>
       <mu-list-item v-for="semester in list" :value="semester.id" :title="semester.name" :afterText="semester.state.toString() === '0'?'注销':'激活'" @click="goSheet(semester.id, semester.state, semester.name)">
-        <mu-icon v-if="semester.state.toString() === '0'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
-        <mu-icon v-if="semester.state.toString() === '1'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
+        <mu-icon v-if="semester.state.toString() === '0'" slot="left" color="grey300" value="block" :size="35" />
+        <mu-icon v-if="semester.state.toString() === '1'" slot="left" color="cyan300" value="beenhere" :size="35" />
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -29,26 +29,20 @@
     <mu-popup position="bottom" :overlay="false" popupClass="popup-bottom" :open="bottomPopup">
       <mu-icon :value="icon" :size="36" :color="color"/>&nbsp;{{ message }}
     </mu-popup>
-    <mu-bottom-sheet :open="bottomSheet" @close="bottomSheet=false">
-      <mu-list>
-        <mu-sub-header inset>{{name}}</mu-sub-header>
-        <mu-list-item title="修改" v-if="permission.Edit" @click="goEdit">
-          <mu-avatar icon="edit" backgroundColor="blue" slot="leftAvatar" />
-        </mu-list-item>
-        <mu-list-item title="激活" v-if="permission.Active && !state" @click="goActive">
-          <mu-avatar icon="visibility" backgroundColor="Green" slot="leftAvatar" />
-        </mu-list-item>
-        <mu-list-item title="注销" v-if="permission.Inactive && state" @click="goInactive">
-          <mu-avatar icon="visibility_off" backgroundColor="Amber" slot="leftAvatar" />
-        </mu-list-item>
-        <mu-list-item title="删除" v-if="permission.Delete" @click="goDelete">
-          <mu-avatar icon="delete" backgroundColor="red" slot="leftAvatar" />
-        </mu-list-item>
-        <mu-list-item title="取消" @click="bottomSheet=false">
-          <mu-avatar icon="undo" backgroundColor="Grey" slot="leftAvatar" />
-        </mu-list-item>
-      </mu-list>
+    <mu-bottom-sheet :open="bottomSheet" @close="goClose">
+      <mu-sub-header inset>{{name}}</mu-sub-header>
+      <mu-raised-button label="修改" v-if="permission.Edit" @click="goEdit" icon="edit" backgroundColor="blue" fullWidth/>
+      <mu-raised-button label="激活" v-if="permission.Active && !state" @click="showActive" icon="beenhere" backgroundColor="green" fullWidth/>
+      <mu-raised-button label="注销" v-if="permission.Inactive && state" @click="showInactive" icon="block" backgroundColor="amber" fullWidth/>
+      <mu-raised-button label="删除" v-if="permission.Delete" @click="showDelete" icon="delete" backgroundColor="red" fullWidth/>
+      <mu-raised-button label="取消" @click="goClose" icon="undo" backgroundColor="grey" fullWidth/>
     </mu-bottom-sheet>
+    <mu-dialog :open="Checking" :title="title" @close="goClose">
+      <mu-flat-button label="取消" @click="goClose" />
+      <mu-flat-button label="确定" v-if="Activing" @click="goActive" secondary/>
+      <mu-flat-button label="确定" v-if="Inactiving" @click="goInactive" secondary/>
+      <mu-flat-button label="确定" v-if="Deleting" @click="goDelete" secondary/>
+    </mu-dialog>
     <mu-dialog :open="Operating" title="正在操作" >
       <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
     </mu-dialog>
@@ -72,6 +66,10 @@
         open: false,
         bottomPopup: false,
         bottomSheet: false,
+        Activing: false,
+        Inactiving: false,
+        Deleting: false,
+        Checking: false,
         Operating: false,
         permission: [],
         menu: [],
@@ -80,6 +78,7 @@
         message: '',
         id: '',
         name: '',
+        title: '',
         state: false,
         keyword: '',
         list: [],
@@ -189,8 +188,39 @@
           pageSize: this.pageSize
         })
       },
-      goDelete () {
+      showActive () {
+        this.Activing = true
+        this.Inactiving = false
+        this.Deleting = false
+        this.Checking = true
         this.bottomSheet = false
+        this.title = '确定要激活：' + this.name + '?'
+      },
+      showInactive () {
+        this.Activing = false
+        this.Inactiving = true
+        this.Deleting = false
+        this.Checking = true
+        this.bottomSheet = false
+        this.title = '确定要注销：' + this.name + '?'
+      },
+      showDelete () {
+        this.Activing = false
+        this.Inactiving = false
+        this.Deleting = true
+        this.Checking = true
+        this.bottomSheet = false
+        this.title = '确定要删除：' + this.name + '?'
+      },
+      goClose () {
+        this.bottomSheet = false
+        this.Checking = false
+        this.Activing = false
+        this.Inactiving = false
+        this.Deleting = false
+      },
+      goDelete () {
+        this.goClose()
         this.Operating = true
         this.$http.get(
           API.del,
@@ -214,7 +244,7 @@
         })
       },
       goActive () {
-        this.bottomSheet = false
+        this.goClose()
         this.Operating = true
         this.$http.get(
           API.active,
@@ -238,7 +268,7 @@
         })
       },
       goInactive () {
-        this.bottomSheet = false
+        this.goClose()
         this.Operating = true
         this.$http.get(
           API.inactive,
