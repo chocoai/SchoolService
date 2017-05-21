@@ -7,7 +7,7 @@
           <Icon type="settings"></Icon>
           首页
         </Menu-item>
-        <Submenu name="basic">
+        <Submenu name="basic" v-if="menu.SemesterDesktop_Page || menu.CourseDesktop_Page || menu.RoomDesktop_Page || menu.TeacherDesktop_Page || menu.StudentDesktop_Page || menu.ParentDesktop_Page">
           <template slot="title">
             <Icon type="stats-bars"></Icon>
             基础管理
@@ -19,7 +19,7 @@
           <Menu-item name="StudentDesktop" v-if="menu.StudentDesktop_Page">学生</Menu-item>
           <Menu-item name="ParentDesktop" v-if="menu.ParentDesktop_Page">家长</Menu-item>
         </Submenu>
-        <Submenu name="relation">
+        <Submenu name="relation" v-if="menu.StudentParentIdentityDesktop_Page || menu.RoomStudentDesktop_Page || menu.CourseRoomTeacherSemesterDesktop_Page || menu.StudentCourseSemesterDesktop_Page">
           <template slot="title">
             <Icon type="stats-bars"></Icon>
             关系管理
