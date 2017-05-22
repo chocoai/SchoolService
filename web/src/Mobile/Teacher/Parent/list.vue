@@ -190,7 +190,8 @@
         }
         this.bottomSheet = true
       },
-      goQuery () {
+      goQuery (keyword) {
+        this.keyword = keyword
         this.pageCurrent = '1'
         this.$store.commit('save', {
           keyword: this.keyword,

@@ -5,11 +5,9 @@
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="goQuery" :value="keyword"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="object in list" :value="object.id" :title="object.name" :describeText="object.number" :afterText="object.state.toString() === '0'?'注销':'激活'" @click="goSheet(object.id, object.state, object.name)">
-        <mu-icon v-if="object.state.toString() === '1' && object.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="Cyan"/>
-        <mu-icon v-if="object.state.toString() === '1' && object.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="pink"/>
-        <mu-icon v-if="object.state.toString() === '2' && object.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
-        <mu-icon v-if="object.state.toString() === '2' && object.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
+      <mu-list-item v-for="object in list" :value="object.id" :title="object.name" :describeText="object.number"  @click="goSheet(object.id, object.name)">
+        <mu-icon v-if="object.sex.toString() === '1'" slot="left" :size="35" value="account_box" color="Cyan"/>
+        <mu-icon v-if="object.sex.toString() === '2'" slot="left" :size="35" value="account_circle" color="pink"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -33,7 +31,7 @@
     <mu-bottom-sheet :open="bottomSheet" @close="goClose">
       <mu-sub-header>{{name}}</mu-sub-header>
       <mu-raised-button class="raised-button" label="学生详情" v-if="permission.GetStudent" @click="goStudent" icon="edit" backgroundColor="blue" fullWidth/>
-      <mu-raised-button class="raised-button" label="家长详情" v-if="permission.GetParent" @click="GoParent" icon="beenhere" backgroundColor="green" fullWidth/>
+      <mu-raised-button class="raised-button" label="家长详情" v-if="permission.GetParent" @click="goParent" icon="beenhere" backgroundColor="green" fullWidth/>
       <mu-raised-button class="raised-button" label="取消" @click="goClose" icon="undo" backgroundColor="grey" fullWidth/>
     </mu-bottom-sheet>
   </div>
@@ -63,7 +61,6 @@
         message: '',
         id: '',
         name: '',
-        state: false,
         keyword: '',
         list: [],
         pageTotal: '',
@@ -144,17 +141,13 @@
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
       },
-      goSheet (id, state, name) {
+      goSheet (id, name) {
         this.id = id
         this.name = name
-        if (state.toString() === '1') {
-          this.state = true
-        } else {
-          this.state = false
-        }
         this.bottomSheet = true
       },
-      goQuery () {
+      goQuery (keyword) {
+        this.keyword = keyword
         this.pageCurrent = '1'
         this.$store.commit('save', {
           keyword: this.keyword,

@@ -613,9 +613,9 @@
         this.$http.get(
           API.save,
           { params: {
-            sid: this.id1,
+            tid: this.id1,
             cid: this.id2,
-            xid: this.id3
+            sid: this.id3
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

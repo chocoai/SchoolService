@@ -9,6 +9,7 @@ import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
+import com.wts.validator.CheckSemester;
 import com.wts.validator.Query;
 import com.wts.validator.CourseRoomTeacherSemester.CourseRoomTeacherSemester_Exist;
 import com.wts.validator.CourseRoomTeacherSemester.CourseRoomTeacherSemester_Save;
@@ -64,29 +65,29 @@ public class CourseRoomTeacherSemesterDesktop extends Controller {
             getParaToInt("pageCurrent"),
             getParaToInt("pageSize"),
             "SELECT " +
-                    "course.id AS cid," +
-                    "room.id AS rid," +
-                    "teacher.id AS tid," +
-                    "semester.id AS sid," +
-                    "course.name AS cname," +
-                    "room.name AS rname," +
-                    "teacher.name AS tname," +
-                    "semester.name AS sname,",
+                    " course.id AS cid," +
+                    " room.id AS rid," +
+                    " teacher.id AS tid," +
+                    " semester.id AS sid," +
+                    " course.name AS cname," +
+                    " room.name AS rname," +
+                    " teacher.name AS tname," +
+                    " semester.name AS sname",
             "FROM ((((courseroomteachersemester " +
-                    "LEFT JOIN course ON courseroomteachersemester.course_id = course.id) " +
-                    "LEFT JOIN room ON courseroomteachersemester.room_id = room.id) " +
-                    "LEFT JOIN teacher ON courseroomteachersemester.teacher_id = teacher.id) " +
-                    "LEFT JOIN semester ON courseroomteachersemester.semester_id = semester.id) " +
-                    "WHERE course.del = 0 " +
-                    "AND room.del = 0 " +
-                    "AND teacher.del = 0 " +
-                    "AND semester.del = 0 " +
-                    "AND (course.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR room.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR teacher.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR semester.name LIKE '%" + getPara("keyword") + "%' " +
-                    "OR teacher.mobile LIKE '%" + getPara("keyword") + "%' " +
-                    "OR teacher.userId LIKE '%" + getPara("keyword") + "%')").getList());
+                    " LEFT JOIN course ON courseroomteachersemester.course_id = course.id) " +
+                    " LEFT JOIN room ON courseroomteachersemester.room_id = room.id) " +
+                    " LEFT JOIN teacher ON courseroomteachersemester.teacher_id = teacher.id) " +
+                    " LEFT JOIN semester ON courseroomteachersemester.semester_id = semester.id) " +
+                    " WHERE course.del = 0 " +
+                    " AND room.del = 0 " +
+                    " AND teacher.del = 0 " +
+                    " AND semester.del = 0 " +
+                    " AND (course.name LIKE '%" + getPara("keyword") + "%' " +
+                    " OR room.name LIKE '%" + getPara("keyword") + "%' " +
+                    " OR teacher.name LIKE '%" + getPara("keyword") + "%' " +
+                    " OR semester.name LIKE '%" + getPara("keyword") + "%' " +
+                    " OR teacher.mobile LIKE '%" + getPara("keyword") + "%' " +
+                    " OR teacher.userId LIKE '%" + getPara("keyword") + "%')").getList());
   }
 
   /**
@@ -116,7 +117,7 @@ public class CourseRoomTeacherSemesterDesktop extends Controller {
   /**
    * 删除
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacherSemester_Exist.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, CourseRoomTeacherSemester_Exist.class, CheckSemester.class})
   public void Delete() {
     Courseroomteachersemester.dao.deleteById(getPara("cid"), getPara("rid"), getPara("sid"), getPara("tid"));
     logger.warn("function:" + this.getClass().getSimpleName() + "/Delete;" +

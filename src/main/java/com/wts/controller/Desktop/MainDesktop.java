@@ -5,6 +5,7 @@ import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.Record;
 import com.wts.controller.Desktop.Teacher.SemesterDesktop;
+import com.wts.entity.model.Semester;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
 import org.apache.log4j.Logger;
@@ -62,6 +63,7 @@ public class MainDesktop extends Controller {
       setCookie("RoomStudentDesktop", PermissionString("RoomStudentDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("CourseRoomTeacherSemesterDesktop", PermissionString("CourseRoomTeacherSemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
       setCookie("StudentCourseSemesterDesktop", PermissionString("StudentCourseSemesterDesktop",teacher.getId().toString()), 60 * 6 * 10);
+      setCookie("SemesterNow", Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1").getName(), 60 * 6 * 10);
 
       logger.warn("function:"+this.getClass().getSimpleName()+"/Login;"+"teacher_id:"+((Teacher) getSessionAttr("Teacher")).getId().toString()+";");
       renderText("OK");

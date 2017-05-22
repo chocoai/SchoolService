@@ -4,10 +4,10 @@
       <mu-icon-button icon='reply' slot="right" @click="goReply" v-if="permission.Page"/></mu-appbar>
     <mu-list>
       <mu-list-item v-for="object in list" :value="object.id" :title="object.name" :describeText="getDescribe(object.mobile, object.iname)" :afterText="getState(object.state)" @click="goSheet(object.id, object.state, object.name, object.mobile)">
-        <mu-avatar v-if="object.state.toString() === '1'" :src="object.picUrl" slot="leftAvatar" :size="40"/>
-        <mu-icon v-if="object.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
-        <mu-icon v-if="object.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-        <mu-icon v-if="object.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
+        <mu-avatar v-if="object.state.toString() === '1'" :src="object.picUrl" slot="leftAvatar" :size="35"/>
+        <mu-icon v-if="object.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="35" />
+        <mu-icon v-if="object.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="35" />
+        <mu-icon v-if="object.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="35" />
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -116,7 +116,7 @@
         setTimeout(() => { this.bottomPopup = false }, 1500)
       },
       getDescribe (mobile, iname) {
-        return iname.toString() + '----' + mobile.toString()
+        return '身份：' + iname.toString() + '     联系电话:' + mobile.toString()
       },
       getState (state) {
         if (state.toString() === '1') {

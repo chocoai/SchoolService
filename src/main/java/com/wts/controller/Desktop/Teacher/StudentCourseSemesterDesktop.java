@@ -3,12 +3,14 @@ package com.wts.controller.Desktop.Teacher;
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.activerecord.Db;
+import com.wts.entity.model.Semester;
 import com.wts.entity.model.Studentcoursesemester;
 import com.wts.entity.model.Teacher;
 import com.wts.interceptor.OverdueCheck;
 import com.wts.interceptor.PageCheck;
 import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
+import com.wts.validator.CheckSemester;
 import com.wts.validator.Query;
 import com.wts.validator.StudentCourseSemester.StudentCourseSemester_Exist;
 import com.wts.validator.StudentCourseSemester.StudentCourseSemester_Save;
@@ -65,8 +67,8 @@ public class StudentCourseSemesterDesktop extends Controller {
             getParaToInt("pageSize"),
             "SELECT " +
                     "course.id AS cid," +
-                    "student.id AS sid," +
-                    "semester.id AS xid," +
+                    "student.id AS tid," +
+                    "semester.id AS sid," +
                     "course.name AS cname," +
                     "student.name AS sname," +
                     "semester.name AS iname," +
@@ -110,14 +112,14 @@ public class StudentCourseSemesterDesktop extends Controller {
   /**
    * 删除
    */
-  @Before({OverdueCheck.class, PermissionCheck.class, StudentCourseSemester_Exist.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, StudentCourseSemester_Exist.class, CheckSemester.class})
   public void Delete() {
     Studentcoursesemester.dao.deleteById(getPara("cid"), getPara("xid"), getPara("sid"));
     logger.warn("function:" + this.getClass().getSimpleName() + "/Delete;" +
             "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
-            "semester_id:" + getPara("xid") + ";" +
+            "semester_id:" + getPara("sid") + ";" +
             "course_id:" + getPara("cid") + ";" +
-            "student_id:" + getPara("sid") + ";");
+            "student_id:" + getPara("tid") + ";");
     renderText("OK");
   }
 
@@ -127,15 +129,15 @@ public class StudentCourseSemesterDesktop extends Controller {
   @Before({OverdueCheck.class, PermissionCheck.class, StudentCourseSemester_Save.class})
   public void Save() {
     Studentcoursesemester object = new Studentcoursesemester();
-    object.set("student_id", getPara("sid"))
+    object.set("student_id", getPara("tid"))
             .set("course_id", getPara("cid"))
-            .set("semester_id", getPara("xid"))
+            .set("semester_id", getPara("sid"))
             .save();
     logger.warn("function:" + this.getClass().getSimpleName() + "/Save;" +
             "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
-            "semester_id:" + getPara("xid") + ";" +
+            "semester_id:" + getPara("sid") + ";" +
             "course_id:" + getPara("cid") + ";" +
-            "student_id:" + getPara("sid") + ";");
+            "student_id:" + getPara("tid") + ";");
     renderText("OK");
   }
 

@@ -219,7 +219,7 @@
         this.del = true
         this.index = index
         this.sname = this.pageList[index].sname
-        this.dname = this.pageList[index].dname
+        this.pname = this.pageList[index].pname
         this.iname = this.pageList[index].iname
       },
       getLists () {

@@ -25,6 +25,7 @@ import dialog from 'muse-components/dialog'
 import drawer from 'muse-components/drawer'
 import chip from 'muse-components/chip'
 import popup from 'muse-components/popup'
+import selectField from 'muse-components/selectField'
 import datePicker from 'muse-components/datePicker'
 import circularProgress from 'muse-components/circularProgress'
 import subHeader from 'muse-components/subHeader'
@@ -46,6 +47,7 @@ Vue.component(dialog.name, dialog)
 Vue.component(drawer.name, drawer)
 Vue.component(chip.name, chip)
 Vue.component(popup.name, popup)
+Vue.component(selectField.name, selectField)
 Vue.component(datePicker.name, datePicker)
 Vue.component(circularProgress.name, circularProgress)
 Vue.component(subHeader.name, subHeader)

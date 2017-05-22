@@ -22,7 +22,7 @@
           this.url
         ).then((res) => {
           this.permission = JSON.parse(JSON.parse(getCookie(this.cookieName)))
-          this.Delete = this.permission.Delete
+          this.Delete = this.permission.Delete && getCookie('SemesterNow').toString() === this.params.sname
         }, (res) => {
           this.$Notice.error({
             title: '服务器内部错误!'

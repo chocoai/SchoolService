@@ -7,11 +7,11 @@ import com.wts.entity.model.Studentcoursesemester;
 
 public class StudentCourseSemester_Save implements Interceptor {
   public void intercept(Invocation inv) {
-    if (!StrKit.isBlank(inv.getController().getPara("xid"))
+    if (!StrKit.isBlank(inv.getController().getPara("sid"))
             && !StrKit.isBlank(inv.getController().getPara("cid"))
-            && !StrKit.isBlank(inv.getController().getPara("sid"))
+            && !StrKit.isBlank(inv.getController().getPara("tid"))
             ) {
-      if (Studentcoursesemester.dao.findById(inv.getController().getPara("cid"), inv.getController().getPara("xid"), inv.getController().getPara("sid")) != null) {
+      if (Studentcoursesemester.dao.findById(inv.getController().getPara("cid"), inv.getController().getPara("sid"), inv.getController().getPara("tid")) != null) {
         inv.getController().renderText("该关系已存在!");
       } else{
         inv.invoke();

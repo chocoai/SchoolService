@@ -86,7 +86,7 @@
         <span>删除确认</span>
       </p>
       <div style="text-align:center">
-        <p>即将要删除学生（{{sname}}）与课程（{{cname}}）在学期（{{xname}}）的关系</p>
+        <p>即将要删除学生（{{tname}}）与课程（{{cname}}）在学期（{{sname}}）的关系</p>
         <p>关系删除后需要重新绑定。</p>
         <p>该功能必须慎用！</p>
         <p>是否继续删除？</p>
@@ -122,9 +122,9 @@
         showLoad: true,
         del: false,
         index: '',
-        sname: '',
+        tname: '',
         cname: '',
-        xname: '',
+        sname: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -218,9 +218,9 @@
       showDelete (index) {
         this.del = true
         this.index = index
-        this.sname = this.pageList[index].sname
+        this.tname = this.pageList[index].tname
         this.cname = this.pageList[index].cname
-        this.xname = this.pageList[index].xname
+        this.sname = this.pageList[index].sname
       },
       getLists () {
         this.$http.get(
@@ -330,9 +330,9 @@
         this.$http.get(
           API.del,
           { params: {
-            xid: this.pageList[this.index].xid,
+            sid: this.pageList[this.index].sid,
             cid: this.pageList[this.index].cid,
-            sid: this.pageList[this.index].sid
+            tid: this.pageList[this.index].tid
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
