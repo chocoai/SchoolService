@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Button type="primary" @click="goEdit" v-if="Edit">详情</Button>
+    <Button type="primary" @click="goDetail" v-if="Detail">详情</Button>
   </div>
 </template>
 <script>
@@ -12,7 +12,7 @@
       return {
         cookieName: '',
         url: '',
-        Edit: false,
+        Detail: false,
         params: ''
       }
     },
@@ -22,7 +22,7 @@
           this.url
         ).then((res) => {
           this.permission = JSON.parse(JSON.parse(getCookie(this.cookieName)))
-          this.Edit = this.permission.Edit
+          this.Detail = this.permission.Detail
         }, (res) => {
           this.$Notice.error({
             title: '服务器内部错误!'
@@ -30,12 +30,12 @@
         })
       } else {
         this.permission = JSON.parse(JSON.parse(getCookie(this.cookieName)))
-        this.Edit = this.permission.Edit
+        this.Detail = this.permission.Detail
       }
     },
     methods: {
-      goEdit: function () {
-        bus.$emit('forEdit', this.params.index)
+      goDetail: function () {
+        bus.$emit('forDetail', this.params.index)
       }
     }
   }

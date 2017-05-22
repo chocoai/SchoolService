@@ -217,8 +217,8 @@
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
-      bus.$on('forEdit', (index) => {
-        this.$router.push({ path: '/edit/' + this.pageList[index].id })
+      bus.$on('forDetail', (index) => {
+        this.$router.push({ path: '/detail/' + this.pageList[index].id })
       })
     },
     methods: {

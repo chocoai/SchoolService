@@ -26,6 +26,9 @@
         <mu-list-item title="学生管理" @click.native="goStudent" v-if="menu.StudentMobile_Page">
           <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
         </mu-list-item>
+        <mu-list-item title="我的学生" @click.native="goMyStudent" v-if="menu.MyStudentMobile_Page">
+          <mu-icon slot="left" value="chrome_reader_mode" color="purple300"/>
+        </mu-list-item>
         <mu-list-item title="退出" @click.native="goExit">
           <mu-icon slot="left" value="exit_to_app" color="grey900"/>
         </mu-list-item>
@@ -70,6 +73,9 @@
       },
       goStudent () {
         window.location.href = '/StudentMobile/Page'
+      },
+      goMyStudent () {
+        window.location.href = '/MyStudentMobile/Page'
       },
       goExit () {
         window.location.href = '/exit'

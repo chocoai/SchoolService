@@ -4,7 +4,7 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 import Vuex from 'vuex'
 import List from './list.vue'
-import Edit from './edit.vue'
+import Detail from './detail.vue'
 import * as API from './API.js'
 import { getCookie } from '../../../cookieUtil.js'
 import 'iview/dist/styles/iview.css'   // 使用 CSS
@@ -24,10 +24,10 @@ const routes = [
       }
     }
   },
-  { path: '/edit/:id',
-    component: Edit,
+  { path: '/detail/:id',
+    component: Detail,
     beforeEnter: (to, from, next) => {
-      if (JSON.parse(JSON.parse(getCookie(API.base))).Edit) {
+      if (JSON.parse(JSON.parse(getCookie(API.base))).Detail) {
         next()
       } else {
         next({ path: '/' })

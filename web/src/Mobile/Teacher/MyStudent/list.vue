@@ -3,14 +3,13 @@
     <mu-appbar title="">
       <mu-icon-button icon='menu' slot="left" @click="openMenu"/>
       <mu-text-field icon="search" class="appbar-search-field" hintText="请输入关键词" @input="goQuery" :value="keyword"/>
-      <mu-icon-button icon='person_add' slot="right" @click="goAdd" v-if="permission.Save"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="object in list" :value="object.id" :title="object.name" :describeText="object.mobile" :afterText="getState(object.state)" @click="goSheet(object.id, object.state, object.name, object.mobile)">
-        <mu-avatar v-if="object.state.toString() === '1'" :src="object.picUrl" slot="leftAvatar" :size="40"/>
-        <mu-icon v-if="object.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
-        <mu-icon v-if="object.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
-        <mu-icon v-if="object.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
+      <mu-list-item v-for="object in list" :value="object.id" :title="object.name" :describeText="object.number" :afterText="object.state.toString() === '0'?'注销':'激活'" @click="goSheet(object.id, object.state, object.name)">
+        <mu-icon v-if="object.state.toString() === '1' && object.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="Cyan"/>
+        <mu-icon v-if="object.state.toString() === '1' && object.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="pink"/>
+        <mu-icon v-if="object.state.toString() === '2' && object.sex.toString() === '1'" slot="left" :size="40" value="account_box" color="#b2ebf2"/>
+        <mu-icon v-if="object.state.toString() === '2' && object.sex.toString() === '2'" slot="left" :size="40" value="account_circle" color="#f8bbd0"/>
       </mu-list-item>
     </mu-list>
     <mu-flexbox>
@@ -33,21 +32,10 @@
     </mu-popup>
     <mu-bottom-sheet :open="bottomSheet" @close="goClose">
       <mu-sub-header>{{name}}</mu-sub-header>
-      <mu-raised-button class="raised-button" label="修改" v-if="permission.Edit" @click="goEdit" icon="edit" backgroundColor="blue" fullWidth/>
-      <mu-raised-button class="raised-button" label="激活" v-if="permission.Active && !state" @click="showActive" icon="beenhere" backgroundColor="green" fullWidth/>
-      <mu-raised-button class="raised-button" label="注销" v-if="permission.Inactive && state" @click="showInactive" icon="block" backgroundColor="amber" fullWidth/>
-      <mu-raised-button class="raised-button" label="删除" v-if="permission.Delete" @click="showDelete" icon="delete" backgroundColor="red" fullWidth/>
+      <mu-raised-button class="raised-button" label="学生详情" v-if="permission.GetStudent" @click="goStudent" icon="edit" backgroundColor="blue" fullWidth/>
+      <mu-raised-button class="raised-button" label="家长详情" v-if="permission.GetParent" @click="GoParent" icon="beenhere" backgroundColor="green" fullWidth/>
       <mu-raised-button class="raised-button" label="取消" @click="goClose" icon="undo" backgroundColor="grey" fullWidth/>
     </mu-bottom-sheet>
-    <mu-dialog :open="Checking" :title="title" @close="goClose">
-      <mu-flat-button label="取消" @click="goClose" />
-      <mu-flat-button label="确定" v-if="Activing" @click="goActive" secondary/>
-      <mu-flat-button label="确定" v-if="Inactiving" @click="goInactive" secondary/>
-      <mu-flat-button label="确定" v-if="Deleting" @click="goDelete" secondary/>
-    </mu-dialog>
-    <mu-dialog :open="Operating" title="正在操作" >
-      <mu-circular-progress :size="60" :strokeWidth="5"/>请稍后
-    </mu-dialog>
   </div>
 </template>
 
@@ -68,11 +56,6 @@
         open: false,
         bottomPopup: false,
         bottomSheet: false,
-        Activing: false,
-        Inactiving: false,
-        Deleting: false,
-        Checking: false,
-        Operating: false,
         permission: [],
         menu: [],
         icon: '',
@@ -80,8 +63,6 @@
         message: '',
         id: '',
         name: '',
-        title: '',
-        mobile: '',
         state: false,
         keyword: '',
         list: [],
@@ -120,9 +101,6 @@
       }
     },
     methods: {
-      goCall () {
-        this.mobile.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.mobile
-      },
       openMenu () {
         this.open = true
       },
@@ -135,19 +113,6 @@
         this.color = color
         this.bottomPopup = true
         setTimeout(() => { this.bottomPopup = false }, 1500)
-      },
-      getState (state) {
-        if (state.toString() === '1') {
-          return '已关注'
-        } else if (state.toString() === '2') {
-          return '已冻结'
-        } else if (state.toString() === '3') {
-          return '取消关注'
-        } else if (state.toString() === '4') {
-          return '未关注'
-        } else {
-          return '状态错误'
-        }
       },
       getLists () {
         this.$http.get(
@@ -179,10 +144,9 @@
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
       },
-      goSheet (id, state, name, mobile) {
+      goSheet (id, state, name) {
         this.id = id
         this.name = name
-        this.mobile = mobile
         if (state.toString() === '1') {
           this.state = true
         } else {
@@ -200,116 +164,24 @@
         this.getLists()
         this.before = false
       },
-      goEdit () {
-        this.$router.push({ path: '/edit/' + this.id })
+      goStudent () {
+        this.$router.push({ path: '/student/' + this.id })
         this.$store.commit('save', {
           keyword: this.keyword,
           pageCurrent: this.pageCurrent,
           pageSize: this.pageSize
         })
       },
-      showActive () {
-        this.Activing = true
-        this.Inactiving = false
-        this.Deleting = false
-        this.Checking = true
-        this.bottomSheet = false
-        this.title = '确定要邀请：' + this.name + '关注?'
-      },
-      showInactive () {
-        this.Activing = false
-        this.Inactiving = true
-        this.Deleting = false
-        this.Checking = true
-        this.bottomSheet = false
-        this.title = '确定要取消：' + this.name + '关注?'
-      },
-      showDelete () {
-        this.Activing = false
-        this.Inactiving = false
-        this.Deleting = true
-        this.Checking = true
-        this.bottomSheet = false
-        this.title = '确定要删除：' + this.name + '?'
+      goParent () {
+        this.$router.push({ path: '/parent/' + this.id })
+        this.$store.commit('save', {
+          keyword: this.keyword,
+          pageCurrent: this.pageCurrent,
+          pageSize: this.pageSize
+        })
       },
       goClose () {
         this.bottomSheet = false
-        this.Checking = false
-        this.Activing = false
-        this.Inactiving = false
-        this.Deleting = false
-      },
-      goDelete () {
-        this.goClose()
-        this.Operating = true
-        this.$http.get(
-          API.del,
-          { params: { id: this.id } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          this.Operating = false
-          if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
-            this.openPopup('请重新登录!', 'report_problem', 'orange')
-            window.location.href = '/MainMobile'
-          } else if (response.body === 'OK') {
-            this.openPopup('保存成功！', 'check_circle', 'green')
-            setTimeout(() => { this.getLists() }, 1000)
-          } else {
-            this.openPopup(response.body, 'report_problem', 'orange')
-          }
-          this.Operating = false
-        }, (response) => {
-          this.Operating = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
-      },
-      goActive () {
-        this.goClose()
-        this.Operating = true
-        this.$http.get(
-          API.active,
-          { params: { id: this.id } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          this.Operating = false
-          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
-            window.location.href = '/MainMobile'
-          } else if (response.body === 'OK') {
-            this.openPopup('激活成功!', 'check_circle', 'green')
-            setTimeout(() => { this.getLists() }, 1000)
-          } else {
-            this.openPopup(response.body, 'report_problem', 'red')
-            setTimeout(() => { this.getLists() }, 1000)
-          }
-        }, (response) => {
-          this.Operating = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
-      },
-      goInactive () {
-        this.goClose()
-        this.Operating = true
-        this.$http.get(
-          API.inactive,
-          { params: { id: this.id } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          this.Operating = false
-          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
-            this.openPopup('请重新登录!', 'report_problem', 'red')
-            window.location.href = '/MainMobile'
-          } else if (response.body === 'OK') {
-            this.openPopup('注销成功!', 'check_circle', 'green')
-            setTimeout(() => { this.getLists() }, 1000)
-          } else {
-            this.openPopup(response.body, 'report_problem', 'red')
-            setTimeout(() => { this.getLists() }, 1000)
-          }
-        }, (response) => {
-          this.Operating = false
-          this.openPopup('服务器内部错误!', 'error', 'red')
-        })
       },
       pageBefore () {
         this.pageCurrent--
@@ -332,9 +204,6 @@
         this.pageCurrent.toString() === this.pageTotal ? this.next = false : this.next = true
         this.before = true
         this.getLists()
-      },
-      goAdd () {
-        this.$router.push({ path: '/add' })
       }
     }
   }

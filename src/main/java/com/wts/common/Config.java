@@ -58,6 +58,7 @@ public class Config extends JFinalConfig {
         me.add("/RoomStudentDesktop", RoomStudentDesktop.class);
         me.add("/CourseRoomTeacherSemesterDesktop", CourseRoomTeacherSemesterDesktop.class);
         me.add("/StudentCourseSemesterDesktop", StudentCourseSemesterDesktop.class);
+        me.add("/MyStudentDesktop", MyStudentDesktop.class);
 
         me.add("/MainMobile", MainMobile.class);
         me.add("/SemesterMobile", SemesterMobile.class);
@@ -66,6 +67,7 @@ public class Config extends JFinalConfig {
         me.add("/TeacherMobile", TeacherMobile.class);
         me.add("/ParentMobile", ParentMobile.class);
         me.add("/StudentMobile", StudentMobile.class);
+        me.add("/MyStudentMobile", MyStudentMobile.class);
 //        me.add("/ForCourse", ForCourse.class);
 //        me.add("/courseRoom", CourseRoomController.class);
 //        me.add("/Teacher", TeacherController.class);

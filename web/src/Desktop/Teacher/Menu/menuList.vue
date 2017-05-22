@@ -29,6 +29,13 @@
           <Menu-item name="CourseRoomTeacherSemesterDesktop" v-if="menu.CourseRoomTeacherSemesterDesktop_Page">课程_班级_教师_学期</Menu-item>
           <Menu-item name="StudentCourseSemesterDesktop" v-if="menu.StudentCourseSemesterDesktop_Page">学生_课程_学期</Menu-item>
         </Submenu>
+        <Submenu name="teach">
+          <template slot="title">
+            <Icon type="stats-bars"></Icon>
+            教学管理
+          </template>
+          <Menu-item name="MyStudentDesktop">我的学生</Menu-item>
+        </Submenu>
         <Submenu name="information">
           <template slot="title">
             <Icon type="stats-bars"></Icon>
@@ -104,6 +111,8 @@
             return '关系管理'
           case 'StudentCourseSemesterDesktop':
             return '关系管理'
+          case 'MyStudentDesktop':
+            return '教学管理'
           case 'notice':
             return '信息管理'
           case 'attendance':
@@ -144,6 +153,8 @@
             return '课程_班级_教师_学期'
           case 'StudentCourseSemesterDesktop':
             return '学生_课程_学期'
+          case 'MyStudentDesktop':
+            return '我的学生'
           case 'notice':
             return '公告'
           case 'attendance':
@@ -196,6 +207,9 @@
             break
           case 'StudentCourseSemesterDesktop':
             window.location.href = '/StudentCourseSemesterDesktop/Page'
+            break
+          case 'MyStudentDesktop':
+            window.location.href = '/MyStudentDesktop/Page'
             break
           default:
             window.location.href = '/MainDesktop'

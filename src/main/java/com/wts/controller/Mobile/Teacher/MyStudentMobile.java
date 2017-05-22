@@ -1,4 +1,4 @@
-package com.wts.controller.Desktop.Teacher;
+package com.wts.controller.Mobile.Teacher;
 
 import com.jfinal.aop.Before;
 import com.jfinal.core.Controller;
@@ -12,6 +12,7 @@ import com.wts.interceptor.PermissionCheck;
 import com.wts.util.ExportUtil;
 import com.wts.validator.Query;
 import com.wts.validator.Student.Student_Exist;
+import com.wts.validator.Total;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -19,8 +20,8 @@ import java.io.IOException;
 import static com.wts.util.Util.PermissionString;
 
 
-public class MyStudentDesktop extends Controller {
-  private static Logger logger = Logger.getLogger(MyStudentDesktop.class);
+public class MyStudentMobile extends Controller {
+  private static Logger logger = Logger.getLogger(MyStudentMobile.class);
 
   /**
    * 页面
@@ -37,12 +38,12 @@ public class MyStudentDesktop extends Controller {
         setSessionAttr("Teacher", teacher);
         setCookie("dit", teacher.getId().toString(), 60 * 60 * 3);
         setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(),teacher.getId().toString()), 60 * 6 * 10);
-        render("/static/html/desktop/Teacher/Desktop_Teacher_MyStudent.html");
+        render("/static/html/mobile/Teacher/Mobile_Teacher_MyStudent.html");
       }
     } else {
       String teacherId = ((Teacher) getSessionAttr("Teacher")).getId().toString();
       setCookie(super.getClass().getSimpleName(), PermissionString(super.getClass().getSimpleName(),teacherId), 60 * 6 * 10);
-      render("/static/html/desktop/Teacher/Desktop_Teacher_MyStudent.html");
+      render("/static/html/mobile/Teacher/Mobile_Teacher_MyStudent.html");
     }
   }
 
@@ -89,7 +90,7 @@ public class MyStudentDesktop extends Controller {
   /**
    * 计数
    */
-  @Before({OverdueCheck.class, PermissionCheck.class})
+  @Before({OverdueCheck.class, PermissionCheck.class, Total.class})
   public void Total() {
     String sid = Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1").getId().toString();
     String tid = ((Teacher) getSessionAttr("Teacher")).getId().toString();
@@ -107,11 +108,15 @@ public class MyStudentDesktop extends Controller {
                     " OR student.`number` LIKE '%" + getPara("keyword") + "%' " +
                     " OR student.`code` LIKE '%" + getPara("keyword") + "%' " +
                     " OR room.`name` LIKE '%" + getPara("keyword") + "%')");
-    renderText(count.toString());
+    if (count % getParaToInt("pageSize") == 0) {
+      renderText((count / getParaToInt("pageSize")) + "");
+    } else {
+      renderText((count / getParaToInt("pageSize") + 1) + "");
+    }
   }
 
   /**
-   * 读取
+   * 读取学生
    */
   @Before({OverdueCheck.class, PermissionCheck.class, Student_Exist.class})
   public void GetStudent() {
@@ -132,41 +137,5 @@ public class MyStudentDesktop extends Controller {
                     " WHERE student_id = "+getPara("id") +
                     " AND parent.del = 0 AND student.del = 0 AND student.state = 1"));
   }
-
-  /**
-   * 导出
-   */
-  @Before({OverdueCheck.class, PermissionCheck.class})
-  public void Download() throws IOException {
-    int sid = Semester.dao.findFirst("SELECT * FROM semester WHERE state = 1").getId();
-    String[] title={"序号","学生姓名","身份证号码","学籍号码","家庭地址","性别","班级名称"};
-    String fileName = "MyStudent";
-    String SQL = "SELECT student.id AS 序号," +
-            "student.`name` AS 学生姓名," +
-            "student.number AS 身份证号码," +
-            "student.`code` AS 学籍号码," +
-            "student.`address` AS 家庭地址," +
-            "(case student.sex when 1 then '男' when 2 then '女' else '未知' end ) AS 性别, " +
-            "room.`name` AS 班级名称 " +
-            "FROM ((roomstudent" +
-                    " LEFT JOIN student ON student.id = roomstudent.student_id)" +
-                    " LEFT JOIN room ON room.id = roomstudent.room_id)" +
-                    " WHERE student_id IN (SELECT DISTINCT student_id FROM studentcoursesemester WHERE studentcoursesemester.course_id IN (SELECT DISTINCT course_id FROM courseroomteachersemester WHERE semester_id = " + sid + " AND teacher_id = " + ((Teacher) getSessionAttr("Teacher")).getId() + "))" +
-                    " AND room_id IN ( SELECT DISTINCT room_id FROM courseroomteachersemester WHERE semester_id = " + sid + " AND teacher_id = " + ((Teacher) getSessionAttr("Teacher")).getId() + ") " +
-                    " AND student.del = 0 " +
-                    " AND student.state = 1 " +
-                    " AND room.del = 0 " +
-                    " AND room.state = 1 " +
-                    " AND (student.`name` LIKE '%" + getPara("keyword") + "%' " +
-                    " OR student.`number` LIKE '%" + getPara("keyword") + "%' " +
-                    " OR student.`code` LIKE '%" + getPara("keyword") + "%' " +
-                    " OR room.`name` LIKE '%" + getPara("keyword") + "%') ORDER BY student.id DESC";
-    logger.warn("function:" + this.getClass().getSimpleName() + "/Download;" +
-            "teacher_id:" + ((Teacher) getSessionAttr("Teacher")).getId().toString() + ";" +
-            "file_name:" + fileName + ";" +
-            "sql:" + SQL + ";");
-    ExportUtil.export(title,fileName,SQL,getResponse());
-  }
-
 
 }

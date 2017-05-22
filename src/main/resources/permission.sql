@@ -138,6 +138,14 @@ INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('137', '
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('138', 'StudentMobile/Query', '查找');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('139', 'StudentMobile/Total', '计数');
 INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('140', 'StudentMobile/Delete', '删除');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('141', 'MyStudentDesktop/Page', '列表');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('142', 'MyStudentDesktop/Query', '查找');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('143', 'MyStudentDesktop/Total', '计数');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('144', 'MyStudentDesktop/Download', '下载');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('145', 'MyStudentDesktop/Detail', '详情');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('146', 'MyStudentDesktop/GetStudent', '学生');
+INSERT INTO `school_service`.`permission` (`id`, `url`, `name`) VALUES ('147', 'MyStudentDesktop/GetParent', '家长');
+
 
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '1', '1');
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '2', '1');
@@ -279,3 +287,10 @@ INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`,
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '138', '1');
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '139', '1');
 INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '140', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '141', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '142', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '143', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '144', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '145', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '146', '1');
+INSERT INTO `school_service`.`teacherpermission` (`teacher_id`, `permission_id`, `state`) VALUES ('1', '147', '1');

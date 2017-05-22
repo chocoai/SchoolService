@@ -17,6 +17,7 @@ module.exports = {
     Mobile_Teacher_Teacher: './src/Mobile/Teacher/Teacher/Index.js',
     Mobile_Teacher_Parent: './src/Mobile/Teacher/Parent/Index.js',
     Mobile_Teacher_Student: './src/Mobile/Teacher/Student/Index.js',
+    Mobile_Teacher_MyStudent: './src/Mobile/Teacher/MyStudent/Index.js',
     // Mobile_Manager_Semester: './src/Mobile/Manager/Semester/Index.js',
     // Mobile_Manager_Course: './src/Mobile/Manager/Course/Index.js',
     // Mobile_Manager_Teacher: './src/Mobile/Manager/Teacher/Index.js',
@@ -41,7 +42,8 @@ module.exports = {
     Desktop_Teacher_StudentParentIdentity: './src/Desktop/Teacher/StudentParentIdentity/Index.js',
     Desktop_Teacher_RoomStudent: './src/Desktop/Teacher/RoomStudent/Index.js',
     Desktop_Teacher_CourseRoomTeacherSemester: './src/Desktop/Teacher/CourseRoomTeacherSemester/Index.js',
-    Desktop_Teacher_StudentCourseSemester: './src/Desktop/Teacher/StudentCourseSemester/Index.js'
+    Desktop_Teacher_StudentCourseSemester: './src/Desktop/Teacher/StudentCourseSemester/Index.js',
+    Desktop_Teacher_MyStudent: './src/Desktop/Teacher/MyStudent/Index.js'
   },
   output: {
     path: config.build.assetsRoot,

@@ -8,7 +8,6 @@ public class Query implements Interceptor {
   public void intercept(Invocation inv) {
     if (!StrKit.isBlank(inv.getController().getPara("pageCurrent"))
             && !StrKit.isBlank(inv.getController().getPara("pageSize"))
-            && !StrKit.isBlank(inv.getController().getPara("keyword"))
             ) {
       inv.invoke();
     } else {

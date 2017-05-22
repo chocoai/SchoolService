@@ -6,8 +6,8 @@
       <mu-icon-button icon='person_add' slot="right" @click="goAdd" v-if="permission.Save"/>
     </mu-appbar>
     <mu-list>
-      <mu-list-item v-for="object in list" :value="object.id" :title="object.name" :describeText="getType(object.type)" :afterText="getState(object.state)" @click="goSheet(object.id, object.state, object.name)">
-        <mu-avatar v-if="object.state.toString() === '1'" :src="teacher.picUrl" slot="leftAvatar" :size="40"/>
+      <mu-list-item v-for="object in list" :value="object.id" :title="object.name" :describeText="getType(object.type)" :afterText="getState(object.state)" @click="goSheet(object.id, object.state, object.name, object.mobile)">
+        <mu-avatar v-if="object.state.toString() === '1'" :src="object.picUrl" slot="leftAvatar" :size="40"/>
         <mu-icon v-if="object.state.toString() === '2'" slot="left" color="#9e9e9e" value="sentiment_very_dissatisfied" :size="40" />
         <mu-icon v-if="object.state.toString() === '3'" slot="left" color="#8bc34a" value="sentiment_neutral" :size="40" />
         <mu-icon v-if="object.state.toString() === '4'" slot="left" color="#3f51b5" value="sentiment_dissatisfied" :size="40" />
@@ -81,6 +81,7 @@
         id: '',
         name: '',
         title: '',
+        mobile: '',
         state: false,
         keyword: '',
         list: [],
@@ -119,6 +120,9 @@
       }
     },
     methods: {
+      goCall () {
+        this.mobile.toString() === '' ? this.openPopup('无联系电话!', 'report_problem', 'orange') : window.location.href = 'tel:' + this.mobile
+      },
       openMenu () {
         this.open = true
       },
@@ -186,9 +190,10 @@
           this.openPopup('服务器内部错误!', 'error', 'red')
         })
       },
-      goSheet (id, state, name) {
+      goSheet (id, state, name, mobile) {
         this.id = id
         this.name = name
+        this.mobile = mobile
         if (state.toString() === '1') {
           this.state = true
         } else {

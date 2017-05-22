@@ -20,7 +20,7 @@
           <Input size="large" disabled v-model="object.address" placeholder="请输入学生的家庭住址" style="width: 400px"></Input>
         </Form-item>
         <Form-item>
-          <Button size="large" type="warning" style="margin-left: 8px" @click="goReset"  v-if="permission.Get">重置</Button>
+          <Button size="large" type="warning" style="margin-left: 8px" @click="goReset"  v-if="permission.Detail">重置</Button>
           <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack" v-if="permission.Page">返回</Button>
         </Form-item>
       </Form>
@@ -46,15 +46,17 @@
   import Copy from '../../Common/copy.vue'
   import MenuList from '../Menu/menuList.vue'
   import * as API from './API.js'
-  import { getCookie, checkNumber } from '../../../cookieUtil.js'
+  import { getCookie } from '../../../cookieUtil.js'
   export default {
     name: 'edit',
     components: { Copy, MenuList },
+    data () {
       return {
         name: '',
         base: API.base,
         permission: [],
         menu: [],
+        pageList: [],
         showLoad: true,
         object: {
           name: '',
@@ -141,7 +143,7 @@
       },
       fetchData (id) {
         this.$http.get(
-          API.get,
+          API.student,
           { params: { id: id } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {

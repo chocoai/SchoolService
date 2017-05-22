@@ -84,7 +84,7 @@ export default {
       this.$router.push({ path: '/list' })
     },
     goReset () {
-      this.Reading = false
+      this.Reading = true
       this.fetchData(this.$route.params.id)
     },
     openPopup (message, icon, color) {
