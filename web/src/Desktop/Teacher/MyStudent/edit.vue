@@ -152,6 +152,24 @@
             window.location.href = '../MainDesktop'
           } else {
             this.object = response.body
+            this.$http.get(
+              API.parent,
+              { params: { id: id } },
+              { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+            ).then((res) => {
+              if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+                this.$Notice.error({
+                  title: '登录过期或非法操作!'
+                })
+                window.location.href = '/MainDesktop'
+              } else {
+                this.pageList = res.body
+              }
+            }, (res) => {
+              this.$Notice.error({
+                title: '服务器内部错误!'
+              })
+            })
           }
         }, (response) => {
           this.$Notice.error({
