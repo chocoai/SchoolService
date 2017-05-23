@@ -36,6 +36,20 @@
           </template>
           <Menu-item name="MyStudentDesktop">我的学生</Menu-item>
         </Submenu>
+        <Submenu name="teach">
+          <template slot="title">
+            <Icon type="stats-bars"></Icon>
+            消息管理
+          </template>
+          <Menu-group title="教师消息">
+            <Menu-item name="3-1">我发出的消息</Menu-item>
+            <Menu-item name="3-2">我收到的消息</Menu-item>
+          </Menu-group>
+          <Menu-group title="家长">
+            <Menu-item name="3-1">我发出的消息</Menu-item>
+            <Menu-item name="3-2">我收到的消息</Menu-item>
+          </Menu-group>
+        </Submenu>
         <Submenu name="information">
           <template slot="title">
             <Icon type="stats-bars"></Icon>

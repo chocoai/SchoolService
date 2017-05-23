@@ -17,12 +17,28 @@ public abstract class BaseCoursechoose<M extends BaseCoursechoose<M>> extends Mo
 		return get("id");
 	}
 
+	public void setStudentId(java.lang.Integer studentId) {
+		set("student_id", studentId);
+	}
+
+	public java.lang.Integer getStudentId() {
+		return get("student_id");
+	}
+
 	public void setCourseId(java.lang.Integer courseId) {
 		set("course_id", courseId);
 	}
 
 	public java.lang.Integer getCourseId() {
 		return get("course_id");
+	}
+
+	public void setParentId(java.lang.Integer parentId) {
+		set("parent_id", parentId);
+	}
+
+	public java.lang.Integer getParentId() {
+		return get("parent_id");
 	}
 
 	public void setSemesterId(java.lang.Integer semesterId) {
@@ -33,36 +49,12 @@ public abstract class BaseCoursechoose<M extends BaseCoursechoose<M>> extends Mo
 		return get("semester_id");
 	}
 
-	public void setTimeStart(java.util.Date timeStart) {
-		set("time_start", timeStart);
+	public void setTime(java.util.Date time) {
+		set("time", time);
 	}
 
-	public java.util.Date getTimeStart() {
-		return get("time_start");
-	}
-
-	public void setTimeEnd(java.util.Date timeEnd) {
-		set("time_end", timeEnd);
-	}
-
-	public java.util.Date getTimeEnd() {
-		return get("time_end");
-	}
-
-	public void setTotal(java.lang.Integer total) {
-		set("total", total);
-	}
-
-	public java.lang.Integer getTotal() {
-		return get("total");
-	}
-
-	public void setLess(java.lang.Integer less) {
-		set("less", less);
-	}
-
-	public java.lang.Integer getLess() {
-		return get("less");
+	public java.util.Date getTime() {
+		return get("time");
 	}
 
 }
