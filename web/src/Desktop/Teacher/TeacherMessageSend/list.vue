@@ -80,17 +80,17 @@
       </Col>
     </Row>
     <Row><Col><Copy></Copy></Col></Row>
-    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
+    <Modal v-model="del" width="360" :styles="{top: '40px'}">
       <p slot="header" style="color:#f60;text-align:center">
         <Icon type="information-circled"></Icon>
-        <span>注销确认</span>
+        <span>删除确认</span>
       </p>
       <div style="text-align:center">
-        <p>消息：{{names}}注销后，关联信息会一并失效。</p>
-        <p>是否继续注销？</p>
+        <p>消息：{{title}}删除后，关联信息会一并失效。</p>
+        <p>是否继续删除？</p>
       </div>
       <div slot="footer">
-        <Button type="warning" size="large" long @click="goInactive">注销</Button>
+        <Button type="warning" size="large" long @click="goDelete">删除</Button>
       </div>
     </Modal>
   </div>
@@ -100,7 +100,7 @@
   import MenuList from '../Menu/menuList.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
-  import listBtn from './listBtn.vue'
+  import listBtn from '../../Common/listBtn_Detail_Delete.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
   import { bus } from '../../Common/bus.js'
@@ -120,10 +120,8 @@
         pageList: [],
         showLoad: true,
         del: false,
-        inactive: false,
-        active: false,
         index: '',
-        names: '',
+        title: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -158,21 +156,6 @@
             title: '发布时间',
             key: 'time',
             sortable: true
-          },
-          {
-            title: '消息状态',
-            key: 'state',
-            sortable: true,
-            render: (h, params) => {
-              const color = params.row.state.toString() === '1' ? 'green' : params.row.state.toString() === '0' ? 'yellow' : 'red'
-              const text = params.row.state.toString() === '1' ? '可用' : params.row.state.toString() === '0' ? '停用' : '错误'
-              return h('Tag', {
-                props: {
-                  type: 'dot',
-                  color: color
-                }
-              }, text)
-            }
           },
           {
             title: '操作',
@@ -230,11 +213,11 @@
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
-      bus.$on('forEdit', (index) => {
-        this.$router.push({ path: '/edit/' + this.pageList[index].id })
+      bus.$on('forDetail', (index) => {
+        this.$router.push({ path: '/detail/' + this.pageList[index].id })
       })
-      bus.$on('forInactive', (index) => {
-        this.showInactive(index)
+      bus.$on('forDelete', (index) => {
+        this.showDelete(index)
       })
     },
     methods: {
@@ -316,10 +299,10 @@
         })
         this.getLists()
       },
-      showInactive (index) {
-        this.inactive = true
+      showDelete (index) {
+        this.del = true
         this.index = index
-        this.names = this.pageList[index].name
+        this.title = this.pageList[index].title
       },
       getBorder (border) {
         this.border = border
@@ -344,12 +327,12 @@
         this.$Message.info('正在进行导出操作，请稍后...')
         window.location.href = API.download + '?keyword=' + this.keyword
       },
-      goInactive () {
+      goDelete () {
         this.$Loading.start()
-        this.$Message.info('正在进行注销操作，请稍后...')
-        this.inactive = false
+        this.$Message.info('正在进行删除操作，请稍后...')
+        this.del = false
         this.$http.get(
-          API.inactive,
+          API.del,
           { params: {
             id: this.pageList[this.index].id
           } },
@@ -359,7 +342,7 @@
             this.getLists()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '消息：' + this.pageList[this.index].name + '已注销！'
+              desc: '消息：' + this.pageList[this.index].title + '已删除！'
             })
             this.$Loading.finish()
           } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {

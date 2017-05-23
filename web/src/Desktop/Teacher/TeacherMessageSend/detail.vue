@@ -7,17 +7,14 @@
       <Col span="8">&nbsp;</Col>
       <Col span="8">
       <Form :label-width="100" :rules="validate" ref="editForm" :model="object">
-        <Form-item label="学期名称" prop="name" required>
-          <Input size="large" v-model="object.name" placeholder="请输入学期名称" style="width: 400px"></Input>
+        <Form-item label="消息标题" prop="title" required>
+          <Input disabled size="large" v-model="object.title" placeholder="请输入消息标题" style="width: 400px"></Input>
         </Form-item>
-        <Form-item label="开始日期" prop="time_start" required>
-          <Date-picker type="date" v-model="object.time_start" placement="bottom-end" placeholder="选择开始日期" style="width: 400px"></Date-picker>
-        </Form-item>
-        <Form-item label="终止日期" prop="time_end" required>
-          <Date-picker type="date" v-model="object.time_end" placement="bottom-end" placeholder="选择终止日期" style="width: 400px"></Date-picker>
+        <Form-item label="消息内容" prop="content" required>
+          <Input disabled size="large" v-model="object.content" type="textarea" :rows="4" placeholder="请输入消息内容" style="width: 400px"></Input>
         </Form-item>
         <Form-item>
-          <Button size="large" type="success" @click="goEdit">保存</Button>
+          <Button size="large" type="success" @click="goSend">发送</Button>
           <Button size="large" type="warning" style="margin-left: 8px" @click="goReset">重置</Button>
           <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack">返回</Button>
         </Form-item>
@@ -37,48 +34,16 @@
     name: 'edit',
     components: { Copy, MenuList },
     data () {
-      const nameCheck = (rule, value, callback) => {
-        this.$http.get(
-          API.checkNameForEdit,
-          { params: {
-            id: this.$route.params.id,
-            name: value
-          } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
-            callback(new Error('登录过期或非法操作!'))
-          } else if (response.body === 'OK') {
-            callback()
-          } else {
-            callback(new Error(response.body))
-          }
-        }, (response) => {
-          callback(new Error('服务器内部错误!'))
-        })
-      }
       return {
-        validate: {
-          name: [
-            { required: true, message: '学期名称不能为空!', trigger: 'change' },
-            { validator: nameCheck, trigger: 'change' }
-          ],
-          time_start: [
-            { required: true, type: 'date', message: '开始日期不能为空!', trigger: 'change' }
-          ],
-          time_end: [
-            { required: true, type: 'date', message: '终止日期不能为空!', trigger: 'change' }
-          ]
-        },
         name: '',
         base: API.base,
         permission: [],
         menu: [],
-        showLoad: true,
+        showLoad: false,
         object: {
-          name: '',
-          time_start: '',
-          time_end: ''
+          title: '',
+          content: '',
+          ids: []
         }
       }
     },
@@ -147,16 +112,13 @@
       goReset () {
         this.fetchData(this.$route.params.id)
       },
-      goEdit () {
+      goSend () {
         this.$Loading.start()
         this.$Message.info('正在进行修改操作，请稍后...')
         this.$http.get(
           API.edit,
           { params: {
-            id: this.$route.params.id,
-            name: this.object.name,
-            time_start: new Date(this.object.time_start).getTime(),
-            time_end: new Date(this.object.time_end).getTime()
+            id: this.$route.params.id
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -170,7 +132,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '学期：' + this.object.name + '已修改！'
+              desc: '消息：' + this.object.name + '已发送！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

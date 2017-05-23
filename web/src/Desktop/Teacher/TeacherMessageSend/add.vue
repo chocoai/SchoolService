@@ -7,17 +7,21 @@
       <Col span="8">&nbsp;</Col>
       <Col span="8">
         <Form :label-width="100" :rules="validate" ref="addForm" :model="object">
-          <Form-item label="学期名称" prop="name" required>
-            <Input size="large" v-model="object.name" placeholder="请输入学期名称" style="width: 400px"></Input>
+          <Form-item label="消息标题" prop="title" required>
+            <Input size="large" v-model="object.title" placeholder="请输入消息标题" style="width: 400px"></Input>
           </Form-item>
-          <Form-item label="开始日期" prop="time_start" required>
-            <Date-picker type="date" v-model="object.time_start" placement="bottom-end" placeholder="选择开始日期" style="width: 400px"></Date-picker>
+          <Form-item label="消息内容" prop="content" required>
+            <Input size="large" v-model="object.content" type="textarea" :rows="4" placeholder="请输入消息内容" style="width: 400px"></Input>
           </Form-item>
-          <Form-item label="终止日期" prop="time_end" required>
-            <Date-picker type="date" v-model="object.time_end" placement="bottom-end" placeholder="选择终止日期" style="width: 400px"></Date-picker>
+          <Form-item label="消息接收人" v-if="showLoad">
+            <Checkbox-group v-model="object.ids">
+              <Checkbox :label="list.id" v-for="list in lists">
+                <span>{{list.name}}-{{list-mobile}}</span>
+              </Checkbox>
+            </Checkbox-group>
           </Form-item>
           <Form-item>
-            <Button size="large" type="success" @click="goSave" v-if="permission.Save">保存</Button>
+            <Button size="large" type="success" @click="goSave" v-if="permission.Save">发送</Button>
             <Button size="large" type="warning" style="margin-left: 8px" @click="goReset">重置</Button>
             <Button size="large" type="ghost" style="margin-left: 8px" @click="goBack" v-if="permission.Page">返回</Button>
           </Form-item>
@@ -37,45 +41,26 @@
     name: 'add',
     components: { Copy, MenuList },
     data () {
-      const nameCheck = (rule, value, callback) => {
-        this.$http.get(
-          API.checkNameForAdd,
-          { params: { name: value } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          if (response.body === 'illegal' || response.body.toString() === 'overdue') {
-            callback(new Error('登录过期或非法操作!'))
-          } else if (response.body === 'OK') {
-            callback()
-          } else {
-            callback(new Error(response.body))
-          }
-        }, (response) => {
-          callback(new Error('服务器内部错误!'))
-        })
-      }
       return {
         validate: {
-          name: [
-            { required: true, message: '学期名称不能为空!', trigger: 'change' },
-            { validator: nameCheck, trigger: 'change' }
+          title: [
+            { required: true, message: '消息标题不能为空!', trigger: 'change' }
           ],
-          time_start: [
-            { required: true, type: 'date', message: '开始日期不能为空!', trigger: 'change' }
+          content: [
+            { required: true, message: '消息内容不能为空!', trigger: 'change' },
+            { type: 'string', max: 400, message: '内容不能多于400字', trigger: 'change' }
           ],
-          time_end: [
-            { required: true, type: 'date', message: '终止日期不能为空!', trigger: 'change' }
-          ]
         },
         name: '',
         base: API.base,
         permission: [],
         menu: [],
-        showLoad: true,
+        lists: [],
+        showLoad: false,
         object: {
-          name: '',
-          time_start: '',
-          time_end: ''
+          title: '',
+          content: '',
+          ids: []
         }
       }
     },
@@ -111,13 +96,34 @@
         this.menu = JSON.parse(JSON.parse(getCookie('MenuDesktop')))
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
       }
+      this.$http.get(
+        API.teacher
+      ).then((res) => {
+        this.lists = res.body
+        this.showLoad = true
+      }, (res) => {
+        this.$Notice.error({
+          title: '服务器内部错误!'
+        })
+      })
     },
     methods: {
       goReset () {
         this.$refs.addForm.resetFields()
-        this.object.name = ''
-        this.object.time_start = ''
-        this.object.time_end = ''
+        this.object.title = ''
+        this.object.content = ''
+        this.object.ids = []
+        this.showLoad = false
+        this.$http.get(
+          API.teacher
+        ).then((res) => {
+          this.lists = res.body
+          this.showLoad = true
+        }, (res) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+        })
       },
       goSave () {
         this.$Loading.start()
@@ -125,9 +131,9 @@
         this.$http.get(
           API.save,
           { params: {
-            name: this.object.name,
-            time_start: this.object.time_start.getTime(),
-            time_end: this.object.time_end.getTime()
+            title: this.object.title,
+            content: this.object.content,
+            ids: this.object.ids
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
@@ -141,7 +147,7 @@
             this.$Loading.finish()
             this.$Notice.success({
               title: '操作完成!',
-              desc: '学期：' + this.object.name + '已保存！'
+              desc: '消息：' + this.object.title + '已保存！'
             })
             setTimeout(() => { this.$router.push({ path: '/list' }) }, 1000)
           } else {

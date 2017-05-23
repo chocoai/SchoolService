@@ -36,16 +36,16 @@
           </template>
           <Menu-item name="MyStudentDesktop">我的学生</Menu-item>
         </Submenu>
-        <Submenu name="teach">
+        <Submenu name="message">
           <template slot="title">
             <Icon type="stats-bars"></Icon>
             消息管理
           </template>
           <Menu-group title="教师消息">
-            <Menu-item name="3-1">我发出的消息</Menu-item>
+            <Menu-item name="TeacherMessageSendDesktop">我发出的消息</Menu-item>
             <Menu-item name="3-2">我收到的消息</Menu-item>
           </Menu-group>
-          <Menu-group title="家长">
+          <Menu-group title="课程消息">
             <Menu-item name="3-1">我发出的消息</Menu-item>
             <Menu-item name="3-2">我收到的消息</Menu-item>
           </Menu-group>
@@ -127,6 +127,8 @@
             return '关系管理'
           case 'MyStudentDesktop':
             return '教学管理'
+          case 'TeacherMessageSendDesktop'
+            return '消息管理-教师'
           case 'notice':
             return '信息管理'
           case 'attendance':
@@ -169,6 +171,8 @@
             return '学生_课程_学期'
           case 'MyStudentDesktop':
             return '我的学生'
+          case 'TeacherMessageSendDesktop'
+            return '我发出的消息'
           case 'notice':
             return '公告'
           case 'attendance':
@@ -224,6 +228,9 @@
             break
           case 'MyStudentDesktop':
             window.location.href = '/MyStudentDesktop/Page'
+            break
+          case 'TeacherMessageSendDesktop':
+            window.location.href = '/TeacherMessageSendDesktop/Page'
             break
           default:
             window.location.href = '/MainDesktop'
