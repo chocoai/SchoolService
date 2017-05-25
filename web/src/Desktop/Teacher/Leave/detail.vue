@@ -65,7 +65,7 @@
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
   export default {
-    name: 'edit',
+    name: 'detail',
     components: { Copy, MenuList },
     data () {
       return {

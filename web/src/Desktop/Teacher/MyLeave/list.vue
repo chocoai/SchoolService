@@ -79,6 +79,33 @@
       </Col>
     </Row>
     <Row><Col><Copy></Copy></Col></Row>
+
+    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
+      <p slot="header" style="color:#f60;text-align:center">
+        <Icon type="information-circled"></Icon>
+        <span>拒绝确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>课程：{{names}}注销后，关联信息会一并失效。</p>
+        <p>是否继续注销？</p>
+      </div>
+      <div slot="footer">
+        <Button type="warning" size="large" long @click="goInactive">拒绝</Button>
+      </div>
+    </Modal>
+    <Modal v-model="active" width="360" :styles="{top: '40px'}">
+      <p slot="header" style="color:#66CDAA;text-align:center">
+        <Icon type="information-circled"></Icon>
+        <span>批准确认</span>
+      </p>
+      <div style="text-align:center">
+        <p>课程：{{names}}激活后，请重新设置关联信息。</p>
+        <p>是否继续激活？</p>
+      </div>
+      <div slot="footer">
+        <Button type="success" size="large" long @click="goActive">批准</Button>
+      </div>
+    </Modal>
   </div>
 </template>
 <script>
@@ -86,7 +113,7 @@
   import MenuList from '../Menu/menuList.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
-  import listBtn from '../../Common/listBtn_Detail.vue'
+  import listBtn from '../../Common/listBtn.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
   import { bus } from '../../Common/bus.js'
@@ -105,6 +132,9 @@
         pageTotal: 0,
         pageList: [],
         showLoad: true,
+        del: false,
+        inactive: false,
+        active: false,
         index: '',
         names: '',
         border: false,
@@ -240,6 +270,12 @@
       bus.$on('forDetail', (index) => {
         this.$router.push({ path: '/detail/' + this.pageList[index].id })
       })
+      bus.$on('forInactive', (index) => {
+        this.showInactive(index)
+      })
+      bus.$on('forActive', (index) => {
+        this.showActive(index)
+      })
     },
     methods: {
       getLists () {
@@ -320,6 +356,16 @@
         })
         this.getLists()
       },
+      showInactive (index) {
+        this.inactive = true
+        this.index = index
+        this.names = this.pageList[index].name
+      },
+      showActive (index) {
+        this.active = true
+        this.index = index
+        this.names = this.pageList[index].name
+      },
       getBorder (border) {
         this.border = border
       },
@@ -339,6 +385,78 @@
         this.$Loading.start()
         this.$Message.info('正在进行导出操作，请稍后...')
         window.location.href = API.download + '?keyword=' + this.keyword
+      },
+      goInactive () {
+        this.$Loading.start()
+        this.$Message.info('正在进行注销操作，请稍后...')
+        this.inactive = false
+        this.$http.get(
+          API.inactive,
+          { params: {
+            id: this.pageList[this.index].id
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body.toString() === 'OK') {
+            this.getLists()
+            this.$Notice.success({
+              title: '操作完成!',
+              desc: '学期：' + this.pageList[this.index].name + '已注销！'
+            })
+            this.$Loading.finish()
+          } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+            this.$Notice.error({
+              title: '登录过期或非法操作!'
+            })
+            this.$Loading.error()
+          } else {
+            this.$Notice.error({
+              title: response.body
+            })
+            this.$Loading.error()
+          }
+        }, (response) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+          this.$Loading.error()
+        })
+      },
+      goActive () {
+        this.$Loading.start()
+        this.$Message.info('正在进行激活操作，请稍后...')
+        this.active = false
+        this.$http.get(
+          API.active,
+          { params: {
+            id: this.pageList[this.index].id
+          } },
+          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
+        ).then((response) => {
+          if (response.body.toString() === 'OK') {
+            this.getLists()
+            this.$Notice.success({
+              title: '操作完成!',
+              desc: '学期：' + this.pageList[this.index].name + '已激活！'
+            })
+            this.$Loading.finish()
+          } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
+            this.$Notice.error({
+              title: '登录过期或非法操作!'
+            })
+            this.$Loading.error()
+          } else {
+            this.$Notice.error({
+              title: response.body
+            })
+            this.$Loading.error()
+          }
+        }, (response) => {
+          this.$Notice.error({
+            title: '服务器内部错误!'
+          })
+          this.$Loading.error()
+        })
       }
     }
   }
