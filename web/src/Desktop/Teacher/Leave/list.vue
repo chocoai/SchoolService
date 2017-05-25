@@ -80,19 +80,6 @@
       </Col>
     </Row>
     <Row><Col><Copy></Copy></Col></Row>
-    <Modal v-model="del" width="360" :styles="{top: '40px'}">
-      <p slot="header" style="color:#f60;text-align:center">
-        <Icon type="information-circled"></Icon>
-        <span>删除确认</span>
-      </p>
-      <div style="text-align:center">
-        <p>消息：{{title}}删除后，关联信息会一并失效。</p>
-        <p>是否继续删除？</p>
-      </div>
-      <div slot="footer">
-        <Button type="warning" size="large" long @click="goDelete">删除</Button>
-      </div>
-    </Modal>
   </div>
 </template>
 <script>
@@ -100,7 +87,7 @@
   import MenuList from '../Menu/menuList.vue'
   import Options from '../../Common/options.vue'
   import Loading from '../../Common/loading.vue'
-  import listBtn from '../../Common/listBtn_Detail_Delete.vue'
+  import listBtn from '../../Common/listBtn.vue'
   import * as API from './API.js'
   import { getCookie } from '../../../cookieUtil.js'
   import { bus } from '../../Common/bus.js'
@@ -119,9 +106,8 @@
         pageTotal: 0,
         pageList: [],
         showLoad: true,
-        del: false,
         index: '',
-        title: '',
+        names: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -137,29 +123,68 @@
             }
           },
           {
-            title: '消息标题',
-            key: 'title',
+            title: '请假学生',
+            key: 'sname',
             sortable: true
           },
           {
-            title: '消息内容',
-            key: 'content',
+            title: '申请家长',
+            key: 'pname',
+            sortable: true
+          },
+          {
+            title: '批准教师',
+            key: 'tname',
+            sortable: true
+          },
+          {
+            title: '开始时间',
+            key: 'time_start',
+            sortable: true
+          },
+          {
+            title: '终止时间',
+            key: 'time_end',
+            sortable: true
+          },
+          {
+            title: '申请时间',
+            key: 'time_apply',
+            sortable: true
+          },
+          {
+            title: '类型',
+            key: 'type',
             sortable: true,
-            ellipsis: true
+            render: (h, params) => {
+              const color = params.row.state.toString() === '2' ? 'green' : params.row.state.toString() === '1' ? 'yellow' : 'red'
+              const text = params.row.state.toString() === '2' ? '事假' : params.row.state.toString() === '1' ? '病假' : '错误'
+              return h('Tag', {
+                props: {
+                  type: 'dot',
+                  color: color
+                }
+              }, text)
+            }
           },
           {
-            title: '发布教师',
-            key: 'name',
-            sortable: true
-          },
-          {
-            title: '发布时间',
-            key: 'time',
-            sortable: true
+            title: '状态',
+            key: 'state',
+            sortable: true,
+            render: (h, params) => {
+              const color = params.row.state.toString() === '1' ? 'green' : params.row.state.toString() === '0' ? 'yellow' : 'red'
+              const text = params.row.state.toString() === '1' ? '已批准' : params.row.state.toString() === '0' ? '未回应' : '已拒绝'
+              return h('Tag', {
+                props: {
+                  type: 'dot',
+                  color: color
+                }
+              }, text)
+            }
           },
           {
             title: '操作',
-            key: 'id',
+            key: 'state',
             align: 'center',
             width: 300,
             render (h, params) {
@@ -213,11 +238,8 @@
         this.name = decodeURI(getCookie('name')).substring(1, decodeURI(getCookie('name')).length - 1)
         this.showLoad = false
       }
-      bus.$on('forDetail', (index) => {
-        this.$router.push({ path: '/detail/' + this.pageList[index].id })
-      })
-      bus.$on('forDelete', (index) => {
-        this.showDelete(index)
+      bus.$on('forEdit', (index) => {
+        this.$router.push({ path: '/edit/' + this.pageList[index].id })
       })
     },
     methods: {
@@ -299,11 +321,6 @@
         })
         this.getLists()
       },
-      showDelete (index) {
-        this.del = true
-        this.index = index
-        this.title = this.pageList[index].title
-      },
       getBorder (border) {
         this.border = border
       },
@@ -319,49 +336,10 @@
           this.size = 'small'
         }
       },
-      goAdd () {
-        this.$router.push({ path: '/add' })
-      },
       goDownload () {
         this.$Loading.start()
         this.$Message.info('正在进行导出操作，请稍后...')
         window.location.href = API.download + '?keyword=' + this.keyword
-      },
-      goDelete () {
-        this.$Loading.start()
-        this.$Message.info('正在进行删除操作，请稍后...')
-        this.del = false
-        this.$http.get(
-          API.del,
-          { params: {
-            id: this.pageList[this.index].id
-          } },
-          { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
-        ).then((response) => {
-          if (response.body.toString() === 'OK') {
-            this.getLists()
-            this.$Notice.success({
-              title: '操作完成!',
-              desc: '消息：' + this.pageList[this.index].title + '已删除！'
-            })
-            this.$Loading.finish()
-          } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
-            this.$Notice.error({
-              title: '登录过期或非法操作!'
-            })
-            this.$Loading.error()
-          } else {
-            this.$Notice.error({
-              title: response.body
-            })
-            this.$Loading.error()
-          }
-        }, (response) => {
-          this.$Notice.error({
-            title: '服务器内部错误!'
-          })
-          this.$Loading.error()
-        })
       }
     }
   }

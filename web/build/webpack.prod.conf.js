@@ -316,10 +316,10 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunksSortMode: 'dependency'
     }),
     new HtmlWebpackPlugin({
-      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_TeacherMessageSend.html',
+      filename: '../dist/static/html/desktop/Teacher/Desktop_Teacher_Leave.html',
       template: 'html/template.html',
       inject: true,
-      chunks: ['vendor', 'manifest', 'Desktop_Teacher_TeacherMessageSend'],
+      chunks: ['vendor', 'manifest', 'Desktop_Teacher_Leave'],
       minify: {
         removeComments: true,
         collapseWhitespace: true,

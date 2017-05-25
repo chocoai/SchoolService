@@ -18,6 +18,7 @@
           <Menu-item name="TeacherDesktop" v-if="menu.TeacherDesktop_Page">教师</Menu-item>
           <Menu-item name="StudentDesktop" v-if="menu.StudentDesktop_Page">学生</Menu-item>
           <Menu-item name="ParentDesktop" v-if="menu.ParentDesktop_Page">家长</Menu-item>
+          <Menu-item name="LeaveDesktop">请假</Menu-item>
         </Submenu>
         <Submenu name="relation" v-if="menu.StudentParentIdentityDesktop_Page || menu.RoomStudentDesktop_Page || menu.CourseRoomTeacherSemesterDesktop_Page || menu.StudentCourseSemesterDesktop_Page">
           <template slot="title">
@@ -35,20 +36,6 @@
             教学管理
           </template>
           <Menu-item name="MyStudentDesktop">我的学生</Menu-item>
-        </Submenu>
-        <Submenu name="message">
-          <template slot="title">
-            <Icon type="stats-bars"></Icon>
-            消息管理
-          </template>
-          <Menu-group title="教师消息">
-            <Menu-item name="TeacherMessageSendDesktop">我发出的消息</Menu-item>
-            <Menu-item name="3-2">我收到的消息</Menu-item>
-          </Menu-group>
-          <Menu-group title="课程消息">
-            <Menu-item name="3-1">我发出的消息</Menu-item>
-            <Menu-item name="3-2">我收到的消息</Menu-item>
-          </Menu-group>
         </Submenu>
         <Submenu name="information">
           <template slot="title">
@@ -117,6 +104,8 @@
             return '基础管理'
           case 'ParentDesktop':
             return '基础管理'
+          case 'LeaveDesktop':
+            return '基础管理'
           case 'StudentParentIdentityDesktop':
             return '关系管理'
           case 'RoomStudentDesktop':
@@ -127,8 +116,6 @@
             return '关系管理'
           case 'MyStudentDesktop':
             return '教学管理'
-          case 'TeacherMessageSendDesktop'
-            return '消息管理-教师'
           case 'notice':
             return '信息管理'
           case 'attendance':
@@ -161,6 +148,8 @@
             return '学生'
           case 'ParentDesktop':
             return '家长'
+          case 'LeaveDesktop':
+            return '请假'
           case 'StudentParentIdentityDesktop':
             return '学生_家长_身份'
           case 'RoomStudentDesktop':
@@ -171,8 +160,6 @@
             return '学生_课程_学期'
           case 'MyStudentDesktop':
             return '我的学生'
-          case 'TeacherMessageSendDesktop'
-            return '我发出的消息'
           case 'notice':
             return '公告'
           case 'attendance':
@@ -214,6 +201,9 @@
           case 'ParentDesktop':
             window.location.href = '/ParentDesktop/Page'
             break
+          case 'LeaveDesktop':
+            window.location.href = '/LeaveDesktop/Page'
+            break
           case 'StudentParentIdentityDesktop':
             window.location.href = '/StudentParentIdentityDesktop/Page'
             break
@@ -228,9 +218,6 @@
             break
           case 'MyStudentDesktop':
             window.location.href = '/MyStudentDesktop/Page'
-            break
-          case 'TeacherMessageSendDesktop':
-            window.location.href = '/TeacherMessageSendDesktop/Page'
             break
           default:
             window.location.href = '/MainDesktop'

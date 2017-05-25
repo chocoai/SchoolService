@@ -44,7 +44,7 @@ module.exports = {
     Desktop_Teacher_CourseRoomTeacherSemester: './src/Desktop/Teacher/CourseRoomTeacherSemester/Index.js',
     Desktop_Teacher_StudentCourseSemester: './src/Desktop/Teacher/StudentCourseSemester/Index.js',
     Desktop_Teacher_MyStudent: './src/Desktop/Teacher/MyStudent/Index.js',
-    Desktop_Teacher_TeacherMessageSend: './src/Desktop/Teacher/TeacherMessageSend/Index.js'
+    Desktop_Teacher_Leave: './src/Desktop/Teacher/Leave/Index.js'
   },
   output: {
     path: config.build.assetsRoot,
