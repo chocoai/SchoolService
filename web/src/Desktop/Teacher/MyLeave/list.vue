@@ -79,31 +79,24 @@
       </Col>
     </Row>
     <Row><Col><Copy></Copy></Col></Row>
-
-    <Modal v-model="inactive" width="360" :styles="{top: '40px'}">
-      <p slot="header" style="color:#f60;text-align:center">
+    <Modal v-model="modal" width="360" :styles="{top: '40px'}">
+      <p slot="header" style="color:#f60;text-align:center" v-show="inactive">
         <Icon type="information-circled"></Icon>
         <span>拒绝确认</span>
       </p>
-      <div style="text-align:center">
-        <p>课程：{{names}}注销后，关联信息会一并失效。</p>
-        <p>是否继续注销？</p>
-      </div>
-      <div slot="footer">
-        <Button type="warning" size="large" long @click="goInactive">拒绝</Button>
-      </div>
-    </Modal>
-    <Modal v-model="active" width="360" :styles="{top: '40px'}">
-      <p slot="header" style="color:#66CDAA;text-align:center">
+      <p slot="header" style="color:#66CDAA;text-align:center" v-show="active">
         <Icon type="information-circled"></Icon>
         <span>批准确认</span>
       </p>
       <div style="text-align:center">
-        <p>课程：{{names}}激活后，请重新设置关联信息。</p>
-        <p>是否继续激活？</p>
+        <p>学生：{{sname}}</p>
+        <p>家长：{{pname}}</p>
+        <p>请输入回复信息：</p>
+        <Input  size="large" v-model="reply" style="width: 360px"></Input>
       </div>
       <div slot="footer">
-        <Button type="success" size="large" long @click="goActive">批准</Button>
+        <Button type="warning" size="large" long @click="goInactive" v-show="inactive">拒绝</Button>
+        <Button type="success" size="large" long @click="goActive" v-show="active">批准</Button>
       </div>
     </Modal>
   </div>
@@ -132,11 +125,13 @@
         pageTotal: 0,
         pageList: [],
         showLoad: true,
-        del: false,
+        modal: false,
         inactive: false,
         active: false,
         index: '',
-        names: '',
+        sname: '',
+        pname: '',
+        reply: '',
         border: false,
         stripe: false,
         size: 'small',
@@ -159,11 +154,6 @@
           {
             title: '申请家长',
             key: 'pname',
-            sortable: true
-          },
-          {
-            title: '批准教师',
-            key: 'tname',
             sortable: true
           },
           {
@@ -357,14 +347,22 @@
         this.getLists()
       },
       showInactive (index) {
+        this.modal = true
         this.inactive = true
+        this.active = false
+        this.reply = ''
         this.index = index
-        this.names = this.pageList[index].name
+        this.sname= = this.pageList[index].sname
+        this.pname= = this.pageList[index].pname
       },
       showActive (index) {
+        this.modal = true
+        this.inactive = false
         this.active = true
+        this.reply = ''
         this.index = index
-        this.names = this.pageList[index].name
+        this.sname= = this.pageList[index].sname
+        this.pname= = this.pageList[index].pname
       },
       getBorder (border) {
         this.border = border
@@ -389,19 +387,19 @@
       goInactive () {
         this.$Loading.start()
         this.$Message.info('正在进行注销操作，请稍后...')
-        this.inactive = false
+        this.modal = false
         this.$http.get(
           API.inactive,
           { params: {
-            id: this.pageList[this.index].id
+            id: this.pageList[this.index].id,
+            reply: this.reply
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
             this.getLists()
             this.$Notice.success({
-              title: '操作完成!',
-              desc: '学期：' + this.pageList[this.index].name + '已注销！'
+              title: '操作完成!'
             })
             this.$Loading.finish()
           } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
@@ -425,19 +423,19 @@
       goActive () {
         this.$Loading.start()
         this.$Message.info('正在进行激活操作，请稍后...')
-        this.active = false
+        this.modal = false
         this.$http.get(
           API.active,
           { params: {
-            id: this.pageList[this.index].id
+            id: this.pageList[this.index].id,
+            reply: this.reply
           } },
           { headers: { 'X-Requested-With': 'XMLHttpRequest' } }
         ).then((response) => {
           if (response.body.toString() === 'OK') {
             this.getLists()
             this.$Notice.success({
-              title: '操作完成!',
-              desc: '学期：' + this.pageList[this.index].name + '已激活！'
+              title: '操作完成!'
             })
             this.$Loading.finish()
           } else if (response.body.toString() === 'illegal' || response.body.toString() === 'overdue') {
